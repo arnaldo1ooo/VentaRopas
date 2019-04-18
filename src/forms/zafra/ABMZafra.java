@@ -210,9 +210,11 @@ public final class ABMZafra extends javax.swing.JDialog {
                 return false; //Disallow the editing of any cell
             }
         };
-        jpBotones2 = new javax.swing.JPanel();
         btnGuardar = new javax.swing.JButton();
+        btnGuardar2 = new javax.swing.JButton();
+        jpBotones2 = new javax.swing.JPanel();
         btnCancelar = new javax.swing.JButton();
+        btnGuardar1 = new javax.swing.JButton();
         jpTabla1 = new javax.swing.JPanel();
         lblBuscarCampo3 = new javax.swing.JLabel();
         cbProductorFiltro = new javax.swing.JComboBox();
@@ -800,7 +802,7 @@ public final class ABMZafra extends javax.swing.JDialog {
                                 .addComponent(btnEliminarImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnPantallaCompleta, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
 
         jtpEdicion.addTab("Ubicación", jpUbicacion);
@@ -810,6 +812,7 @@ public final class ABMZafra extends javax.swing.JDialog {
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos20x20/IconoBuscar.png"))); // NOI18N
         jLabel12.setText("  BUSCAR ");
 
         txtBuscar1.setBackground(new java.awt.Color(0, 0, 0));
@@ -862,51 +865,17 @@ public final class ABMZafra extends javax.swing.JDialog {
         });
         jScrollPane2.setViewportView(scInventario);
 
-        javax.swing.GroupLayout jpInventarioLayout = new javax.swing.GroupLayout(jpInventario);
-        jpInventario.setLayout(jpInventarioLayout);
-        jpInventarioLayout.setHorizontalGroup(
-            jpInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpInventarioLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addGroup(jpInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpInventarioLayout.createSequentialGroup()
-                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtBuscar1, javax.swing.GroupLayout.PREFERRED_SIZE, 553, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblBuscarCampo1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbCampoBuscar1, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1095, Short.MAX_VALUE))
-                .addContainerGap(119, Short.MAX_VALUE))
-        );
-        jpInventarioLayout.setVerticalGroup(
-            jpInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpInventarioLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jpInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(cbCampoBuscar1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblBuscarCampo1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtBuscar1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, 0)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        jtpEdicion.addTab("Inventario", jpInventario);
-
-        jpBotones2.setBackground(new java.awt.Color(45, 62, 80));
-        jpBotones2.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
-
-        btnGuardar.setBackground(new java.awt.Color(0, 153, 255));
-        btnGuardar.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
+        btnGuardar.setBackground(new java.awt.Color(0, 153, 102));
+        btnGuardar.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
         btnGuardar.setForeground(new java.awt.Color(255, 255, 255));
-        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos20x20/IconoGuardar.png"))); // NOI18N
-        btnGuardar.setText("Guardar");
+        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoEntrada.png"))); // NOI18N
+        btnGuardar.setText("Nueva entrada");
         btnGuardar.setToolTipText("Inserta el nuevo registro");
-        btnGuardar.setEnabled(false);
+        btnGuardar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnGuardar.setIconTextGap(0);
         btnGuardar.setPreferredSize(new java.awt.Dimension(128, 36));
+        btnGuardar.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        btnGuardar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGuardarActionPerformed(evt);
@@ -917,6 +886,75 @@ public final class ABMZafra extends javax.swing.JDialog {
                 btnGuardarKeyPressed(evt);
             }
         });
+
+        btnGuardar2.setBackground(new java.awt.Color(153, 0, 0));
+        btnGuardar2.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
+        btnGuardar2.setForeground(new java.awt.Color(255, 255, 255));
+        btnGuardar2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoSalida.png"))); // NOI18N
+        btnGuardar2.setText("Nueva salida");
+        btnGuardar2.setToolTipText("Inserta el nuevo registro");
+        btnGuardar2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnGuardar2.setIconTextGap(0);
+        btnGuardar2.setPreferredSize(new java.awt.Dimension(128, 36));
+        btnGuardar2.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        btnGuardar2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnGuardar2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardar2ActionPerformed(evt);
+            }
+        });
+        btnGuardar2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btnGuardar2KeyPressed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jpInventarioLayout = new javax.swing.GroupLayout(jpInventario);
+        jpInventario.setLayout(jpInventarioLayout);
+        jpInventarioLayout.setHorizontalGroup(
+            jpInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpInventarioLayout.createSequentialGroup()
+                .addGap(0, 97, Short.MAX_VALUE)
+                .addGroup(jpInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jpInventarioLayout.createSequentialGroup()
+                        .addComponent(jLabel12)
+                        .addGap(3, 3, 3)
+                        .addComponent(txtBuscar1, javax.swing.GroupLayout.PREFERRED_SIZE, 562, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblBuscarCampo1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbCampoBuscar1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1019, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(4, 4, 4)
+                .addGroup(jpInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnGuardar2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(16, 16, 16))
+        );
+        jpInventarioLayout.setVerticalGroup(
+            jpInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpInventarioLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jpInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(cbCampoBuscar1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblBuscarCampo1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtBuscar1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, 0)
+                .addGroup(jpInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(jpInventarioLayout.createSequentialGroup()
+                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnGuardar2, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 98, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+
+        jtpEdicion.addTab("Inventario", jpInventario);
+
+        jpBotones2.setBackground(new java.awt.Color(45, 62, 80));
+        jpBotones2.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
 
         btnCancelar.setBackground(new java.awt.Color(255, 0, 51));
         btnCancelar.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
@@ -931,25 +969,50 @@ public final class ABMZafra extends javax.swing.JDialog {
             }
         });
 
+        btnGuardar1.setBackground(new java.awt.Color(0, 153, 255));
+        btnGuardar1.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
+        btnGuardar1.setForeground(new java.awt.Color(255, 255, 255));
+        btnGuardar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos20x20/IconoGuardar.png"))); // NOI18N
+        btnGuardar1.setText("Guardar");
+        btnGuardar1.setToolTipText("Inserta el nuevo registro");
+        btnGuardar1.setEnabled(false);
+        btnGuardar1.setPreferredSize(new java.awt.Dimension(128, 36));
+        btnGuardar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardar1ActionPerformed(evt);
+            }
+        });
+        btnGuardar1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btnGuardar1KeyPressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jpBotones2Layout = new javax.swing.GroupLayout(jpBotones2);
         jpBotones2.setLayout(jpBotones2Layout);
         jpBotones2Layout.setHorizontalGroup(
             jpBotones2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpBotones2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addContainerGap(158, Short.MAX_VALUE)
                 .addComponent(btnCancelar)
                 .addContainerGap())
+            .addGroup(jpBotones2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jpBotones2Layout.createSequentialGroup()
+                    .addGap(16, 16, 16)
+                    .addComponent(btnGuardar1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(138, Short.MAX_VALUE)))
         );
         jpBotones2Layout.setVerticalGroup(
             jpBotones2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpBotones2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jpBotones2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
+            .addGroup(jpBotones2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jpBotones2Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(btnGuardar1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         jpTabla1.setBackground(new java.awt.Color(45, 62, 80));
@@ -1058,8 +1121,8 @@ public final class ABMZafra extends javax.swing.JDialog {
                     .addComponent(jpTabla1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jpBotones, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jtpEdicion)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 30, Short.MAX_VALUE)
+                .addComponent(jtpEdicion, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jpBotones2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -1335,6 +1398,22 @@ public final class ABMZafra extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtDescripcion1KeyTyped
 
+    private void btnGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnGuardar1ActionPerformed
+
+    private void btnGuardar1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnGuardar1KeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnGuardar1KeyPressed
+
+    private void btnGuardar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnGuardar2ActionPerformed
+
+    private void btnGuardar2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnGuardar2KeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnGuardar2KeyPressed
+
     public void SiguienteFoco(KeyEvent evt) {
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
             ((JComponent) evt.getSource()).transferFocus();//Con esta parte transfieres el foco al siguiente campo sea un Jtextfield, Jpasswordfield, boton, etc..
@@ -1526,6 +1605,8 @@ public final class ABMZafra extends javax.swing.JDialog {
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnEliminarImagen;
     private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnGuardar1;
+    private javax.swing.JButton btnGuardar2;
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnNuevo;
     private javax.swing.JButton btnPantallaCompleta;
