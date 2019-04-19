@@ -6,6 +6,7 @@
 package forms.zafra;
 
 import conexion.Conexion;
+import forms.inventario.entrada.ABMEntrada;
 import java.awt.HeadlessException;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
@@ -210,7 +211,7 @@ public final class ABMZafra extends javax.swing.JDialog {
                 return false; //Disallow the editing of any cell
             }
         };
-        btnGuardar = new javax.swing.JButton();
+        btnNuevaEntrada = new javax.swing.JButton();
         btnGuardar2 = new javax.swing.JButton();
         jpBotones2 = new javax.swing.JPanel();
         btnCancelar = new javax.swing.JButton();
@@ -784,7 +785,7 @@ public final class ABMZafra extends javax.swing.JDialog {
                         .addGroup(jpUbicacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                             .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtLocalidad, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(37, 37, 37)
+                        .addGap(26, 26, 26)
                         .addGroup(jpUbicacionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtX, javax.swing.GroupLayout.Alignment.CENTER, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.CENTER, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -802,7 +803,7 @@ public final class ABMZafra extends javax.swing.JDialog {
                                 .addComponent(btnEliminarImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnPantallaCompleta, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         jtpEdicion.addTab("Ubicación", jpUbicacion);
@@ -865,25 +866,25 @@ public final class ABMZafra extends javax.swing.JDialog {
         });
         jScrollPane2.setViewportView(scInventario);
 
-        btnGuardar.setBackground(new java.awt.Color(0, 153, 102));
-        btnGuardar.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
-        btnGuardar.setForeground(new java.awt.Color(255, 255, 255));
-        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoEntrada.png"))); // NOI18N
-        btnGuardar.setText("Nueva entrada");
-        btnGuardar.setToolTipText("Inserta el nuevo registro");
-        btnGuardar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnGuardar.setIconTextGap(0);
-        btnGuardar.setPreferredSize(new java.awt.Dimension(128, 36));
-        btnGuardar.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        btnGuardar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+        btnNuevaEntrada.setBackground(new java.awt.Color(0, 153, 102));
+        btnNuevaEntrada.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
+        btnNuevaEntrada.setForeground(new java.awt.Color(255, 255, 255));
+        btnNuevaEntrada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoEntrada.png"))); // NOI18N
+        btnNuevaEntrada.setText("Nueva entrada");
+        btnNuevaEntrada.setToolTipText("Inserta el nuevo registro");
+        btnNuevaEntrada.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnNuevaEntrada.setIconTextGap(0);
+        btnNuevaEntrada.setPreferredSize(new java.awt.Dimension(128, 36));
+        btnNuevaEntrada.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        btnNuevaEntrada.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnNuevaEntrada.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarActionPerformed(evt);
+                btnNuevaEntradaActionPerformed(evt);
             }
         });
-        btnGuardar.addKeyListener(new java.awt.event.KeyAdapter() {
+        btnNuevaEntrada.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                btnGuardarKeyPressed(evt);
+                btnNuevaEntradaKeyPressed(evt);
             }
         });
 
@@ -914,7 +915,7 @@ public final class ABMZafra extends javax.swing.JDialog {
         jpInventarioLayout.setHorizontalGroup(
             jpInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpInventarioLayout.createSequentialGroup()
-                .addGap(0, 97, Short.MAX_VALUE)
+                .addGap(97, 97, 97)
                 .addGroup(jpInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jpInventarioLayout.createSequentialGroup()
                         .addComponent(jLabel12)
@@ -927,7 +928,7 @@ public final class ABMZafra extends javax.swing.JDialog {
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1019, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(4, 4, 4)
                 .addGroup(jpInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnNuevaEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnGuardar2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(16, 16, 16))
         );
@@ -942,12 +943,11 @@ public final class ABMZafra extends javax.swing.JDialog {
                     .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, 0)
                 .addGroup(jpInventarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(jpInventarioLayout.createSequentialGroup()
-                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnNuevaEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnGuardar2, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 98, Short.MAX_VALUE)))
+                        .addComponent(btnGuardar2, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -1095,21 +1095,19 @@ public final class ABMZafra extends javax.swing.JDialog {
         jpPrincipalLayout.setHorizontalGroup(
             jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jpBanner, javax.swing.GroupLayout.DEFAULT_SIZE, 1250, Short.MAX_VALUE)
-            .addComponent(jtpEdicion, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jtpEdicion, javax.swing.GroupLayout.DEFAULT_SIZE, 1250, Short.MAX_VALUE)
             .addGroup(jpPrincipalLayout.createSequentialGroup()
-                .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpPrincipalLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jpTabla1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jpTabla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jpBotones, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jpPrincipalLayout.createSequentialGroup()
-                        .addGap(379, 379, 379)
-                        .addComponent(jpBotones2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap()
+                .addComponent(jpTabla1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jpTabla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jpBotones, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
+            .addGroup(jpPrincipalLayout.createSequentialGroup()
+                .addGap(377, 377, 377)
+                .addComponent(jpBotones2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jpPrincipalLayout.setVerticalGroup(
             jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1121,10 +1119,10 @@ public final class ABMZafra extends javax.swing.JDialog {
                     .addComponent(jpTabla1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jpBotones, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jtpEdicion, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jtpEdicion, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jpBotones2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         jpBanner.getAccessibleContext().setAccessibleName("");
@@ -1141,7 +1139,7 @@ public final class ABMZafra extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 715, Short.MAX_VALUE)
+            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 681, Short.MAX_VALUE)
         );
 
         getAccessibleContext().setAccessibleName("dgZafra");
@@ -1208,13 +1206,10 @@ public final class ABMZafra extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtDescripcionKeyTyped
 
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        if (txtCodigo.getText().equals("")) {//Si es nuevo
-            RegistroNuevo();
-        } else { //Si es modificar
-            RegistroModificar();
-        }
-    }//GEN-LAST:event_btnGuardarActionPerformed
+    private void btnNuevaEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaEntradaActionPerformed
+        ABMEntrada abmentrada = new ABMEntrada(this,false);
+        abmentrada.setVisible(true);
+    }//GEN-LAST:event_btnNuevaEntradaActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         ModoEdicion(false);
@@ -1244,11 +1239,11 @@ public final class ABMZafra extends javax.swing.JDialog {
         SiguienteFoco(evt);
     }//GEN-LAST:event_txtDescripcionKeyPressed
 
-    private void btnGuardarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnGuardarKeyPressed
+    private void btnNuevaEntradaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnNuevaEntradaKeyPressed
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
-            btnGuardar.doClick();
+            btnNuevaEntrada.doClick();
         }
-    }//GEN-LAST:event_btnGuardarKeyPressed
+    }//GEN-LAST:event_btnNuevaEntradaKeyPressed
 
     private void tbPrincipalMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbPrincipalMousePressed
         if (tbPrincipal.isEnabled() == true) {
@@ -1435,7 +1430,7 @@ public final class ABMZafra extends javax.swing.JDialog {
         btnNuevo.setEnabled(!valor);
         btnModificar.setEnabled(false);
         btnEliminar.setEnabled(false);
-        btnGuardar.setEnabled(valor);
+        btnNuevaEntrada.setEnabled(valor);
         btnCancelar.setEnabled(valor);
         btnReporte.setEnabled(!valor);
         btnEliminarImagen.setEnabled(valor);
@@ -1604,10 +1599,10 @@ public final class ABMZafra extends javax.swing.JDialog {
     private javax.swing.JButton btnCargarImagen;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnEliminarImagen;
-    private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnGuardar1;
     private javax.swing.JButton btnGuardar2;
     private javax.swing.JButton btnModificar;
+    private javax.swing.JButton btnNuevaEntrada;
     private javax.swing.JButton btnNuevo;
     private javax.swing.JButton btnPantallaCompleta;
     private javax.swing.JButton btnReporte;

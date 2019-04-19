@@ -24,7 +24,7 @@ import metodos.Metodos;
  */
 public final class ABMEntrada extends javax.swing.JDialog {
 
-    public ABMEntrada(java.awt.Frame parent, Boolean modal) {
+    public ABMEntrada(java.awt.Dialog parent, Boolean modal) {
         super(parent, modal);
         initComponents();
 
@@ -310,11 +310,11 @@ public final class ABMEntrada extends javax.swing.JDialog {
                                     .addGroup(jpTablaLayout.createSequentialGroup()
                                         .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(4, 4, 4)
-                                        .addComponent(txtDescripcion2, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(txtDescripcion2, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE))
                                     .addGroup(jpTablaLayout.createSequentialGroup()
                                         .addComponent(cbClaseProducto1, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(2, 2, 2)
-                                        .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)))
+                                        .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                 .addGap(4, 4, 4)
                                 .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -324,12 +324,12 @@ public final class ABMEntrada extends javax.swing.JDialog {
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                     .addComponent(jbIImagen3, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGap(4, 4, 4)
-                                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE))))
                         .addContainerGap(12, Short.MAX_VALUE))
                     .addGroup(jpTablaLayout.createSequentialGroup()
-                        .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtDescripcion4, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtDescripcion3, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtDescripcion3, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
+                            .addComponent(txtDescripcion4))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         jpTablaLayout.setVerticalGroup(
@@ -448,7 +448,7 @@ public final class ABMEntrada extends javax.swing.JDialog {
             jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpPrincipalLayout.createSequentialGroup()
                 .addComponent(jpBanner, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jpTabla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jpBotones2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -465,7 +465,7 @@ public final class ABMEntrada extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 373, Short.MAX_VALUE)
+            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
         );
 
         getAccessibleContext().setAccessibleName("Inventario");
@@ -519,17 +519,10 @@ public final class ABMEntrada extends javax.swing.JDialog {
     }//GEN-LAST:event_txtDescripcionKeyTyped
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        if (txtCodigo.getText().equals("")) {//Si es nuevo
-            RegistroNuevo();
-            ModoEdicion(false);
-            Limpiar();
-        } else { //Si es modificar
-            RegistroModificar();
-        }
+
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        ModoEdicion(false);
         Limpiar();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
@@ -620,11 +613,6 @@ public final class ABMEntrada extends javax.swing.JDialog {
     private void Limpiar() {
         txtCodigo.setText("");
         txtDescripcion.setText("");
-        tbTabla.clearSelection();
-        TablaSQL(""); //Trae todos los registros
-        txtBuscar.setText("");
-
-        txtBuscar.requestFocus();
     }
 
     public void RegistroNuevo() {
@@ -644,7 +632,6 @@ public final class ABMEntrada extends javax.swing.JDialog {
 
                         con.close();
                         JOptionPane.showMessageDialog(this, "Se agrego correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
-                        ModoEdicion(false);
                         Limpiar();
                     } catch (HeadlessException ex) {
                         JOptionPane.showMessageDialog(this, "Ocurrió un Error " + ex.getMessage());
@@ -693,49 +680,12 @@ public final class ABMEntrada extends javax.swing.JDialog {
                 } catch (SQLException ex) {
                     System.out.println("Error al modificar registro " + ex);
                 }
-                ModoEdicion(false);
                 Limpiar();
             } else {
                 System.out.println("No se modifico registro");
             }
         } else {
             JOptionPane.showMessageDialog(null, "No dejar vacio ningun campo", "Advertencia", JOptionPane.WARNING_MESSAGE);
-        }
-    }
-
-    private void RegistroEliminar() {
-        int filasel;
-        String codigo;
-        try {
-            filasel = tbTabla.getSelectedRow();
-            if (filasel == -1) {
-                JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila", "Advertencia", JOptionPane.WARNING_MESSAGE);
-                txtBuscar.requestFocus();
-            } else {
-                int confirmado = javax.swing.JOptionPane.showConfirmDialog(null, "¿Realmente desea eliminar este registro?", "Confirmación", JOptionPane.YES_OPTION);
-                if (confirmado == JOptionPane.YES_OPTION) {
-                    codigo = (String) tbTabla.getModel().getValueAt(filasel, 0);
-
-                    Connection con;
-                    con = Conexion.GetConnection();
-                    String sentence;
-                    sentence = "CALL SP_EmpresaRegistranteEliminar(" + codigo + ")";
-
-                    try {
-                        PreparedStatement pst = con.prepareStatement(sentence);
-                        pst.executeUpdate();
-                        JOptionPane.showMessageDialog(null, "Registro eliminado correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
-                    } catch (SQLException ex) {
-                        JOptionPane.showMessageDialog(null, ex);
-                    }
-                } else {
-                    ModoEdicion(false);
-                    Limpiar();
-                    JOptionPane.showMessageDialog(null, "Cancelado correctamente", "Información", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        } catch (HeadlessException e) {
-            System.out.println("Error al intentar eliminar registro" + e);
         }
     }
 
