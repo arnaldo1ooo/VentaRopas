@@ -30,7 +30,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED;
@@ -43,6 +42,7 @@ import metodos.MetodosCombo;
 import metodos.Metodos;
 import metodos.MetodosImagen;
 import metodos.VistaCompleta;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /**
  *
@@ -91,6 +91,13 @@ public class ABMProducto extends javax.swing.JDialog {
         cbFiltroClaseProducto.removeAllItems();
         cbEmpresaRegistrante.removeAllItems();
         cbFormulacion.removeAllItems();
+        
+        
+        AutoCompleteDecorator.decorate(cbFabricante);
+        AutoCompleteDecorator.decorate(cbClaseProducto);
+        AutoCompleteDecorator.decorate(cbTipoAgroquimico);
+        AutoCompleteDecorator.decorate(cbEmpresaRegistrante);
+        AutoCompleteDecorator.decorate(cbFormulacion);
 
         //Carga los combobox con las consultas
         metodoscombo.CargarComboBox(cbFabricante, "SELECT fa_codigo, fa_descripcion FROM fabricante ORDER BY fa_descripcion");
@@ -341,12 +348,13 @@ public class ABMProducto extends javax.swing.JDialog {
                     .addComponent(lblBuscarCampo1)
                     .addComponent(lblBuscarCampo2))
                 .addGap(0, 0, 0)
-                .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblBuscarCampo, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cbFiltroClaseProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cbFiltroCampo, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblBuscarCampo, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cbFiltroClaseProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cbFiltroCampo, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 0, 0)
                 .addComponent(scpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
                 .addContainerGap())
@@ -414,10 +422,9 @@ public class ABMProducto extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jpBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(btnInforme, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jpBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(btnEliminar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnNuevo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnModificar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(btnEliminar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnNuevo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnModificar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jpBotonesLayout.setVerticalGroup(
@@ -469,7 +476,6 @@ public class ABMProducto extends javax.swing.JDialog {
 
         txtNombreComercial.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
         txtNombreComercial.setEnabled(false);
-        txtNombreComercial.setNextFocusableComponent(txtNRegistro);
         txtNombreComercial.setPreferredSize(new java.awt.Dimension(13, 27));
         txtNombreComercial.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -489,7 +495,6 @@ public class ABMProducto extends javax.swing.JDialog {
 
         txtNRegistro.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
         txtNRegistro.setEnabled(false);
-        txtNRegistro.setNextFocusableComponent(cbFabricante);
         txtNRegistro.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtNRegistroKeyTyped(evt);
@@ -517,14 +522,12 @@ public class ABMProducto extends javax.swing.JDialog {
         cbFabricante.setEnabled(false);
         cbFabricante.setMinimumSize(new java.awt.Dimension(55, 31));
         cbFabricante.setName("Fabricante"); // NOI18N
-        cbFabricante.setNextFocusableComponent(cbEmpresaRegistrante);
         cbFabricante.setPreferredSize(new java.awt.Dimension(55, 31));
 
         cbTipoAgroquimico.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         cbTipoAgroquimico.setEnabled(false);
         cbTipoAgroquimico.setMinimumSize(new java.awt.Dimension(55, 31));
         cbTipoAgroquimico.setName("TipoAgroquimico"); // NOI18N
-        cbTipoAgroquimico.setNextFocusableComponent(btnMas);
         cbTipoAgroquimico.setPreferredSize(new java.awt.Dimension(55, 31));
 
         btnFabricante.setFont(new java.awt.Font("Adobe Hebrew", 1, 18)); // NOI18N
@@ -542,7 +545,6 @@ public class ABMProducto extends javax.swing.JDialog {
         cbFormulacion.setEnabled(false);
         cbFormulacion.setMinimumSize(new java.awt.Dimension(55, 31));
         cbFormulacion.setName("Formulacion"); // NOI18N
-        cbFormulacion.setNextFocusableComponent(cbClaseProducto);
         cbFormulacion.setPreferredSize(new java.awt.Dimension(55, 31));
         cbFormulacion.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -639,7 +641,6 @@ public class ABMProducto extends javax.swing.JDialog {
         cbEmpresaRegistrante.setEnabled(false);
         cbEmpresaRegistrante.setMinimumSize(new java.awt.Dimension(55, 31));
         cbEmpresaRegistrante.setName("EmpresaRegistrante"); // NOI18N
-        cbEmpresaRegistrante.setNextFocusableComponent(cbFormulacion);
         cbEmpresaRegistrante.setPreferredSize(new java.awt.Dimension(55, 31));
 
         btnEmpresaRegistrante.setFont(new java.awt.Font("Adobe Hebrew", 1, 18)); // NOI18N
@@ -662,7 +663,6 @@ public class ABMProducto extends javax.swing.JDialog {
         cbClaseProducto.setEnabled(false);
         cbClaseProducto.setMinimumSize(new java.awt.Dimension(55, 31));
         cbClaseProducto.setName("ClaseProducto"); // NOI18N
-        cbClaseProducto.setNextFocusableComponent(cbTipoAgroquimico);
         cbClaseProducto.setPreferredSize(new java.awt.Dimension(55, 31));
 
         btnTipoProducto.setFont(new java.awt.Font("Adobe Hebrew", 1, 18)); // NOI18N

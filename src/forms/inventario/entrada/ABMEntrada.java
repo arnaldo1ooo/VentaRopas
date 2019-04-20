@@ -5,15 +5,15 @@
  */
 package forms.inventario.entrada;
 
-import forms.producto.empresa_registrante.*;
 import conexion.Conexion;
-import forms.producto.ABMProducto;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import metodos.Metodos;
@@ -28,6 +28,10 @@ public final class ABMEntrada extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
 
+        Calendar c2 = new GregorianCalendar();
+        dcFechaEntrada.setCalendar(c2);
+        
+        
     }
 
     Metodos metodos = new Metodos();
@@ -43,23 +47,23 @@ public final class ABMEntrada extends javax.swing.JDialog {
         jLabel5 = new javax.swing.JLabel();
         txtCodigo = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        txtDescripcion = new javax.swing.JTextField();
+        txtCantidad = new javax.swing.JTextField();
         jbIImagen3 = new javax.swing.JLabel();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        dcFechaEntrada = new com.toedter.calendar.JDateChooser();
         jLabel6 = new javax.swing.JLabel();
-        cbClaseProducto = new javax.swing.JComboBox<>();
+        cbProducto = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        txtDescripcion1 = new javax.swing.JTextField();
+        txtPrecioUnitario = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        txtDescripcion2 = new javax.swing.JTextField();
+        txtPrecioTotal = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        txtDescripcion3 = new javax.swing.JTextField();
+        txtUsuario = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
-        txtDescripcion4 = new javax.swing.JTextField();
-        cbClaseProducto1 = new javax.swing.JComboBox();
+        txtObs = new javax.swing.JTextField();
+        cbPresentacion = new javax.swing.JComboBox();
         jpBotones2 = new javax.swing.JPanel();
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
@@ -123,23 +127,23 @@ public final class ABMEntrada extends javax.swing.JDialog {
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel7.setText("Cantidad*:");
 
-        txtDescripcion.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        txtDescripcion.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtDescripcion.setText("0");
-        txtDescripcion.addActionListener(new java.awt.event.ActionListener() {
+        txtCantidad.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtCantidad.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtCantidad.setText("0");
+        txtCantidad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtDescripcionActionPerformed(evt);
+                txtCantidadActionPerformed(evt);
             }
         });
-        txtDescripcion.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtCantidad.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtDescripcionKeyPressed(evt);
+                txtCantidadKeyPressed(evt);
             }
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtDescripcionKeyReleased(evt);
+                txtCantidadKeyReleased(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtDescripcionKeyTyped(evt);
+                txtCantidadKeyTyped(evt);
             }
         });
 
@@ -153,10 +157,10 @@ public final class ABMEntrada extends javax.swing.JDialog {
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel6.setText("Producto*:");
 
-        cbClaseProducto.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        cbClaseProducto.setMinimumSize(new java.awt.Dimension(55, 31));
-        cbClaseProducto.setName("ClaseProducto"); // NOI18N
-        cbClaseProducto.setPreferredSize(new java.awt.Dimension(55, 31));
+        cbProducto.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        cbProducto.setMinimumSize(new java.awt.Dimension(55, 31));
+        cbProducto.setName("ClaseProducto"); // NOI18N
+        cbProducto.setPreferredSize(new java.awt.Dimension(55, 31));
 
         jLabel8.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
@@ -168,23 +172,23 @@ public final class ABMEntrada extends javax.swing.JDialog {
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel9.setText("Precio Unitario*:");
 
-        txtDescripcion1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        txtDescripcion1.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtDescripcion1.setText("0");
-        txtDescripcion1.addActionListener(new java.awt.event.ActionListener() {
+        txtPrecioUnitario.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtPrecioUnitario.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtPrecioUnitario.setText("0");
+        txtPrecioUnitario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtDescripcion1ActionPerformed(evt);
+                txtPrecioUnitarioActionPerformed(evt);
             }
         });
-        txtDescripcion1.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtPrecioUnitario.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtDescripcion1KeyPressed(evt);
+                txtPrecioUnitarioKeyPressed(evt);
             }
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtDescripcion1KeyReleased(evt);
+                txtPrecioUnitarioKeyReleased(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtDescripcion1KeyTyped(evt);
+                txtPrecioUnitarioKeyTyped(evt);
             }
         });
 
@@ -199,24 +203,24 @@ public final class ABMEntrada extends javax.swing.JDialog {
         jLabel11.setText("Precio Total:");
         jLabel11.setToolTipText("");
 
-        txtDescripcion2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        txtDescripcion2.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtDescripcion2.setText("0");
-        txtDescripcion2.setEnabled(false);
-        txtDescripcion2.addActionListener(new java.awt.event.ActionListener() {
+        txtPrecioTotal.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtPrecioTotal.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtPrecioTotal.setText("0");
+        txtPrecioTotal.setEnabled(false);
+        txtPrecioTotal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtDescripcion2ActionPerformed(evt);
+                txtPrecioTotalActionPerformed(evt);
             }
         });
-        txtDescripcion2.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtPrecioTotal.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtDescripcion2KeyPressed(evt);
+                txtPrecioTotalKeyPressed(evt);
             }
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtDescripcion2KeyReleased(evt);
+                txtPrecioTotalKeyReleased(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtDescripcion2KeyTyped(evt);
+                txtPrecioTotalKeyTyped(evt);
             }
         });
 
@@ -230,23 +234,23 @@ public final class ABMEntrada extends javax.swing.JDialog {
         jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel13.setText("Usuario:");
 
-        txtDescripcion3.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        txtDescripcion3.setHorizontalAlignment(javax.swing.JTextField.LEFT);
-        txtDescripcion3.setEnabled(false);
-        txtDescripcion3.addActionListener(new java.awt.event.ActionListener() {
+        txtUsuario.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtUsuario.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        txtUsuario.setEnabled(false);
+        txtUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtDescripcion3ActionPerformed(evt);
+                txtUsuarioActionPerformed(evt);
             }
         });
-        txtDescripcion3.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtDescripcion3KeyPressed(evt);
+                txtUsuarioKeyPressed(evt);
             }
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtDescripcion3KeyReleased(evt);
+                txtUsuarioKeyReleased(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtDescripcion3KeyTyped(evt);
+                txtUsuarioKeyTyped(evt);
             }
         });
 
@@ -255,31 +259,31 @@ public final class ABMEntrada extends javax.swing.JDialog {
         jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel14.setText("Obs:");
 
-        txtDescripcion4.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        txtDescripcion4.setHorizontalAlignment(javax.swing.JTextField.LEFT);
-        txtDescripcion4.addActionListener(new java.awt.event.ActionListener() {
+        txtObs.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtObs.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        txtObs.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtDescripcion4ActionPerformed(evt);
+                txtObsActionPerformed(evt);
             }
         });
-        txtDescripcion4.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtObs.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtDescripcion4KeyPressed(evt);
+                txtObsKeyPressed(evt);
             }
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtDescripcion4KeyReleased(evt);
+                txtObsKeyReleased(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtDescripcion4KeyTyped(evt);
+                txtObsKeyTyped(evt);
             }
         });
 
-        cbClaseProducto1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        cbClaseProducto1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "0,5", "1", "5", "10", "20", "50", " " }));
-        cbClaseProducto1.setSelectedIndex(1);
-        cbClaseProducto1.setMinimumSize(new java.awt.Dimension(55, 31));
-        cbClaseProducto1.setName("ClaseProducto"); // NOI18N
-        cbClaseProducto1.setPreferredSize(new java.awt.Dimension(55, 31));
+        cbPresentacion.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        cbPresentacion.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "0,5", "1", "5", "10", "20", "50", " " }));
+        cbPresentacion.setSelectedIndex(1);
+        cbPresentacion.setMinimumSize(new java.awt.Dimension(55, 31));
+        cbPresentacion.setName("ClaseProducto"); // NOI18N
+        cbPresentacion.setPreferredSize(new java.awt.Dimension(55, 31));
 
         javax.swing.GroupLayout jpTablaLayout = new javax.swing.GroupLayout(jpTabla);
         jpTabla.setLayout(jpTablaLayout);
@@ -301,35 +305,35 @@ public final class ABMEntrada extends javax.swing.JDialog {
                             .addGroup(jpTablaLayout.createSequentialGroup()
                                 .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jpTablaLayout.createSequentialGroup()
-                                        .addComponent(txtDescripcion1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtPrecioUnitario, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(4, 4, 4)
                                         .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(jpTablaLayout.createSequentialGroup()
                                         .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(4, 4, 4)
-                                        .addComponent(txtDescripcion2, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE))
+                                        .addComponent(txtPrecioTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE))
                                     .addGroup(jpTablaLayout.createSequentialGroup()
-                                        .addComponent(cbClaseProducto1, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(cbPresentacion, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(2, 2, 2)
                                         .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                 .addGap(4, 4, 4)
                                 .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(cbClaseProducto, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(cbProducto, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpTablaLayout.createSequentialGroup()
                                     .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                     .addComponent(jbIImagen3, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGap(4, 4, 4)
-                                    .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE))))
-                        .addContainerGap(12, Short.MAX_VALUE))
+                                    .addComponent(dcFechaEntrada, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE))))
+                        .addGap(12, 12, 12))
                     .addGroup(jpTablaLayout.createSequentialGroup()
                         .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtDescripcion3, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
-                            .addComponent(txtDescripcion4))
+                            .addComponent(txtUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
+                            .addComponent(txtObs))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         jpTablaLayout.setVerticalGroup(
@@ -337,32 +341,32 @@ public final class ABMEntrada extends javax.swing.JDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpTablaLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dcFechaEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jbIImagen3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(2, 2, 2)
                 .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(cbClaseProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(2, 2, 2)
                 .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cbClaseProducto1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbPresentacion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(2, 2, 2)
                 .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtDescripcion2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPrecioTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtDescripcion1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPrecioUnitario, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(2, 2, 2)
                 .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtDescripcion3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(2, 2, 2)
                 .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpTablaLayout.createSequentialGroup()
@@ -370,7 +374,7 @@ public final class ABMEntrada extends javax.swing.JDialog {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jpTablaLayout.createSequentialGroup()
                         .addGap(1, 1, 1)
-                        .addComponent(txtDescripcion4, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)))
+                        .addComponent(txtObs, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -496,27 +500,27 @@ public final class ABMEntrada extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_txtCodigoKeyTyped
 
-    private void txtDescripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDescripcionActionPerformed
+    private void txtCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantidadActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtDescripcionActionPerformed
+    }//GEN-LAST:event_txtCantidadActionPerformed
 
-    private void txtDescripcionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescripcionKeyReleased
+    private void txtCantidadKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyReleased
         //Limitar cantidad de caracteres
-        int longitud = txtDescripcion.getText().length();
+        int longitud = txtCantidad.getText().length();
         if (longitud > 70) {
-            txtDescripcion.setText(txtDescripcion.getText().substring(0, 71));
+            txtCantidad.setText(txtCantidad.getText().substring(0, 71));
         }
 
         //Convertir a mayuscula
         Character s = evt.getKeyChar();
         if (Character.isLetter(s)) {
-            txtDescripcion.setText(txtDescripcion.getText().toUpperCase());
+            txtCantidad.setText(txtCantidad.getText().toUpperCase());
         }
-    }//GEN-LAST:event_txtDescripcionKeyReleased
+    }//GEN-LAST:event_txtCantidadKeyReleased
 
-    private void txtDescripcionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescripcionKeyTyped
+    private void txtCantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyTyped
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtDescripcionKeyTyped
+    }//GEN-LAST:event_txtCantidadKeyTyped
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
 
@@ -526,9 +530,9 @@ public final class ABMEntrada extends javax.swing.JDialog {
         Limpiar();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    private void txtDescripcionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescripcionKeyPressed
+    private void txtCantidadKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyPressed
         SiguienteFoco(evt);
-    }//GEN-LAST:event_txtDescripcionKeyPressed
+    }//GEN-LAST:event_txtCantidadKeyPressed
 
     private void txtCodigoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoKeyPressed
         SiguienteFoco(evt);
@@ -540,69 +544,69 @@ public final class ABMEntrada extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_btnGuardarKeyPressed
 
-    private void txtDescripcion1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDescripcion1ActionPerformed
+    private void txtPrecioUnitarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPrecioUnitarioActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtDescripcion1ActionPerformed
+    }//GEN-LAST:event_txtPrecioUnitarioActionPerformed
 
-    private void txtDescripcion1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescripcion1KeyPressed
+    private void txtPrecioUnitarioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioUnitarioKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtDescripcion1KeyPressed
+    }//GEN-LAST:event_txtPrecioUnitarioKeyPressed
 
-    private void txtDescripcion1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescripcion1KeyReleased
+    private void txtPrecioUnitarioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioUnitarioKeyReleased
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtDescripcion1KeyReleased
+    }//GEN-LAST:event_txtPrecioUnitarioKeyReleased
 
-    private void txtDescripcion1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescripcion1KeyTyped
+    private void txtPrecioUnitarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioUnitarioKeyTyped
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtDescripcion1KeyTyped
+    }//GEN-LAST:event_txtPrecioUnitarioKeyTyped
 
-    private void txtDescripcion2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDescripcion2ActionPerformed
+    private void txtPrecioTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPrecioTotalActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtDescripcion2ActionPerformed
+    }//GEN-LAST:event_txtPrecioTotalActionPerformed
 
-    private void txtDescripcion2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescripcion2KeyPressed
+    private void txtPrecioTotalKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioTotalKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtDescripcion2KeyPressed
+    }//GEN-LAST:event_txtPrecioTotalKeyPressed
 
-    private void txtDescripcion2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescripcion2KeyReleased
+    private void txtPrecioTotalKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioTotalKeyReleased
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtDescripcion2KeyReleased
+    }//GEN-LAST:event_txtPrecioTotalKeyReleased
 
-    private void txtDescripcion2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescripcion2KeyTyped
+    private void txtPrecioTotalKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioTotalKeyTyped
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtDescripcion2KeyTyped
+    }//GEN-LAST:event_txtPrecioTotalKeyTyped
 
-    private void txtDescripcion3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDescripcion3ActionPerformed
+    private void txtUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuarioActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtDescripcion3ActionPerformed
+    }//GEN-LAST:event_txtUsuarioActionPerformed
 
-    private void txtDescripcion3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescripcion3KeyPressed
+    private void txtUsuarioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsuarioKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtDescripcion3KeyPressed
+    }//GEN-LAST:event_txtUsuarioKeyPressed
 
-    private void txtDescripcion3KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescripcion3KeyReleased
+    private void txtUsuarioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsuarioKeyReleased
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtDescripcion3KeyReleased
+    }//GEN-LAST:event_txtUsuarioKeyReleased
 
-    private void txtDescripcion3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescripcion3KeyTyped
+    private void txtUsuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsuarioKeyTyped
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtDescripcion3KeyTyped
+    }//GEN-LAST:event_txtUsuarioKeyTyped
 
-    private void txtDescripcion4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDescripcion4ActionPerformed
+    private void txtObsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtObsActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtDescripcion4ActionPerformed
+    }//GEN-LAST:event_txtObsActionPerformed
 
-    private void txtDescripcion4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescripcion4KeyPressed
+    private void txtObsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtObsKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtDescripcion4KeyPressed
+    }//GEN-LAST:event_txtObsKeyPressed
 
-    private void txtDescripcion4KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescripcion4KeyReleased
+    private void txtObsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtObsKeyReleased
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtDescripcion4KeyReleased
+    }//GEN-LAST:event_txtObsKeyReleased
 
-    private void txtDescripcion4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescripcion4KeyTyped
+    private void txtObsKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtObsKeyTyped
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtDescripcion4KeyTyped
+    }//GEN-LAST:event_txtObsKeyTyped
 
     public void SiguienteFoco(KeyEvent evt) {
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
@@ -612,13 +616,13 @@ public final class ABMEntrada extends javax.swing.JDialog {
 
     private void Limpiar() {
         txtCodigo.setText("");
-        txtDescripcion.setText("");
+        txtCantidad.setText("");
     }
 
     public void RegistroNuevo() {
         try {
-            if (!txtDescripcion.getText().trim().isEmpty()) {
-                String descri = txtDescripcion.getText();
+            if (!txtCantidad.getText().trim().isEmpty()) {
+                String descri = txtCantidad.getText();
                 int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro crear este nuevo registro?", "Confirmación", JOptionPane.YES_OPTION);
 
                 if (JOptionPane.YES_OPTION == confirmado) {
@@ -644,13 +648,13 @@ public final class ABMEntrada extends javax.swing.JDialog {
 
             } else {
                 JOptionPane.showMessageDialog(null, "Completa todos los campos marcados con *", "Error", JOptionPane.ERROR_MESSAGE);
-                txtDescripcion.requestFocus();
+                txtCantidad.requestFocus();
             }
 
         } catch (HeadlessException ex) {
             JOptionPane.showMessageDialog(null, "Completar los campos obligarios marcados con * ", "Advertencia", JOptionPane.WARNING_MESSAGE);
             System.out.println("Completar los campos obligarios marcados con * " + ex);
-            txtDescripcion.requestFocus();
+            txtCantidad.requestFocus();
         }
     }
 
@@ -661,7 +665,7 @@ public final class ABMEntrada extends javax.swing.JDialog {
         String sentencia;
         String cod, descri;
         cod = txtCodigo.getText();
-        descri = txtDescripcion.getText();
+        descri = txtCantidad.getText();
 
         //si los datos son diferentes de vacios
         if (!cod.isEmpty() && !descri.isEmpty()) {
@@ -693,9 +697,9 @@ public final class ABMEntrada extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardar;
-    public javax.swing.JComboBox<metodos.MetodosCombo> cbClaseProducto;
-    private javax.swing.JComboBox cbClaseProducto1;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
+    private javax.swing.JComboBox cbPresentacion;
+    public javax.swing.JComboBox<metodos.MetodosCombo> cbProducto;
+    private com.toedter.calendar.JDateChooser dcFechaEntrada;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -712,11 +716,11 @@ public final class ABMEntrada extends javax.swing.JDialog {
     private javax.swing.JPanel jpPrincipal;
     private javax.swing.JPanel jpTabla;
     private javax.swing.JLabel lbBanner;
+    private javax.swing.JTextField txtCantidad;
     private javax.swing.JTextField txtCodigo;
-    private javax.swing.JTextField txtDescripcion;
-    private javax.swing.JTextField txtDescripcion1;
-    private javax.swing.JTextField txtDescripcion2;
-    private javax.swing.JTextField txtDescripcion3;
-    private javax.swing.JTextField txtDescripcion4;
+    private javax.swing.JTextField txtObs;
+    private javax.swing.JTextField txtPrecioTotal;
+    private javax.swing.JTextField txtPrecioUnitario;
+    private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 }
