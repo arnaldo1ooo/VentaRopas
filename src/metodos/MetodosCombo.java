@@ -6,11 +6,13 @@
 package metodos;
 
 import conexion.Conexion;
+import java.awt.Color;
 import java.sql.SQLException;
 import javax.swing.JComboBox;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.UIManager;
 
 /**
  *

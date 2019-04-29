@@ -39,6 +39,8 @@ import javax.swing.JInternalFrame;
  */
 public class Metodos {
 
+    public int CantRegistros = 0;
+
     public Conexion ObtenerRSSentencia(String sentencia) { //con.Desconectar luego de usar el metodo
         Conexion con = new Conexion();
         try {
@@ -175,11 +177,13 @@ public class Metodos {
             ResultSetMetaData mdrs = rs.getMetaData();
             int numColumns = mdrs.getColumnCount();
             Object[] registro = new Object[numColumns]; //el numero es la cantidad de columnas del rs
+            CantRegistros = 0;
             while (rs.next()) {
                 for (int j = 0; j < numColumns; j++) {
                     registro[j] = (rs.getString(j + 1));
                 }
-                modelotabla.addRow(registro);//agrega el registro a la tabla  
+                modelotabla.addRow(registro);//agrega el registro a la tabla
+                CantRegistros = CantRegistros + 1;
             }
             LaTabla.setModel(modelotabla);//asigna a la tabla el modelo creado
 

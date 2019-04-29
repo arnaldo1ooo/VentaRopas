@@ -13,6 +13,7 @@ import forms.producto.formulacion.ABMFormulacion;
 import forms.producto.clase_producto.ABMClaseProducto;
 import forms.producto.fabricante.ABMFabricante;
 import forms.producto.tipoagroquimico.ABMTipoAgroquimico;
+import java.awt.Color;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -36,6 +37,7 @@ import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED;
 import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER;
 import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED;
 import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import metodos.MetodosCombo;
@@ -77,6 +79,9 @@ public class ABMProducto extends javax.swing.JDialog {
         TablaPrincipalConsulta(txtBuscar.getText());
         txtBuscar.requestFocus();
 
+        UIManager.put("ComboBox.disabledBackground", Color.BLUE);
+        lUIManager.put("ComboBox.disabledForeground", Color.BLUE);
+
         //Shortcuts 
         btnNuevo.setMnemonic(KeyEvent.VK_N); //ALT+N
         btnModificar.setMnemonic(KeyEvent.VK_M); //ALT+M
@@ -91,8 +96,7 @@ public class ABMProducto extends javax.swing.JDialog {
         cbFiltroClaseProducto.removeAllItems();
         cbEmpresaRegistrante.removeAllItems();
         cbFormulacion.removeAllItems();
-        
-        
+
         AutoCompleteDecorator.decorate(cbFabricante);
         AutoCompleteDecorator.decorate(cbClaseProducto);
         AutoCompleteDecorator.decorate(cbTipoAgroquimico);
@@ -122,6 +126,7 @@ public class ABMProducto extends javax.swing.JDialog {
 
         metodos.ConsultaFiltroTablaBD(tbPrincipal, titlesJtabla, camposconsulta, nombreSp, filtro, cbFiltroCampo);
         metodos.AnchuraColumna(tbPrincipal);
+        lbCantRegistros.setText(metodos.CantRegistros + " Registros encontrados");
     }
 
     @SuppressWarnings("unchecked")
@@ -145,6 +150,7 @@ public class ABMProducto extends javax.swing.JDialog {
         cbFiltroClaseProducto = new javax.swing.JComboBox();
         lblBuscarCampo1 = new javax.swing.JLabel();
         lblBuscarCampo2 = new javax.swing.JLabel();
+        lbCantRegistros = new javax.swing.JLabel();
         jpBotones = new javax.swing.JPanel();
         btnNuevo = new javax.swing.JButton();
         btnModificar = new javax.swing.JButton();
@@ -219,7 +225,9 @@ public class ABMProducto extends javax.swing.JDialog {
         jpBanner.setLayout(jpBannerLayout);
         jpBannerLayout.setHorizontalGroup(
             jpBannerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(lbBanner, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jpBannerLayout.createSequentialGroup()
+                .addComponent(lbBanner, javax.swing.GroupLayout.PREFERRED_SIZE, 1238, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jpBannerLayout.setVerticalGroup(
             jpBannerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -310,21 +318,24 @@ public class ABMProducto extends javax.swing.JDialog {
         lblBuscarCampo2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblBuscarCampo2.setText("Campo");
 
+        lbCantRegistros.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        lbCantRegistros.setForeground(new java.awt.Color(204, 204, 0));
+        lbCantRegistros.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lbCantRegistros.setText("0 Registros encontrados");
+        lbCantRegistros.setPreferredSize(new java.awt.Dimension(57, 25));
+
         javax.swing.GroupLayout jpTablaLayout = new javax.swing.GroupLayout(jpTabla);
         jpTabla.setLayout(jpTablaLayout);
         jpTablaLayout.setHorizontalGroup(
             jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpTablaLayout.createSequentialGroup()
                 .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpTablaLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(scpPrincipal))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpTablaLayout.createSequentialGroup()
+                    .addGroup(jpTablaLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(jLabel10)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtBuscar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 444, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
                         .addComponent(lblBuscarCampo, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -337,27 +348,38 @@ public class ABMProducto extends javax.swing.JDialog {
                             .addComponent(cbFiltroClaseProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpTablaLayout.createSequentialGroup()
                                 .addComponent(lblBuscarCampo1)
-                                .addGap(61, 61, 61)))
-                        .addGap(1, 1, 1)))
+                                .addGap(61, 61, 61))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpTablaLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(scpPrincipal))
+                    .addGroup(jpTablaLayout.createSequentialGroup()
+                        .addGap(747, 747, 747)
+                        .addComponent(lbCantRegistros, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jpTablaLayout.setVerticalGroup(
             jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpTablaLayout.createSequentialGroup()
-                .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblBuscarCampo1)
-                    .addComponent(lblBuscarCampo2))
-                .addGap(0, 0, 0)
                 .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lblBuscarCampo, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(cbFiltroClaseProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(cbFiltroCampo, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jpTablaLayout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jpTablaLayout.createSequentialGroup()
+                        .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblBuscarCampo1)
+                            .addComponent(lblBuscarCampo2))
+                        .addGap(0, 0, 0)
+                        .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblBuscarCampo, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbFiltroClaseProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbFiltroCampo, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(0, 0, 0)
-                .addComponent(scpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(scpPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(3, 3, 3)
+                .addComponent(lbCantRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(3, 3, 3))
         );
 
         jpBotones.setBackground(new java.awt.Color(45, 62, 80));
@@ -430,15 +452,15 @@ public class ABMProducto extends javax.swing.JDialog {
         jpBotonesLayout.setVerticalGroup(
             jpBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpBotonesLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(11, 11, 11)
                 .addComponent(btnNuevo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnModificar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnEliminar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnInforme)
-                .addContainerGap())
+                .addGap(15, 15, 15))
         );
 
         jtpEdicion.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
@@ -449,13 +471,14 @@ public class ABMProducto extends javax.swing.JDialog {
         jpDatosGenerales.setBackground(new java.awt.Color(45, 62, 80));
         jpDatosGenerales.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
 
-        jLabel5.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel5.setText("Código:");
         jLabel5.setPreferredSize(new java.awt.Dimension(57, 25));
 
-        txtCodigo.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        txtCodigo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtCodigo.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         txtCodigo.setEnabled(false);
         txtCodigo.setMinimumSize(new java.awt.Dimension(13, 25));
         txtCodigo.setPreferredSize(new java.awt.Dimension(13, 27));
@@ -468,13 +491,14 @@ public class ABMProducto extends javax.swing.JDialog {
             }
         });
 
-        jLabel7.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel7.setText("Fabricante*:");
         jLabel7.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
-        txtNombreComercial.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        txtNombreComercial.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtNombreComercial.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         txtNombreComercial.setEnabled(false);
         txtNombreComercial.setPreferredSize(new java.awt.Dimension(13, 27));
         txtNombreComercial.addActionListener(new java.awt.event.ActionListener() {
@@ -488,12 +512,13 @@ public class ABMProducto extends javax.swing.JDialog {
             }
         });
 
-        lbNumRegistro.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        lbNumRegistro.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         lbNumRegistro.setForeground(new java.awt.Color(255, 255, 255));
         lbNumRegistro.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lbNumRegistro.setText("Nº de registro*:");
 
-        txtNRegistro.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        txtNRegistro.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtNRegistro.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         txtNRegistro.setEnabled(false);
         txtNRegistro.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -512,19 +537,19 @@ public class ABMProducto extends javax.swing.JDialog {
             }
         });
 
-        jLabel3.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel3.setText("Nombre comercial*:");
 
-        cbFabricante.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        cbFabricante.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         cbFabricante.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         cbFabricante.setEnabled(false);
         cbFabricante.setMinimumSize(new java.awt.Dimension(55, 31));
         cbFabricante.setName("Fabricante"); // NOI18N
         cbFabricante.setPreferredSize(new java.awt.Dimension(55, 31));
 
-        cbTipoAgroquimico.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        cbTipoAgroquimico.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         cbTipoAgroquimico.setEnabled(false);
         cbTipoAgroquimico.setMinimumSize(new java.awt.Dimension(55, 31));
         cbTipoAgroquimico.setName("TipoAgroquimico"); // NOI18N
@@ -541,7 +566,7 @@ public class ABMProducto extends javax.swing.JDialog {
             }
         });
 
-        cbFormulacion.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        cbFormulacion.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         cbFormulacion.setEnabled(false);
         cbFormulacion.setMinimumSize(new java.awt.Dimension(55, 31));
         cbFormulacion.setName("Formulacion"); // NOI18N
@@ -557,7 +582,7 @@ public class ABMProducto extends javax.swing.JDialog {
             }
         });
 
-        jLabel6.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel6.setText("Formulación*:");
@@ -573,7 +598,7 @@ public class ABMProducto extends javax.swing.JDialog {
             }
         });
 
-        jLabel11.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        jLabel11.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel11.setText("Ingredientes Activos*:");
@@ -581,6 +606,7 @@ public class ABMProducto extends javax.swing.JDialog {
 
         tbIngrActivos.setAutoCreateRowSorter(true);
         tbIngrActivos.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(153, 153, 153), null, new java.awt.Color(102, 102, 102)));
+        tbIngrActivos.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         tbIngrActivos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -632,12 +658,12 @@ public class ABMProducto extends javax.swing.JDialog {
             }
         });
 
-        jLabel4.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel4.setText("Empresa registrante*:");
 
-        cbEmpresaRegistrante.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        cbEmpresaRegistrante.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         cbEmpresaRegistrante.setEnabled(false);
         cbEmpresaRegistrante.setMinimumSize(new java.awt.Dimension(55, 31));
         cbEmpresaRegistrante.setName("EmpresaRegistrante"); // NOI18N
@@ -654,12 +680,12 @@ public class ABMProducto extends javax.swing.JDialog {
             }
         });
 
-        jbIImagen.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        jbIImagen.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jbIImagen.setForeground(new java.awt.Color(255, 255, 255));
         jbIImagen.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jbIImagen.setText("Clase de producto*:");
 
-        cbClaseProducto.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        cbClaseProducto.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         cbClaseProducto.setEnabled(false);
         cbClaseProducto.setMinimumSize(new java.awt.Dimension(55, 31));
         cbClaseProducto.setName("ClaseProducto"); // NOI18N
@@ -676,7 +702,7 @@ public class ABMProducto extends javax.swing.JDialog {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel1.setText("Tipo de Agroquimico*:");
@@ -720,7 +746,7 @@ public class ABMProducto extends javax.swing.JDialog {
             }
         });
 
-        lbDosis.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        lbDosis.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         lbDosis.setForeground(new java.awt.Color(255, 255, 255));
         lbDosis.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lbDosis.setText("Dosis recomendada");
@@ -728,6 +754,7 @@ public class ABMProducto extends javax.swing.JDialog {
 
         tbDosis.setAutoCreateRowSorter(true);
         tbDosis.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(153, 153, 153), null, new java.awt.Color(102, 102, 102)));
+        tbDosis.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         tbDosis.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -779,7 +806,7 @@ public class ABMProducto extends javax.swing.JDialog {
             }
         });
 
-        lbEstado.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        lbEstado.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         lbEstado.setForeground(new java.awt.Color(255, 255, 255));
         lbEstado.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lbEstado.setText("(Estado)");
@@ -810,7 +837,7 @@ public class ABMProducto extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jpDatosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lbNumRegistro, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
                     .addComponent(jbIImagen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(4, 4, 4)
@@ -831,17 +858,11 @@ public class ABMProducto extends javax.swing.JDialog {
                 .addGap(47, 47, 47)
                 .addGroup(jpDatosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(4, 4, 4)
                 .addGroup(jpDatosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpDatosGeneralesLayout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(lbDosis, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(2, 2, 2)
-                        .addComponent(lbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(39, 39, 39))
                     .addGroup(jpDatosGeneralesLayout.createSequentialGroup()
                         .addGroup(jpDatosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(cbFormulacion, javax.swing.GroupLayout.Alignment.LEADING, 0, 263, Short.MAX_VALUE)
@@ -855,12 +876,19 @@ public class ABMProducto extends javax.swing.JDialog {
                             .addComponent(btnTipoAgroquimico, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnFormulacion, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jpDatosGeneralesLayout.createSequentialGroup()
-                        .addComponent(scpDosis, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jpDatosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpDatosGeneralesLayout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(lbDosis, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(1, 1, 1)
+                                .addComponent(lbEstado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(scpDosis, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(4, 4, 4)
                         .addGroup(jpDatosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnMasDosis, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnModificarDosis, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnMenosDosis, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
                 .addComponent(lbImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jpDatosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -992,19 +1020,19 @@ public class ABMProducto extends javax.swing.JDialog {
         jpPrincipal.setLayout(jpPrincipalLayout);
         jpPrincipalLayout.setHorizontalGroup(
             jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpBanner, javax.swing.GroupLayout.DEFAULT_SIZE, 1271, Short.MAX_VALUE)
+            .addComponent(jpBanner, javax.swing.GroupLayout.DEFAULT_SIZE, 1241, Short.MAX_VALUE)
             .addGroup(jpPrincipalLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jpTabla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jpTabla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jpBotones, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(16, 16, 16))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpPrincipalLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jpBotones2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(485, 485, 485))
             .addGroup(jpPrincipalLayout.createSequentialGroup()
-                .addComponent(jtpEdicion, javax.swing.GroupLayout.PREFERRED_SIZE, 1271, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jtpEdicion, javax.swing.GroupLayout.PREFERRED_SIZE, 1241, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         jpPrincipalLayout.setVerticalGroup(
@@ -1012,9 +1040,11 @@ public class ABMProducto extends javax.swing.JDialog {
             .addGroup(jpPrincipalLayout.createSequentialGroup()
                 .addComponent(jpBanner, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jpTabla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jpBotones, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jpPrincipalLayout.createSequentialGroup()
+                        .addGap(36, 36, 36)
+                        .addComponent(jpBotones, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jtpEdicion, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1029,7 +1059,7 @@ public class ABMProducto extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 1269, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jpPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 1238, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1867,6 +1897,7 @@ public class ABMProducto extends javax.swing.JDialog {
     private javax.swing.JPanel jpTabla;
     private javax.swing.JTabbedPane jtpEdicion;
     private javax.swing.JLabel lbBanner;
+    private javax.swing.JLabel lbCantRegistros;
     private javax.swing.JLabel lbDosis;
     public javax.swing.JLabel lbEstado;
     private javax.swing.JLabel lbImagen;
