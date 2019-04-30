@@ -14,6 +14,7 @@ import forms.producto.clase_producto.ABMClaseProducto;
 import forms.producto.fabricante.ABMFabricante;
 import forms.producto.tipoagroquimico.ABMTipoAgroquimico;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -29,10 +30,13 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ComboBoxEditor;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED;
 import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER;
 import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED;
@@ -72,15 +76,13 @@ public class ABMProducto extends javax.swing.JDialog {
     public ABMProducto(java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
         this.regdosis = new String[5];
+
         initComponents();
         CargarComboBoxes();
         imagendefault = lbImagen.getIcon();
 
         TablaPrincipalConsulta(txtBuscar.getText());
         txtBuscar.requestFocus();
-
-        UIManager.put("ComboBox.disabledBackground", Color.BLUE);
-        lUIManager.put("ComboBox.disabledForeground", Color.BLUE);
 
         //Shortcuts 
         btnNuevo.setMnemonic(KeyEvent.VK_N); //ALT+N
@@ -96,12 +98,6 @@ public class ABMProducto extends javax.swing.JDialog {
         cbFiltroClaseProducto.removeAllItems();
         cbEmpresaRegistrante.removeAllItems();
         cbFormulacion.removeAllItems();
-
-        AutoCompleteDecorator.decorate(cbFabricante);
-        AutoCompleteDecorator.decorate(cbClaseProducto);
-        AutoCompleteDecorator.decorate(cbTipoAgroquimico);
-        AutoCompleteDecorator.decorate(cbEmpresaRegistrante);
-        AutoCompleteDecorator.decorate(cbFormulacion);
 
         //Carga los combobox con las consultas
         metodoscombo.CargarComboBox(cbFabricante, "SELECT fa_codigo, fa_descripcion FROM fabricante ORDER BY fa_descripcion");
@@ -203,6 +199,7 @@ public class ABMProducto extends javax.swing.JDialog {
         btnMenosDosis = new javax.swing.JButton();
         lbEstado = new javax.swing.JLabel();
         btnModificarDosis = new javax.swing.JButton();
+        jComboBox1 = new javax.swing.JComboBox<>();
         jpBotones2 = new javax.swing.JPanel();
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
@@ -829,6 +826,9 @@ public class ABMProducto extends javax.swing.JDialog {
             }
         });
 
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.setEnabled(false);
+
         javax.swing.GroupLayout jpDatosGeneralesLayout = new javax.swing.GroupLayout(jpDatosGenerales);
         jpDatosGenerales.setLayout(jpDatosGeneralesLayout);
         jpDatosGeneralesLayout.setHorizontalGroup(
@@ -857,11 +857,16 @@ public class ABMProducto extends javax.swing.JDialog {
                             .addComponent(btnTipoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(47, 47, 47)
                 .addGroup(jpDatosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(4, 4, 4)
+                    .addGroup(jpDatosGeneralesLayout.createSequentialGroup()
+                        .addGroup(jpDatosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(4, 4, 4))
+                    .addGroup(jpDatosGeneralesLayout.createSequentialGroup()
+                        .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(48, 48, 48)))
                 .addGroup(jpDatosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpDatosGeneralesLayout.createSequentialGroup()
                         .addGroup(jpDatosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -888,7 +893,7 @@ public class ABMProducto extends javax.swing.JDialog {
                             .addComponent(btnMasDosis, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnModificarDosis, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnMenosDosis, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                .addGap(11, 11, 11)
                 .addComponent(lbImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jpDatosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -949,7 +954,11 @@ public class ABMProducto extends javax.swing.JDialog {
                                         .addComponent(lbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGroup(jpDatosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(jpDatosGeneralesLayout.createSequentialGroup()
-                                        .addComponent(btnMas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(jpDatosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(btnMas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(jpDatosGeneralesLayout.createSequentialGroup()
+                                                .addGap(21, 21, 21)
+                                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(btnMenos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(scpIngrActivos, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
@@ -1880,6 +1889,7 @@ public class ABMProducto extends javax.swing.JDialog {
     private javax.swing.JComboBox cbFiltroClaseProducto;
     private javax.swing.JComboBox<metodos.MetodosCombo> cbFormulacion;
     private javax.swing.JComboBox<metodos.MetodosCombo> cbTipoAgroquimico;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

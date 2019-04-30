@@ -7,16 +7,18 @@ package metodos;
 
 import conexion.Conexion;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.sql.SQLException;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
-import javax.swing.UIManager;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /**
  *
- * @author arnal
+ * @author Lic. Arnaldo Cantero
  */
 public class MetodosCombo {
 
@@ -65,6 +67,7 @@ public class MetodosCombo {
 
     public void CargarComboBox(JComboBox ElCombo, String sentencia) {
         try {
+            AutoCompleteDecorator.decorate(ElCombo);
             Conexion con = new Conexion();
             con.ConectarBasedeDatos();
             System.out.println("Cargar combo (" + ElCombo.getName() + "): " + sentencia);
