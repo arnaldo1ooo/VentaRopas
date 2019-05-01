@@ -17,7 +17,7 @@ public final class FormInventario extends javax.swing.JDialog {
 
     private ABMProducto abmproducto; //Para que tenga relacion con su form padre
 
-    public FormInventario(ABMProducto abmproducto, java.awt.Frame parent, Boolean modal) {
+    public FormInventario(java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
         this.abmproducto = abmproducto;
         initComponents();

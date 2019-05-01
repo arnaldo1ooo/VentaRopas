@@ -72,7 +72,9 @@ public final class ABMEntrada extends javax.swing.JDialog {
         btnCancelar = new javax.swing.JButton();
 
         setTitle("Ventana entrada de producto");
+        setAlwaysOnTop(true);
         setBackground(new java.awt.Color(45, 62, 80));
+        setModal(true);
         setResizable(false);
 
         jpPrincipal.setBackground(new java.awt.Color(45, 62, 80));

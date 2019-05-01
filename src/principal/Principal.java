@@ -6,6 +6,7 @@
 package principal;
 
 import forms.configuracion.truncartabla.TruncarTabla;
+import forms.inventario.FormInventario;
 import metodos.ImagenFondo;
 import forms.producto.ABMProducto;
 import forms.producto.dosis.ABMDosis;
@@ -574,7 +575,8 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_jMenuItem10ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+       FormInventario forminventario = new FormInventario(this,false);
+       forminventario.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
