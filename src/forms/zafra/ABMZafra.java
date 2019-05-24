@@ -6,7 +6,6 @@
 package forms.zafra;
 
 import conexion.Conexion;
-import forms.inventario.entrada.ABMEntrada;
 import java.awt.HeadlessException;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;

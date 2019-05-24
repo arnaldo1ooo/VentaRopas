@@ -8,6 +8,8 @@ package principal;
 import forms.configuracion.truncartabla.TruncarTabla;
 import forms.inventario.FormInventario;
 import forms.inventario.empresa_vendedora.ABMEmpresaVendedora;
+import forms.inventario.entrada.ABMEntrada;
+import forms.inventario.entrada.TablaEntrada;
 import metodos.ImagenFondo;
 import forms.producto.ABMProducto;
 import forms.producto.dosis.ABMDosis;
@@ -254,6 +256,11 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         });
 
         jMenuItem11.setText("ENTRADAS");
+        jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem11ActionPerformed(evt);
+            }
+        });
         jMenu8.add(jMenuItem11);
         jMenu8.add(jSeparator11);
 
@@ -529,7 +536,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_jMenuItem19ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        ABMProducto abmproducto = new ABMProducto(null, false,null);
+        ABMProducto abmproducto = new ABMProducto(this, false,null);
         abmproducto.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -598,6 +605,11 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     private void jMenu8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu8ActionPerformed
 
     }//GEN-LAST:event_jMenu8ActionPerformed
+
+    private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
+        TablaEntrada tablaentrada = new TablaEntrada(this,true);
+        tablaentrada.setVisible(true);
+    }//GEN-LAST:event_jMenuItem11ActionPerformed
 
     /**
      * @param args the command line arguments

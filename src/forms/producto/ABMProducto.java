@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package forms.producto;
 
 import conexion.Conexion;
@@ -75,7 +70,7 @@ public class ABMProducto extends javax.swing.JDialog {
     public java.awt.Dialog d;
     private JComboBox<metodos.MetodosCombo> cbProductoSelec;
 
-    public ABMProducto(java.awt.Dialog parent, Boolean modal, JComboBox<metodos.MetodosCombo> cbProducto) {
+    public ABMProducto(java.awt.Frame parent, Boolean modal, JComboBox<metodos.MetodosCombo> cbProducto) {
         super(parent, modal);
         this.regdosis = new String[5];
 

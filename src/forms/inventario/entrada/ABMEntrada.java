@@ -10,8 +10,6 @@ import forms.inventario.empresa_vendedora.ABMEmpresaVendedora;
 import forms.producto.ABMProducto;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -20,6 +18,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import metodos.Metodos;
@@ -70,7 +70,7 @@ public class ABMEntrada extends javax.swing.JDialog {
         dcFechaEntrada = new com.toedter.calendar.JDateChooser();
         jLabel6 = new javax.swing.JLabel();
         cbProducto = new javax.swing.JComboBox<>();
-        jLabel8 = new javax.swing.JLabel();
+        lbPresentacion = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         txtPrecioUnitario = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
@@ -180,16 +180,21 @@ public class ABMEntrada extends javax.swing.JDialog {
         cbProducto.setMinimumSize(new java.awt.Dimension(55, 31));
         cbProducto.setName("Producto"); // NOI18N
         cbProducto.setPreferredSize(new java.awt.Dimension(55, 31));
+        cbProducto.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbProductoItemStateChanged(evt);
+            }
+        });
         cbProducto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbProductoActionPerformed(evt);
             }
         });
 
-        jLabel8.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel8.setText("Lts");
+        lbPresentacion.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        lbPresentacion.setForeground(new java.awt.Color(255, 255, 255));
+        lbPresentacion.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lbPresentacion.setText("Lts");
 
         jLabel9.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
@@ -249,7 +254,7 @@ public class ABMEntrada extends javax.swing.JDialog {
         jLabel14.setText("Obs:");
 
         cbPresentacion.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        cbPresentacion.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "0.5", "1", "5", "10", "20", "25", "50", " " }));
+        cbPresentacion.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "0.5", "1", "5", "10", "20", "25", "50", "100" }));
         cbPresentacion.setToolTipText("En que presentación viene el producto");
         cbPresentacion.setFocusable(false);
         cbPresentacion.setMinimumSize(new java.awt.Dimension(55, 31));
@@ -299,6 +304,11 @@ public class ABMEntrada extends javax.swing.JDialog {
         txtNumFactura.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtNumFactura.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtNumFactura.setToolTipText("N° de factura de la compra");
+        txtNumFactura.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNumFacturaKeyTyped(evt);
+            }
+        });
 
         jLabel17.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel17.setForeground(new java.awt.Color(255, 255, 255));
@@ -361,8 +371,8 @@ public class ABMEntrada extends javax.swing.JDialog {
                                         .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGroup(jpTablaLayout.createSequentialGroup()
                                             .addComponent(cbPresentacion, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(3, 3, 3)
-                                            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                            .addGap(2, 2, 2)
+                                            .addComponent(lbPresentacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                     .addGap(4, 4, 4)
                                     .addComponent(txtPrecioTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGap(3, 3, 3)
@@ -391,7 +401,7 @@ public class ABMEntrada extends javax.swing.JDialog {
                         .addComponent(cbEmpresaVendedora, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(4, 4, 4)
                         .addComponent(btnEmpresaVendedora, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(10, 10, 10))
+                .addContainerGap())
         );
         jpTablaLayout.setVerticalGroup(
             jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -402,9 +412,9 @@ public class ABMEntrada extends javax.swing.JDialog {
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(4, 4, 4)
                 .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(dcFechaCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dcFechaCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jbIImagen4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dcFechaEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dcFechaEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jbIImagen3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(4, 4, 4)
                 .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
@@ -426,18 +436,17 @@ public class ABMEntrada extends javax.swing.JDialog {
                     .addComponent(btnEmpresaVendedora, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(4, 4, 4)
                 .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cbPresentacion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(4, 4, 4)
                 .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtPrecioUnitario, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtPrecioTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtPrecioTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(4, 4, 4)
                 .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -447,6 +456,10 @@ public class ABMEntrada extends javax.swing.JDialog {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpTablaLayout.createSequentialGroup()
+                .addContainerGap(176, Short.MAX_VALUE)
+                .addComponent(lbPresentacion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(142, 142, 142))
         );
 
         jpBotones2.setBackground(new java.awt.Color(45, 62, 80));
@@ -507,15 +520,15 @@ public class ABMEntrada extends javax.swing.JDialog {
         jpPrincipal.setLayout(jpPrincipalLayout);
         jpPrincipalLayout.setHorizontalGroup(
             jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpBanner, javax.swing.GroupLayout.DEFAULT_SIZE, 584, Short.MAX_VALUE)
-            .addGroup(jpPrincipalLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jpTabla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jpBanner, javax.swing.GroupLayout.DEFAULT_SIZE, 568, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpPrincipalLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jpBotones2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(158, 158, 158))
+            .addGroup(jpPrincipalLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jpTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 546, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jpPrincipalLayout.setVerticalGroup(
             jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -525,7 +538,7 @@ public class ABMEntrada extends javax.swing.JDialog {
                 .addComponent(jpTabla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jpBotones2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
 
         jpBanner.getAccessibleContext().setAccessibleName("");
@@ -548,11 +561,8 @@ public class ABMEntrada extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        //Poner si el producto y su presentacion ya existen en el inventario
 
         RegistroNuevoEntradaInventario();
-
-        this.dispose(); //Destruye el form
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -566,10 +576,8 @@ public class ABMEntrada extends javax.swing.JDialog {
     }//GEN-LAST:event_btnGuardarKeyPressed
 
     private void btnProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductoActionPerformed
-        ABMProducto abmproducto = new ABMProducto(this, true, cbProducto);
-
+        ABMProducto abmproducto = new ABMProducto(null, true, cbProducto);
         abmproducto.setVisible(true);
-
     }//GEN-LAST:event_btnProductoActionPerformed
 
     private void txtCantidadKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyReleased
@@ -646,6 +654,36 @@ public class ABMEntrada extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_cbProductoActionPerformed
 
+    private void txtNumFacturaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumFacturaKeyTyped
+        // Verificar si la tecla pulsada no es un digito
+        char caracter = evt.getKeyChar();
+        if (((caracter < '0') || (caracter > '9')) && (caracter != '\b' /* corresponde a BACK_SPACE */)) {
+            evt.consume(); // ignorar el evento de teclado
+        }
+    }//GEN-LAST:event_txtNumFacturaKeyTyped
+
+    private void cbProductoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbProductoItemStateChanged
+        if (cbProducto.getSelectedIndex() != -1) {
+            try {
+                Conexion con = metodos.ObtenerRSSentencia("SELECT es_descripcion FROM producto, formulacion, estado "
+                        + "WHERE pro_formulacion = for_codigo AND for_estado = es_codigo AND pro_codigo = '" + metodoscombo.ObtenerIdComboBox(cbProducto) + "'");
+                con.rs.next();
+
+                String estado = con.rs.getString("es_descripcion");
+                if (estado.equals("ml/Ha")) {
+                    lbPresentacion.setText("Lts");
+                } else {
+                    if (estado.equals("gr/Ha")) {
+                        lbPresentacion.setText("Kgs");
+                    }
+                }
+            } catch (SQLException ex) {
+                System.out.println("Error al verificar estado de producto");
+                Logger.getLogger(ABMEntrada.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_cbProductoItemStateChanged
+
     public void SiguienteFoco(KeyEvent evt) {
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
             ((JComponent) evt.getSource()).transferFocus();//Con esta parte transfieres el foco al siguiente campo sea un Jtextfield, Jpasswordfield, boton, etc..
@@ -655,6 +693,14 @@ public class ABMEntrada extends javax.swing.JDialog {
     private void Limpiar() {
         txtCodigo.setText("");
         txtCantidad.setText("");
+        txtNumFactura.setText("");
+        txtPrecioTotal.setText("");
+        txtUsuario.setText("");
+        txtPrecioUnitario.setText("");
+        cbEmpresaVendedora.setSelectedIndex(-1);
+        cbEstablecimiento.setSelectedIndex(-1);
+        cbPresentacion.setSelectedIndex(1);
+        cbProducto.setSelectedIndex(-1);
     }
 
     public void RegistroNuevoEntradaInventario() {
@@ -704,9 +750,9 @@ public class ABMEntrada extends javax.swing.JDialog {
                             statement.executeUpdate(sentencia);
                         }
                         RegistroNuevoInventario();
-
                         JOptionPane.showMessageDialog(this, "Se agrego correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
                         Limpiar();
+                        this.dispose(); //Destruye el form
                     } catch (HeadlessException ex) {
                         JOptionPane.showMessageDialog(this, "Ocurrió un Error " + ex.getMessage());
                     } catch (SQLException ex) {
@@ -724,7 +770,6 @@ public class ABMEntrada extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "Error al guardar registro", "Error", JOptionPane.ERROR_MESSAGE);
             System.out.println("Completar los campos obligarios marcados con * " + ex);
             txtCantidad.requestFocus();
-            return;
         }
     }
 
@@ -735,11 +780,11 @@ public class ABMEntrada extends javax.swing.JDialog {
             int idproducto = metodoscombo.ObtenerIdComboBox(cbProducto);
             double presentacion = Double.parseDouble(cbPresentacion.getSelectedItem() + "");
             String fechaultimaentrada = formatofecha.format(new Date());
-            String fechaultimasalida = null;
+            String fechaultimasalida = "0000-00-00";
             int cantidadentrada = 1;
             int cantidadsalida = 0;
             double existencia = Double.parseDouble(txtCantidad.getText());
-            double existenciatotal = existencia * presentacion;
+            double existenciatotal = (existencia * presentacion)*1000;
             double costototal = Double.parseDouble(txtPrecioTotal.getText().replace(",", "."));
 
             //REGISTRAR NUEVO
@@ -791,7 +836,6 @@ public class ABMEntrada extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel jbIImagen3;
@@ -801,6 +845,7 @@ public class ABMEntrada extends javax.swing.JDialog {
     private javax.swing.JPanel jpPrincipal;
     private javax.swing.JPanel jpTabla;
     private javax.swing.JLabel lbBanner;
+    private javax.swing.JLabel lbPresentacion;
     private javax.swing.JTextArea taObs;
     private javax.swing.JTextField txtCantidad;
     private javax.swing.JTextField txtCodigo;
