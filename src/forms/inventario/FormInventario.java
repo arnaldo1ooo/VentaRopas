@@ -14,6 +14,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -30,10 +32,12 @@ public class FormInventario extends javax.swing.JDialog {
     public FormInventario(java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
         initComponents();
-        TablaConsulta(txtFiltro.getText()); //Trae todos los registros
+
         txtFiltro.requestFocus();
 
         CargarCombos();
+
+        TablaConsulta(txtFiltro.getText()); //Trae todos los registros
     }
 
     //-------------METODOS----------//
@@ -51,11 +55,11 @@ public class FormInventario extends javax.swing.JDialog {
         }
     }
 
-    public void TablaConsulta(String filtro) {//Realiza la consulta de los productos que tenemos en la base de datos
+    private void TablaConsulta(String filtro) {//Realiza la consulta de los productos que tenemos en la base de datos
         String titlesJtabla[] = {"Código", "Producto", "Presentación", "Última entrada", "Última salida", "Cant entrada",
-            "Cant salida", "Existencia", "Existencia total", "Costo total"};
+            "Cant salida", "Existencia (unidades)", "Existencia (Kg/Lt)", "Costo total ($)"};
         String titlesconsulta[] = {"in_codigo", "pro_descripcion", "in_presentacion", "in_fechaultimaentrada", "in_fechaultimasalida",
-            "in_cantidadentradas", "in_cantidadsalida", "in_existencia", "in_existenciatotal", "in_costototal"};
+            "in_cantidadentrada", "in_cantidadsalida", "in_existencia", "in_existenciatotal", "in_costototal"};
         String nombresp = "SP_InventarioConsulta";
         int idestablecimiento = metodoscombo.ObtenerIdComboBox(cbEstablecimiento);
 
@@ -102,11 +106,20 @@ public class FormInventario extends javax.swing.JDialog {
             ResultSetMetaData mdrs = rs.getMetaData();
             int numColumns = mdrs.getColumnCount();
             Object[] registro = new Object[numColumns]; //el numero es la cantidad de columnas del rs
+            String estado;
             CantRegistros = 0;
             while (rs.next()) {
-                for (int j = 0; j < numColumns; j++) {
-                    registro[j] = (rs.getString(j + 1));
-                }
+                estado = EncontrarEstadoProducto(rs);
+                registro[0] = (rs.getString("in_codigo"));
+                registro[1] = (rs.getString("pro_descripcion"));
+                registro[2] = (rs.getString("in_presentacion") + " " + estado);
+                registro[3] = (rs.getString("in_fechaultimaentrada"));
+                registro[4] = (rs.getString("in_fechaultimasalida"));
+                registro[5] = (rs.getString("in_cantidadentrada"));
+                registro[6] = (rs.getString("in_cantidadsalida"));
+                registro[7] = (rs.getInt("in_existencia") + " unidades");
+                registro[8] = ((rs.getDouble("in_existenciatotal") / 1000) + " " + estado);
+                registro[9] = (rs.getString("in_costototal") + " $");
                 modelotabla.addRow(registro);//agrega el registro a la tabla
                 CantRegistros = CantRegistros + 1;
             }
@@ -120,6 +133,29 @@ public class FormInventario extends javax.swing.JDialog {
         }
 
         lbCantRegistros.setText(CantRegistros + " Registros encontrados");
+    }
+
+    private String EncontrarEstadoProducto(ResultSet rs) {
+        String estado = "No encontrado";
+        try {
+            String sentencia = "SELECT es_descripcion FROM producto, formulacion, estado "
+                    + "WHERE pro_formulacion = for_codigo AND for_estado = es_codigo AND pro_codigo = '" + rs.getString("pro_codigo") + "'";
+            Conexion con = metodos.ObtenerRSSentencia(sentencia);
+            con.rs.next();
+
+            estado = con.rs.getString("es_descripcion");
+            if (estado.equals("ml/Ha")) {
+                estado = ("Lts");
+            } else {
+                if (estado.equals("gr/Ha")) {
+                    estado = ("Kgs");
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error al verificar estado de producto");
+            Logger.getLogger(ABMEntrada.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return estado;
     }
 
 
@@ -207,7 +243,7 @@ public class FormInventario extends javax.swing.JDialog {
 
         tbTabla.setAutoCreateRowSorter(true);
         tbTabla.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(153, 153, 153), null, new java.awt.Color(102, 102, 102)));
-        tbTabla.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        tbTabla.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         tbTabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 

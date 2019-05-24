@@ -13,8 +13,11 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -29,17 +32,31 @@ public class TablaEntrada extends javax.swing.JDialog {
 
     public TablaEntrada(java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
+
         initComponents();
         CargarCombos();
-        
-        Calendar c2 = new GregorianCalendar();
+
+        try {
+            String fecha = "2008/01/01";
+            SimpleDateFormat formato = new SimpleDateFormat("yyyy/MM/dd");
+            java.util.Date fechaDate = formato.parse(fecha);
+            dcFechaInicio.setDate(fechaDate);
+        } catch (ParseException ex) {
+            Logger.getLogger(TablaEntrada.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        Calendar c2 = new java.util.GregorianCalendar();
         dcFechaFin.setCalendar(c2);
+
+        TablaPrincipalConsulta(txtBuscar.getText());
 
     }
 
     //-------------METODOS-------------//
     Metodos metodos = new Metodos();
     MetodosCombo metodoscombo = new MetodosCombo();
+
+    Boolean CombosListo = false;
 
     private void CargarCombos() {
         metodoscombo.CargarComboBox(cbProductorFiltro, "SELECT prod_codigo, CONCAT(prod_nombre, ' ', prod_apellido) FROM productor");
@@ -50,6 +67,7 @@ public class TablaEntrada extends javax.swing.JDialog {
         if (cbEstablecimientoFiltro.getItemCount() > 0) {
             cbEstablecimientoFiltro.setSelectedIndex(0);
         }
+        CombosListo = true;
     }
 
     @SuppressWarnings("unchecked")
@@ -134,6 +152,11 @@ public class TablaEntrada extends javax.swing.JDialog {
                 cbProductorFiltroItemStateChanged(evt);
             }
         });
+        cbProductorFiltro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbProductorFiltroActionPerformed(evt);
+            }
+        });
 
         cbEstablecimientoFiltro.setFont(new java.awt.Font("sansserif", 0, 10)); // NOI18N
         cbEstablecimientoFiltro.setName("EstablecimientoFiltro"); // NOI18N
@@ -203,7 +226,7 @@ public class TablaEntrada extends javax.swing.JDialog {
 
         tbPrincipal.setAutoCreateRowSorter(true);
         tbPrincipal.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(153, 153, 153), null, new java.awt.Color(102, 102, 102)));
-        tbPrincipal.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        tbPrincipal.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         tbPrincipal.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -283,15 +306,20 @@ public class TablaEntrada extends javax.swing.JDialog {
         lblBuscarCampo7.setText("Hasta");
         lblBuscarCampo7.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
 
-        dcFechaFin.setToolTipText("Fecha en que se compró el producto");
+        dcFechaFin.setToolTipText("");
 
-        dcFechaInicio.setToolTipText("Fecha en que se compró el producto");
+        dcFechaInicio.setToolTipText("");
 
         rb2.setForeground(new java.awt.Color(255, 255, 255));
         rb2.setText("Por fecha de compra");
         rb2.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 rb2ItemStateChanged(evt);
+            }
+        });
+        rb2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rb2ActionPerformed(evt);
             }
         });
 
@@ -301,6 +329,11 @@ public class TablaEntrada extends javax.swing.JDialog {
         rb1.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 rb1ItemStateChanged(evt);
+            }
+        });
+        rb1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rb1ActionPerformed(evt);
             }
         });
 
@@ -371,7 +404,7 @@ public class TablaEntrada extends javax.swing.JDialog {
                         .addComponent(jpTabla5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(150, 150, 150))
                     .addGroup(jpPrincipalLayout.createSequentialGroup()
-                        .addGap(26, 26, 26)
+                        .addGap(24, 24, 24)
                         .addComponent(jpTabla4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
@@ -400,11 +433,12 @@ public class TablaEntrada extends javax.swing.JDialog {
     }//GEN-LAST:event_cbEstablecimientoFiltroItemStateChanged
 
     private void cbProductorFiltroItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbProductorFiltroItemStateChanged
-        if (cbProductorFiltro.getSelectedIndex() != -1) {
-            metodoscombo.CargarComboBox(cbProductorFiltro, "SELECT prod_codigo, CONCAT(prod_nombre, ' ', prod_apellido) FROM productor");
-            if (cbProductorFiltro.getItemCount() > 0) {
-                cbProductorFiltro.setSelectedIndex(0);
+        if (cbProductorFiltro.getSelectedIndex() != -1 && CombosListo == true) {
+            metodoscombo.CargarComboBox(cbEstablecimientoFiltro, "SELECT estab_codigo, estab_descripcion FROM establecimiento WHERE estab_productor = " + metodoscombo.ObtenerIdComboBox(cbProductorFiltro));
+            if (cbEstablecimientoFiltro.getItemCount() > 0) {
+                cbEstablecimientoFiltro.setSelectedIndex(0);
             }
+            TablaPrincipalConsulta(txtBuscar.getText());
         }
     }//GEN-LAST:event_cbProductorFiltroItemStateChanged
 
@@ -420,15 +454,15 @@ public class TablaEntrada extends javax.swing.JDialog {
     }//GEN-LAST:event_txtBuscarKeyReleased
 
     String nombresp = "SP_EntradaConsulta";
-    String titlesJtabla[] = {"Codigo", "Producto", "N° Factura", "Empresa vendedora", "Fecha entrada", "Fecha compra", "Cantidad", "Presentación", "Precio unitario", "Precio total", "Usuario", "Obs."};
-    String titlesconsulta[] = {"en_codigo", "par_descripcion", "par_extension", "dep_descripcion", "dis_descripcion", "par_localidad", "par_x", "par_y"};
+    String titlesJtabla[] = {"Codigo", "Producto", "Presentación", "Cantidad", "Precio unitario", "Precio total", "Fecha entrada", "Fecha compra",  "N° Factura", "Empresa vendedora", "Usuario", "Obs."};
+    String titlesconsulta[] = {"en_codigo", "pro_descripcion", "en_presentacion", "en_cantidad", "en_preciounitario", "en_preciototal", "en_fechaentrada","en_fechacompra" , "en_numfactura", "emv_descripcion", "usu_nombre,usu_apellido", "en_obs"};
 
     String sentencia;
     String campoconsulta[];
     DefaultTableModel modelotabla;
     DecimalFormat df = new DecimalFormat("#.###");
 
-    public void TablaPrincipalConsulta(String filtro) {//Realiza la consulta de los productos que tenemos en la base de datos
+    private void TablaPrincipalConsulta(String filtro) {//Realiza la consulta de los productos que tenemos en la base de datos
         modelotabla = new DefaultTableModel(null, titlesJtabla);
         //Rellenar el combo campo buscar
         if (cbCampoBuscar.getItemCount() == 0) {//Si combo esta vacio
@@ -439,22 +473,45 @@ public class TablaEntrada extends javax.swing.JDialog {
             cbCampoBuscar.setSelectedIndex(1);
         }
 
+        String campobuscar = "";
+        String tipofecha = "";
+        int idestablecimiento = metodoscombo.ObtenerIdComboBox(cbEstablecimientoFiltro);
+        SimpleDateFormat formatofecha = new SimpleDateFormat("yyyy-MM-dd");
+        String fechainicio = formatofecha.format(dcFechaInicio.getDate());
+        String fechafin = formatofecha.format(dcFechaFin.getDate());
+
+        //Filtro fecha
+        if (rb1.isSelected() == true) {
+            tipofecha = "en_fechaentrada";
+        } else {
+            if (rb2.isSelected() == true) {
+                tipofecha = "en_fechacompra";
+            }
+        }
+
         if (cbEstablecimientoFiltro.getItemCount() > 0) {
             if (cbCampoBuscar.getSelectedItem() == "Todos") {
-                String todoscamposconsulta = campoconsulta[0]; //Cargar el combo campobuscar
+                campobuscar = campoconsulta[0]; //Cargar el combo campobuscar
                 //Cargamos todos los titulos en un String separado por comas
                 for (int i = 1; i < campoconsulta.length; i++) {
-                    todoscamposconsulta = todoscamposconsulta + ", " + campoconsulta[i];
+                    campobuscar = campobuscar + ", " + campoconsulta[i];
                 }
-                sentencia = "CALL " + nombresp + " ('" + todoscamposconsulta + "', '" + filtro + " ('" + metodoscombo.ObtenerIdComboBox(cbEstablecimiento1) + "');";
             } else {
-                sentencia = "CALL " + nombresp + " ('" + titlesconsulta[cbCampoBuscar.getSelectedIndex()] + "', '" + filtro + "', '" + metodoscombo.ObtenerIdComboBox(cbEstablecimiento1) + "');";
+                campobuscar = titlesconsulta[cbCampoBuscar.getSelectedIndex()];
             }
+
+            sentencia = "CALL " + nombresp + " ('" + campobuscar
+                    + "', '" + filtro
+                    + "', '" + idestablecimiento
+                    + "', '" + tipofecha
+                    + "', '" + fechainicio
+                    + "', '" + fechafin + "');";
             System.out.println("sentencia filtro tabla BD: " + sentencia);
 
             Connection connection;
             Statement st;
             ResultSet rs;
+            SimpleDateFormat formatofechanormal = new SimpleDateFormat("dd/MM/yyyy");  //25/08/2015
             try {
                 connection = (Connection) Conexion.GetConnection();
                 st = connection.createStatement();
@@ -463,14 +520,18 @@ public class TablaEntrada extends javax.swing.JDialog {
                 int numColumns = mdrs.getColumnCount();
                 Object[] registro = new Object[numColumns]; //el numero es la cantidad de columnas del rs
                 while (rs.next()) {
-                    registro[0] = (rs.getString("par_codigo"));
-                    registro[1] = (rs.getString("par_descripcion"));
-                    registro[2] = (df.format(Double.parseDouble(rs.getString("par_extension"))));
-                    registro[3] = (rs.getString("dep_descripcion"));
-                    registro[4] = (rs.getString("dis_descripcion"));
-                    registro[5] = (rs.getString("par_localidad"));
-                    registro[6] = (rs.getString("par_x"));
-                    registro[7] = (rs.getString("par_y"));
+                    registro[0] = (rs.getString("en_codigo"));
+                    registro[1] = (rs.getString("pro_descripcion"));
+                    registro[2] = (rs.getString("en_presentacion") + " " + EncontrarEstadoProducto(rs));
+                    registro[3] = (rs.getString("en_cantidad"));
+                    registro[4] = (rs.getString("en_preciounitario") + " $");
+                    registro[5] = (rs.getString("en_preciototal") + " $");
+                    registro[6] = (formatofechanormal.format(rs.getDate("en_fechaentrada")));
+                    registro[7] = (formatofechanormal.format(rs.getDate("en_fechacompra")));
+                    registro[8] = (rs.getString("en_numfactura"));
+                    registro[9] = (rs.getString("emv_descripcion"));
+                    registro[10] = (rs.getString("usu_nombre") + " " + rs.getString("usu_apellido"));
+                    registro[11] = (rs.getString("en_obs"));
                     modelotabla.addRow(registro);//agrega el registro a la tabla  
                 }
                 tbPrincipal.setModel(modelotabla);//asigna a la tabla el modelo creado
@@ -483,6 +544,29 @@ public class TablaEntrada extends javax.swing.JDialog {
             }
         }
         metodos.AnchuraColumna(tbPrincipal);
+    }
+
+    private String EncontrarEstadoProducto(ResultSet rs) {
+        String estado = "No encontrado";
+        try {
+            sentencia = "SELECT es_descripcion FROM producto, formulacion, estado "
+                    + "WHERE pro_formulacion = for_codigo AND for_estado = es_codigo AND pro_codigo = '" + rs.getString("pro_codigo") + "'";
+            Conexion con = metodos.ObtenerRSSentencia(sentencia);
+            con.rs.next();
+
+            estado = con.rs.getString("es_descripcion");
+            if (estado.equals("ml/Ha")) {
+                estado = ("Lts");
+            } else {
+                if (estado.equals("gr/Ha")) {
+                    estado = ("Kgs");
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error al verificar estado de producto");
+            Logger.getLogger(ABMEntrada.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return estado;
     }
 
     private void txtBuscarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyTyped
@@ -498,12 +582,24 @@ public class TablaEntrada extends javax.swing.JDialog {
     }//GEN-LAST:event_tbPrincipalMousePressed
 
     private void rb1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rb1ItemStateChanged
-        rb2.setSelected(false);
+
     }//GEN-LAST:event_rb1ItemStateChanged
 
     private void rb2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rb2ItemStateChanged
-        rb1.setSelected(false);
+
     }//GEN-LAST:event_rb2ItemStateChanged
+
+    private void rb1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rb1ActionPerformed
+        rb2.setSelected(false);
+    }//GEN-LAST:event_rb1ActionPerformed
+
+    private void rb2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rb2ActionPerformed
+        rb1.setSelected(false);
+    }//GEN-LAST:event_rb2ActionPerformed
+
+    private void cbProductorFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbProductorFiltroActionPerformed
+
+    }//GEN-LAST:event_cbProductorFiltroActionPerformed
 
     DecimalFormat formatodecimal = new DecimalFormat("#.##");
 
