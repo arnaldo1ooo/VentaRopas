@@ -264,7 +264,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jMenu8.add(jMenuItem11);
         jMenu8.add(jSeparator11);
 
-        jMenuItem18.setText("EMPRESAS VENDEDORAS");
+        jMenuItem18.setText("SALIDAS");
         jMenuItem18.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem18ActionPerformed(evt);
@@ -536,7 +536,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_jMenuItem19ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        ABMProducto abmproducto = new ABMProducto(this, false,null);
+        ABMProducto abmproducto = new ABMProducto(this, false, null);
         abmproducto.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -607,7 +607,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_jMenu8ActionPerformed
 
     private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
-        TablaEntrada tablaentrada = new TablaEntrada(this,true);
+        TablaEntrada tablaentrada = new TablaEntrada(this, false);
         tablaentrada.setVisible(true);
     }//GEN-LAST:event_jMenuItem11ActionPerformed
 

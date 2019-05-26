@@ -98,7 +98,7 @@ public class ABMEntrada extends javax.swing.JDialog {
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
 
-        setTitle("Ventana entrada de producto");
+        setTitle("Ventana nueva entrada");
         setBackground(new java.awt.Color(45, 62, 80));
         setModal(true);
         setResizable(false);
@@ -112,7 +112,7 @@ public class ABMEntrada extends javax.swing.JDialog {
 
         lbBanner.setFont(new java.awt.Font("sansserif", 1, 23)); // NOI18N
         lbBanner.setForeground(new java.awt.Color(255, 255, 255));
-        lbBanner.setText("Nueva entrada de producto");
+        lbBanner.setText("Nueva entrada");
         lbBanner.setMaximumSize(new java.awt.Dimension(1100, 52));
         lbBanner.setMinimumSize(new java.awt.Dimension(1100, 52));
         lbBanner.setPreferredSize(new java.awt.Dimension(1100, 52));
@@ -123,7 +123,7 @@ public class ABMEntrada extends javax.swing.JDialog {
             jpBannerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpBannerLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lbBanner, javax.swing.GroupLayout.PREFERRED_SIZE, 556, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lbBanner, javax.swing.GroupLayout.PREFERRED_SIZE, 525, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jpBannerLayout.setVerticalGroup(
@@ -520,7 +520,7 @@ public class ABMEntrada extends javax.swing.JDialog {
         jpPrincipal.setLayout(jpPrincipalLayout);
         jpPrincipalLayout.setHorizontalGroup(
             jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpBanner, javax.swing.GroupLayout.DEFAULT_SIZE, 568, Short.MAX_VALUE)
+            .addComponent(jpBanner, javax.swing.GroupLayout.DEFAULT_SIZE, 558, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpPrincipalLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jpBotones2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -576,7 +576,7 @@ public class ABMEntrada extends javax.swing.JDialog {
     }//GEN-LAST:event_btnGuardarKeyPressed
 
     private void btnProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductoActionPerformed
-        ABMProducto abmproducto = new ABMProducto(null, true, cbProducto);
+        ABMProducto abmproducto = new ABMProducto(this, true, cbProducto);
         abmproducto.setVisible(true);
     }//GEN-LAST:event_btnProductoActionPerformed
 

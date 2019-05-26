@@ -154,7 +154,7 @@ public final class ABMProductor extends javax.swing.JDialog {
 
         tbPrincipal.setAutoCreateRowSorter(true);
         tbPrincipal.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(153, 153, 153), null, new java.awt.Color(102, 102, 102)));
-        tbPrincipal.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        tbPrincipal.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         tbPrincipal.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 

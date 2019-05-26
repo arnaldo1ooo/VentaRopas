@@ -7,6 +7,7 @@ package forms.inventario.entrada;
 
 import conexion.Conexion;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -29,13 +30,13 @@ import metodos.MetodosCombo;
  * @author Lic. Arnaldo Cantero
  */
 public class TablaEntrada extends javax.swing.JDialog {
-
+    
     public TablaEntrada(java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
-
+        
         initComponents();
         CargarCombos();
-
+        
         try {
             String fecha = "2008/01/01";
             SimpleDateFormat formato = new SimpleDateFormat("yyyy/MM/dd");
@@ -44,20 +45,20 @@ public class TablaEntrada extends javax.swing.JDialog {
         } catch (ParseException ex) {
             Logger.getLogger(TablaEntrada.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
         Calendar c2 = new java.util.GregorianCalendar();
         dcFechaFin.setCalendar(c2);
-
+        
         TablaPrincipalConsulta(txtBuscar.getText());
-
+        
     }
 
     //-------------METODOS-------------//
     Metodos metodos = new Metodos();
     MetodosCombo metodoscombo = new MetodosCombo();
-
+    
     Boolean CombosListo = false;
-
+    
     private void CargarCombos() {
         metodoscombo.CargarComboBox(cbProductorFiltro, "SELECT prod_codigo, CONCAT(prod_nombre, ' ', prod_apellido) FROM productor");
         if (cbProductorFiltro.getItemCount() > 0) {
@@ -69,7 +70,7 @@ public class TablaEntrada extends javax.swing.JDialog {
         }
         CombosListo = true;
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -93,6 +94,8 @@ public class TablaEntrada extends javax.swing.JDialog {
         };
         lblBuscarCampo5 = new javax.swing.JLabel();
         cbCampoBuscar = new javax.swing.JComboBox();
+        lbCantRegistros = new javax.swing.JLabel();
+        btnFiltrarporFecha1 = new javax.swing.JButton();
         jpTabla5 = new javax.swing.JPanel();
         lblBuscarCampo6 = new javax.swing.JLabel();
         lblBuscarCampo7 = new javax.swing.JLabel();
@@ -100,8 +103,9 @@ public class TablaEntrada extends javax.swing.JDialog {
         dcFechaInicio = new com.toedter.calendar.JDateChooser();
         rb2 = new javax.swing.JRadioButton();
         rb1 = new javax.swing.JRadioButton();
+        btnFiltrarporFecha = new javax.swing.JButton();
 
-        setTitle("Ventana de entradas de productos");
+        setTitle("Ventana de entradas");
         setBackground(new java.awt.Color(45, 62, 80));
         setModal(true);
         setResizable(false);
@@ -115,7 +119,7 @@ public class TablaEntrada extends javax.swing.JDialog {
 
         lbBanner.setFont(new java.awt.Font("sansserif", 1, 23)); // NOI18N
         lbBanner.setForeground(new java.awt.Color(255, 255, 255));
-        lbBanner.setText("Entradas de productos");
+        lbBanner.setText("Entradas ");
         lbBanner.setMaximumSize(new java.awt.Dimension(1100, 52));
         lbBanner.setMinimumSize(new java.awt.Dimension(1100, 52));
         lbBanner.setPreferredSize(new java.awt.Dimension(1100, 52));
@@ -125,7 +129,7 @@ public class TablaEntrada extends javax.swing.JDialog {
         jpBannerLayout.setHorizontalGroup(
             jpBannerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpBannerLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(28, Short.MAX_VALUE)
                 .addComponent(lbBanner, javax.swing.GroupLayout.PREFERRED_SIZE, 827, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(163, 163, 163))
         );
@@ -137,7 +141,7 @@ public class TablaEntrada extends javax.swing.JDialog {
         );
 
         jpTabla1.setBackground(new java.awt.Color(45, 62, 80));
-        jpTabla1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED), "Filtrar por establecimiento   ", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Yu Gothic UI Semibold", 1, 14), new java.awt.Color(255, 255, 255))); // NOI18N
+        jpTabla1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED), "Filtrar por establecimiento   ", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Yu Gothic UI Semibold", 1, 14), new java.awt.Color(255, 255, 255))); // NOI18N
 
         lblBuscarCampo3.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
         lblBuscarCampo3.setForeground(new java.awt.Color(255, 255, 255));
@@ -198,7 +202,7 @@ public class TablaEntrada extends javax.swing.JDialog {
                 .addComponent(lblBuscarCampo4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
                 .addComponent(cbEstablecimientoFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(7, Short.MAX_VALUE))
         );
 
         jpTabla4.setBackground(new java.awt.Color(45, 62, 80));
@@ -259,6 +263,20 @@ public class TablaEntrada extends javax.swing.JDialog {
 
         cbCampoBuscar.setName("CampoBuscarPrincipal"); // NOI18N
 
+        lbCantRegistros.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        lbCantRegistros.setForeground(new java.awt.Color(204, 204, 0));
+        lbCantRegistros.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lbCantRegistros.setText("0 Registros encontrados");
+        lbCantRegistros.setPreferredSize(new java.awt.Dimension(57, 25));
+
+        btnFiltrarporFecha1.setText("Nueva Entrada");
+        btnFiltrarporFecha1.setToolTipText("");
+        btnFiltrarporFecha1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFiltrarporFecha1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jpTabla4Layout = new javax.swing.GroupLayout(jpTabla4);
         jpTabla4.setLayout(jpTabla4Layout);
         jpTabla4Layout.setHorizontalGroup(
@@ -274,7 +292,11 @@ public class TablaEntrada extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblBuscarCampo5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbCampoBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(cbCampoBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpTabla4Layout.createSequentialGroup()
+                        .addComponent(btnFiltrarporFecha1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lbCantRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, 543, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jpTabla4Layout.setVerticalGroup(
@@ -287,12 +309,16 @@ public class TablaEntrada extends javax.swing.JDialog {
                     .addComponent(cbCampoBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, 0)
-                .addComponent(scPrincipal3, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(scPrincipal3, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addGroup(jpTabla4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnFiltrarporFecha1)
+                    .addComponent(lbCantRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(7, 7, 7))
         );
 
         jpTabla5.setBackground(new java.awt.Color(45, 62, 80));
-        jpTabla5.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED), "Filtrar por fecha  ", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Yu Gothic UI Semibold", 1, 14), new java.awt.Color(255, 255, 255))); // NOI18N
+        jpTabla5.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED), "Filtrar por fecha  ", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Yu Gothic UI Semibold", 1, 14), new java.awt.Color(255, 255, 255))); // NOI18N
 
         lblBuscarCampo6.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
         lblBuscarCampo6.setForeground(new java.awt.Color(255, 255, 255));
@@ -337,6 +363,14 @@ public class TablaEntrada extends javax.swing.JDialog {
             }
         });
 
+        btnFiltrarporFecha.setText("Filtrar");
+        btnFiltrarporFecha.setToolTipText("");
+        btnFiltrarporFecha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFiltrarporFechaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jpTabla5Layout = new javax.swing.GroupLayout(jpTabla5);
         jpTabla5.setLayout(jpTabla5Layout);
         jpTabla5Layout.setHorizontalGroup(
@@ -359,6 +393,10 @@ public class TablaEntrada extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(rb2)
                         .addGap(0, 4, Short.MAX_VALUE))))
+            .addGroup(jpTabla5Layout.createSequentialGroup()
+                .addGap(96, 96, 96)
+                .addComponent(btnFiltrarporFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jpTabla5Layout.setVerticalGroup(
             jpTabla5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -375,7 +413,9 @@ public class TablaEntrada extends javax.swing.JDialog {
                 .addGroup(jpTabla5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(dcFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(dcFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(8, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                .addComponent(btnFiltrarporFecha)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jpPrincipalLayout = new javax.swing.GroupLayout(jpPrincipal);
@@ -388,25 +428,22 @@ public class TablaEntrada extends javax.swing.JDialog {
                 .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jpTabla1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jpTabla5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(5, 5, 5)
+                .addGap(3, 3, 3)
                 .addComponent(jpTabla4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(9, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jpPrincipalLayout.setVerticalGroup(
             jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpPrincipalLayout.createSequentialGroup()
                 .addComponent(jpBanner, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                 .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpPrincipalLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpPrincipalLayout.createSequentialGroup()
                         .addComponent(jpTabla1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jpTabla5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(150, 150, 150))
-                    .addGroup(jpPrincipalLayout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addComponent(jpTabla4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(jpTabla5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jpTabla4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10))
         );
 
         jpBanner.getAccessibleContext().setAccessibleName("");
@@ -419,7 +456,7 @@ public class TablaEntrada extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
         );
 
         getAccessibleContext().setAccessibleName("ABMEntrada");
@@ -452,16 +489,16 @@ public class TablaEntrada extends javax.swing.JDialog {
         //actualiza la tabla conforme a la letra que teclea
         TablaPrincipalConsulta(txtBuscar.getText());
     }//GEN-LAST:event_txtBuscarKeyReleased
-
+    
     String nombresp = "SP_EntradaConsulta";
-    String titlesJtabla[] = {"Codigo", "Producto", "Presentación", "Cantidad", "Precio unitario", "Precio total", "Fecha entrada", "Fecha compra",  "N° Factura", "Empresa vendedora", "Usuario", "Obs."};
-    String titlesconsulta[] = {"en_codigo", "pro_descripcion", "en_presentacion", "en_cantidad", "en_preciounitario", "en_preciototal", "en_fechaentrada","en_fechacompra" , "en_numfactura", "emv_descripcion", "usu_nombre,usu_apellido", "en_obs"};
-
+    String titlesJtabla[] = {"Codigo", "Producto", "Presentación", "Cantidad", "Precio unitario", "Precio total", "Fecha entrada", "Fecha compra", "N° Factura", "Empresa vendedora", "Usuario", "Obs."};
+    String titlesconsulta[] = {"en_codigo", "pro_descripcion", "en_presentacion", "en_cantidad", "en_preciounitario", "en_preciototal", "en_fechaentrada", "en_fechacompra", "en_numfactura", "emv_descripcion", "usu_nombre,usu_apellido", "en_obs"};
+    
     String sentencia;
     String campoconsulta[];
     DefaultTableModel modelotabla;
     DecimalFormat df = new DecimalFormat("#.###");
-
+    
     private void TablaPrincipalConsulta(String filtro) {//Realiza la consulta de los productos que tenemos en la base de datos
         modelotabla = new DefaultTableModel(null, titlesJtabla);
         //Rellenar el combo campo buscar
@@ -472,7 +509,7 @@ public class TablaEntrada extends javax.swing.JDialog {
             cbCampoBuscar.addItem("Todos");
             cbCampoBuscar.setSelectedIndex(1);
         }
-
+        
         String campobuscar = "";
         String tipofecha = "";
         int idestablecimiento = metodoscombo.ObtenerIdComboBox(cbEstablecimientoFiltro);
@@ -488,7 +525,7 @@ public class TablaEntrada extends javax.swing.JDialog {
                 tipofecha = "en_fechacompra";
             }
         }
-
+        
         if (cbEstablecimientoFiltro.getItemCount() > 0) {
             if (cbCampoBuscar.getSelectedItem() == "Todos") {
                 campobuscar = campoconsulta[0]; //Cargar el combo campobuscar
@@ -499,7 +536,7 @@ public class TablaEntrada extends javax.swing.JDialog {
             } else {
                 campobuscar = titlesconsulta[cbCampoBuscar.getSelectedIndex()];
             }
-
+            
             sentencia = "CALL " + nombresp + " ('" + campobuscar
                     + "', '" + filtro
                     + "', '" + idestablecimiento
@@ -507,7 +544,7 @@ public class TablaEntrada extends javax.swing.JDialog {
                     + "', '" + fechainicio
                     + "', '" + fechafin + "');";
             System.out.println("sentencia filtro tabla BD: " + sentencia);
-
+            
             Connection connection;
             Statement st;
             ResultSet rs;
@@ -519,6 +556,7 @@ public class TablaEntrada extends javax.swing.JDialog {
                 ResultSetMetaData mdrs = rs.getMetaData();
                 int numColumns = mdrs.getColumnCount();
                 Object[] registro = new Object[numColumns]; //el numero es la cantidad de columnas del rs
+                int CantRegistro = 0;
                 while (rs.next()) {
                     registro[0] = (rs.getString("en_codigo"));
                     registro[1] = (rs.getString("pro_descripcion"));
@@ -532,10 +570,11 @@ public class TablaEntrada extends javax.swing.JDialog {
                     registro[9] = (rs.getString("emv_descripcion"));
                     registro[10] = (rs.getString("usu_nombre") + " " + rs.getString("usu_apellido"));
                     registro[11] = (rs.getString("en_obs"));
-                    modelotabla.addRow(registro);//agrega el registro a la tabla  
+                    modelotabla.addRow(registro);//agrega el registro a la tabla 
+                    CantRegistro = CantRegistro + 1;
                 }
                 tbPrincipal.setModel(modelotabla);//asigna a la tabla el modelo creado
-
+                lbCantRegistros.setText(CantRegistro + " Registros encontrados");
                 connection.close();
                 st.close();
                 rs.close();
@@ -545,7 +584,7 @@ public class TablaEntrada extends javax.swing.JDialog {
         }
         metodos.AnchuraColumna(tbPrincipal);
     }
-
+    
     private String EncontrarEstadoProducto(ResultSet rs) {
         String estado = "No encontrado";
         try {
@@ -553,7 +592,7 @@ public class TablaEntrada extends javax.swing.JDialog {
                     + "WHERE pro_formulacion = for_codigo AND for_estado = es_codigo AND pro_codigo = '" + rs.getString("pro_codigo") + "'";
             Conexion con = metodos.ObtenerRSSentencia(sentencia);
             con.rs.next();
-
+            
             estado = con.rs.getString("es_descripcion");
             if (estado.equals("ml/Ha")) {
                 estado = ("Lts");
@@ -601,8 +640,26 @@ public class TablaEntrada extends javax.swing.JDialog {
 
     }//GEN-LAST:event_cbProductorFiltroActionPerformed
 
-    DecimalFormat formatodecimal = new DecimalFormat("#.##");
+    private void btnFiltrarporFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarporFechaActionPerformed
+        TablaPrincipalConsulta(txtBuscar.getText());
+    }//GEN-LAST:event_btnFiltrarporFechaActionPerformed
 
+    private void btnFiltrarporFecha1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarporFecha1ActionPerformed
+        ABMEntrada abmentrada = new ABMEntrada(this, true);
+        metodoscombo.setSelectedNombreItem(abmentrada.cbEstablecimiento, cbEstablecimientoFiltro.getSelectedItem().toString());
+        
+        abmentrada.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                TablaPrincipalConsulta(txtBuscar.getText());
+            }
+        });
+ 
+        abmentrada.setVisible(true);
+    }//GEN-LAST:event_btnFiltrarporFecha1ActionPerformed
+    
+    DecimalFormat formatodecimal = new DecimalFormat("#.##");
+    
     public void SiguienteFoco(KeyEvent evt) {
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
             ((JComponent) evt.getSource()).transferFocus();//Con esta parte transfieres el foco al siguiente campo sea un Jtextfield, Jpasswordfield, boton, etc..
@@ -611,6 +668,8 @@ public class TablaEntrada extends javax.swing.JDialog {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnFiltrarporFecha;
+    private javax.swing.JButton btnFiltrarporFecha1;
     private javax.swing.JComboBox cbCampoBuscar;
     private javax.swing.JComboBox cbEstablecimientoFiltro;
     private javax.swing.JComboBox cbProductorFiltro;
@@ -623,6 +682,7 @@ public class TablaEntrada extends javax.swing.JDialog {
     private javax.swing.JPanel jpTabla4;
     private javax.swing.JPanel jpTabla5;
     private javax.swing.JLabel lbBanner;
+    private javax.swing.JLabel lbCantRegistros;
     private javax.swing.JLabel lblBuscarCampo3;
     private javax.swing.JLabel lblBuscarCampo4;
     private javax.swing.JLabel lblBuscarCampo5;

@@ -8,8 +8,6 @@ import forms.producto.formulacion.ABMFormulacion;
 import forms.producto.clase_producto.ABMClaseProducto;
 import forms.producto.fabricante.ABMFabricante;
 import forms.producto.tipoagroquimico.ABMTipoAgroquimico;
-import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -25,19 +23,15 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ComboBoxEditor;
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED;
 import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER;
 import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED;
 import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER;
-import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import metodos.MetodosCombo;
@@ -91,6 +85,8 @@ public class ABMProducto extends javax.swing.JDialog {
     }
 
     //-------------METODOS----------//
+    boolean CombosListo = false;
+
     public void CargarComboBoxes() {
         //Carga los combobox con las consultas
         metodoscombo.CargarComboBox(cbFabricante, "SELECT fa_codigo, fa_descripcion FROM fabricante ORDER BY fa_descripcion");
@@ -98,12 +94,8 @@ public class ABMProducto extends javax.swing.JDialog {
         metodoscombo.CargarComboBox(cbTipoAgroquimico, "SELECT ta_codigo, ta_descripcion FROM tipo_agroquimico ORDER BY ta_descripcion");
         metodoscombo.CargarComboBox(cbEmpresaRegistrante, "SELECT er_codigo, er_descripcion FROM empresa_registrante ORDER BY er_descripcion");
         metodoscombo.CargarComboBox(cbFormulacion, "SELECT for_codigo, concat(for_descripcion,' (',for_abreviatura,')') AS formulacion FROM formulacion ORDER BY for_descripcion");
-
-        metodoscombo.CargarComboBox(cbFiltroClaseProducto, "SELECT cp_codigo, cp_descripcion FROM clase_producto ORDER BY cp_descripcion");
-        cbFiltroClaseProducto.addItem("TODOS");
-        cbFiltroClaseProducto.setSelectedItem("TODOS");
-
         ModoEdicion(false);
+        CombosListo = true;
     }
 
     public void TablaPrincipalConsulta(String filtro) {//Realiza la consulta de los productos que tenemos en la base de datos
@@ -137,9 +129,6 @@ public class ABMProducto extends javax.swing.JDialog {
         };
         lblBuscarCampo = new javax.swing.JLabel();
         cbFiltroCampo = new javax.swing.JComboBox();
-        cbFiltroClaseProducto = new javax.swing.JComboBox();
-        lblBuscarCampo1 = new javax.swing.JLabel();
-        lblBuscarCampo2 = new javax.swing.JLabel();
         lbCantRegistros = new javax.swing.JLabel();
         jpBotones = new javax.swing.JPanel();
         btnNuevo = new javax.swing.JButton();
@@ -302,18 +291,6 @@ public class ABMProducto extends javax.swing.JDialog {
             }
         });
 
-        cbFiltroClaseProducto.setEnabled(false);
-
-        lblBuscarCampo1.setFont(new java.awt.Font("sansserif", 1, 10)); // NOI18N
-        lblBuscarCampo1.setForeground(new java.awt.Color(255, 255, 255));
-        lblBuscarCampo1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblBuscarCampo1.setText("Tipo de producto");
-
-        lblBuscarCampo2.setFont(new java.awt.Font("sansserif", 1, 10)); // NOI18N
-        lblBuscarCampo2.setForeground(new java.awt.Color(255, 255, 255));
-        lblBuscarCampo2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblBuscarCampo2.setText("Campo");
-
         lbCantRegistros.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         lbCantRegistros.setForeground(new java.awt.Color(204, 204, 0));
         lbCantRegistros.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -330,27 +307,17 @@ public class ABMProducto extends javax.swing.JDialog {
                         .addGap(10, 10, 10)
                         .addComponent(jLabel10)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 444, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
+                        .addComponent(txtBuscar)
+                        .addGap(18, 18, 18)
                         .addComponent(lblBuscarCampo, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cbFiltroCampo, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jpTablaLayout.createSequentialGroup()
-                                .addGap(8, 8, 8)
-                                .addComponent(lblBuscarCampo2)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cbFiltroClaseProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpTablaLayout.createSequentialGroup()
-                                .addComponent(lblBuscarCampo1)
-                                .addGap(61, 61, 61))))
+                        .addComponent(cbFiltroCampo, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpTablaLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(scpPrincipal))
                     .addGroup(jpTablaLayout.createSequentialGroup()
                         .addGap(747, 747, 747)
-                        .addComponent(lbCantRegistros, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(lbCantRegistros, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jpTablaLayout.setVerticalGroup(
@@ -363,13 +330,9 @@ public class ABMProducto extends javax.swing.JDialog {
                             .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jpTablaLayout.createSequentialGroup()
-                        .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblBuscarCampo1)
-                            .addComponent(lblBuscarCampo2))
-                        .addGap(0, 0, 0)
+                        .addGap(14, 14, 14)
                         .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblBuscarCampo, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cbFiltroClaseProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cbFiltroCampo, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(0, 0, 0)
                 .addComponent(scpPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1406,10 +1369,10 @@ public class ABMProducto extends javax.swing.JDialog {
     }//GEN-LAST:event_cbFormulacionActionPerformed
 
     private void cbFormulacionItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbFormulacionItemStateChanged
-        estado = ObtenerEstado();
-        lbEstado.setText("(" + estado + ")");
-
-
+        if (CombosListo == true) {
+            estado = ObtenerEstado();
+            lbEstado.setText("(" + estado + ")");
+        }
     }//GEN-LAST:event_cbFormulacionItemStateChanged
 
     private String ObtenerEstado() {
@@ -1891,7 +1854,6 @@ public class ABMProducto extends javax.swing.JDialog {
     private javax.swing.JComboBox<metodos.MetodosCombo> cbEmpresaRegistrante;
     private javax.swing.JComboBox<metodos.MetodosCombo> cbFabricante;
     private javax.swing.JComboBox cbFiltroCampo;
-    private javax.swing.JComboBox cbFiltroClaseProducto;
     private javax.swing.JComboBox<metodos.MetodosCombo> cbFormulacion;
     private javax.swing.JComboBox<metodos.MetodosCombo> cbTipoAgroquimico;
     private javax.swing.JLabel jLabel1;
@@ -1918,8 +1880,6 @@ public class ABMProducto extends javax.swing.JDialog {
     private javax.swing.JLabel lbImagen;
     private javax.swing.JLabel lbNumRegistro;
     private javax.swing.JLabel lblBuscarCampo;
-    private javax.swing.JLabel lblBuscarCampo1;
-    private javax.swing.JLabel lblBuscarCampo2;
     private javax.swing.JScrollPane scpDosis;
     private javax.swing.JScrollPane scpIngrActivos;
     private javax.swing.JScrollPane scpPrincipal;
