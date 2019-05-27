@@ -53,21 +53,20 @@ public class ABMProducto extends javax.swing.JDialog {
     public DefaultTableModel modeloTablaListaIA = new DefaultTableModel(null, titlesIA);
 
     //TablaDosis
-    private String titlesdosis[] = {"Id", "Dosis mínima", "Dosis máxima", "Cultivo", "IdCultivo"};
-    private String regdosis[];
+    private final String titlesdosis[] = {"Id", "Dosis mínima", "Dosis máxima", "Cultivo", "IdCultivo"};
+    private final String regdosis[];
     public DefaultTableModel modeloTablaDosis = new DefaultTableModel(null, titlesdosis);
 
-    private Metodos metodos = new Metodos();
-    private MetodosCombo metodoscombo = new MetodosCombo();
-    private Icon imagendefault;
+    private final Metodos metodos = new Metodos();
+    private final MetodosCombo metodoscombo = new MetodosCombo();
+    private final Icon imagendefault;
     public String estado;
     public java.awt.Dialog d;
-    private JComboBox<metodos.MetodosCombo> cbProductoSelec;
+    private final JComboBox<metodos.MetodosCombo> cbProductoSelec;
 
     public ABMProducto(java.awt.Frame parent, Boolean modal, JComboBox<metodos.MetodosCombo> cbProducto) {
         super(parent, modal);
         this.regdosis = new String[5];
-
         cbProductoSelec = cbProducto;
 
         initComponents();

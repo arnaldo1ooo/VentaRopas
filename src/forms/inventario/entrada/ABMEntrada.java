@@ -10,6 +10,7 @@ import forms.inventario.empresa_vendedora.ABMEmpresaVendedora;
 import forms.producto.ABMProducto;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -185,11 +186,6 @@ public class ABMEntrada extends javax.swing.JDialog {
                 cbProductoItemStateChanged(evt);
             }
         });
-        cbProducto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbProductoActionPerformed(evt);
-            }
-        });
 
         lbPresentacion.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         lbPresentacion.setForeground(new java.awt.Color(255, 255, 255));
@@ -353,7 +349,17 @@ public class ABMEntrada extends javax.swing.JDialog {
                     .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpTablaLayout.createSequentialGroup()
+                        .addGap(148, 148, 148)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpTablaLayout.createSequentialGroup()
+                        .addGap(9, 9, 9)
+                        .addComponent(dcFechaEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jbIImagen4, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(dcFechaCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jpTablaLayout.createSequentialGroup()
                         .addGap(7, 7, 7)
                         .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -377,31 +383,19 @@ public class ABMEntrada extends javax.swing.JDialog {
                                     .addComponent(txtPrecioTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGap(3, 3, 3)
                                     .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(jScrollPane1)
                                 .addComponent(cbEstablecimiento, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(txtUsuario)
+                                .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addGroup(jpTablaLayout.createSequentialGroup()
-                                    .addComponent(cbProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 352, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(4, 4, 4)
-                                    .addComponent(btnProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jpTablaLayout.createSequentialGroup()
-                                .addGap(141, 141, 141)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpTablaLayout.createSequentialGroup()
-                                .addGap(2, 2, 2)
-                                .addComponent(dcFechaEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jbIImagen4, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(dcFechaCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(37, 37, 37))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpTablaLayout.createSequentialGroup()
-                        .addGap(4, 4, 4)
-                        .addComponent(cbEmpresaVendedora, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(4, 4, 4)
-                        .addComponent(btnEmpresaVendedora, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                                    .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(cbEmpresaVendedora, javax.swing.GroupLayout.Alignment.LEADING, 0, 354, Short.MAX_VALUE)
+                                        .addComponent(cbProducto, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGap(2, 2, 2)
+                                    .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(btnProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnEmpresaVendedora, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                .addGap(37, 37, 37))
         );
         jpTablaLayout.setVerticalGroup(
             jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -576,7 +570,7 @@ public class ABMEntrada extends javax.swing.JDialog {
     }//GEN-LAST:event_btnGuardarKeyPressed
 
     private void btnProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductoActionPerformed
-        ABMProducto abmproducto = new ABMProducto(this, true, cbProducto);
+        ABMProducto abmproducto = new ABMProducto(null, true, cbProducto);
         abmproducto.setVisible(true);
     }//GEN-LAST:event_btnProductoActionPerformed
 
@@ -650,10 +644,6 @@ public class ABMEntrada extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_txtPrecioUnitarioKeyTyped
 
-    private void cbProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbProductoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbProductoActionPerformed
-
     private void txtNumFacturaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumFacturaKeyTyped
         // Verificar si la tecla pulsada no es un digito
         char caracter = evt.getKeyChar();
@@ -663,12 +653,16 @@ public class ABMEntrada extends javax.swing.JDialog {
     }//GEN-LAST:event_txtNumFacturaKeyTyped
 
     private void cbProductoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbProductoItemStateChanged
+        EstadoProducto();
+    }//GEN-LAST:event_cbProductoItemStateChanged
+
+    private void EstadoProducto() {
         if (cbProducto.getSelectedIndex() != -1) {
             try {
                 Conexion con = metodos.ObtenerRSSentencia("SELECT es_descripcion FROM producto, formulacion, estado "
                         + "WHERE pro_formulacion = for_codigo AND for_estado = es_codigo AND pro_codigo = '" + metodoscombo.ObtenerIdComboBox(cbProducto) + "'");
                 con.rs.next();
-
+                
                 String estado = con.rs.getString("es_descripcion");
                 if (estado.equals("ml/Ha")) {
                     lbPresentacion.setText("Lts");
@@ -682,7 +676,7 @@ public class ABMEntrada extends javax.swing.JDialog {
                 Logger.getLogger(ABMEntrada.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }//GEN-LAST:event_cbProductoItemStateChanged
+    }
 
     public void SiguienteFoco(KeyEvent evt) {
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
@@ -784,7 +778,7 @@ public class ABMEntrada extends javax.swing.JDialog {
             int cantidadentrada = 1;
             int cantidadsalida = 0;
             double existencia = Double.parseDouble(txtCantidad.getText());
-            double existenciatotal = (existencia * presentacion)*1000;
+            double existenciatotal = (existencia * presentacion) * 1000;
             double costototal = Double.parseDouble(txtPrecioTotal.getText().replace(",", "."));
 
             //REGISTRAR NUEVO
