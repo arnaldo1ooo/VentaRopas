@@ -6,7 +6,7 @@
 package forms.inventario;
 
 import conexion.Conexion;
-import forms.inventario.entrada.ABMEntrada;
+import forms.inventario.entrada.AMEntrada;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Connection;
@@ -153,7 +153,7 @@ public class FormInventario extends javax.swing.JDialog {
             }
         } catch (SQLException ex) {
             System.out.println("Error al verificar estado de producto");
-            Logger.getLogger(ABMEntrada.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AMEntrada.class.getName()).log(Level.SEVERE, null, ex);
         }
         return estado;
     }
@@ -502,8 +502,8 @@ public class FormInventario extends javax.swing.JDialog {
 
     private void btnNuevaEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaEntradaActionPerformed
         if (cbEstablecimiento.getSelectedIndex() != -1) {
-            ABMEntrada abmentrada = new ABMEntrada(this, true);
-            metodoscombo.setSelectedNombreItem(abmentrada.cbEstablecimiento, cbEstablecimiento.getSelectedItem().toString());
+            AMEntrada abmentrada = new AMEntrada(this, true);
+            metodoscombo.setSelectedNombreItem(abmentrada.getCbEstablecimiento(), cbEstablecimiento.getSelectedItem().toString());
 
             abmentrada.addWindowListener(new WindowAdapter() {
                 @Override

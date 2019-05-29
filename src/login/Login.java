@@ -18,7 +18,7 @@ import metodos.PlaceHolder;
 
 public class Login extends javax.swing.JFrame {
 
-    public static int IdUsuario;
+    public static String CodUsuario;
     public static String NomApeUsuario;
     public static String Alias;
     private String Pass;
@@ -49,7 +49,7 @@ public class Login extends javax.swing.JFrame {
             int TipoDeUsuario;
             //Si se encontro coincidencia
             if (rs.next()) {
-                IdUsuario = Integer.parseInt(rs.getString("usu_codigo"));
+                CodUsuario = rs.getString("usu_codigo");
                 NomApeUsuario = rs.getString("usu_nombre") + " " + rs.getString("usu_apellido");
                 TipoDeUsuario = Integer.parseInt(rs.getString("usu_tipousuario"));
                 //Si el tipo de usuario es Administrador

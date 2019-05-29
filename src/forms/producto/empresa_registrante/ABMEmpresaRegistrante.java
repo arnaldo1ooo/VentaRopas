@@ -137,7 +137,7 @@ public final class ABMEmpresaRegistrante extends javax.swing.JDialog {
 
         tbTabla.setAutoCreateRowSorter(true);
         tbTabla.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(153, 153, 153), null, new java.awt.Color(102, 102, 102)));
-        tbTabla.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        tbTabla.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         tbTabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 

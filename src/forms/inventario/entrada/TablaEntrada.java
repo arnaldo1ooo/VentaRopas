@@ -17,6 +17,7 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComponent;
@@ -30,35 +31,26 @@ import metodos.MetodosCombo;
  * @author Lic. Arnaldo Cantero
  */
 public class TablaEntrada extends javax.swing.JDialog {
-    
+
     public TablaEntrada(java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
-        
+
         initComponents();
         CargarCombos();
-        
-        try {
-            String fecha = "2008/01/01";
-            SimpleDateFormat formato = new SimpleDateFormat("yyyy/MM/dd");
-            java.util.Date fechaDate = formato.parse(fecha);
-            dcFechaInicio.setDate(fechaDate);
-        } catch (ParseException ex) {
-            Logger.getLogger(TablaEntrada.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+
         Calendar c2 = new java.util.GregorianCalendar();
         dcFechaFin.setCalendar(c2);
-        
+
         TablaPrincipalConsulta(txtBuscar.getText());
-        
+
     }
 
     //-------------METODOS-------------//
     Metodos metodos = new Metodos();
     MetodosCombo metodoscombo = new MetodosCombo();
-    
+
     Boolean CombosListo = false;
-    
+
     private void CargarCombos() {
         metodoscombo.CargarComboBox(cbProductorFiltro, "SELECT prod_codigo, CONCAT(prod_nombre, ' ', prod_apellido) FROM productor");
         if (cbProductorFiltro.getItemCount() > 0) {
@@ -70,7 +62,7 @@ public class TablaEntrada extends javax.swing.JDialog {
         }
         CombosListo = true;
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -95,7 +87,8 @@ public class TablaEntrada extends javax.swing.JDialog {
         lblBuscarCampo5 = new javax.swing.JLabel();
         cbCampoBuscar = new javax.swing.JComboBox();
         lbCantRegistros = new javax.swing.JLabel();
-        btnFiltrarporFecha1 = new javax.swing.JButton();
+        btnNuevaEntrada = new javax.swing.JButton();
+        btnModificarEntrada = new javax.swing.JButton();
         jpTabla5 = new javax.swing.JPanel();
         lblBuscarCampo6 = new javax.swing.JLabel();
         lblBuscarCampo7 = new javax.swing.JLabel();
@@ -129,7 +122,7 @@ public class TablaEntrada extends javax.swing.JDialog {
         jpBannerLayout.setHorizontalGroup(
             jpBannerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpBannerLayout.createSequentialGroup()
-                .addContainerGap(28, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lbBanner, javax.swing.GroupLayout.PREFERRED_SIZE, 827, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(163, 163, 163))
         );
@@ -149,7 +142,7 @@ public class TablaEntrada extends javax.swing.JDialog {
         lblBuscarCampo3.setText(" Productor");
         lblBuscarCampo3.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
 
-        cbProductorFiltro.setFont(new java.awt.Font("sansserif", 0, 10)); // NOI18N
+        cbProductorFiltro.setFont(new java.awt.Font("sansserif", 0, 11)); // NOI18N
         cbProductorFiltro.setName("ProductorFiltro"); // NOI18N
         cbProductorFiltro.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -162,7 +155,7 @@ public class TablaEntrada extends javax.swing.JDialog {
             }
         });
 
-        cbEstablecimientoFiltro.setFont(new java.awt.Font("sansserif", 0, 10)); // NOI18N
+        cbEstablecimientoFiltro.setFont(new java.awt.Font("sansserif", 0, 11)); // NOI18N
         cbEstablecimientoFiltro.setName("EstablecimientoFiltro"); // NOI18N
         cbEstablecimientoFiltro.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -269,11 +262,20 @@ public class TablaEntrada extends javax.swing.JDialog {
         lbCantRegistros.setText("0 Registros encontrados");
         lbCantRegistros.setPreferredSize(new java.awt.Dimension(57, 25));
 
-        btnFiltrarporFecha1.setText("Nueva Entrada");
-        btnFiltrarporFecha1.setToolTipText("");
-        btnFiltrarporFecha1.addActionListener(new java.awt.event.ActionListener() {
+        btnNuevaEntrada.setText("Nueva Entrada");
+        btnNuevaEntrada.setToolTipText("");
+        btnNuevaEntrada.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFiltrarporFecha1ActionPerformed(evt);
+                btnNuevaEntradaActionPerformed(evt);
+            }
+        });
+
+        btnModificarEntrada.setText("Modificar Entrada");
+        btnModificarEntrada.setToolTipText("");
+        btnModificarEntrada.setEnabled(false);
+        btnModificarEntrada.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarEntradaActionPerformed(evt);
             }
         });
 
@@ -283,21 +285,25 @@ public class TablaEntrada extends javax.swing.JDialog {
             jpTabla4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpTabla4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jpTabla4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jpTabla4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(scPrincipal3)
-                    .addGroup(jpTabla4Layout.createSequentialGroup()
-                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblBuscarCampo5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbCampoBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpTabla4Layout.createSequentialGroup()
-                        .addComponent(btnFiltrarporFecha1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lbCantRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, 543, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jpTabla4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jpTabla4Layout.createSequentialGroup()
+                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(lblBuscarCampo5)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(cbCampoBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(0, 0, Short.MAX_VALUE))
+                        .addGroup(jpTabla4Layout.createSequentialGroup()
+                            .addComponent(btnNuevaEntrada)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btnModificarEntrada)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lbCantRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap())
         );
         jpTabla4Layout.setVerticalGroup(
             jpTabla4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -312,8 +318,9 @@ public class TablaEntrada extends javax.swing.JDialog {
                 .addComponent(scPrincipal3, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
                 .addGroup(jpTabla4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnFiltrarporFecha1)
-                    .addComponent(lbCantRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnNuevaEntrada)
+                    .addComponent(lbCantRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnModificarEntrada))
                 .addGap(7, 7, 7))
         );
 
@@ -430,13 +437,13 @@ public class TablaEntrada extends javax.swing.JDialog {
                     .addComponent(jpTabla5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(3, 3, 3)
                 .addComponent(jpTabla4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
         jpPrincipalLayout.setVerticalGroup(
             jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpPrincipalLayout.createSequentialGroup()
                 .addComponent(jpBanner, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpPrincipalLayout.createSequentialGroup()
                         .addComponent(jpTabla1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -456,7 +463,7 @@ public class TablaEntrada extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
+            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
         );
 
         getAccessibleContext().setAccessibleName("ABMEntrada");
@@ -466,7 +473,9 @@ public class TablaEntrada extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cbEstablecimientoFiltroItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbEstablecimientoFiltroItemStateChanged
-
+        if (cbProductorFiltro.getSelectedIndex() != -1 && CombosListo == true) {
+            TablaPrincipalConsulta(txtBuscar.getText());
+        }
     }//GEN-LAST:event_cbEstablecimientoFiltroItemStateChanged
 
     private void cbProductorFiltroItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbProductorFiltroItemStateChanged
@@ -489,16 +498,16 @@ public class TablaEntrada extends javax.swing.JDialog {
         //actualiza la tabla conforme a la letra que teclea
         TablaPrincipalConsulta(txtBuscar.getText());
     }//GEN-LAST:event_txtBuscarKeyReleased
-    
+
     String nombresp = "SP_EntradaConsulta";
     String titlesJtabla[] = {"Codigo", "Producto", "Presentación", "Cantidad", "Precio unitario", "Precio total", "Fecha entrada", "Fecha compra", "N° Factura", "Empresa vendedora", "Usuario", "Obs."};
     String titlesconsulta[] = {"en_codigo", "pro_descripcion", "en_presentacion", "en_cantidad", "en_preciounitario", "en_preciototal", "en_fechaentrada", "en_fechacompra", "en_numfactura", "emv_descripcion", "usu_nombre,usu_apellido", "en_obs"};
-    
+
     String sentencia;
     String campoconsulta[];
     DefaultTableModel modelotabla;
     DecimalFormat df = new DecimalFormat("#.###");
-    
+
     private void TablaPrincipalConsulta(String filtro) {//Realiza la consulta de los productos que tenemos en la base de datos
         modelotabla = new DefaultTableModel(null, titlesJtabla);
         //Rellenar el combo campo buscar
@@ -509,12 +518,17 @@ public class TablaEntrada extends javax.swing.JDialog {
             cbCampoBuscar.addItem("Todos");
             cbCampoBuscar.setSelectedIndex(1);
         }
-        
+
         String campobuscar = "";
         String tipofecha = "";
         int idestablecimiento = metodoscombo.ObtenerIdComboBox(cbEstablecimientoFiltro);
         SimpleDateFormat formatofecha = new SimpleDateFormat("yyyy-MM-dd");
-        String fechainicio = formatofecha.format(dcFechaInicio.getDate());
+        String fechainicio;
+        if (dcFechaInicio.getDate() != null) {
+            fechainicio = formatofecha.format(dcFechaInicio.getDate());
+        } else {
+            fechainicio = "2000-01-01";
+        }
         String fechafin = formatofecha.format(dcFechaFin.getDate());
 
         //Filtro fecha
@@ -525,7 +539,7 @@ public class TablaEntrada extends javax.swing.JDialog {
                 tipofecha = "en_fechacompra";
             }
         }
-        
+
         if (cbEstablecimientoFiltro.getItemCount() > 0) {
             if (cbCampoBuscar.getSelectedItem() == "Todos") {
                 campobuscar = campoconsulta[0]; //Cargar el combo campobuscar
@@ -536,7 +550,7 @@ public class TablaEntrada extends javax.swing.JDialog {
             } else {
                 campobuscar = titlesconsulta[cbCampoBuscar.getSelectedIndex()];
             }
-            
+
             sentencia = "CALL " + nombresp + " ('" + campobuscar
                     + "', '" + filtro
                     + "', '" + idestablecimiento
@@ -544,7 +558,7 @@ public class TablaEntrada extends javax.swing.JDialog {
                     + "', '" + fechainicio
                     + "', '" + fechafin + "');";
             System.out.println("sentencia filtro tabla BD: " + sentencia);
-            
+
             Connection connection;
             Statement st;
             ResultSet rs;
@@ -584,7 +598,7 @@ public class TablaEntrada extends javax.swing.JDialog {
         }
         metodos.AnchuraColumna(tbPrincipal);
     }
-    
+
     private String EncontrarEstadoProducto(ResultSet rs) {
         String estado = "No encontrado";
         try {
@@ -592,7 +606,7 @@ public class TablaEntrada extends javax.swing.JDialog {
                     + "WHERE pro_formulacion = for_codigo AND for_estado = es_codigo AND pro_codigo = '" + rs.getString("pro_codigo") + "'";
             Conexion con = metodos.ObtenerRSSentencia(sentencia);
             con.rs.next();
-            
+
             estado = con.rs.getString("es_descripcion");
             if (estado.equals("ml/Ha")) {
                 estado = ("Lts");
@@ -603,7 +617,7 @@ public class TablaEntrada extends javax.swing.JDialog {
             }
         } catch (SQLException ex) {
             System.out.println("Error al verificar estado de producto");
-            Logger.getLogger(ABMEntrada.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AMEntrada.class.getName()).log(Level.SEVERE, null, ex);
         }
         return estado;
     }
@@ -611,14 +625,6 @@ public class TablaEntrada extends javax.swing.JDialog {
     private void txtBuscarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyTyped
         metodos.FiltroDeCaracteres(evt);
     }//GEN-LAST:event_txtBuscarKeyTyped
-
-    private void tbPrincipalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbPrincipalMouseClicked
-
-    }//GEN-LAST:event_tbPrincipalMouseClicked
-
-    private void tbPrincipalMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbPrincipalMousePressed
-
-    }//GEN-LAST:event_tbPrincipalMousePressed
 
     private void rb1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rb1ItemStateChanged
 
@@ -641,25 +647,94 @@ public class TablaEntrada extends javax.swing.JDialog {
     }//GEN-LAST:event_cbProductorFiltroActionPerformed
 
     private void btnFiltrarporFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarporFechaActionPerformed
-        TablaPrincipalConsulta(txtBuscar.getText());
+        if (dcFechaInicio.getDate() != null && dcFechaFin.getDate() != null) {
+            TablaPrincipalConsulta(txtBuscar.getText());
+        } else {
+            JOptionPane.showMessageDialog(null, "Fecha de inicio y/o fin invalidas, verifique las mismas", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
     }//GEN-LAST:event_btnFiltrarporFechaActionPerformed
 
-    private void btnFiltrarporFecha1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarporFecha1ActionPerformed
-        ABMEntrada abmentrada = new ABMEntrada(this, true);
-        metodoscombo.setSelectedNombreItem(abmentrada.cbEstablecimiento, cbEstablecimientoFiltro.getSelectedItem().toString());
-        
-        abmentrada.addWindowListener(new WindowAdapter() {
+    private void btnNuevaEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaEntradaActionPerformed
+        AMEntrada amentrada = new AMEntrada(this, true);
+        metodoscombo.setSelectedNombreItem(amentrada.getCbEstablecimiento(), cbEstablecimientoFiltro.getSelectedItem().toString());
+
+        amentrada.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent e) {
                 TablaPrincipalConsulta(txtBuscar.getText());
             }
         });
- 
-        abmentrada.setVisible(true);
-    }//GEN-LAST:event_btnFiltrarporFecha1ActionPerformed
-    
+
+        amentrada.setVisible(true);
+    }//GEN-LAST:event_btnNuevaEntradaActionPerformed
+
+    private void btnModificarEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarEntradaActionPerformed
+        AMEntrada amentrada = new AMEntrada(this, true);
+
+        amentrada.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                TablaPrincipalConsulta(txtBuscar.getText());
+            }
+        });
+
+        try {
+            SimpleDateFormat formatofecha = new SimpleDateFormat("yyyy/MM/dd");
+            String codigo = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0).toString();
+            String presentacion = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 2).toString();
+            String cantidad = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 3).toString();
+            String preciounitario = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 4).toString();
+            String preciototal = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 5).toString();
+            Date fechaentrada = formatofecha.parse(formatofecha.format(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 6).toString()));
+            Date fechacompra = formatofecha.parse(formatofecha.format(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 7).toString()));
+            String numfactura = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 8).toString();
+            String empresavendedora = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 9).toString();
+            String usuario = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 10).toString();
+            String obs = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 11).toString();
+
+            amentrada.setTxtCodigo(codigo);
+
+            Conexion con = metodos.ObtenerRSSentencia("SELECT en_producto, en_usuario FROM entrada WHERE en_codigo = " + codigo);
+            con.rs.next();
+            amentrada.setCbProducto(con.rs.getInt("en_producto"));
+
+            amentrada.setDcFechaEntrada(fechaentrada);
+            amentrada.setDcFechaCompra(fechacompra);
+            amentrada.setCbPresentacion(presentacion.replace(".0 Lts", "").replace(".0 Kgs", ""));
+            amentrada.setTxtCantidad(cantidad);
+            amentrada.setTxtPrecioUnitario(preciounitario.replace(" $", ""));
+            amentrada.setTxtPrecioTotal(preciototal.replace(" $", ""));
+            amentrada.setTxtNumFactura(numfactura);
+            amentrada.setCbEmpresaVendedora(empresavendedora);
+            amentrada.setTxtCodUsuario(con.rs.getString("en_usuario"));
+            amentrada.setTxtUsuario(usuario);
+            amentrada.setTaObs(obs);
+
+            con.DesconectarBasedeDatos();
+        } catch (SQLException e) {
+            System.out.println("Error al buscar producto");
+        } catch (ParseException ex) {
+            Logger.getLogger(TablaEntrada.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        amentrada.setVisible(true);
+    }//GEN-LAST:event_btnModificarEntradaActionPerformed
+
+    private void tbPrincipalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbPrincipalMouseClicked
+        if (tbPrincipal.getSelectedRow() > 0) {
+            btnModificarEntrada.setEnabled(true);
+        }
+    }//GEN-LAST:event_tbPrincipalMouseClicked
+
+    private void tbPrincipalMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbPrincipalMousePressed
+        if (tbPrincipal.getSelectedRow() > 0) {
+            btnModificarEntrada.setEnabled(true);
+        }
+    }//GEN-LAST:event_tbPrincipalMousePressed
+
     DecimalFormat formatodecimal = new DecimalFormat("#.##");
-    
+
     public void SiguienteFoco(KeyEvent evt) {
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
             ((JComponent) evt.getSource()).transferFocus();//Con esta parte transfieres el foco al siguiente campo sea un Jtextfield, Jpasswordfield, boton, etc..
@@ -669,7 +744,8 @@ public class TablaEntrada extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFiltrarporFecha;
-    private javax.swing.JButton btnFiltrarporFecha1;
+    private javax.swing.JButton btnModificarEntrada;
+    private javax.swing.JButton btnNuevaEntrada;
     private javax.swing.JComboBox cbCampoBuscar;
     private javax.swing.JComboBox cbEstablecimientoFiltro;
     private javax.swing.JComboBox cbProductorFiltro;

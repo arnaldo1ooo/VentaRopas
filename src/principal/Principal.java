@@ -8,7 +8,7 @@ package principal;
 import forms.configuracion.truncartabla.TruncarTabla;
 import forms.inventario.FormInventario;
 import forms.inventario.empresa_vendedora.ABMEmpresaVendedora;
-import forms.inventario.entrada.ABMEntrada;
+import forms.inventario.entrada.AMEntrada;
 import forms.inventario.entrada.TablaEntrada;
 import metodos.ImagenFondo;
 import forms.producto.ABMProducto;
@@ -255,6 +255,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             }
         });
 
+        jMenuItem11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoEntrada.png"))); // NOI18N
         jMenuItem11.setText("ENTRADAS");
         jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -264,6 +265,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jMenu8.add(jMenuItem11);
         jMenu8.add(jSeparator11);
 
+        jMenuItem18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoSalida.png"))); // NOI18N
         jMenuItem18.setText("SALIDAS");
         jMenuItem18.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
