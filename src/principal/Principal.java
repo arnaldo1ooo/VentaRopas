@@ -5,29 +5,13 @@
  */
 package principal;
 
-import forms.configuracion.truncartabla.TruncarTabla;
-import forms.inventario.FormInventario;
-import forms.inventario.empresa_vendedora.ABMEmpresaVendedora;
-import forms.inventario.entrada.AMEntrada;
-import forms.inventario.entrada.TablaEntrada;
-import metodos.ImagenFondo;
-import forms.producto.ABMProducto;
-import forms.producto.dosis.ABMDosis;
-import forms.producto.empresa_registrante.ABMEmpresaRegistrante;
-import forms.producto.formulacion.ABMFormulacion;
-import forms.producto.ingrediente_activo.ABMIngredienteActivo;
-import forms.producto.clase_producto.ABMClaseProducto;
-import forms.producto.fabricante.ABMFabricante;
-import forms.producto.tipoagroquimico.ABMTipoAgroquimico;
-import forms.zafra.ABMZafra;
-import forms.zafra.establecimiento.ABMEstablecimiento;
-import forms.zafra.parcela.ABMParcela;
-import forms.zafra.productor.ABMProductor;
+import forms.socio.ABMSocio;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import static login.Login.Alias;
+import metodos.ImagenFondo;
 
 /**
  *
@@ -484,18 +468,18 @@ public class Principal extends javax.swing.JFrame implements Runnable {
 
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        ABMProductor abmproductor = new ABMProductor(this, false);
+        ABMSocio abmproductor = new ABMSocio(this, false);
         abmproductor.setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        ABMIngredienteActivo abmingredienteactivo = new ABMIngredienteActivo(null, this, false);
-        abmingredienteactivo.setVisible(true);
+        /*ABMIngredienteActivo abmingredienteactivo = new ABMIngredienteActivo(null, this, false);
+        abmingredienteactivo.setVisible(true);*/
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
-        ABMEmpresaRegistrante abmempresaregistrante = new ABMEmpresaRegistrante(null, this, false);
-        abmempresaregistrante.setVisible(true);
+        /*ABMEmpresaRegistrante abmempresaregistrante = new ABMEmpresaRegistrante(null, this, false);
+        abmempresaregistrante.setVisible(true);*/
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
@@ -508,8 +492,8 @@ public class Principal extends javax.swing.JFrame implements Runnable {
 
 
     private void jMenuItem16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem16ActionPerformed
-        ABMFormulacion abmformulacion = new ABMFormulacion(null, this, false);
-        abmformulacion.setVisible(true);
+        /*ABMFormulacion abmformulacion = new ABMFormulacion(null, this, false);
+        abmformulacion.setVisible(true);*/
     }//GEN-LAST:event_jMenuItem16ActionPerformed
 
     private void jMenuItem17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem17ActionPerformed
@@ -538,23 +522,23 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_jMenuItem19ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        ABMProducto abmproducto = new ABMProducto(this, false, null);
-        abmproducto.setVisible(true);
+        /*ABMProducto abmproducto = new ABMProducto(this, false, null);
+        abmproducto.setVisible(true);*/
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jMenuItem20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem20ActionPerformed
-        ABMTipoAgroquimico abmtipoagroquimico = new ABMTipoAgroquimico(null, null, false);
-        abmtipoagroquimico.setVisible(true);
+        /*ABMTipoAgroquimico abmtipoagroquimico = new ABMTipoAgroquimico(null, null, false);
+        abmtipoagroquimico.setVisible(true);*/
     }//GEN-LAST:event_jMenuItem20ActionPerformed
 
     private void jMenuItem21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem21ActionPerformed
-        ABMClaseProducto abmpaisorigen = new ABMClaseProducto(null, this, false);
-        abmpaisorigen.setVisible(true);
+       /* ABMClaseProducto abmpaisorigen = new ABMClaseProducto(null, this, false);
+        abmpaisorigen.setVisible(true);*/
     }//GEN-LAST:event_jMenuItem21ActionPerformed
 
     private void jMenuItem22ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem22ActionPerformed
-        ABMFabricante abmtipocultivo = new ABMFabricante(null, this, false);
-        abmtipocultivo.setVisible(true);
+        /*ABMFabricante abmtipocultivo = new ABMFabricante(null, this, false);
+        abmtipocultivo.setVisible(true);*/
     }//GEN-LAST:event_jMenuItem22ActionPerformed
 
     private void dpEscritorioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dpEscritorioKeyPressed
@@ -562,8 +546,8 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_dpEscritorioKeyPressed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
-        TruncarTabla truncartabla = new TruncarTabla(this, true);
-        truncartabla.setVisible(true);
+        /*TruncarTabla truncartabla = new TruncarTabla(this, true);
+        truncartabla.setVisible(true);*/
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void jMenu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu2ActionPerformed
@@ -571,13 +555,13 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_jMenu2ActionPerformed
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
-        ABMEstablecimiento abmestablecimiento = new ABMEstablecimiento(this, false);
-        abmestablecimiento.setVisible(true);
+        /*ABMEstablecimiento abmestablecimiento = new ABMEstablecimiento(this, false);
+        abmestablecimiento.setVisible(true);*/
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     private void jMenuItem23ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem23ActionPerformed
-        ABMDosis abmdosis = new ABMDosis(this, false);
-        abmdosis.setVisible(true);
+      /*  ABMDosis abmdosis = new ABMDosis(this, false);
+        abmdosis.setVisible(true);*/
     }//GEN-LAST:event_jMenuItem23ActionPerformed
 
     private void jMenu3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu3ActionPerformed
@@ -585,23 +569,23 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_jMenu3ActionPerformed
 
     private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
-        ABMParcela abmparcela = new ABMParcela(this, true);
-        abmparcela.setVisible(true);
+        /*ABMParcela abmparcela = new ABMParcela(this, true);
+        abmparcela.setVisible(true);*/
     }//GEN-LAST:event_jMenuItem10ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        FormInventario forminventario = new FormInventario(this, false);
-        forminventario.setVisible(true);
+        /*FormInventario forminventario = new FormInventario(this, false);
+        forminventario.setVisible(true);*/
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        ABMZafra abmzafra = new ABMZafra(this, false);
-        abmzafra.setVisible(true);
+        /*ABMZafra abmzafra = new ABMZafra(this, false);
+        abmzafra.setVisible(true);*/
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jMenuItem18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem18ActionPerformed
-        ABMEmpresaVendedora abmempresavendedora = new ABMEmpresaVendedora(this, false);
-        abmempresavendedora.setVisible(true);
+       /* ABMEmpresaVendedora abmempresavendedora = new ABMEmpresaVendedora(this, false);
+        abmempresavendedora.setVisible(true);*/
     }//GEN-LAST:event_jMenuItem18ActionPerformed
 
     private void jMenu8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu8ActionPerformed
@@ -609,8 +593,8 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_jMenu8ActionPerformed
 
     private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
-        TablaEntrada tablaentrada = new TablaEntrada(this, false);
-        tablaentrada.setVisible(true);
+       /* TablaEntrada tablaentrada = new TablaEntrada(this, false);
+        tablaentrada.setVisible(true);*/
     }//GEN-LAST:event_jMenuItem11ActionPerformed
 
     /**

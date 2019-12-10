@@ -5,7 +5,6 @@
  */
 package metodos;
 
-import forms.producto.ABMProducto;
 import java.awt.Graphics2D;
 import java.awt.HeadlessException;
 import java.awt.Image;

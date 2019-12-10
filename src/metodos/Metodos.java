@@ -25,7 +25,6 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import conexion.Conexion;
-import forms.producto.ABMProducto;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.logging.Level;
@@ -204,21 +203,6 @@ public class Metodos {
         }
     }
 
-    public int ObtenerIdUltimoRegistro(String campocodigo, String tabla) {
-        int idultimoregistro = -1;
-        try {
-            Conexion con = this.ObtenerRSSentencia("SELECT MAX(" + campocodigo + ") AS idultimoregistro FROM " + tabla);
-
-            while (con.rs.next()) {
-                idultimoregistro = con.rs.getInt("idultimoregistro");
-            }
-            con.DesconectarBasedeDatos();
-        } catch (SQLException ex) {
-            Logger.getLogger(ABMProducto.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("No se pudo obtener el idultimoproducto: " + idultimoregistro);
-        }
-        return idultimoregistro;
-    }
 
     public void centrarventanaJInternalFrame(JInternalFrame LaVentana) {
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();

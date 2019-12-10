@@ -18,7 +18,7 @@ public class Conexion {
     private static final String controlador = "com.mysql.jdbc.Driver";
     private static final String usuarioDB = "root";
     private static final String passDB = "toor5127"; //Contrasena de la BD
-    private static final String servidor = "jdbc:mysql://localhost:3306/sicua"
+    private static final String servidor = "jdbc:mysql://localhost:3306/kuarahyrese"
             + "?useUnicode=true"
             + "&useJDBCCompliantTimezoneShift=true"
             + "&useLegacyDatetimeCode=false"
