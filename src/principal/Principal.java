@@ -289,7 +289,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jMenu2.add(jMenuItem7);
         jMenu2.add(jSeparator14);
 
-        jMenuItem2.setText("PRODUCTORES");
+        jMenuItem2.setText("SOCIOS");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem2ActionPerformed(evt);
