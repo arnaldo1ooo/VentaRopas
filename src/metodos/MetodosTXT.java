@@ -16,7 +16,7 @@ import javax.swing.JTextField;
  */
 public class MetodosTXT {
 
-    public void FiltroCaracteresInvalidos(java.awt.event.KeyEvent evt) {
+    public void FiltroCaracteresProhibidos(java.awt.event.KeyEvent evt) {
         // Verificar si la tecla pulsada no es '
         char caracter = evt.getKeyChar();
 
@@ -43,7 +43,7 @@ public class MetodosTXT {
         }
     }
 
-    public void SoloNumeroDecimalKeyPress(KeyEvent evt, JTextField ElTXT) {
+    public void SoloNumeroDecimalKeyPressed(KeyEvent evt, JTextField ElTXT) {
         //Declaramos una variable y le asignamos un evento
         char car = evt.getKeyChar();
         //Condicion que nos permite ingresar datos de tipo texto
@@ -81,5 +81,4 @@ public class MetodosTXT {
             ElTXT.setText(ElTXT.getText().substring(0, Cantidad + 1));
         };
     }
-
 }

@@ -7,6 +7,7 @@ package principal;
 
 import conexion.Conexion;
 import forms.ABMCliente;
+import forms.ABMProducto;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,14 +15,8 @@ import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import static login.Login.Alias;
-import static login.Login.CodUsuario;
-import static login.Login.NomApeUsuario;
-import static login.Login.txtAlias;
-import static login.Login.txtContrasena;
 import metodos.ImagenFondo;
 import metodos.Metodos;
 
@@ -437,7 +432,6 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jMenu4.setFont(new java.awt.Font("Sitka Text", 1, 14)); // NOI18N
         jMenu4.setPreferredSize(new java.awt.Dimension(270, 70));
 
-        jMenuItem4.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.ALT_MASK));
         jMenuItem4.setText("CLIENTE");
         jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -447,7 +441,6 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jMenu4.add(jMenuItem4);
         jMenu4.add(jSeparator7);
 
-        jMenuItem9.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.SHIFT_MASK));
         jMenuItem9.setText("PRODUCTO");
         jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -457,7 +450,6 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jMenu4.add(jMenuItem9);
         jMenu4.add(jSeparator6);
 
-        jMenuItem17.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem17.setText("USUARIOS");
         jMenuItem17.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -578,8 +570,8 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_jMenuItem19ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        /*ABMProducto abmproducto = new ABMProducto(this, false, null);
-        abmproducto.setVisible(true);*/
+        ABMProducto abmproducto = new ABMProducto(this, false);
+        abmproducto.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jMenuItem20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem20ActionPerformed

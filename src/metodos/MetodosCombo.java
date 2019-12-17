@@ -8,13 +8,15 @@ package metodos;
 import conexion.Conexion;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
-import javax.swing.UIManager;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /**
@@ -75,23 +77,27 @@ public class MetodosCombo {
                 super.paint(g);
             }
         });
-        
+
         ElCombo.removeAllItems(); //Vaciamos el combo
         try {
             AutoCompleteDecorator.decorate(ElCombo);
-            Conexion con = new Conexion();
-            con.ConectarBasedeDatos();
             System.out.println("Cargar combo (" + ElCombo.getName() + "): " + sentencia);
-            con.rs = con.st.executeQuery(sentencia);
-
-            while (con.rs.next()) {
+            Connection connection;
+            connection = (Connection) Conexion.ConectarBasedeDatos();
+            Statement st;
+            st = connection.createStatement();
+            ResultSet rs;
+            rs = st.executeQuery(sentencia);
+            while (rs.next()) {
                 ElCombo.addItem(new MetodosCombo(
-                        con.rs.getInt(1),
-                        con.rs.getString(2)));
+                        rs.getInt(1), 
+                        rs.getString(2)));
             }
-            ElCombo.setSelectedIndex(-1);
+            ElCombo.setSelectedIndex(0);
             ElCombo.setMaximumRowCount(ElCombo.getModel().getSize()); //Hace que se despliegue en toda la pantalla vertical el combo
-            con.DesconectarBasedeDatos();
+            rs.close();
+            st.close();
+            connection.close();
 
             AnadirScrollHorizontal(ElCombo);
         } catch (NumberFormatException | SQLException e) {
@@ -100,13 +106,13 @@ public class MetodosCombo {
     }
 
     public int ObtenerIdComboBox(JComboBox<MetodosCombo> ElCombo) {
-        int id = -1;
+        int codigoitemselect = -1;
         try {
-            id = ElCombo.getItemAt(ElCombo.getSelectedIndex()).getId();
+            codigoitemselect = ElCombo.getItemAt(ElCombo.getSelectedIndex()).getId();
         } catch (Exception e) {
-            System.out.println("ObtenerIdCombo: No se selecciono ningun item en el combo " + e);
+            System.out.println("ObtenerIdCombo: No se selecciono ningun item en el combo: " + e);
         }
-        return id;
+        return codigoitemselect;
     }
 
     private void AnadirScrollHorizontal(JComboBox box) {

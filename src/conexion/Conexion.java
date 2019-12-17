@@ -19,8 +19,8 @@ public class Conexion {
     private static final String controlador = "com.mysql.jdbc.Driver";
     private static final String usuarioDB = "root";
     private static final String passDB = "toor5127"; //Contrasena de la BD
-    private static final String nombreBD = "puntoventas";
-    private static final String servidor = "jdbc:mysql://localhost:3306/" + nombreBD
+    private static final String nombreDB = "ventaropas";
+    private static final String servidor = "jdbc:mysql://localhost:3306/" + nombreDB
             + "?useUnicode=true"
             + "&useJDBCCompliantTimezoneShift=true"
             + "&useLegacyDatetimeCode=false"
@@ -66,7 +66,7 @@ public class Conexion {
             Class.forName(controlador);
             conexion = DriverManager.getConnection(servidor, usuarioDB, passDB);
             if (conexion != null) {
-                System.out.println("CONEXIÓN A " + nombreBD + ", EXITOSA..");
+                System.out.println("CONEXIÓN A " + nombreDB + ", EXITOSA..");
             }
         } catch (ClassNotFoundException ex) {
             System.out.println("Error1 al intentar conectar con la bd: " + ex);
@@ -88,7 +88,7 @@ public class Conexion {
         try {
             if (conexion != null) {
                 conexion.close();
-                System.out.println("DESCONEXIÓN DE " + nombreBD + ", EXITOSO..");
+                System.out.println("DESCONEXIÓN DE " + nombreDB + ", EXITOSO..");
                 if (st != null) {
                     st.close();
                     System.out.println("DESCONEXIÓN DE STATEMENT, EXITOSO..");
