@@ -4,13 +4,13 @@
  */
 package login;
 
-import login.cambiarpass.CambiarContrasena;
 import conexion.Conexion;
 import java.awt.event.KeyEvent;
 import principal.Principal;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -39,40 +39,35 @@ public class Login extends javax.swing.JFrame {
         Alias = txtAlias.getText();
         Pass = String.valueOf(txtContrasena.getPassword());
 
-        Connection con;
-        con = Conexion.GetConnection();
-
         String consulta = "CALL SP_UsuarioConsulta ('" + Alias + "','" + Pass + "') ";
+        System.out.println("consulta: " + consulta);
         try {
-            java.sql.Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery(consulta);
-            int TipoDeUsuario;
+            Connection conexion;
+            conexion = Conexion.ConectarBasedeDatos();
+            Statement st;
+            st = conexion.createStatement();            
+            ResultSet rs;
+            rs = st.executeQuery(consulta);
+
             //Si se encontro coincidencia
-            if (rs.next()) {
+            if (rs.next() == true) {
                 CodUsuario = rs.getString("usu_codigo");
                 NomApeUsuario = rs.getString("usu_nombre") + " " + rs.getString("usu_apellido");
-                TipoDeUsuario = Integer.parseInt(rs.getString("usu_tipousuario"));
-                //Si el tipo de usuario es Administrador
-                if (TipoDeUsuario == 1) {
-                    Principal principal = new Principal();
-                    principal.setVisible(true);
-                    this.dispose();
-                } else {
-                    if (TipoDeUsuario == 2) {
 
-                    }
-                }
+                Principal principal = new Principal();
+                principal.setEnabled(true);
+                dispose(); //Cerrar jdialog
             } else {
+                JOptionPane.showMessageDialog(this, "Nombre de usuario o contraseña incorrecta!");
                 //txtUsuario.setText("");
-                txtContrasena.setText("");
                 txtAlias.requestFocus();
+                txtContrasena.setText("");
+
                 lblError.setVisible(true);
             }
             rs.close();
             st.close();
-            //con.close();
-        } catch (NumberFormatException SQL) {
-            System.out.println("Error en SQL " + SQL.getMessage());
+            conexion.close();
         } catch (SQLException SQL) {
             System.out.println("Error en SQL " + SQL.getMessage());
         }
@@ -91,7 +86,7 @@ public class Login extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         lblError = new javax.swing.JLabel();
         btncancelar = new javax.swing.JButton();
-        btncambiarpass = new javax.swing.JButton();
+        btnCambiarPass = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -107,12 +102,12 @@ public class Login extends javax.swing.JFrame {
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jpPrincipal.setBackground(new java.awt.Color(45, 62, 80));
+        jpPrincipal.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/login/iconos/IconoLogin.png"))); // NOI18N
 
-        jPanel1.setBackground(new java.awt.Color(45, 62, 80));
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(153, 153, 153), null, new java.awt.Color(153, 153, 153)), "Login  ", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("PMingLiU-ExtB", 1, 14), new java.awt.Color(255, 255, 255))); // NOI18N
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(153, 153, 153), null, new java.awt.Color(153, 153, 153)), "Login  ", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("PMingLiU-ExtB", 1, 14), new java.awt.Color(0, 0, 0))); // NOI18N
 
         txtAlias.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
         txtAlias.setToolTipText("Teclea tu nombre de usuario para ingresar");
@@ -186,6 +181,7 @@ public class Login extends javax.swing.JFrame {
         lblError.setText("No se pudo iniciar sesión !!!");
 
         btncancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos20x20/IconoCancelar.png"))); // NOI18N
+        btncancelar.setText("Limpiar campos");
         btncancelar.setToolTipText("Cancelar");
         btncancelar.setContentAreaFilled(false);
         btncancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -194,12 +190,13 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        btncambiarpass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos20x20/IconoCambiarPass.png"))); // NOI18N
-        btncambiarpass.setToolTipText("Cambiar Contraseña");
-        btncambiarpass.setContentAreaFilled(false);
-        btncambiarpass.addActionListener(new java.awt.event.ActionListener() {
+        btnCambiarPass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos20x20/IconoCambiarPass.png"))); // NOI18N
+        btnCambiarPass.setText("Cambiar pass");
+        btnCambiarPass.setToolTipText("Cambiar Contraseña");
+        btnCambiarPass.setContentAreaFilled(false);
+        btnCambiarPass.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btncambiarpassActionPerformed(evt);
+                btnCambiarPassActionPerformed(evt);
             }
         });
 
@@ -212,32 +209,33 @@ public class Login extends javax.swing.JFrame {
                     .addGroup(jpPrincipalLayout.createSequentialGroup()
                         .addGap(203, 203, 203)
                         .addComponent(jLabel3))
-                    .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpPrincipalLayout.createSequentialGroup()
-                            .addGap(50, 50, 50)
-                            .addComponent(btncancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(btncambiarpass, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblError, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpPrincipalLayout.createSequentialGroup()
-                            .addGap(43, 43, 43)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(43, 43, 43))
+                    .addGroup(jpPrincipalLayout.createSequentialGroup()
+                        .addGap(43, 43, 43)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addGroup(jpPrincipalLayout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(btncancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnCambiarPass)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblError, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 17, Short.MAX_VALUE))
         );
         jpPrincipalLayout.setVerticalGroup(
             jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpPrincipalLayout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(4, 4, 4)
                 .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btncancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btncambiarpass, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btncancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnCambiarPass, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(lblError, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -283,10 +281,10 @@ public class Login extends javax.swing.JFrame {
         IniciarSesion();
     }//GEN-LAST:event_btnokActionPerformed
 
-    private void btncambiarpassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncambiarpassActionPerformed
-        CambiarContrasena ob = new CambiarContrasena();
-        ob.setVisible(true);
-    }//GEN-LAST:event_btncambiarpassActionPerformed
+    private void btnCambiarPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarPassActionPerformed
+        CambiarPass cambiarpass = new CambiarPass(this, true);
+        cambiarpass.setVisible(true);
+    }//GEN-LAST:event_btnCambiarPassActionPerformed
 
     private void txtAliasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAliasKeyPressed
         lblError.setVisible(false);
@@ -299,11 +297,15 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_txtContrasenaKeyPressed
 
     private void btncancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncancelarActionPerformed
+        Limpiar();
+    }//GEN-LAST:event_btncancelarActionPerformed
+
+    private void Limpiar() {
         lblError.setVisible(false);
         txtAlias.setText("");
         txtContrasena.setText("");
         txtAlias.requestFocus();
-    }//GEN-LAST:event_btncancelarActionPerformed
+    }
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         int opcion = JOptionPane.showConfirmDialog(null, "¿Realmente desea salir?", "Advertencia!", JOptionPane.YES_NO_OPTION);
@@ -314,7 +316,7 @@ public class Login extends javax.swing.JFrame {
 
     private void btnokKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnokKeyPressed
         char car = (char) evt.getKeyCode();
-        if (car == evt.VK_ENTER) {//Al apretar ENTER QUE HAGA ALGO
+        if (car == KeyEvent.VK_ENTER) {//Al apretar ENTER QUE HAGA ALGO
             btnok.doClick();
         }
     }//GEN-LAST:event_btnokKeyPressed
@@ -361,7 +363,7 @@ public class Login extends javax.swing.JFrame {
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btncambiarpass;
+    private javax.swing.JButton btnCambiarPass;
     private javax.swing.JButton btncancelar;
     private javax.swing.JButton btnok;
     private javax.swing.JLabel jLabel1;

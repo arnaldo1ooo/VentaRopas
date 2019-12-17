@@ -5,35 +5,75 @@
  */
 package principal;
 
-import forms.socio.ABMSocio;
+import conexion.Conexion;
+import forms.ABMCliente;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import static login.Login.Alias;
+import static login.Login.CodUsuario;
+import static login.Login.NomApeUsuario;
+import static login.Login.txtAlias;
+import static login.Login.txtContrasena;
 import metodos.ImagenFondo;
+import metodos.Metodos;
 
 /**
  *
- * @author Ing.Ivan
+ * @author Lic. Arnaldo Cantero
  */
 public class Principal extends javax.swing.JFrame implements Runnable {
 
+    Metodos metodos = new Metodos();
     Thread hilo;
 
     public Principal() {
         initComponents();
         dpEscritorio.setBorder(new ImagenFondo());//Imagen de fondo al jdesktopane
         this.setExtendedState(Principal.MAXIMIZED_BOTH);//Maximizar ventana
+        ObtenerHorayFecha();
+        setVisible(true);
+        lbAlias.setText(Alias);
+
+        PerfilUsuario();
+    }
+
+    private void PerfilUsuario() {
+        String consulta = "CALL SP_UsuarioPerfilConsulta('" + Alias + "')";
+        System.out.println("consulta: " + consulta);
+        try {
+            Connection conexion;
+            conexion = Conexion.ConectarBasedeDatos();
+            Statement st;
+            st = conexion.createStatement();
+            ResultSet rs;
+            rs = st.executeQuery(consulta);
+
+            //Si se encontro coincidencia
+            while (rs.next() == true) {
+                lblPerfil.setText(rs.getString("pe_denominacion"));
+            }
+            rs.close();
+            st.close();
+            conexion.close();
+        } catch (SQLException SQL) {
+            System.out.println("Error en SQL " + SQL.getMessage());
+        }
+    }
+
+    private void ObtenerHorayFecha() {
         //Obtener fecha y hora
         hilo = new Thread(this);
         hilo.start();
-        setVisible(true);
-
-        lbAlias.setText(Alias);
     }
 
-    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -48,6 +88,8 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         lbHoraTitulo = new javax.swing.JLabel();
         lbHora = new javax.swing.JLabel();
         lbFecha = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        lblPerfil = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu8 = new javax.swing.JMenu();
         jMenuItem11 = new javax.swing.JMenuItem();
@@ -100,7 +142,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             }
         });
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoAgroquimico.png"))); // NOI18N
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoProducto.png"))); // NOI18N
         jButton1.setText("PRODUCTOS");
         jButton1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -109,8 +151,8 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             }
         });
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoInventario.png"))); // NOI18N
-        jButton2.setText("INVENTARIOS");
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoClientes.png"))); // NOI18N
+        jButton2.setText("CLIENTES");
         jButton2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -149,10 +191,10 @@ public class Principal extends javax.swing.JFrame implements Runnable {
                 .addGap(40, 40, 40)
                 .addComponent(jButton2)
                 .addGap(18, 18, 18)
-                .addComponent(jButton3)
-                .addGap(18, 18, 18)
                 .addComponent(jButton1)
-                .addContainerGap(271, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jButton3)
+                .addContainerGap(213, Short.MAX_VALUE))
         );
 
         jpBarra.setPreferredSize(new java.awt.Dimension(1586, 25));
@@ -190,6 +232,14 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         lbFecha.setFocusable(false);
         lbFecha.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel2.setText("Perfil:");
+
+        lblPerfil.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        lblPerfil.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblPerfil.setText("Error de perfil");
+
         javax.swing.GroupLayout jpBarraLayout = new javax.swing.GroupLayout(jpBarra);
         jpBarra.setLayout(jpBarraLayout);
         jpBarraLayout.setHorizontalGroup(
@@ -198,8 +248,12 @@ public class Principal extends javax.swing.JFrame implements Runnable {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbAlias, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
-                .addGap(942, 942, 942)
+                .addComponent(lbAlias, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblPerfil, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+                .addGap(634, 634, 634)
                 .addComponent(lbFechaTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lbFecha)
@@ -215,7 +269,9 @@ public class Principal extends javax.swing.JFrame implements Runnable {
                 .addGroup(jpBarraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpBarraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                         .addComponent(lbAlias, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jpBarraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                         .addComponent(lbFechaTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(lbFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -452,7 +508,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(dpEscritorio)
-                    .addComponent(jpBarra, javax.swing.GroupLayout.DEFAULT_SIZE, 1582, Short.MAX_VALUE))
+                    .addComponent(jpBarra, javax.swing.GroupLayout.DEFAULT_SIZE, 1597, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
         layout.setVerticalGroup(
@@ -468,7 +524,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
 
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        ABMSocio abmproductor = new ABMSocio(this, false);
+        ABMCliente abmproductor = new ABMCliente(this, false);
         abmproductor.setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
@@ -532,13 +588,12 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_jMenuItem20ActionPerformed
 
     private void jMenuItem21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem21ActionPerformed
-       /* ABMClaseProducto abmpaisorigen = new ABMClaseProducto(null, this, false);
+        /* ABMClaseProducto abmpaisorigen = new ABMClaseProducto(null, this, false);
         abmpaisorigen.setVisible(true);*/
     }//GEN-LAST:event_jMenuItem21ActionPerformed
 
     private void jMenuItem22ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem22ActionPerformed
-        /*ABMFabricante abmtipocultivo = new ABMFabricante(null, this, false);
-        abmtipocultivo.setVisible(true);*/
+
     }//GEN-LAST:event_jMenuItem22ActionPerformed
 
     private void dpEscritorioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dpEscritorioKeyPressed
@@ -560,7 +615,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     private void jMenuItem23ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem23ActionPerformed
-      /*  ABMDosis abmdosis = new ABMDosis(this, false);
+        /*  ABMDosis abmdosis = new ABMDosis(this, false);
         abmdosis.setVisible(true);*/
     }//GEN-LAST:event_jMenuItem23ActionPerformed
 
@@ -574,8 +629,8 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_jMenuItem10ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        /*FormInventario forminventario = new FormInventario(this, false);
-        forminventario.setVisible(true);*/
+        ABMCliente abmcliente = new ABMCliente(this, false);
+        abmcliente.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -584,7 +639,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jMenuItem18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem18ActionPerformed
-       /* ABMEmpresaVendedora abmempresavendedora = new ABMEmpresaVendedora(this, false);
+        /* ABMEmpresaVendedora abmempresavendedora = new ABMEmpresaVendedora(this, false);
         abmempresavendedora.setVisible(true);*/
     }//GEN-LAST:event_jMenuItem18ActionPerformed
 
@@ -593,7 +648,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_jMenu8ActionPerformed
 
     private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
-       /* TablaEntrada tablaentrada = new TablaEntrada(this, false);
+        /* TablaEntrada tablaentrada = new TablaEntrada(this, false);
         tablaentrada.setVisible(true);*/
     }//GEN-LAST:event_jMenuItem11ActionPerformed
 
@@ -642,6 +697,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
@@ -683,6 +739,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     private javax.swing.JLabel lbFechaTitulo;
     private javax.swing.JLabel lbHora;
     private javax.swing.JLabel lbHoraTitulo;
+    private javax.swing.JLabel lblPerfil;
     // End of variables declaration//GEN-END:variables
 
     @Override

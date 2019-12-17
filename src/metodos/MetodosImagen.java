@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -89,7 +90,6 @@ public class MetodosImagen {
                     ImageIO.write(biImagen, fileextension, new File(rutadestinoimagen + "." + fileextension));
                 } catch (IOException ex) {
                     JOptionPane.showMessageDialog(null, "Error al guardar imagen del producto... " + ex, "Error", JOptionPane.ERROR_MESSAGE);
-                    Logger.getLogger(ABMProducto.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         } catch (HeadlessException | IOException e) {
@@ -172,7 +172,18 @@ public class MetodosImagen {
         try {
             javax.swing.UIManager.setLookAndFeel(look);
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(ABMProducto.class.getName()).log(Level.SEVERE, null, ex);
+
         }
     }
+
+   /* public void EscalarImagenAjButton(String rutaimagen, JButton EljButton) {
+        // Crea un icono que referencie a la imagen en disco
+        ImageIcon iconoOriginal = new ImageIcon(rutaimagen);
+
+        int ancho = 32; // ancho en pixeles que tendra el icono escalado
+        int alto = -1; // alto (para que conserve la proporcion pasamos -1)
+
+// Obtiene un icono en escala con las dimensiones especificadas
+        ImageIcon iconoEscala = new ImageIcon(iconoOriginal.getImage().getScaledInstance(EljButton.getho, largojbutton, java.awt.Image.SCALE_DEFAULT));
+    }*/
 }

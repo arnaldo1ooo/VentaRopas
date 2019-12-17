@@ -37,18 +37,17 @@ import javax.swing.JInternalFrame;
  * @author Lic. Arnaldo Cantero
  */
 public class Metodos {
-
     public int CantRegistros = 0;
 
     public Conexion ObtenerRSSentencia(String sentencia) { //con.Desconectar luego de usar el metodo
-        Conexion con = new Conexion();
+        Conexion conexion = new Conexion();
         try {
-            con.ConectarBasedeDatos();
+            Conexion.ConectarBasedeDatos();
             System.out.println("Ejecutar sentencia ObtenerRSSentencia " + sentencia);
-            con.rs = con.st.executeQuery(sentencia);
+            conexion.rs = conexion.st.executeQuery(sentencia);
 
             int cantreg = 0;
-            while (con.rs.next() && cantreg < 2) { //Revisamos cuantos registro trajo la consulta
+            while (conexion.rs.next() && cantreg < 2) { //Revisamos cuantos registro trajo la consulta
                 cantreg++;
             }
 
@@ -58,20 +57,19 @@ public class Metodos {
                     break;
                 case 1:
                     System.out.println("ObtenerRSSentencia trajo un resultado");
-                    con.rs.beforeFirst(); //Ponemos antes del primer registro en el puntero
+                    conexion.rs.beforeFirst(); //Ponemos antes del primer registro en el puntero
                     break;
                 case 2:
                     System.out.println("ObtenerRSSentencia trajo mas de un resultado");
-                    con.rs.beforeFirst(); //Ponemos antes del primer registro en el puntero
+                    conexion.rs.beforeFirst(); //Ponemos antes del primer registro en el puntero
                     break;
                 default:
                 //aca se escribe lo que si o si se ejecuta
             }
-
         } catch (SQLException e) {
             System.out.println("Error al EjecutarSentencia ObtenerRSSentencia, sentencia: " + sentencia + "ERROR " + e);
         }
-        return con;
+        return conexion;
     }
 
     public void AnchuraColumna(JTable LaTabla) {
@@ -170,7 +168,7 @@ public class Metodos {
         Statement st;
         ResultSet rs;
         try {
-            connection = (Connection) Conexion.GetConnection();
+            connection = (Connection) Conexion.ConectarBasedeDatos();
             st = connection.createStatement();
             rs = st.executeQuery(sentencia);
             ResultSetMetaData mdrs = rs.getMetaData();
@@ -193,16 +191,6 @@ public class Metodos {
             JOptionPane.showMessageDialog(null, ex);
         }
     }
-
-    public void FiltroDeCaracteres(java.awt.event.KeyEvent evt) {
-        // Verificar si la tecla pulsada no es '
-        char caracter = evt.getKeyChar();
-
-        if (caracter == "'".charAt(0) || caracter == "\\".charAt(0)) {
-            evt.consume(); // ignorar el evento de teclado
-        }
-    }
-
 
     public void centrarventanaJInternalFrame(JInternalFrame LaVentana) {
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
