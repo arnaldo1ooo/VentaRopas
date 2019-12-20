@@ -108,7 +108,7 @@
         <Menu class="javax.swing.JMenu" name="jMenu3">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/iconos/Iconos70x70/IconoAgroquimico.png"/>
+              <Image iconType="3" name="/iconos/Iconos70x70/IconoProducto.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="PRODUCTOS"/>
             <Property name="toolTipText" type="java.lang.String" value=""/>

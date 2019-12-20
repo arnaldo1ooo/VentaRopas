@@ -350,7 +350,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
 
         jMenuBar1.add(jMenu2);
 
-        jMenu3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoAgroquimico.png"))); // NOI18N
+        jMenu3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoProducto.png"))); // NOI18N
         jMenu3.setText("PRODUCTOS");
         jMenu3.setToolTipText("");
         jMenu3.setFont(new java.awt.Font("Sitka Text", 1, 14)); // NOI18N

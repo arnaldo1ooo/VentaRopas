@@ -49,26 +49,31 @@ public final class ABMProducto extends javax.swing.JDialog {
 //--------------------------METODOS----------------------------//
     public void CargarComboBoxes() {
         //Carga los combobox con las consultas
-        cbCategoria.removeAllItems();
-        cbSubcategoria.removeAllItems();
 
         metodoscombo.CargarComboBox(cbCategoria, "SELECT cat_codigo, cat_descripcion FROM categoria ORDER BY cat_descripcion");
-        metodoscombo.CargarComboBox(cbSubcategoria, "SELECT subcat_codigo, subcat_descripcion FROM subcategoria ORDER BY subcat_descripcion");
+
+        if (metodoscombo.ObtenerIdComboBox(cbCategoria) > -1) {
+            metodoscombo.CargarComboBox(cbSubcategoria, "SELECT subcat_codigo, subcat_descripcion FROM subcategoria "
+                    + "WHERE subcat_categoria = " + metodoscombo.ObtenerIdComboBox(cbCategoria) + " ORDER BY subcat_descripcion");
+        }
 
         ModoEdicion(false);
     }
 
     public void RegistroNuevo() {
         try {
-            String codigoproducto = txtCodigoProducto.getText();
-            String descripcion = txtDescripcion.getText();
-            String precio = txtPrecio.getText();
-            String existencia = txtExistencia.getText();
-            int idcategoria = metodoscombo.ObtenerIdComboBox(cbCategoria);
-            int idsubcategoria = metodoscombo.ObtenerIdComboBox(cbSubcategoria);
-            String obs = taObs.getText();
-
             if (ComprobarCampos() == true) {
+                String codigoproducto = txtCodigoProducto.getText();
+                String descripcion = txtDescripcion.getText();
+
+                String precio = (txtPrecio.getText().replace(".", "")).replace(",", ".");
+                precio = metodostxt.DosDecimalesDouble(precio); //Redondear double para que tenga solo dos numeros decimales
+
+                String existencia = txtExistencia.getText();
+                int idcategoria = metodoscombo.ObtenerIdComboBox(cbCategoria);
+                int idsubcategoria = metodoscombo.ObtenerIdComboBox(cbSubcategoria);
+                String obs = taObs.getText();
+
                 int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro crear este nuevo registro?", "Confirmación", JOptionPane.YES_OPTION);
 
                 if (JOptionPane.YES_OPTION == confirmado) {
@@ -89,9 +94,9 @@ public final class ABMProducto extends javax.swing.JDialog {
                         ModoEdicion(false);
                         Limpiar();
                     } catch (HeadlessException ex) {
-                        JOptionPane.showMessageDialog(this, "Ocurrió un Error " + ex.getMessage());
+                        JOptionPane.showMessageDialog(this, "Ocurrió un Error al intentar guardar el registro " + ex.getMessage());
                     } catch (SQLException ex) {
-                        JOptionPane.showMessageDialog(this, "Ocurrió un Error " + ex.getMessage());
+                        JOptionPane.showMessageDialog(this, "Ocurrió un Error al intentar guardar el registro " + ex.getMessage());
                     }
                 } else {
                     System.out.println("No se guardo el registro");
@@ -105,18 +110,17 @@ public final class ABMProducto extends javax.swing.JDialog {
     }
 
     public void RegistroModificar() {
-        //guarda los datos que se han modificado en los campos
-
-        String codigo = txtCodigo.getText();
-        String codigoproducto = txtCodigoProducto.getText();
-        String descripcion = txtDescripcion.getText();
-        String precio = txtPrecio.getText();
-        String existencia = txtExistencia.getText();
-        int idcategoria = metodoscombo.ObtenerIdComboBox(cbCategoria);
-        int idsubcategoria = metodoscombo.ObtenerIdComboBox(cbSubcategoria);
-        String obs = taObs.getText();
-
         if (ComprobarCampos() == true) {
+            //guarda los datos que se han modificado en los campos
+            String codigo = txtCodigo.getText();
+            String codigoproducto = txtCodigoProducto.getText();
+            String descripcion = txtDescripcion.getText();
+            String precio = txtPrecio.getText();
+            String existencia = txtExistencia.getText();
+            int idcategoria = metodoscombo.ObtenerIdComboBox(cbCategoria);
+            int idsubcategoria = metodoscombo.ObtenerIdComboBox(cbSubcategoria);
+            String obs = taObs.getText();
+
             int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro de modificar este registro?", "Confirmación", JOptionPane.YES_OPTION);
             if (JOptionPane.YES_OPTION == confirmado) {
                 String sentencia = "CALL SP_ProductoModificar(" + codigo + ",'" + codigoproducto + "','" + descripcion + "','" + precio + "','" + existencia
@@ -192,13 +196,17 @@ public final class ABMProducto extends javax.swing.JDialog {
 
         metodos.ConsultaFiltroTablaBD(tbPrincipal, titlesJtabla, titlesconsulta, nombresp, filtro, cbCampoBuscar);
         metodos.AnchuraColumna(tbPrincipal);
+        lbCantRegistros.setText(metodos.CantRegistros + " Registros encontrados");
     }
 
     private void ModoVistaPrevia() {
         txtCodigo.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0).toString());
         txtCodigoProducto.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 1).toString());
         txtDescripcion.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 2).toString());
-        txtPrecio.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 3).toString());
+
+        txtPrecio.setText((tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 3).toString()).replace(".", ","));
+        metodostxt.PonerPuntosMilesKeyReleased(txtPrecio);
+
         txtExistencia.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 4).toString());
         metodoscombo.setSelectedNombreItem(cbCategoria, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 5).toString());
         metodoscombo.setSelectedNombreItem(cbSubcategoria, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 6).toString());
@@ -240,22 +248,43 @@ public final class ABMProducto extends javax.swing.JDialog {
 
     public boolean ComprobarCampos() {
         if (txtCodigoProducto.getText().equals("")) {
-            lblCodigoProducto.setText("Ingrese el RUC/CI:");
+            lblCodigoProducto.setText("Ingrese el código del producto:");
             lblCodigoProducto.setForeground(Color.RED);
             lblCodigoProducto.requestFocus();
             return false;
         } else {
             if (txtDescripcion.getText().equals("")) {
-                lblDescripcion.setText("Ingrese el nombre:");
+                lblDescripcion.setText("Ingrese la descripción:");
                 lblDescripcion.setForeground(Color.RED);
                 lblDescripcion.requestFocus();
                 return false;
             } else {
                 if (txtPrecio.getText().equals("")) {
-                    lblPrecio.setText("Ingrese el apellido:");
+                    lblPrecio.setText("Ingrese el precio:");
                     lblPrecio.setForeground(Color.RED);
                     lblPrecio.requestFocus();
                     return false;
+                } else {
+                    if (txtExistencia.getText().equals("")) {
+                        lblExistencia.setText("Ingrese la existencia:");
+                        lblExistencia.setForeground(Color.RED);
+                        lblExistencia.requestFocus();
+                        return false;
+                    } else {
+                        if (cbCategoria.getSelectedIndex() == -1) {
+                            lblCategoria.setText("Ingrese la categoria:");
+                            lblCategoria.setForeground(Color.RED);
+                            lblCategoria.requestFocus();
+                            return false;
+                        } else {
+                            if (cbSubcategoria.getSelectedIndex() == -1) {
+                                lblSubcategoria.setText("Ingrese la subcategoria:");
+                                lblSubcategoria.setForeground(Color.RED);
+                                lblSubcategoria.requestFocus();
+                                return false;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -280,6 +309,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         };
         lblBuscarCampo = new javax.swing.JLabel();
         cbCampoBuscar = new javax.swing.JComboBox();
+        lbCantRegistros = new javax.swing.JLabel();
         jpBotones = new javax.swing.JPanel();
         btnNuevo = new javax.swing.JButton();
         btnModificar = new javax.swing.JButton();
@@ -305,7 +335,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         cbCategoria = new javax.swing.JComboBox<>();
         cbSubcategoria = new javax.swing.JComboBox<>();
-        jLabel3 = new javax.swing.JLabel();
+        lblMoneda = new javax.swing.JLabel();
         jpBotones2 = new javax.swing.JPanel();
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
@@ -393,22 +423,32 @@ public final class ABMProducto extends javax.swing.JDialog {
         lblBuscarCampo.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblBuscarCampo.setText("Buscar por:");
 
+        lbCantRegistros.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        lbCantRegistros.setForeground(new java.awt.Color(153, 153, 0));
+        lbCantRegistros.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lbCantRegistros.setText("0 Registros encontrados");
+        lbCantRegistros.setPreferredSize(new java.awt.Dimension(57, 25));
+
         javax.swing.GroupLayout jpTablaLayout = new javax.swing.GroupLayout(jpTabla);
         jpTabla.setLayout(jpTablaLayout);
         jpTablaLayout.setHorizontalGroup(
             jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpTablaLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(scPrincipal)
-                    .addGroup(jpTablaLayout.createSequentialGroup()
-                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(lblBuscarCampo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbCampoBuscar, 0, 180, Short.MAX_VALUE)))
+            .addGroup(jpTablaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpTablaLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(scPrincipal)
+                            .addGroup(jpTablaLayout.createSequentialGroup()
+                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(lblBuscarCampo)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cbCampoBuscar, 0, 180, Short.MAX_VALUE))))
+                    .addComponent(lbCantRegistros, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 711, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jpTablaLayout.setVerticalGroup(
@@ -420,9 +460,11 @@ public final class ABMProducto extends javax.swing.JDialog {
                     .addComponent(lblBuscarCampo, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(1, 1, 1)
-                .addComponent(scPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addComponent(scPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4)
+                .addComponent(lbCantRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4))
         );
 
         jpBotones.setBackground(new java.awt.Color(255, 255, 255));
@@ -497,13 +539,13 @@ public final class ABMProducto extends javax.swing.JDialog {
             jpBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpBotonesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
+                .addComponent(btnNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnModificar, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
+                .addComponent(btnModificar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
+                .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnReporte, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)
+                .addComponent(btnReporte, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -529,6 +571,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         lblCodigoProducto.setToolTipText("");
 
         txtCodigoProducto.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        txtCodigoProducto.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtCodigoProducto.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         txtCodigoProducto.setEnabled(false);
         txtCodigoProducto.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -573,6 +616,9 @@ public final class ABMProducto extends javax.swing.JDialog {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtPrecioKeyReleased(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrecioKeyTyped(evt);
+            }
         });
 
         lblExistencia.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
@@ -612,6 +658,11 @@ public final class ABMProducto extends javax.swing.JDialog {
         taObs.setRows(5);
         taObs.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         taObs.setEnabled(false);
+        taObs.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                taObsKeyPressed(evt);
+            }
+        });
         scpObs.setViewportView(taObs);
 
         jLabel2.setForeground(new java.awt.Color(0, 0, 153));
@@ -624,9 +675,9 @@ public final class ABMProducto extends javax.swing.JDialog {
             }
         });
 
-        jLabel3.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel3.setText("Gs.");
+        lblMoneda.setForeground(new java.awt.Color(102, 102, 102));
+        lblMoneda.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblMoneda.setText("Dólares.");
 
         javax.swing.GroupLayout jpEdicionLayout = new javax.swing.GroupLayout(jpEdicion);
         jpEdicion.setLayout(jpEdicionLayout);
@@ -662,20 +713,18 @@ public final class ABMProducto extends javax.swing.JDialog {
                                     .addComponent(lblSubcategoria, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 92, Short.MAX_VALUE)))))
                     .addGroup(jpEdicionLayout.createSequentialGroup()
                         .addGap(2, 2, 2)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(lblMoneda)))
                 .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpEdicionLayout.createSequentialGroup()
                         .addGap(4, 4, 4)
-                        .addComponent(scpObs, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(scpObs, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jpEdicionLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbCategoria, 0, 278, Short.MAX_VALUE))
+                        .addComponent(cbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jpEdicionLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbSubcategoria, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(91, 91, 91))
+                        .addComponent(cbSubcategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jpEdicionLayout.setVerticalGroup(
             jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -699,7 +748,7 @@ public final class ABMProducto extends javax.swing.JDialog {
                         .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblExistencia, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -803,11 +852,11 @@ public final class ABMProducto extends javax.swing.JDialog {
                 .addComponent(jpBanner, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jpBotones, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                    .addComponent(jpBotones, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
                     .addComponent(jpTabla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jtpEdicion, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jpBotones2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -824,7 +873,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jpPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 624, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jpPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 636, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -918,51 +967,64 @@ public final class ABMProducto extends javax.swing.JDialog {
     private void txtCodigoProductoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoProductoKeyTyped
         metodostxt.SoloNumeroEnteroKeyTyped(evt);
         //Cantidad de caracteres
-        metodostxt.txtCantidadCaracteresKeyTyped(txtCodigoProducto, 40);
+        metodostxt.TxtCantidadCaracteresKeyTyped(txtCodigoProducto, 40);
     }//GEN-LAST:event_txtCodigoProductoKeyTyped
 
     private void txtCodigoProductoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoProductoKeyReleased
-        metodostxt.txtColorLabelKeyReleased(txtCodigoProducto, lblCodigo, "Código del producto*:");
+        metodostxt.TxtColorLabelKeyReleased(txtCodigoProducto, lblCodigoProducto, "Código del producto*:");
     }//GEN-LAST:event_txtCodigoProductoKeyReleased
 
     private void txtPrecioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioKeyReleased
-        metodostxt.txtColorLabelKeyReleased(txtPrecio, lblPrecio, "Precio*:");
+        metodostxt.PonerPuntosMilesKeyReleased(txtPrecio);
+        metodostxt.TxtColorLabelKeyReleased(txtPrecio, lblPrecio, "Precio*:");
     }//GEN-LAST:event_txtPrecioKeyReleased
 
     private void txtDescripcionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescripcionKeyTyped
-        metodostxt.SoloTextoKeyTyped(evt);
+        metodostxt.FiltroCaracteresProhibidos(evt);
 
         //Cantidad de caracteres
-        metodostxt.txtCantidadCaracteresKeyTyped(txtDescripcion, 30);
+        metodostxt.TxtCantidadCaracteresKeyTyped(txtDescripcion, 150);
     }//GEN-LAST:event_txtDescripcionKeyTyped
 
     private void txtDescripcionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescripcionKeyReleased
-        metodostxt.txtColorLabelKeyReleased(txtDescripcion, lblDescripcion, "Descripción*:");
-        metodostxt.txtMayusKeyReleased(txtDescripcion, evt);
+        metodostxt.TxtColorLabelKeyReleased(txtDescripcion, lblDescripcion, "Descripción*:");
     }//GEN-LAST:event_txtDescripcionKeyReleased
 
     private void txtPrecioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioKeyPressed
-        metodostxt.SoloNumeroDecimalKeyPressed(evt, txtPrecio);
+
     }//GEN-LAST:event_txtPrecioKeyPressed
 
     private void txtExistenciaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtExistenciaKeyTyped
         metodostxt.SoloNumeroEnteroKeyTyped(evt);
+        metodostxt.TxtCantidadCaracteresKeyTyped(txtExistencia, 20);
     }//GEN-LAST:event_txtExistenciaKeyTyped
 
     private void txtExistenciaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtExistenciaKeyReleased
-        metodostxt.txtColorLabelKeyReleased(txtExistencia, lblExistencia, "Existencia*:");
+        metodostxt.TxtColorLabelKeyReleased(txtExistencia, lblExistencia, "Existencia*:");
     }//GEN-LAST:event_txtExistenciaKeyReleased
 
     private void cbCategoriaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbCategoriaItemStateChanged
-        cbSubcategoria.removeAllItems();
-        String sentencia = "SELECT subcat_codigo, subcat_descripcion FROM subcategoria WHERE subcat_categoria = " 
-                + metodoscombo.ObtenerIdComboBox(cbCategoria) + " ORDER BY subcat_descripcion";
-        System.out.println("Cambio en combo: " + sentencia);
-        metodoscombo.CargarComboBox(cbSubcategoria, sentencia);
-        if (cbSubcategoria.getItemCount() > 0) {
-            cbSubcategoria.setSelectedIndex(1);
+        if (metodoscombo.ObtenerIdComboBox(cbCategoria) > -1) {
+            metodoscombo.CargarComboBox(cbSubcategoria, "SELECT subcat_codigo, subcat_descripcion FROM subcategoria "
+                    + "WHERE subcat_categoria = " + metodoscombo.ObtenerIdComboBox(cbCategoria) + " ORDER BY subcat_descripcion");
+
+            if (cbSubcategoria.getItemCount() > 0 && cbSubcategoria.isEnabled()) {
+                cbSubcategoria.setSelectedIndex(1);
+            }
         }
     }//GEN-LAST:event_cbCategoriaItemStateChanged
+
+    private void taObsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_taObsKeyPressed
+        char car = (char) evt.getKeyCode();
+        if (evt.VK_TAB == car) {//Al apretar ENTER QUE HAGA ALGO
+            btnGuardar.requestFocus();
+        }
+    }//GEN-LAST:event_taObsKeyPressed
+
+    private void txtPrecioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioKeyTyped
+        metodostxt.TxtCantidadCaracteresKeyTyped(txtPrecio, 11);
+        metodostxt.SoloNumeroDecimalKeyTyped(evt, txtPrecio);
+    }//GEN-LAST:event_txtPrecioKeyTyped
 
     List<Component> ordenTabulador;
 
@@ -1018,7 +1080,6 @@ public final class ABMProducto extends javax.swing.JDialog {
     private javax.swing.JComboBox<MetodosCombo> cbSubcategoria;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jpBanner;
     private javax.swing.JPanel jpBotones;
     private javax.swing.JPanel jpBotones2;
@@ -1027,12 +1088,14 @@ public final class ABMProducto extends javax.swing.JDialog {
     private javax.swing.JPanel jpTabla;
     private javax.swing.JTabbedPane jtpEdicion;
     private javax.swing.JLabel lbBanner;
+    private javax.swing.JLabel lbCantRegistros;
     private javax.swing.JLabel lblBuscarCampo;
     private javax.swing.JLabel lblCategoria;
     private javax.swing.JLabel lblCodigo;
     private javax.swing.JLabel lblCodigoProducto;
     private javax.swing.JLabel lblDescripcion;
     private javax.swing.JLabel lblExistencia;
+    private javax.swing.JLabel lblMoneda;
     private javax.swing.JLabel lblObs;
     private javax.swing.JLabel lblPrecio;
     private javax.swing.JLabel lblSubcategoria;

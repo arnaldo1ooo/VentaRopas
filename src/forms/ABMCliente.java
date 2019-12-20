@@ -46,15 +46,15 @@ public final class ABMCliente extends javax.swing.JDialog {
 //--------------------------METODOS----------------------------//
     public void RegistroNuevo() {
         try {
-            String rucci = txtRucCedula.getText();
-            String nombre = txtNombre.getText();
-            String apellido = txtApellido.getText();
-            String direccion = txtDireccion.getText();
-            String email = txtEmail.getText();
-            String telefono = txtTelefono.getText();
-            String obs = taObs.getText();
-
             if (ComprobarCampos() == true) {
+                String rucci = txtRucCedula.getText();
+                String nombre = txtNombre.getText();
+                String apellido = txtApellido.getText();
+                String direccion = txtDireccion.getText();
+                String email = txtEmail.getText();
+                String telefono = txtTelefono.getText();
+                String obs = taObs.getText();
+
                 int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro crear este nuevo registro?", "Confirmación", JOptionPane.YES_OPTION);
 
                 if (JOptionPane.YES_OPTION == confirmado) {
@@ -93,16 +93,16 @@ public final class ABMCliente extends javax.swing.JDialog {
     public void RegistroModificar() {
         //guarda los datos que se han modificado en los campos
 
-        String codigo = txtCodigo.getText();
-        String rucci = txtRucCedula.getText();
-        String nombre = txtNombre.getText();
-        String apellido = txtApellido.getText();
-        String direccion = txtDireccion.getText();
-        String telefono = txtTelefono.getText();
-        String email = txtEmail.getText();
-        String obs = taObs.getText();
-
         if (ComprobarCampos() == true) {
+            String codigo = txtCodigo.getText();
+            String rucci = txtRucCedula.getText();
+            String nombre = txtNombre.getText();
+            String apellido = txtApellido.getText();
+            String direccion = txtDireccion.getText();
+            String telefono = txtTelefono.getText();
+            String email = txtEmail.getText();
+            String obs = taObs.getText();
+
             int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro de modificar este registro?", "Confirmación", JOptionPane.YES_OPTION);
             if (JOptionPane.YES_OPTION == confirmado) {
                 String sentencia = "CALL SP_ClienteModificar(" + codigo + ",'" + rucci + "','" + nombre + "','" + apellido + "','" + direccion
@@ -178,6 +178,7 @@ public final class ABMCliente extends javax.swing.JDialog {
 
         metodos.ConsultaFiltroTablaBD(tbPrincipal, titlesJtabla, titlesconsulta, nombresp, filtro, cbCampoBuscar);
         metodos.AnchuraColumna(tbPrincipal);
+        lbCantRegistros.setText(metodos.CantRegistros + " Registros encontrados");
     }
 
     private void ModoVistaPrevia() {
@@ -266,6 +267,7 @@ public final class ABMCliente extends javax.swing.JDialog {
         };
         lblBuscarCampo = new javax.swing.JLabel();
         cbCampoBuscar = new javax.swing.JComboBox();
+        lbCantRegistros = new javax.swing.JLabel();
         jpBotones = new javax.swing.JPanel();
         btnNuevo = new javax.swing.JButton();
         btnModificar = new javax.swing.JButton();
@@ -378,11 +380,17 @@ public final class ABMCliente extends javax.swing.JDialog {
         lblBuscarCampo.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblBuscarCampo.setText("Buscar por:");
 
+        lbCantRegistros.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        lbCantRegistros.setForeground(new java.awt.Color(153, 153, 0));
+        lbCantRegistros.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lbCantRegistros.setText("0 Registros encontrados");
+        lbCantRegistros.setPreferredSize(new java.awt.Dimension(57, 25));
+
         javax.swing.GroupLayout jpTablaLayout = new javax.swing.GroupLayout(jpTabla);
         jpTabla.setLayout(jpTablaLayout);
         jpTablaLayout.setHorizontalGroup(
             jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpTablaLayout.createSequentialGroup()
+            .addGroup(jpTablaLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(scPrincipal)
@@ -393,7 +401,8 @@ public final class ABMCliente extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lblBuscarCampo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbCampoBuscar, 0, 180, Short.MAX_VALUE)))
+                        .addComponent(cbCampoBuscar, 0, 180, Short.MAX_VALUE))
+                    .addComponent(lbCantRegistros, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jpTablaLayout.setVerticalGroup(
@@ -405,9 +414,11 @@ public final class ABMCliente extends javax.swing.JDialog {
                     .addComponent(lblBuscarCampo, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(1, 1, 1)
-                .addComponent(scPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addComponent(scPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4)
+                .addComponent(lbCantRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4))
         );
 
         jpBotones.setBackground(new java.awt.Color(255, 255, 255));
@@ -482,13 +493,13 @@ public final class ABMCliente extends javax.swing.JDialog {
             jpBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpBotonesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
+                .addComponent(btnNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnModificar, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
+                .addComponent(btnModificar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
+                .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnReporte, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)
+                .addComponent(btnReporte, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -617,6 +628,11 @@ public final class ABMCliente extends javax.swing.JDialog {
         taObs.setRows(5);
         taObs.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         taObs.setEnabled(false);
+        taObs.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                taObsKeyPressed(evt);
+            }
+        });
         scpObs.setViewportView(taObs);
 
         jLabel2.setForeground(new java.awt.Color(0, 0, 153));
@@ -773,11 +789,11 @@ public final class ABMCliente extends javax.swing.JDialog {
                 .addComponent(jpBanner, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jpBotones, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                    .addComponent(jpBotones, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)
                     .addComponent(jpTabla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jtpEdicion, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jpBotones2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -889,7 +905,7 @@ public final class ABMCliente extends javax.swing.JDialog {
     }//GEN-LAST:event_txtDireccionKeyTyped
 
     private void txtDireccionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDireccionKeyReleased
-        metodostxt.txtMayusKeyReleased(txtDireccion, evt);
+        metodostxt.TxtMayusKeyReleased(txtDireccion, evt);
     }//GEN-LAST:event_txtDireccionKeyReleased
 
     private void txtDireccionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDireccionKeyPressed
@@ -904,11 +920,11 @@ public final class ABMCliente extends javax.swing.JDialog {
         }
 
         //Cantidad de caracteres
-        metodostxt.txtCantidadCaracteresKeyTyped(txtRucCedula, 15);
+        metodostxt.TxtCantidadCaracteresKeyTyped(txtRucCedula, 15);
     }//GEN-LAST:event_txtRucCedulaKeyTyped
 
     private void txtRucCedulaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRucCedulaKeyReleased
-        metodostxt.txtColorLabelKeyReleased(txtRucCedula, lblRucCedula, "RUC/CI*:");
+        metodostxt.TxtColorLabelKeyReleased(txtRucCedula, lblRucCedula, "RUC/CI*:");
     }//GEN-LAST:event_txtRucCedulaKeyReleased
 
     private void txtRucCedulaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRucCedulaKeyPressed
@@ -927,25 +943,32 @@ public final class ABMCliente extends javax.swing.JDialog {
         metodostxt.SoloTextoKeyTyped(evt);
 
         //Cantidad de caracteres
-        metodostxt.txtCantidadCaracteresKeyTyped(txtApellido, 30);
+        metodostxt.TxtCantidadCaracteresKeyTyped(txtApellido, 30);
     }//GEN-LAST:event_txtApellidoKeyTyped
 
     private void txtApellidoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidoKeyReleased
-        metodostxt.txtColorLabelKeyReleased(txtApellido, lblApellido, "Apellido*:");
-        metodostxt.txtMayusKeyReleased(txtApellido, evt);
+        metodostxt.TxtColorLabelKeyReleased(txtApellido, lblApellido, "Apellido*:");
+        metodostxt.TxtMayusKeyReleased(txtApellido, evt);
     }//GEN-LAST:event_txtApellidoKeyReleased
 
     private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
         metodostxt.SoloTextoKeyTyped(evt);
 
         //Cantidad de caracteres
-        metodostxt.txtCantidadCaracteresKeyTyped(txtNombre, 30);
+        metodostxt.TxtCantidadCaracteresKeyTyped(txtNombre, 30);
     }//GEN-LAST:event_txtNombreKeyTyped
 
     private void txtNombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyReleased
-        metodostxt.txtColorLabelKeyReleased(txtNombre, lblNombre, "Nombre*:");
-        metodostxt.txtMayusKeyReleased(txtNombre, evt);
+        metodostxt.TxtColorLabelKeyReleased(txtNombre, lblNombre, "Nombre*:");
+        metodostxt.TxtMayusKeyReleased(txtNombre, evt);
     }//GEN-LAST:event_txtNombreKeyReleased
+
+    private void taObsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_taObsKeyPressed
+        char car = (char) evt.getKeyCode();
+        if (car == evt.VK_TAB) {//Al apretar ENTER QUE HAGA ALGO
+            btnGuardar.requestFocus();
+        }
+    }//GEN-LAST:event_taObsKeyPressed
 
     List<Component> ordenTabulador;
 
@@ -1007,6 +1030,7 @@ public final class ABMCliente extends javax.swing.JDialog {
     private javax.swing.JPanel jpTabla;
     private javax.swing.JTabbedPane jtpEdicion;
     private javax.swing.JLabel lbBanner;
+    private javax.swing.JLabel lbCantRegistros;
     private javax.swing.JLabel lblApellido;
     private javax.swing.JLabel lblBuscarCampo;
     private javax.swing.JLabel lblCodigo;

@@ -17,6 +17,7 @@ import javax.swing.JComboBox;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.text.StyledEditorKit;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /**
@@ -25,23 +26,23 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
  */
 public class MetodosCombo {
 
-    private int id;
+    private int codigo;
     private String descripcion;
 
-    public MetodosCombo() {
+    public MetodosCombo() { //No borrar
     }
 
-    public MetodosCombo(int id, String descripcion) {
-        this.id = id;
+    public MetodosCombo(int codigo, String descripcion) {
+        this.codigo = codigo;
         this.descripcion = descripcion;
     }
 
-    public int getId() {
-        return id;
+    public int getCodigo() {
+        return codigo;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCodigo(int id) {
+        this.codigo = id;
     }
 
     public String getDescripcion() {
@@ -69,8 +70,9 @@ public class MetodosCombo {
     }
 
     public void CargarComboBox(JComboBox ElCombo, String sentencia) {
-        //Cambiar color de texto del combo cuando esta disabled
-        ElCombo.setRenderer(new DefaultListCellRenderer() {
+        ElCombo.removeAllItems(); //Vaciamos el combo
+
+        ElCombo.setRenderer(new DefaultListCellRenderer() {//Cambiar color de texto del combo cuando esta disabled
             @Override
             public void paint(Graphics g) {
                 setForeground(Color.BLACK);
@@ -78,48 +80,51 @@ public class MetodosCombo {
             }
         });
 
-        ElCombo.removeAllItems(); //Vaciamos el combo
         try {
             AutoCompleteDecorator.decorate(ElCombo);
             System.out.println("Cargar combo (" + ElCombo.getName() + "): " + sentencia);
-            Connection connection;
-            connection = (Connection) Conexion.ConectarBasedeDatos();
+            Connection con;
+            con = (Connection) Conexion.ConectarBasedeDatos();
             Statement st;
-            st = connection.createStatement();
+            st = con.createStatement();
             ResultSet rs;
             rs = st.executeQuery(sentencia);
             while (rs.next()) {
                 ElCombo.addItem(new MetodosCombo(
-                        rs.getInt(1), 
+                        rs.getInt(1),
                         rs.getString(2)));
             }
-            ElCombo.setSelectedIndex(0);
+            if (ElCombo.getItemCount() > 0) {
+                ElCombo.setSelectedIndex(-1);
+            }
+
             ElCombo.setMaximumRowCount(ElCombo.getModel().getSize()); //Hace que se despliegue en toda la pantalla vertical el combo
             rs.close();
             st.close();
-            connection.close();
+            con.close();
 
             AnadirScrollHorizontal(ElCombo);
         } catch (NumberFormatException | SQLException e) {
-            System.out.println("Error al cargar combo " + e);
+            System.out.println("Error al cargar combo: " + sentencia + ",   ERROR: " + e
+            );
         }
     }
 
     public int ObtenerIdComboBox(JComboBox<MetodosCombo> ElCombo) {
         int codigoitemselect = -1;
         try {
-            codigoitemselect = ElCombo.getItemAt(ElCombo.getSelectedIndex()).getId();
+            codigoitemselect = ElCombo.getItemAt(ElCombo.getSelectedIndex()).getCodigo();
         } catch (Exception e) {
             System.out.println("ObtenerIdCombo: No se selecciono ningun item en el combo: " + e);
         }
         return codigoitemselect;
     }
 
-    private void AnadirScrollHorizontal(JComboBox box) {
-        if (box.getItemCount() == 0) {
+    private void AnadirScrollHorizontal(JComboBox ElCombo) {
+        if (ElCombo.getItemCount() == 0) {
             return;
         }
-        Object comp = box.getUI().getAccessibleChild(box, 0);
+        Object comp = ElCombo.getUI().getAccessibleChild(ElCombo, 0);
         if (!(comp instanceof JPopupMenu)) {
             return;
         }

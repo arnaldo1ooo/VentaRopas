@@ -95,7 +95,6 @@ public class Login extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Inicio de sesión del sistema");
-        setAlwaysOnTop(true);
         setBackground(new java.awt.Color(255, 255, 255));
         setIconImage(new ImageIcon(getClass().getResource("/login/iconos/IconoUser.png")).getImage());
         setMinimumSize(new java.awt.Dimension(420, 350));
@@ -120,7 +119,6 @@ public class Login extends javax.swing.JFrame {
 
         txtContrasena.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
         txtContrasena.setToolTipText("Teclea tu contraseña para ingresar");
-        txtContrasena.setNextFocusableComponent(btnok);
         txtContrasena.setPreferredSize(new java.awt.Dimension(9, 25));
         txtContrasena.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {

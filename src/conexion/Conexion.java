@@ -16,16 +16,19 @@ public class Conexion {
     public ResultSet rs;
 
     //Modo host local
-    private static final String controlador = "com.mysql.jdbc.Driver";
+    private static final String controlador = "com.mysql.cj.jdbc.Driver";
     private static final String usuarioDB = "root";
     private static final String passDB = "toor5127"; //Contrasena de la BD
     private static final String nombreDB = "ventaropas";
-    private static final String servidor = "jdbc:mysql://localhost:3306/" + nombreDB
+    private static final String host = "localhost";
+    private static final String puerto = "3306";
+    private static final String servidor = "jdbc:mysql://" + host + ":" + puerto + "/" + nombreDB
             + "?useUnicode=true"
             + "&useJDBCCompliantTimezoneShift=true"
             + "&useLegacyDatetimeCode=false"
             + "&serverTimezone=UTC"
-            + "&useSSL=false";
+            + "&useSSL=false"
+            + "&allowPublicKeyRetrieval=true";
 
     //Modo host online
     /*private static final String controlador = "com.mysql.jdbc.Driver";
@@ -41,25 +44,7 @@ public class Conexion {
             + "&serverTimezone=UTC"
             + "&useSSL=false";*/
 
- /*public void ConectarBasedeDatos() {
-        try {
-            Class.forName(controlador);
-            conexion = DriverManager.getConnection(servidor, usuarioDB, passDB);
-            st = conexion.createStatement();
-            if (conexion != null) {
-                System.out.println("Conexión a " + NombreBD + ", exitosa..");
-            }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex, "Error1 en la Conexión con la BD " + ex.getMessage(), JOptionPane.ERROR_MESSAGE);
-            conexion = null;
-        } catch (ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(null, ex, "Error2 en la Conexión con la BD " + ex.getMessage(), JOptionPane.ERROR_MESSAGE);
-            conexion = null;
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, ex, "Error3 en la Conexión con la BD " + ex.getMessage(), JOptionPane.ERROR_MESSAGE);
-            conexion = null;
-        }
-    }*/
+
     public static Connection ConectarBasedeDatos() {
         Connection conexion;
         try {

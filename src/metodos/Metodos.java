@@ -27,8 +27,6 @@ import javax.swing.table.TableColumnModel;
 import conexion.Conexion;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JInternalFrame;
 
@@ -37,6 +35,7 @@ import javax.swing.JInternalFrame;
  * @author Lic. Arnaldo Cantero
  */
 public class Metodos {
+
     public int CantRegistros = 0;
 
     public Conexion ObtenerRSSentencia(String sentencia) { //con.Desconectar luego de usar el metodo
