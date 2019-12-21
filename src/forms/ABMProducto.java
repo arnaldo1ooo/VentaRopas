@@ -12,6 +12,7 @@ import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
 
 import java.awt.HeadlessException;
+import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -44,6 +45,9 @@ public final class ABMProducto extends javax.swing.JDialog {
 
         OrdenTabulador();
         CargarComboBoxes();
+
+        //Shortcuts 
+        btnGuardar.setMnemonic(KeyEvent.VK_F5);
     }
 
 //--------------------------METODOS----------------------------//
@@ -111,23 +115,26 @@ public final class ABMProducto extends javax.swing.JDialog {
 
     public void RegistroModificar() {
         if (ComprobarCampos() == true) {
-            //guarda los datos que se han modificado en los campos
-            String codigo = txtCodigo.getText();
-            String codigoproducto = txtCodigoProducto.getText();
-            String descripcion = txtDescripcion.getText();
-            String precio = txtPrecio.getText();
-            String existencia = txtExistencia.getText();
-            int idcategoria = metodoscombo.ObtenerIdComboBox(cbCategoria);
-            int idsubcategoria = metodoscombo.ObtenerIdComboBox(cbSubcategoria);
-            String obs = taObs.getText();
-
             int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro de modificar este registro?", "Confirmación", JOptionPane.YES_OPTION);
             if (JOptionPane.YES_OPTION == confirmado) {
-                String sentencia = "CALL SP_ProductoModificar(" + codigo + ",'" + codigoproducto + "','" + descripcion + "','" + precio + "','" + existencia
-                        + "','" + idcategoria + "','" + idsubcategoria + "','" + obs + "')";
-                System.out.println("Actualizar registro: " + sentencia);
-
                 try {
+                    //guarda los datos que se han modificado en los campos
+                    String codigo = txtCodigo.getText();
+                    String codigoproducto = txtCodigoProducto.getText();
+                    String descripcion = txtDescripcion.getText();
+
+                    String precio = (txtPrecio.getText().replace(".", "")).replace(",", ".");
+                    precio = metodostxt.DosDecimalesDouble(precio); //Redondear double para que tenga solo dos numeros decimales
+
+                    String existencia = txtExistencia.getText();
+                    int idcategoria = metodoscombo.ObtenerIdComboBox(cbCategoria);
+                    int idsubcategoria = metodoscombo.ObtenerIdComboBox(cbSubcategoria);
+                    String obs = taObs.getText();
+
+                    String sentencia = "CALL SP_ProductoModificar(" + codigo + ",'" + codigoproducto + "','" + descripcion + "','" + precio + "','" + existencia
+                            + "','" + idcategoria + "','" + idsubcategoria + "','" + obs + "')";
+                    System.out.println("Actualizar registro: " + sentencia);
+
                     Connection con;
                     con = conexion.Conexion.ConectarBasedeDatos();
                     PreparedStatement pst;
@@ -967,7 +974,7 @@ public final class ABMProducto extends javax.swing.JDialog {
     private void txtCodigoProductoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoProductoKeyTyped
         metodostxt.SoloNumeroEnteroKeyTyped(evt);
         //Cantidad de caracteres
-        metodostxt.TxtCantidadCaracteresKeyTyped(txtCodigoProducto, 40);
+        metodostxt.TxtCantidadCaracteresKeyTyped(txtCodigoProducto, 30);
     }//GEN-LAST:event_txtCodigoProductoKeyTyped
 
     private void txtCodigoProductoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoProductoKeyReleased
@@ -996,7 +1003,7 @@ public final class ABMProducto extends javax.swing.JDialog {
 
     private void txtExistenciaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtExistenciaKeyTyped
         metodostxt.SoloNumeroEnteroKeyTyped(evt);
-        metodostxt.TxtCantidadCaracteresKeyTyped(txtExistencia, 20);
+        metodostxt.TxtCantidadCaracteresKeyTyped(txtExistencia, 10);
     }//GEN-LAST:event_txtExistenciaKeyTyped
 
     private void txtExistenciaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtExistenciaKeyReleased
