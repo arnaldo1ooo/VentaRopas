@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package forms.producto;
+package forms;
 
 import conexion.Conexion;
 import java.awt.Color;
@@ -274,6 +274,12 @@ public final class ABMProducto extends javax.swing.JDialog {
         metodoscombo.setSelectedNombreItem(cbSubcategoria, "SIN ESPECIFICAR");
         taObs.setText("");
 
+        txtCodigo.setForeground(new Color(102, 102, 102));
+        txtCodigoProducto.setForeground(new Color(102, 102, 102));
+        txtDescripcion.setForeground(new Color(102, 102, 102));
+        txtPrecio.setForeground(new Color(102, 102, 102));
+        txtExistencia.setForeground(new Color(102, 102, 102));
+
         URL url = this.getClass().getResource("imagenproductos\\imageproducto_0.png");
         lbImagen.setIcon(new ImageIcon(url));
 
@@ -301,6 +307,9 @@ public final class ABMProducto extends javax.swing.JDialog {
                     return false;
                 }
             } catch (SQLException e) {
+                System.out.println("Error al comprobar si codigo de producto ya existe en la bd: " + e);
+            } catch (NullPointerException e) {
+                System.out.println("El codigo de producto ingresado no existe en la bd, aprobado: " + e);
             }
         }
 

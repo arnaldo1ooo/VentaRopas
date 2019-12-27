@@ -5,8 +5,6 @@
  */
 package metodos;
 
-import javax.swing.Icon;
-
 /**
  *
  * @author Lic. Arnaldo Cantero

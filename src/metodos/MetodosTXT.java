@@ -59,7 +59,7 @@ public class MetodosTXT {
         if (ElTXT.getText().equals("")) {
             ElLabel.setForeground(new Color(102, 102, 102));
         } else {
-            ElLabel.setText(ElTexto);
+            ElLabel.setText(ElTexto); //Vuelve a poner el texto original ya que cuando hay un error cambia
             ElLabel.setForeground(new Color(0, 153, 51));
         }
     }

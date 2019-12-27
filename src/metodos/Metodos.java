@@ -39,37 +39,41 @@ public class Metodos {
     public int CantRegistros = 0;
 
     public Conexion ObtenerRSSentencia(String sentencia) { //con.Desconectar luego de usar el metodo
-        Conexion con = new Conexion();
+        Conexion conexion = new Conexion();
         try {
-            Conexion.ConectarBasedeDatos();
             System.out.println("Ejecutar sentencia ObtenerRSSentencia " + sentencia);
-            con.rs = con.st.executeQuery(sentencia);
-
+            conexion.connection = (Connection) Conexion.ConectarBasedeDatos();
+            conexion.st = conexion.connection.createStatement();
+            conexion.rs = conexion.st.executeQuery(sentencia);
             int cantreg = 0;
-            while (con.rs.next() && cantreg < 2) { //Revisamos cuantos registro trajo la consulta
+            while (conexion.rs.next() && cantreg < 2) { //Revisamos cuantos registro trajo la consulta
                 cantreg++;
             }
 
             switch (cantreg) {
                 case 0:
                     System.out.println("ObtenerRSSentencia no trajo ningun resultado");
+                    //con.rs.beforeFirst(); //Ponemos antes del primer registro en el puntero
                     break;
                 case 1:
                     System.out.println("ObtenerRSSentencia trajo un resultado");
-                    con.rs.beforeFirst(); //Ponemos antes del primer registro en el puntero
+                    conexion.rs.beforeFirst(); //Ponemos antes del primer registro en el puntero
                     break;
                 case 2:
                     System.out.println("ObtenerRSSentencia trajo mas de un resultado");
-                    con.rs.beforeFirst(); //Ponemos antes del primer registro en el puntero
+                    conexion.rs.beforeFirst(); //Ponemos antes del primer registro en el puntero
                     break;
                 default:
                 //aca se escribe lo que si o si se ejecuta
             }
 
         } catch (SQLException e) {
-            System.out.println("Error al EjecutarSentencia ObtenerRSSentencia, sentencia: " + sentencia + "ERROR " + e);
+            System.out.println("Error al EjecutarSentencia ObtenerRSSentencia,  sentencia: " + sentencia + ",  ERROR " + e);
         }
-        return con;
+        catch (NullPointerException e) {
+            System.out.println("ObtenerRSSentencia no trajo ningun resultado (null),  sentencia: " + sentencia + ",  ERROR " + e);
+        }
+        return conexion;
     }
 
     public void AnchuraColumna(JTable LaTabla) {

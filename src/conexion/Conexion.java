@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 
 public class Conexion {
 
-    public Connection conexion;
+    public Connection connection;
     public Statement st;
     public ResultSet rs;
 
@@ -71,8 +71,8 @@ public class Conexion {
 
     public void DesconectarBasedeDatos() {
         try {
-            if (conexion != null) {
-                conexion.close();
+            if (connection != null) {
+                connection.close();
                 System.out.println("DESCONEXIÓN DE " + nombreDB + ", EXITOSO..");
                 if (st != null) {
                     st.close();
@@ -84,7 +84,7 @@ public class Conexion {
                 }
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error al intentar desconectar", JOptionPane.ERROR_MESSAGE);
             System.exit(1);
         }
     }

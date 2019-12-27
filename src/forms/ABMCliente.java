@@ -82,7 +82,7 @@ public final class ABMCliente extends javax.swing.JDialog {
                         JOptionPane.showMessageDialog(this, "Ocurrió un Error " + ex.getMessage());
                     }
                 } else {
-                    System.out.println("No se guardo el registro");
+                    System.out.println("No se guardó el registro");
                 }
             }
         } catch (HeadlessException ex) {
@@ -223,6 +223,12 @@ public final class ABMCliente extends javax.swing.JDialog {
         txtEmail.setText("");
         txtTelefono.setText("");
         taObs.setText("");
+        
+        txtCodigo.setForeground(new Color(102,102,102));
+        txtRucCedula.setForeground(new Color(102,102,102));
+        txtNombre.setForeground(new Color(102,102,102));
+        txtApellido.setForeground(new Color(102,102,102));
+        txtDireccion.setForeground(new Color(102,102,102));
 
         txtBuscar.requestFocus();
     }
@@ -239,8 +245,9 @@ public final class ABMCliente extends javax.swing.JDialog {
         if (txtCodigo.getText().equals("")) {
             try {
                 Conexion con = metodos.ObtenerRSSentencia("SELECT cli_ruccedula FROM cliente "
-                        + "WHERE cli_ruccedula= '" + txtRucCedula.getText() + "'");
+                        + "WHERE cli_ruccedula='" + txtRucCedula.getText() + "'");
                 if (con.rs.next() == true) { //Si ya existe el numero de cedula en la bd de clientes
+                    System.out.println("El CI ingresado ya existe en la bd");
                     lblRucCedula.setText("El Ruc o CI ya existe: ");
                     lblRucCedula.setForeground(Color.RED);
                     lblRucCedula.requestFocus();
@@ -249,6 +256,9 @@ public final class ABMCliente extends javax.swing.JDialog {
                     return false;
                 }
             } catch (SQLException e) {
+                System.out.println("Error al buscar si ci ya existe en bd: " + e);
+            } catch (NullPointerException e) {
+                System.out.println("La CI ingresada no existe en la bd, aprobado: " + e);
             }
         }
 
@@ -263,6 +273,13 @@ public final class ABMCliente extends javax.swing.JDialog {
             lblApellido.setText("Ingrese el apellido:");
             lblApellido.setForeground(Color.RED);
             lblApellido.requestFocus();
+            Toolkit.getDefaultToolkit().beep();
+            return false;
+        }
+        if (txtDireccion.getText().equals("")) {
+            lblDireccion.setText("Ingrese la dirección:");
+            lblDireccion.setForeground(Color.RED);
+            lblDireccion.requestFocus();
             Toolkit.getDefaultToolkit().beep();
             return false;
         }
@@ -956,6 +973,7 @@ public final class ABMCliente extends javax.swing.JDialog {
 
     private void txtDireccionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDireccionKeyReleased
         metodostxt.TxtMayusKeyReleased(txtDireccion, evt);
+        metodostxt.TxtColorLabelKeyReleased(txtDireccion, lblDireccion, "Dirección*:");
     }//GEN-LAST:event_txtDireccionKeyReleased
 
     private void txtDireccionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDireccionKeyPressed

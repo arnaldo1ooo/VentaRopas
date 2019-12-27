@@ -6,7 +6,7 @@
 package metodos;
 
 import conexion.Conexion;
-import forms.producto.ABMProducto;
+import forms.ABMProducto;
 import java.awt.Graphics2D;
 import java.awt.HeadlessException;
 import java.awt.Image;
