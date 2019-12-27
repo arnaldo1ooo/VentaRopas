@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package forms;
+package forms.producto;
 
 import conexion.Conexion;
 import java.awt.Color;
@@ -12,17 +12,23 @@ import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
 
 import java.awt.HeadlessException;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import metodos.Metodos;
 import metodos.MetodosCombo;
+import metodos.MetodosImagen;
 import metodos.MetodosTXT;
+import metodos.VistaCompletaImagen;
 
 /**
  *
@@ -33,6 +39,7 @@ public final class ABMProducto extends javax.swing.JDialog {
     MetodosTXT metodostxt = new MetodosTXT();
     Metodos metodos = new Metodos();
     MetodosCombo metodoscombo = new MetodosCombo();
+    MetodosImagen metodosimagen = new MetodosImagen();
 
     public ABMProducto(java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
@@ -40,7 +47,7 @@ public final class ABMProducto extends javax.swing.JDialog {
 
         /*ImagenBanner p = new ImagenBanner(); //Produce error, al ejecutar en el jar la ventana se ve blanco
         jpBanner.add(p);*/
-        TablaConsultaBD(""); //Trae todos los registros
+        TablaConsultaBD(txtBuscar.getText()); //Trae todos los registros
         txtBuscar.requestFocus();
 
         OrdenTabulador();
@@ -53,12 +60,13 @@ public final class ABMProducto extends javax.swing.JDialog {
 //--------------------------METODOS----------------------------//
     public void CargarComboBoxes() {
         //Carga los combobox con las consultas
-
         metodoscombo.CargarComboBox(cbCategoria, "SELECT cat_codigo, cat_descripcion FROM categoria ORDER BY cat_descripcion");
+        metodoscombo.setSelectedNombreItem(cbCategoria, "SIN ESPECIFICAR");
 
         if (metodoscombo.ObtenerIdComboBox(cbCategoria) > -1) {
             metodoscombo.CargarComboBox(cbSubcategoria, "SELECT subcat_codigo, subcat_descripcion FROM subcategoria "
                     + "WHERE subcat_categoria = " + metodoscombo.ObtenerIdComboBox(cbCategoria) + " ORDER BY subcat_descripcion");
+            metodoscombo.setSelectedNombreItem(cbSubcategoria, "SIN ESPECIFICAR");
         }
 
         ModoEdicion(false);
@@ -105,6 +113,10 @@ public final class ABMProducto extends javax.swing.JDialog {
                 } else {
                     System.out.println("No se guardo el registro");
                 }
+
+                String ultimoid = metodosimagen.ObtenerUltimoID();
+                //Guardarimagen
+                metodosimagen.GuardarImagen("imagenproductos\\imageproducto_" + ultimoid);
             }
         } catch (HeadlessException ex) {
             JOptionPane.showMessageDialog(null, "Completar los campos obligarios marcados con * ", "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -145,6 +157,9 @@ public final class ABMProducto extends javax.swing.JDialog {
 
                     con.close();
                     pst.close();
+
+                    //Guardarimagen
+                    metodosimagen.GuardarImagen("imagenproductos\\imageproducto_" + codigo);
                 } catch (SQLException ex) {
                     System.out.println("Error al modificar registro " + ex);
                     JOptionPane.showMessageDialog(null, "Error al intentar modificar el registro", "Error", JOptionPane.INFORMATION_MESSAGE);
@@ -218,6 +233,12 @@ public final class ABMProducto extends javax.swing.JDialog {
         metodoscombo.setSelectedNombreItem(cbCategoria, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 5).toString());
         metodoscombo.setSelectedNombreItem(cbSubcategoria, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 6).toString());
         taObs.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 7).toString());
+
+        if (metodosimagen.LeerImagen(lbImagen, "imagenproductos\\imageproducto_" + txtCodigo.getText()) == false) {
+            URL url = this.getClass().getResource("imagenproductos\\imageproducto_0.png");
+            lbImagen.setIcon(new ImageIcon(url));
+        }
+
     }
 
     private void ModoEdicion(boolean valor) {
@@ -236,6 +257,9 @@ public final class ABMProducto extends javax.swing.JDialog {
         btnGuardar.setEnabled(valor);
         btnCancelar.setEnabled(valor);
         btnReporte.setEnabled(!valor);
+        btnCargarImagen.setEnabled(valor);
+        btnEliminarImagen.setEnabled(valor);
+        btnPantallaCompleta.setEnabled(!valor);
 
         txtCodigoProducto.requestFocus();
     }
@@ -246,9 +270,12 @@ public final class ABMProducto extends javax.swing.JDialog {
         txtDescripcion.setText("");
         txtPrecio.setText("");
         txtExistencia.setText("");
-        cbCategoria.setSelectedIndex(-1);
-        cbSubcategoria.setSelectedIndex(-1);
+        metodoscombo.setSelectedNombreItem(cbCategoria, "SIN ESPECIFICAR");
+        metodoscombo.setSelectedNombreItem(cbSubcategoria, "SIN ESPECIFICAR");
         taObs.setText("");
+
+        URL url = this.getClass().getResource("imagenproductos\\imageproducto_0.png");
+        lbImagen.setIcon(new ImageIcon(url));
 
         txtBuscar.requestFocus();
     }
@@ -258,42 +285,59 @@ public final class ABMProducto extends javax.swing.JDialog {
             lblCodigoProducto.setText("Ingrese el código del producto:");
             lblCodigoProducto.setForeground(Color.RED);
             lblCodigoProducto.requestFocus();
+            Toolkit.getDefaultToolkit().beep();
             return false;
-        } else {
-            if (txtDescripcion.getText().equals("")) {
-                lblDescripcion.setText("Ingrese la descripción:");
-                lblDescripcion.setForeground(Color.RED);
-                lblDescripcion.requestFocus();
-                return false;
-            } else {
-                if (txtPrecio.getText().equals("")) {
-                    lblPrecio.setText("Ingrese el precio:");
-                    lblPrecio.setForeground(Color.RED);
-                    lblPrecio.requestFocus();
+        }
+
+        if (txtCodigo.getText().equals("")) {
+            try {
+                Conexion con = metodos.ObtenerRSSentencia("SELECT pro_identificador FROM producto "
+                        + "WHERE pro_identificador = '" + txtCodigoProducto.getText() + "'");
+                if (con.rs.next() == true) { //Si ya existe el numero de cedula en la bd de clientes
+                    txtCodigoProducto.setText("Este código de producto ya existe: ");
+                    txtCodigoProducto.setForeground(Color.RED);
+                    txtCodigoProducto.requestFocus();
+                    Toolkit.getDefaultToolkit().beep();
                     return false;
-                } else {
-                    if (txtExistencia.getText().equals("")) {
-                        lblExistencia.setText("Ingrese la existencia:");
-                        lblExistencia.setForeground(Color.RED);
-                        lblExistencia.requestFocus();
-                        return false;
-                    } else {
-                        if (cbCategoria.getSelectedIndex() == -1) {
-                            lblCategoria.setText("Ingrese la categoria:");
-                            lblCategoria.setForeground(Color.RED);
-                            lblCategoria.requestFocus();
-                            return false;
-                        } else {
-                            if (cbSubcategoria.getSelectedIndex() == -1) {
-                                lblSubcategoria.setText("Ingrese la subcategoria:");
-                                lblSubcategoria.setForeground(Color.RED);
-                                lblSubcategoria.requestFocus();
-                                return false;
-                            }
-                        }
-                    }
                 }
+            } catch (SQLException e) {
             }
+        }
+
+        if (txtDescripcion.getText().equals("")) {
+            lblDescripcion.setText("Ingrese la descripción:");
+            lblDescripcion.setForeground(Color.RED);
+            lblDescripcion.requestFocus();
+            Toolkit.getDefaultToolkit().beep();
+            return false;
+        }
+        if (txtPrecio.getText().equals("")) {
+            lblPrecio.setText("Ingrese el precio:");
+            lblPrecio.setForeground(Color.RED);
+            lblPrecio.requestFocus();
+            Toolkit.getDefaultToolkit().beep();
+            return false;
+        }
+        if (txtExistencia.getText().equals("")) {
+            lblExistencia.setText("Ingrese la existencia:");
+            lblExistencia.setForeground(Color.RED);
+            lblExistencia.requestFocus();
+            Toolkit.getDefaultToolkit().beep();
+            return false;
+        }
+        if (cbCategoria.getSelectedIndex() == -1) {
+            lblCategoria.setText("Ingrese la categoria:");
+            lblCategoria.setForeground(Color.RED);
+            lblCategoria.requestFocus();
+            Toolkit.getDefaultToolkit().beep();
+            return false;
+        }
+        if (cbSubcategoria.getSelectedIndex() == -1) {
+            lblSubcategoria.setText("Ingrese la subcategoria:");
+            lblSubcategoria.setForeground(Color.RED);
+            lblSubcategoria.requestFocus();
+            Toolkit.getDefaultToolkit().beep();
+            return false;
         }
         return true;
     }
@@ -317,6 +361,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         lblBuscarCampo = new javax.swing.JLabel();
         cbCampoBuscar = new javax.swing.JComboBox();
         lbCantRegistros = new javax.swing.JLabel();
+        btnActualizarTabla = new javax.swing.JButton();
         jpBotones = new javax.swing.JPanel();
         btnNuevo = new javax.swing.JButton();
         btnModificar = new javax.swing.JButton();
@@ -343,6 +388,10 @@ public final class ABMProducto extends javax.swing.JDialog {
         cbCategoria = new javax.swing.JComboBox<>();
         cbSubcategoria = new javax.swing.JComboBox<>();
         lblMoneda = new javax.swing.JLabel();
+        lbImagen = new javax.swing.JLabel();
+        btnCargarImagen = new javax.swing.JButton();
+        btnEliminarImagen = new javax.swing.JButton();
+        btnPantallaCompleta = new javax.swing.JButton();
         jpBotones2 = new javax.swing.JPanel();
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
@@ -436,26 +485,33 @@ public final class ABMProducto extends javax.swing.JDialog {
         lbCantRegistros.setText("0 Registros encontrados");
         lbCantRegistros.setPreferredSize(new java.awt.Dimension(57, 25));
 
+        btnActualizarTabla.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos20x20/IconoActualizar.png"))); // NOI18N
+        btnActualizarTabla.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarTablaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jpTablaLayout = new javax.swing.GroupLayout(jpTabla);
         jpTabla.setLayout(jpTablaLayout);
         jpTablaLayout.setHorizontalGroup(
             jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpTablaLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpTablaLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpTablaLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(scPrincipal)
-                            .addGroup(jpTablaLayout.createSequentialGroup()
-                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(lblBuscarCampo)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbCampoBuscar, 0, 180, Short.MAX_VALUE))))
-                    .addComponent(lbCantRegistros, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 711, Short.MAX_VALUE))
+                .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(scPrincipal)
+                    .addGroup(jpTablaLayout.createSequentialGroup()
+                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtBuscar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblBuscarCampo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbCampoBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jpTablaLayout.createSequentialGroup()
+                        .addComponent(btnActualizarTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lbCantRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, 639, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jpTablaLayout.setVerticalGroup(
@@ -468,9 +524,11 @@ public final class ABMProducto extends javax.swing.JDialog {
                     .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
-                .addComponent(scPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(4, 4, 4)
-                .addComponent(lbCantRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(scPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lbCantRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnActualizarTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(4, 4, 4))
         );
 
@@ -686,18 +744,57 @@ public final class ABMProducto extends javax.swing.JDialog {
         lblMoneda.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblMoneda.setText("Dólares.");
 
+        lbImagen.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
+        lbImagen.setForeground(new java.awt.Color(255, 255, 255));
+        lbImagen.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/SinFoto.png"))); // NOI18N
+        lbImagen.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
+        lbImagen.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        btnCargarImagen.setBackground(new java.awt.Color(0, 153, 153));
+        btnCargarImagen.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
+        btnCargarImagen.setText("+");
+        btnCargarImagen.setToolTipText("Cargar una imagen del producto");
+        btnCargarImagen.setEnabled(false);
+        btnCargarImagen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCargarImagenActionPerformed(evt);
+            }
+        });
+
+        btnEliminarImagen.setBackground(new java.awt.Color(255, 0, 51));
+        btnEliminarImagen.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
+        btnEliminarImagen.setText("-");
+        btnEliminarImagen.setToolTipText("Eliminar imagen del producto");
+        btnEliminarImagen.setEnabled(false);
+        btnEliminarImagen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarImagenActionPerformed(evt);
+            }
+        });
+
+        btnPantallaCompleta.setBackground(new java.awt.Color(0, 255, 255));
+        btnPantallaCompleta.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
+        btnPantallaCompleta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos20x20/IconoPantallacompleta.png"))); // NOI18N
+        btnPantallaCompleta.setToolTipText("Ampliar vista de Imagen del producto");
+        btnPantallaCompleta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPantallaCompletaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jpEdicionLayout = new javax.swing.GroupLayout(jpEdicion);
         jpEdicion.setLayout(jpEdicionLayout);
         jpEdicionLayout.setHorizontalGroup(
             jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpEdicionLayout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblCodigo, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblCodigoProducto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblDescripcion, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblPrecio, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblExistencia, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(15, 15, 15)
+                .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(lblCodigoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblExistencia, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(4, 4, 4)
                 .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpEdicionLayout.createSequentialGroup()
@@ -708,37 +805,44 @@ public final class ABMProducto extends javax.swing.JDialog {
                     .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtExistencia, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(2, 2, 2)
+                .addComponent(lblMoneda)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblObs, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblCategoria, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblSubcategoria, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpEdicionLayout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblObs, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpEdicionLayout.createSequentialGroup()
-                                .addGap(11, 11, 11)
-                                .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(lblCategoria, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(lblSubcategoria, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 92, Short.MAX_VALUE)))))
-                    .addGroup(jpEdicionLayout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(lblMoneda)))
-                .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpEdicionLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(cbSubcategoria, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cbCategoria, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpEdicionLayout.createSequentialGroup()
                         .addGap(4, 4, 4)
-                        .addComponent(scpObs, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jpEdicionLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jpEdicionLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbSubcategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(scpObs, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lbImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(3, 3, 3)
+                .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnEliminarImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCargarImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnPantallaCompleta, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
         jpEdicionLayout.setVerticalGroup(
             jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpEdicionLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpEdicionLayout.createSequentialGroup()
+                .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(lbImagen, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpEdicionLayout.createSequentialGroup()
+                        .addComponent(btnCargarImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnEliminarImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnPantallaCompleta, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpEdicionLayout.createSequentialGroup()
                         .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                             .addComponent(lblCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -760,7 +864,7 @@ public final class ABMProducto extends javax.swing.JDialog {
                         .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblExistencia, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtExistencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jpEdicionLayout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpEdicionLayout.createSequentialGroup()
                         .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -772,7 +876,7 @@ public final class ABMProducto extends javax.swing.JDialog {
                         .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblObs, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(scpObs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap())
+                .addGap(64, 64, 64))
         );
 
         jtpEdicion.addTab("Edición", jpEdicion);
@@ -837,21 +941,20 @@ public final class ABMProducto extends javax.swing.JDialog {
         jpPrincipal.setLayout(jpPrincipalLayout);
         jpPrincipalLayout.setHorizontalGroup(
             jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpBanner, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1009, Short.MAX_VALUE)
+            .addComponent(jpBanner, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1055, Short.MAX_VALUE)
             .addGroup(jpPrincipalLayout.createSequentialGroup()
-                .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpPrincipalLayout.createSequentialGroup()
                         .addGap(14, 14, 14)
-                        .addComponent(jpTabla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jpTabla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jpBotones, javax.swing.GroupLayout.PREFERRED_SIZE, 155, Short.MAX_VALUE))
+                        .addComponent(jpBotones, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jpPrincipalLayout.createSequentialGroup()
-                        .addGap(298, 298, 298)
-                        .addComponent(jpBotones2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jpPrincipalLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jtpEdicion, javax.swing.GroupLayout.PREFERRED_SIZE, 896, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(369, 369, 369)
+                        .addComponent(jpBotones2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jtpEdicion))
+                .addContainerGap())
         );
         jpPrincipalLayout.setVerticalGroup(
             jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -859,13 +962,13 @@ public final class ABMProducto extends javax.swing.JDialog {
                 .addComponent(jpBanner, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jpBotones, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+                    .addComponent(jpBotones, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
                     .addComponent(jpTabla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jtpEdicion, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jpBotones2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jpBanner.getAccessibleContext().setAccessibleName("");
@@ -875,13 +978,11 @@ public final class ABMProducto extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 909, Short.MAX_VALUE)
+            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 1055, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jpPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 636, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 647, Short.MAX_VALUE)
         );
 
         getAccessibleContext().setAccessibleName("Inventario");
@@ -1016,7 +1117,7 @@ public final class ABMProducto extends javax.swing.JDialog {
                     + "WHERE subcat_categoria = " + metodoscombo.ObtenerIdComboBox(cbCategoria) + " ORDER BY subcat_descripcion");
 
             if (cbSubcategoria.getItemCount() > 0 && cbSubcategoria.isEnabled()) {
-                cbSubcategoria.setSelectedIndex(1);
+                cbSubcategoria.setSelectedIndex(0);
             }
         }
     }//GEN-LAST:event_cbCategoriaItemStateChanged
@@ -1033,6 +1134,29 @@ public final class ABMProducto extends javax.swing.JDialog {
         metodostxt.SoloNumeroDecimalKeyTyped(evt, txtPrecio);
     }//GEN-LAST:event_txtPrecioKeyTyped
 
+    private void btnActualizarTablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarTablaActionPerformed
+        TablaConsultaBD(txtBuscar.getText()); //Trae todos los registros
+        btnModificar.setEnabled(false);
+        btnEliminar.setEnabled(false);
+    }//GEN-LAST:event_btnActualizarTablaActionPerformed
+
+    private void btnCargarImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargarImagenActionPerformed
+        metodosimagen.CargarImagenFC(lbImagen);
+    }//GEN-LAST:event_btnCargarImagenActionPerformed
+
+    private void btnEliminarImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarImagenActionPerformed
+        URL url = this.getClass().getResource("/forms/images/IconoProductoSinFoto.png");
+        lbImagen.setIcon(new ImageIcon(url));
+        Icon imagendefault = lbImagen.getIcon();
+        btnEliminarImagen.setEnabled(!(lbImagen.getIcon().toString().equals(imagendefault.toString()))); //Revisa si el icono es default
+    }//GEN-LAST:event_btnEliminarImagenActionPerformed
+
+    private void btnPantallaCompletaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPantallaCompletaActionPerformed
+        VistaCompletaImagen vistacompleta = new VistaCompletaImagen("src/forms/producto/imagenproductos/image_" + txtCodigo.getText());
+        metodos.centrarventanaJDialog(vistacompleta);
+        vistacompleta.setVisible(true);
+    }//GEN-LAST:event_btnPantallaCompletaActionPerformed
+
     List<Component> ordenTabulador;
 
     private void OrdenTabulador() {
@@ -1046,6 +1170,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         ordenTabulador.add(taObs);
         ordenTabulador.add(btnGuardar);
         setFocusTraversalPolicy(new PersonalizadoFocusTraversalPolicy());
+
     }
 
     private class PersonalizadoFocusTraversalPolicy extends FocusTraversalPolicy {
@@ -1076,11 +1201,15 @@ public final class ABMProducto extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnActualizarTabla;
     private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnCargarImagen;
     private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnEliminarImagen;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnNuevo;
+    private javax.swing.JButton btnPantallaCompleta;
     private javax.swing.JButton btnReporte;
     private javax.swing.JComboBox cbCampoBuscar;
     private javax.swing.JComboBox<MetodosCombo> cbCategoria;
@@ -1096,6 +1225,7 @@ public final class ABMProducto extends javax.swing.JDialog {
     private javax.swing.JTabbedPane jtpEdicion;
     private javax.swing.JLabel lbBanner;
     private javax.swing.JLabel lbCantRegistros;
+    private javax.swing.JLabel lbImagen;
     private javax.swing.JLabel lblBuscarCampo;
     private javax.swing.JLabel lblCategoria;
     private javax.swing.JLabel lblCodigo;

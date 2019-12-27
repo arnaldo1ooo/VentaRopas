@@ -38,7 +38,7 @@ public class MetodosTXT {
     public void SoloNumeroEnteroKeyTyped(KeyEvent evt) {
         //Declaramos una variable y le asignamos un evento
         char car = evt.getKeyChar();
-        //Condicion que nos permite ingresar datos de tipo texto
+        //Condicion que nos permite ingresar datos de tipo numerico
         if (((car < '0' || car > '9') && (car != (char) KeyEvent.VK_BACK_SPACE))) {
             evt.consume();
         }
@@ -197,5 +197,14 @@ public class MetodosTXT {
         Double elNumero = Double.parseDouble(ElDouble);
         String elNumeroFormateado = df.format(elNumero);
         return elNumeroFormateado.replace(",", ".");
+    }
+
+    public void BloquearTeclaKeyTyped(KeyEvent evt, int tecla) {
+        //Declaramos una variable y le asignamos un evento
+        char car = evt.getKeyChar();
+        //Que no entre espacio
+        if ((car == (char) tecla)) { //Ejemplo de tecla: KeyEvent.VK_SPACE
+            evt.consume();
+        }
     }
 };

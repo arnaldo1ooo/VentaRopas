@@ -39,14 +39,14 @@ public class Metodos {
     public int CantRegistros = 0;
 
     public Conexion ObtenerRSSentencia(String sentencia) { //con.Desconectar luego de usar el metodo
-        Conexion conexion = new Conexion();
+        Conexion con = new Conexion();
         try {
             Conexion.ConectarBasedeDatos();
             System.out.println("Ejecutar sentencia ObtenerRSSentencia " + sentencia);
-            conexion.rs = conexion.st.executeQuery(sentencia);
+            con.rs = con.st.executeQuery(sentencia);
 
             int cantreg = 0;
-            while (conexion.rs.next() && cantreg < 2) { //Revisamos cuantos registro trajo la consulta
+            while (con.rs.next() && cantreg < 2) { //Revisamos cuantos registro trajo la consulta
                 cantreg++;
             }
 
@@ -56,19 +56,20 @@ public class Metodos {
                     break;
                 case 1:
                     System.out.println("ObtenerRSSentencia trajo un resultado");
-                    conexion.rs.beforeFirst(); //Ponemos antes del primer registro en el puntero
+                    con.rs.beforeFirst(); //Ponemos antes del primer registro en el puntero
                     break;
                 case 2:
                     System.out.println("ObtenerRSSentencia trajo mas de un resultado");
-                    conexion.rs.beforeFirst(); //Ponemos antes del primer registro en el puntero
+                    con.rs.beforeFirst(); //Ponemos antes del primer registro en el puntero
                     break;
                 default:
                 //aca se escribe lo que si o si se ejecuta
             }
+
         } catch (SQLException e) {
             System.out.println("Error al EjecutarSentencia ObtenerRSSentencia, sentencia: " + sentencia + "ERROR " + e);
         }
-        return conexion;
+        return con;
     }
 
     public void AnchuraColumna(JTable LaTabla) {
@@ -163,12 +164,12 @@ public class Metodos {
 
         System.out.println("sentencia filtro tabla BD: " + sentencia);
 
-        Connection connection;
+        Connection conexion;
         Statement st;
         ResultSet rs;
         try {
-            connection = (Connection) Conexion.ConectarBasedeDatos();
-            st = connection.createStatement();
+            conexion = (Connection) Conexion.ConectarBasedeDatos();
+            st = conexion.createStatement();
             rs = st.executeQuery(sentencia);
             ResultSetMetaData mdrs = rs.getMetaData();
             int numColumns = mdrs.getColumnCount();
@@ -183,7 +184,7 @@ public class Metodos {
             }
             LaTabla.setModel(modelotabla);//asigna a la tabla el modelo creado
 
-            connection.close();
+            conexion.close();
             st.close();
             rs.close();
         } catch (SQLException ex) {

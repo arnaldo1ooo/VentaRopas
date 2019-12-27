@@ -12,6 +12,8 @@ import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
 
 import java.awt.HeadlessException;
+import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -37,7 +39,7 @@ public final class ABMCliente extends javax.swing.JDialog {
 
         /*ImagenBanner p = new ImagenBanner(); //Produce error, al ejecutar en el jar la ventana se ve blanco
         jpBanner.add(p);*/
-        TablaConsultaBD(""); //Trae todos los registros
+        TablaConsultaBD(txtBuscar.getText()); //Trae todos los registros
         txtBuscar.requestFocus();
 
         OrdenTabulador();
@@ -230,21 +232,39 @@ public final class ABMCliente extends javax.swing.JDialog {
             lblRucCedula.setText("Ingrese el RUC/CI:");
             lblRucCedula.setForeground(Color.RED);
             lblRucCedula.requestFocus();
+            Toolkit.getDefaultToolkit().beep();
             return false;
-        } else {
-            if (txtNombre.getText().equals("")) {
-                lblNombre.setText("Ingrese el nombre:");
-                lblNombre.setForeground(Color.RED);
-                lblNombre.requestFocus();
-                return false;
-            } else {
-                if (txtApellido.getText().equals("")) {
-                    lblApellido.setText("Ingrese el apellido:");
-                    lblApellido.setForeground(Color.RED);
-                    lblApellido.requestFocus();
+        }
+
+        if (txtCodigo.getText().equals("")) {
+            try {
+                Conexion con = metodos.ObtenerRSSentencia("SELECT cli_ruccedula FROM cliente "
+                        + "WHERE cli_ruccedula= '" + txtRucCedula.getText() + "'");
+                if (con.rs.next() == true) { //Si ya existe el numero de cedula en la bd de clientes
+                    lblRucCedula.setText("El Ruc o CI ya existe: ");
+                    lblRucCedula.setForeground(Color.RED);
+                    lblRucCedula.requestFocus();
+                    con.DesconectarBasedeDatos();
+                    Toolkit.getDefaultToolkit().beep();
                     return false;
                 }
+            } catch (SQLException e) {
             }
+        }
+
+        if (txtNombre.getText().equals("")) {
+            lblNombre.setText("Ingrese el nombre:");
+            lblNombre.setForeground(Color.RED);
+            lblNombre.requestFocus();
+            Toolkit.getDefaultToolkit().beep();
+            return false;
+        }
+        if (txtApellido.getText().equals("")) {
+            lblApellido.setText("Ingrese el apellido:");
+            lblApellido.setForeground(Color.RED);
+            lblApellido.requestFocus();
+            Toolkit.getDefaultToolkit().beep();
+            return false;
         }
         return true;
     }
@@ -268,6 +288,7 @@ public final class ABMCliente extends javax.swing.JDialog {
         lblBuscarCampo = new javax.swing.JLabel();
         cbCampoBuscar = new javax.swing.JComboBox();
         lbCantRegistros = new javax.swing.JLabel();
+        btnActualizarTabla = new javax.swing.JButton();
         jpBotones = new javax.swing.JPanel();
         btnNuevo = new javax.swing.JButton();
         btnModificar = new javax.swing.JButton();
@@ -301,7 +322,7 @@ public final class ABMCliente extends javax.swing.JDialog {
         setBackground(new java.awt.Color(45, 62, 80));
         setResizable(false);
 
-        jpPrincipal.setBackground(new java.awt.Color(255, 255, 255));
+        jpPrincipal.setBackground(new java.awt.Color(233, 255, 255));
         jpPrincipal.setPreferredSize(new java.awt.Dimension(1580, 478));
 
         jpBanner.setBackground(new java.awt.Color(0, 51, 102));
@@ -330,7 +351,7 @@ public final class ABMCliente extends javax.swing.JDialog {
                 .addGap(0, 13, Short.MAX_VALUE))
         );
 
-        jpTabla.setBackground(new java.awt.Color(255, 255, 255));
+        jpTabla.setBackground(new java.awt.Color(233, 255, 255));
         jpTabla.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
@@ -386,6 +407,13 @@ public final class ABMCliente extends javax.swing.JDialog {
         lbCantRegistros.setText("0 Registros encontrados");
         lbCantRegistros.setPreferredSize(new java.awt.Dimension(57, 25));
 
+        btnActualizarTabla.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos20x20/IconoActualizar.png"))); // NOI18N
+        btnActualizarTabla.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarTablaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jpTablaLayout = new javax.swing.GroupLayout(jpTabla);
         jpTabla.setLayout(jpTablaLayout);
         jpTablaLayout.setHorizontalGroup(
@@ -402,7 +430,10 @@ public final class ABMCliente extends javax.swing.JDialog {
                         .addComponent(lblBuscarCampo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cbCampoBuscar, 0, 180, Short.MAX_VALUE))
-                    .addComponent(lbCantRegistros, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jpTablaLayout.createSequentialGroup()
+                        .addComponent(btnActualizarTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(36, 36, 36)
+                        .addComponent(lbCantRegistros, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jpTablaLayout.setVerticalGroup(
@@ -414,14 +445,16 @@ public final class ABMCliente extends javax.swing.JDialog {
                     .addComponent(lblBuscarCampo, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                 .addComponent(scPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(4, 4, 4)
-                .addComponent(lbCantRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(4, 4, 4))
+                .addGap(2, 2, 2)
+                .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnActualizarTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbCantRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(3, 3, 3))
         );
 
-        jpBotones.setBackground(new java.awt.Color(255, 255, 255));
+        jpBotones.setBackground(new java.awt.Color(233, 255, 255));
         jpBotones.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
         jpBotones.setPreferredSize(new java.awt.Dimension(100, 50));
 
@@ -506,7 +539,7 @@ public final class ABMCliente extends javax.swing.JDialog {
         jtpEdicion.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
         jtpEdicion.setName(""); // NOI18N
 
-        jpEdicion.setBackground(new java.awt.Color(255, 255, 255));
+        jpEdicion.setBackground(new java.awt.Color(233, 255, 255));
         jpEdicion.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
 
         lblCodigo.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
@@ -618,6 +651,14 @@ public final class ABMCliente extends javax.swing.JDialog {
         txtEmail.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         txtEmail.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         txtEmail.setEnabled(false);
+        txtEmail.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtEmailKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtEmailKeyTyped(evt);
+            }
+        });
 
         lblObs.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         lblObs.setForeground(new java.awt.Color(102, 102, 102));
@@ -645,11 +686,11 @@ public final class ABMCliente extends javax.swing.JDialog {
             jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpEdicionLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblCodigo, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblRucCedula, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblNombre, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblApellido, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblCodigo)
+                    .addComponent(lblNombre)
+                    .addComponent(lblApellido)
+                    .addComponent(lblRucCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(4, 4, 4)
                 .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(txtNombre, javax.swing.GroupLayout.Alignment.LEADING)
@@ -658,8 +699,8 @@ public final class ABMCliente extends javax.swing.JDialog {
                         .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2))
-                    .addComponent(txtApellido))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
+                    .addComponent(txtApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(43, 43, 43)
                 .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblObs, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblEmail, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -677,37 +718,46 @@ public final class ABMCliente extends javax.swing.JDialog {
             jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpEdicionLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(lblCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(lblRucCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtRucCedula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(lblNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(scpObs, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(lblApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lblObs, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jpEdicionLayout.createSequentialGroup()
+                        .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                            .addComponent(lblDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                            .addComponent(lblTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                            .addComponent(lblEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(scpObs, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblObs, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jpEdicionLayout.createSequentialGroup()
+                        .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                            .addComponent(lblCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                            .addComponent(lblRucCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtRucCedula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                            .addComponent(lblNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jtpEdicion.addTab("Edición", jpEdicion);
 
-        jpBotones2.setBackground(new java.awt.Color(255, 255, 255));
+        jpBotones2.setBackground(new java.awt.Color(233, 255, 255));
         jpBotones2.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
 
         btnGuardar.setBackground(new java.awt.Color(0, 153, 255));
@@ -789,7 +839,7 @@ public final class ABMCliente extends javax.swing.JDialog {
                 .addComponent(jpBanner, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jpBotones, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)
+                    .addComponent(jpBotones, javax.swing.GroupLayout.DEFAULT_SIZE, 274, Short.MAX_VALUE)
                     .addComponent(jpTabla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jtpEdicion, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -810,7 +860,7 @@ public final class ABMCliente extends javax.swing.JDialog {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jpPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 624, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jpPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 635, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -970,6 +1020,20 @@ public final class ABMCliente extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_taObsKeyPressed
 
+    private void txtEmailKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEmailKeyTyped
+        metodostxt.BloquearTeclaKeyTyped(evt, KeyEvent.VK_SPACE);
+    }//GEN-LAST:event_txtEmailKeyTyped
+
+    private void txtEmailKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEmailKeyPressed
+
+    }//GEN-LAST:event_txtEmailKeyPressed
+
+    private void btnActualizarTablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarTablaActionPerformed
+        TablaConsultaBD(txtBuscar.getText()); //Trae todos los registros
+        btnModificar.setEnabled(false);
+        btnEliminar.setEnabled(false);
+    }//GEN-LAST:event_btnActualizarTablaActionPerformed
+
     List<Component> ordenTabulador;
 
     private void OrdenTabulador() {
@@ -1013,6 +1077,7 @@ public final class ABMCliente extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnActualizarTabla;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;

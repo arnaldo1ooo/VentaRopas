@@ -5,16 +5,15 @@
  */
 package metodos;
 
+import javax.swing.Icon;
+
 /**
  *
  * @author Lic. Arnaldo Cantero
  */
-public class VistaCompleta extends javax.swing.JDialog {
+public class VistaCompletaImagen extends javax.swing.JDialog {
 
-    /**
-     * Creates new form VistaCompleta
-     */
-    public VistaCompleta(String rutaimagen) {
+    public VistaCompletaImagen(String rutaimagen) {
         System.out.println("Form Padre " + this.getParent().getName());
         initComponents();
 
@@ -23,7 +22,6 @@ public class VistaCompleta extends javax.swing.JDialog {
         System.out.println("Se cargo la imagen a la VistaCompleta " + rutaimagen);
 
         this.setSize(this.getToolkit().getScreenSize());
-
     }
 
     @SuppressWarnings("unchecked")
@@ -38,6 +36,7 @@ public class VistaCompleta extends javax.swing.JDialog {
         setAlwaysOnTop(true);
         setModal(true);
         setName("dgVistaCompleta"); // NOI18N
+        setSize(new java.awt.Dimension(700, 700));
         setType(java.awt.Window.Type.POPUP);
 
         lbImagen.setFont(new java.awt.Font("sansserif", 1, 24)); // NOI18N
@@ -68,7 +67,7 @@ public class VistaCompleta extends javax.swing.JDialog {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @SuppressWarnings("override")
             public void run() {
-                VistaCompleta dialog = new VistaCompleta(null);
+                VistaCompletaImagen dialog = new VistaCompletaImagen(null);
 
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override

@@ -5,17 +5,19 @@
  */
 package metodos;
 
+import conexion.Conexion;
+import forms.producto.ABMProducto;
 import java.awt.Graphics2D;
 import java.awt.HeadlessException;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -89,7 +91,7 @@ public class MetodosImagen {
                     System.out.println("Guardando imagen... " + rutadestinoimagen + "." + fileextension);
                     ImageIO.write(biImagen, fileextension, new File(rutadestinoimagen + "." + fileextension));
                 } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(null, "Error al guardar imagen del producto... " + ex, "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Error al guardar imagen... " + ex, "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         } catch (HeadlessException | IOException e) {
@@ -97,7 +99,7 @@ public class MetodosImagen {
         }
     }
 
-    public void LeerImagen(JLabel ElLabel, String rutaimagen) {
+    public boolean LeerImagen(JLabel ElLabel, String rutaimagen) {
         //rutaimagen = System.getProperty("user.dir") + rutaimagen;
         //ObtenerImagen Escalado al Label
         String ruta = rutaimagen + ".png";
@@ -111,8 +113,10 @@ public class MetodosImagen {
             ElLabel.setText("");
             EscalarImagen(ElLabel, null, ruta);
             System.out.println("Se cargó la imagen: " + ruta);
+            return true;
         } else {
             System.out.println("Error al LeerImagen, La imagen solicitada no existe o la ruta esta mal, revise la extension o ruta: " + ficheroimagen.getAbsolutePath());
+            return false;
         }
     }
 
@@ -176,7 +180,7 @@ public class MetodosImagen {
         }
     }
 
-   /* public void EscalarImagenAjButton(String rutaimagen, JButton EljButton) {
+    /* public void EscalarImagenAjButton(String rutaimagen, JButton EljButton) {
         // Crea un icono que referencie a la imagen en disco
         ImageIcon iconoOriginal = new ImageIcon(rutaimagen);
 
@@ -186,4 +190,19 @@ public class MetodosImagen {
 // Obtiene un icono en escala con las dimensiones especificadas
         ImageIcon iconoEscala = new ImageIcon(iconoOriginal.getImage().getScaledInstance(EljButton.getho, largojbutton, java.awt.Image.SCALE_DEFAULT));
     }*/
+    public String ObtenerUltimoID() {
+        Metodos metodos = new Metodos();
+        String idultimoproducto = "";
+        try {
+            Conexion con = metodos.ObtenerRSSentencia("SELECT MAX(pro_codigo) AS idultimoproducto FROM producto");
+            while (con.rs.next()) {
+                idultimoproducto = con.rs.getString("idultimoproducto");
+            }
+            con.DesconectarBasedeDatos();
+        } catch (SQLException ex) {
+            Logger.getLogger(ABMProducto.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("No se pudo obtener el idultimoproducto: " + idultimoproducto);
+        }
+        return idultimoproducto;
+    }
 }

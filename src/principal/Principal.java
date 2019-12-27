@@ -7,7 +7,7 @@ package principal;
 
 import conexion.Conexion;
 import forms.ABMCliente;
-import forms.ABMProducto;
+import forms.producto.ABMProducto;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
