@@ -16,7 +16,7 @@ public class Conexion {
     public ResultSet rs;
 
     //Modo host local
-    private static final String controlador = "com.mysql.cj.jdbc.Driver";
+    /*private static final String controlador = "com.mysql.cj.jdbc.Driver";
     private static final String usuarioDB = "root";
     private static final String passDB = "toor5127"; //Contrasena de la BD
     private static final String nombreBD = "ventaropas";
@@ -28,10 +28,10 @@ public class Conexion {
             + "&useLegacyDatetimeCode=false"
             + "&serverTimezone=UTC"
             + "&useSSL=false"
-            + "&allowPublicKeyRetrieval=true";
+            + "&allowPublicKeyRetrieval=true";*/
 
     //Modo host remoto
-    /*private static final String controlador = "com.mysql.cj.jdbc.Driver";
+    private static final String controlador = "com.mysql.cj.jdbc.Driver";
     private static final String usuarioDB = "visitante";
     private static final String passDB = "toor5127"; //Contrasena de la BD
     private static final String nombreBD = "ventaropas";
@@ -42,7 +42,9 @@ public class Conexion {
             + "&useJDBCCompliantTimezoneShift=true"
             + "&useLegacyDatetimeCode=false"
             + "&serverTimezone=UTC"
-            + "&useSSL=false";*/
+            + "&useSSL=false";
+    
+    
     public static Connection ConectarBasedeDatos() {
         Connection conexion;
         try {

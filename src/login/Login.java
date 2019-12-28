@@ -45,7 +45,7 @@ public class Login extends javax.swing.JFrame {
             Connection conexion;
             conexion = Conexion.ConectarBasedeDatos();
             Statement st;
-            st = conexion.createStatement();            
+            st = conexion.createStatement();
             ResultSet rs;
             rs = st.executeQuery(consulta);
 
@@ -68,8 +68,10 @@ public class Login extends javax.swing.JFrame {
             rs.close();
             st.close();
             conexion.close();
-        } catch (SQLException SQL) {
-            System.out.println("Error en SQL " + SQL.getMessage());
+        } catch (SQLException e) {
+            System.out.println("Error en SQL " + e.getMessage());
+        } catch (NullPointerException e) {
+            System.out.println("El intento de conexion a la bd trajo NULL " + e.getMessage());
         }
     }
 

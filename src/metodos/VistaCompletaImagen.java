@@ -19,7 +19,7 @@ public class VistaCompletaImagen extends javax.swing.JDialog {
         metodosimagen.LeerImagen(lbImagen, rutaimagen);
         System.out.println("Se cargo la imagen a la VistaCompleta " + rutaimagen);
 
-        this.setSize(this.getToolkit().getScreenSize());
+        //this.setSize(this.getToolkit().getScreenSize());
     }
 
     @SuppressWarnings("unchecked")
@@ -34,7 +34,7 @@ public class VistaCompletaImagen extends javax.swing.JDialog {
         setAlwaysOnTop(true);
         setModal(true);
         setName("dgVistaCompleta"); // NOI18N
-        setSize(new java.awt.Dimension(700, 700));
+        setSize(new java.awt.Dimension(800, 800));
         setType(java.awt.Window.Type.POPUP);
 
         lbImagen.setFont(new java.awt.Font("sansserif", 1, 24)); // NOI18N
@@ -49,12 +49,12 @@ public class VistaCompletaImagen extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 947, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 529, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
         );
 
         pack();

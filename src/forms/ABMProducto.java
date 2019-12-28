@@ -83,9 +83,9 @@ public final class ABMProducto extends javax.swing.JDialog {
                 precio = metodostxt.DosDecimalesDouble(precio); //Redondear double para que tenga solo dos numeros decimales
 
                 String existencia = txtExistencia.getText();
-                int idcategoria = metodoscombo.ObtenerIdComboBox(cbCategoria);
                 int idsubcategoria = metodoscombo.ObtenerIdComboBox(cbSubcategoria);
                 String obs = taObs.getText();
+                int estado = cbEstado.getSelectedIndex();
 
                 int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro crear este nuevo registro?", "Confirmación", JOptionPane.YES_OPTION);
 
@@ -95,7 +95,7 @@ public final class ABMProducto extends javax.swing.JDialog {
                         Connection con;
                         con = (Connection) Conexion.ConectarBasedeDatos();
                         String sentencia = "CALL SP_ProductoAlta ('" + codigoproducto + "','" + descripcion + "','"
-                                + precio + "','" + existencia + "','" + idcategoria + "','" + idsubcategoria + "','" + obs + "')";
+                                + precio + "','" + existencia + "','" + idsubcategoria + "','" + obs + "','" + estado + "')";
                         System.out.println("Insertar registro: " + sentencia);
                         Statement st;
                         st = (Statement) con.createStatement();
@@ -103,9 +103,9 @@ public final class ABMProducto extends javax.swing.JDialog {
 
                         con.close();
                         st.close();
-
-                        String ultimoid = metodosimagen.ObtenerUltimoID();
+                        
                         //Guardarimagen
+                        String ultimoid = metodosimagen.ObtenerUltimoID();
                         metodosimagen.GuardarImagen(rutaimagenproducto + ultimoid);
 
                         JOptionPane.showMessageDialog(this, "Se agrego correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
@@ -141,12 +141,12 @@ public final class ABMProducto extends javax.swing.JDialog {
                     precio = metodostxt.DosDecimalesDouble(precio); //Redondear double para que tenga solo dos numeros decimales
 
                     String existencia = txtExistencia.getText();
-                    int idcategoria = metodoscombo.ObtenerIdComboBox(cbCategoria);
                     int idsubcategoria = metodoscombo.ObtenerIdComboBox(cbSubcategoria);
                     String obs = taObs.getText();
+                    int estado = cbEstado.getSelectedIndex();
 
                     String sentencia = "CALL SP_ProductoModificar(" + codigo + ",'" + codigoproducto + "','" + descripcion + "','" + precio + "','" + existencia
-                            + "','" + idcategoria + "','" + idsubcategoria + "','" + obs + "')";
+                            + "','" + idsubcategoria + "','" + obs + "','" + estado + "')";
                     System.out.println("Actualizar registro: " + sentencia);
 
                     Connection con;
@@ -215,8 +215,8 @@ public final class ABMProducto extends javax.swing.JDialog {
 
     public void TablaConsultaBD(String filtro) {//Realiza la consulta de los productos que tenemos en la base de datos
         String nombresp = "SP_ProductoConsulta";
-        String titlesJtabla[] = {"Código", "Código del producto", "Descripción", "Precio", "Existencia", "Categoria", "Subcategoria", "Observación"}; //Debe tener la misma cantidad que titlesconsulta
-        String titlesconsulta[] = {"pro_codigo", "pro_identificador", "pro_descripcion", "pro_precio", "pro_existencia", "pro_categoria", "pro_subcategoria", "pro_obs"};
+        String titlesJtabla[] = {"Código", "Código del producto", "Descripción", "Precio", "Existencia", "Categoria", "Subcategoria", "Observación", "Estado"}; //Debe tener la misma cantidad que titlesconsulta
+        String titlesconsulta[] = {"pro_codigo", "pro_identificador", "pro_descripcion", "pro_precio", "pro_existencia", "pro_categoria", "pro_subcategoria", "pro_obs", "pro_estado"};
 
         metodos.ConsultaFiltroTablaBD(tbPrincipal, titlesJtabla, titlesconsulta, nombresp, filtro, cbCampoBuscar);
         metodos.AnchuraColumna(tbPrincipal);
@@ -235,12 +235,12 @@ public final class ABMProducto extends javax.swing.JDialog {
         metodoscombo.setSelectedNombreItem(cbCategoria, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 5).toString());
         metodoscombo.setSelectedNombreItem(cbSubcategoria, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 6).toString());
         taObs.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 7).toString());
+        cbEstado.setSelectedIndex(Integer.parseInt(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 8).toString()));
 
         if (metodosimagen.LeerImagen(lbImagen, rutaimagenproducto + txtCodigo.getText()) == false) {
-            URL url = this.getClass().getResource(rutaimagenproducto + "0.png");
+            URL url = this.getClass().getResource("/images/IconoProductoSinFoto.png");
             lbImagen.setIcon(new ImageIcon(url));
         }
-
     }
 
     private void ModoEdicion(boolean valor) {
@@ -253,6 +253,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         cbCategoria.setEnabled(valor);
         cbSubcategoria.setEnabled(valor);
         taObs.setEnabled(valor);
+        cbEstado.setEnabled(valor);
         btnNuevo.setEnabled(!valor);
         btnModificar.setEnabled(false);
         btnEliminar.setEnabled(false);
@@ -275,6 +276,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         metodoscombo.setSelectedNombreItem(cbCategoria, "SIN ESPECIFICAR");
         metodoscombo.setSelectedNombreItem(cbSubcategoria, "SIN ESPECIFICAR");
         taObs.setText("");
+        cbEstado.setSelectedIndex(1);
 
         lblCodigoProducto.setForeground(new Color(102, 102, 102));
         lblDescripcion.setForeground(new Color(102, 102, 102));
@@ -285,6 +287,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         lbImagen.setIcon(new ImageIcon(url));
 
         txtBuscar.requestFocus();
+        tbPrincipal.clearSelection();
     }
 
     public boolean ComprobarCampos() {
@@ -402,6 +405,8 @@ public final class ABMProducto extends javax.swing.JDialog {
         btnCargarImagen = new javax.swing.JButton();
         btnEliminarImagen = new javax.swing.JButton();
         btnPantallaCompleta = new javax.swing.JButton();
+        lblSubcategoria1 = new javax.swing.JLabel();
+        cbEstado = new javax.swing.JComboBox<>();
         jpBotones2 = new javax.swing.JPanel();
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
@@ -430,7 +435,7 @@ public final class ABMProducto extends javax.swing.JDialog {
             .addGroup(jpBannerLayout.createSequentialGroup()
                 .addGap(38, 38, 38)
                 .addComponent(lbBanner, javax.swing.GroupLayout.PREFERRED_SIZE, 965, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(61, Short.MAX_VALUE))
         );
         jpBannerLayout.setVerticalGroup(
             jpBannerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -749,6 +754,17 @@ public final class ABMProducto extends javax.swing.JDialog {
                 cbCategoriaItemStateChanged(evt);
             }
         });
+        cbCategoria.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                cbCategoriaKeyReleased(evt);
+            }
+        });
+
+        cbSubcategoria.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                cbSubcategoriaKeyReleased(evt);
+            }
+        });
 
         lblMoneda.setForeground(new java.awt.Color(102, 102, 102));
         lblMoneda.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -793,44 +809,58 @@ public final class ABMProducto extends javax.swing.JDialog {
             }
         });
 
+        lblSubcategoria1.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lblSubcategoria1.setForeground(new java.awt.Color(102, 102, 102));
+        lblSubcategoria1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblSubcategoria1.setText("Estado*:");
+
+        cbEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "INACTIVO", "ACTIVO" }));
+        cbEstado.setSelectedIndex(1);
+
         javax.swing.GroupLayout jpEdicionLayout = new javax.swing.GroupLayout(jpEdicion);
         jpEdicion.setLayout(jpEdicionLayout);
         jpEdicionLayout.setHorizontalGroup(
             jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpEdicionLayout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(lblCodigoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblExistencia, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(4, 4, 4)
-                .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jpEdicionLayout.createSequentialGroup()
-                        .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lblCodigoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblExistencia, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(4, 4, 4)
+                        .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jpEdicionLayout.createSequentialGroup()
+                                .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel2))
+                            .addComponent(txtCodigoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtExistencia, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2))
-                    .addComponent(txtCodigoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtExistencia, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(2, 2, 2)
-                .addComponent(lblMoneda)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jpEdicionLayout.createSequentialGroup()
+                                .addComponent(lblMoneda)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblObs, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(lblCategoria, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblSubcategoria, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE))))
+                    .addComponent(lblSubcategoria1, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblObs, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblCategoria, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblSubcategoria, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpEdicionLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(cbSubcategoria, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cbCategoria, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpEdicionLayout.createSequentialGroup()
                         .addGap(4, 4, 4)
-                        .addComponent(scpObs, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(scpObs, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jpEdicionLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbSubcategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lbImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(3, 3, 3)
@@ -886,7 +916,10 @@ public final class ABMProducto extends javax.swing.JDialog {
                         .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblObs, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(scpObs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(64, 64, 64))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblSubcategoria1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         jtpEdicion.addTab("Edición", jpEdicion);
@@ -951,19 +984,21 @@ public final class ABMProducto extends javax.swing.JDialog {
         jpPrincipal.setLayout(jpPrincipalLayout);
         jpPrincipalLayout.setHorizontalGroup(
             jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpBanner, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1055, Short.MAX_VALUE)
-            .addGroup(jpPrincipalLayout.createSequentialGroup()
-                .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jpBanner, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1064, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpPrincipalLayout.createSequentialGroup()
+                .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jpPrincipalLayout.createSequentialGroup()
-                        .addGap(14, 14, 14)
+                        .addContainerGap()
+                        .addComponent(jtpEdicion, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpPrincipalLayout.createSequentialGroup()
+                        .addContainerGap()
                         .addComponent(jpTabla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jpBotones, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jpPrincipalLayout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpPrincipalLayout.createSequentialGroup()
                         .addGap(369, 369, 369)
                         .addComponent(jpBotones2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jtpEdicion))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jpPrincipalLayout.setVerticalGroup(
@@ -975,8 +1010,8 @@ public final class ABMProducto extends javax.swing.JDialog {
                     .addComponent(jpBotones, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
                     .addComponent(jpTabla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jtpEdicion, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jtpEdicion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jpBotones2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -988,11 +1023,11 @@ public final class ABMProducto extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 1055, Short.MAX_VALUE)
+            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 1064, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 647, Short.MAX_VALUE)
+            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 672, Short.MAX_VALUE)
         );
 
         getAccessibleContext().setAccessibleName("Inventario");
@@ -1167,6 +1202,24 @@ public final class ABMProducto extends javax.swing.JDialog {
         vistacompleta.setVisible(true);
     }//GEN-LAST:event_btnPantallaCompletaActionPerformed
 
+    private void cbCategoriaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cbCategoriaKeyReleased
+        if (cbCategoria.getSelectedItem().equals("")) {
+            lblCategoria.setForeground(new Color(102, 102, 102));
+        } else {
+            lblCategoria.setText("Categoria:"); //Vuelve a poner el texto original ya que cuando hay un error cambia
+            lblCategoria.setForeground(new Color(0, 153, 51));
+        }
+    }//GEN-LAST:event_cbCategoriaKeyReleased
+
+    private void cbSubcategoriaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cbSubcategoriaKeyReleased
+        if (cbSubcategoria.getSelectedItem().equals("")) {
+            lblSubcategoria.setForeground(new Color(102, 102, 102));
+        } else {
+            lblSubcategoria.setText("Subcategoria*:"); //Vuelve a poner el texto original ya que cuando hay un error cambia
+            lblSubcategoria.setForeground(new Color(0, 153, 51));
+        }
+    }//GEN-LAST:event_cbSubcategoriaKeyReleased
+
     List<Component> ordenTabulador;
 
     private void OrdenTabulador() {
@@ -1223,6 +1276,7 @@ public final class ABMProducto extends javax.swing.JDialog {
     private javax.swing.JButton btnReporte;
     private javax.swing.JComboBox cbCampoBuscar;
     private javax.swing.JComboBox<MetodosCombo> cbCategoria;
+    private javax.swing.JComboBox<String> cbEstado;
     private javax.swing.JComboBox<MetodosCombo> cbSubcategoria;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -1246,6 +1300,7 @@ public final class ABMProducto extends javax.swing.JDialog {
     private javax.swing.JLabel lblObs;
     private javax.swing.JLabel lblPrecio;
     private javax.swing.JLabel lblSubcategoria;
+    private javax.swing.JLabel lblSubcategoria1;
     private javax.swing.JScrollPane scPrincipal;
     private javax.swing.JScrollPane scpObs;
     private javax.swing.JTextArea taObs;

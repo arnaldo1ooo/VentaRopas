@@ -7,6 +7,7 @@ package principal;
 
 import conexion.Conexion;
 import forms.ABMCliente;
+import forms.ABMEmpleado;
 import forms.ABMProducto;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -86,16 +87,6 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jLabel2 = new javax.swing.JLabel();
         lblPerfil = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu8 = new javax.swing.JMenu();
-        jMenuItem11 = new javax.swing.JMenuItem();
-        jSeparator11 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem18 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        jMenuItem10 = new javax.swing.JMenuItem();
-        jSeparator16 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem7 = new javax.swing.JMenuItem();
-        jSeparator14 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem2 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem22 = new javax.swing.JMenuItem();
         jSeparator5 = new javax.swing.JPopupMenu.Separator();
@@ -110,6 +101,16 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jMenuItem20 = new javax.swing.JMenuItem();
         jSeparator13 = new javax.swing.JPopupMenu.Separator();
         jMenuItem23 = new javax.swing.JMenuItem();
+        jMenu8 = new javax.swing.JMenu();
+        jMenuItem11 = new javax.swing.JMenuItem();
+        jSeparator11 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem18 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuItem10 = new javax.swing.JMenuItem();
+        jSeparator16 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem7 = new javax.swing.JMenuItem();
+        jSeparator14 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem2 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
         jSeparator7 = new javax.swing.JPopupMenu.Separator();
@@ -155,8 +156,8 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             }
         });
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoZafra.png"))); // NOI18N
-        jButton3.setText("ZAFRAS");
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoEmpleados.png"))); // NOI18N
+        jButton3.setText("EMPLEADOS");
         jButton3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -175,8 +176,8 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             .addGroup(dpEscritorioLayout.createSequentialGroup()
                 .addGap(57, 57, 57)
                 .addGroup(dpEscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -186,10 +187,10 @@ public class Principal extends javax.swing.JFrame implements Runnable {
                 .addGap(40, 40, 40)
                 .addComponent(jButton2)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addGap(18, 18, 18)
                 .addComponent(jButton3)
-                .addContainerGap(213, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jButton1)
+                .addContainerGap(159, Short.MAX_VALUE))
         );
 
         jpBarra.setPreferredSize(new java.awt.Dimension(1586, 25));
@@ -280,76 +281,6 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jMenuBar1.setMinimumSize(new java.awt.Dimension(120, 70));
         jMenuBar1.setPreferredSize(new java.awt.Dimension(120, 70));
 
-        jMenu8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoInventario.png"))); // NOI18N
-        jMenu8.setText("INVENTARIOS");
-        jMenu8.setFont(new java.awt.Font("Sitka Text", 1, 14)); // NOI18N
-        jMenu8.setPreferredSize(new java.awt.Dimension(270, 70));
-        jMenu8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenu8ActionPerformed(evt);
-            }
-        });
-
-        jMenuItem11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoEntrada.png"))); // NOI18N
-        jMenuItem11.setText("ENTRADAS");
-        jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem11ActionPerformed(evt);
-            }
-        });
-        jMenu8.add(jMenuItem11);
-        jMenu8.add(jSeparator11);
-
-        jMenuItem18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoSalida.png"))); // NOI18N
-        jMenuItem18.setText("SALIDAS");
-        jMenuItem18.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem18ActionPerformed(evt);
-            }
-        });
-        jMenu8.add(jMenuItem18);
-
-        jMenuBar1.add(jMenu8);
-
-        jMenu2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoZafra.png"))); // NOI18N
-        jMenu2.setText("ZAFRAS");
-        jMenu2.setFont(new java.awt.Font("Sitka Text", 1, 14)); // NOI18N
-        jMenu2.setMinimumSize(new java.awt.Dimension(200, 70));
-        jMenu2.setPreferredSize(new java.awt.Dimension(270, 70));
-        jMenu2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenu2ActionPerformed(evt);
-            }
-        });
-
-        jMenuItem10.setText("PARCELAS");
-        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem10ActionPerformed(evt);
-            }
-        });
-        jMenu2.add(jMenuItem10);
-        jMenu2.add(jSeparator16);
-
-        jMenuItem7.setText("ESTABLECIMIENTOS");
-        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem7ActionPerformed(evt);
-            }
-        });
-        jMenu2.add(jMenuItem7);
-        jMenu2.add(jSeparator14);
-
-        jMenuItem2.setText("SOCIOS");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
-            }
-        });
-        jMenu2.add(jMenuItem2);
-
-        jMenuBar1.add(jMenu2);
-
         jMenu3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoProducto.png"))); // NOI18N
         jMenu3.setText("PRODUCTOS");
         jMenu3.setToolTipText("");
@@ -426,6 +357,76 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jMenu3.add(jMenuItem23);
 
         jMenuBar1.add(jMenu3);
+
+        jMenu8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoInventario.png"))); // NOI18N
+        jMenu8.setText("INVENTARIOS");
+        jMenu8.setFont(new java.awt.Font("Sitka Text", 1, 14)); // NOI18N
+        jMenu8.setPreferredSize(new java.awt.Dimension(270, 70));
+        jMenu8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu8ActionPerformed(evt);
+            }
+        });
+
+        jMenuItem11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoEntrada.png"))); // NOI18N
+        jMenuItem11.setText("ENTRADAS");
+        jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem11ActionPerformed(evt);
+            }
+        });
+        jMenu8.add(jMenuItem11);
+        jMenu8.add(jSeparator11);
+
+        jMenuItem18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoSalida.png"))); // NOI18N
+        jMenuItem18.setText("SALIDAS");
+        jMenuItem18.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem18ActionPerformed(evt);
+            }
+        });
+        jMenu8.add(jMenuItem18);
+
+        jMenuBar1.add(jMenu8);
+
+        jMenu2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoEmpleados.png"))); // NOI18N
+        jMenu2.setText("ZAFRAS");
+        jMenu2.setFont(new java.awt.Font("Sitka Text", 1, 14)); // NOI18N
+        jMenu2.setMinimumSize(new java.awt.Dimension(200, 70));
+        jMenu2.setPreferredSize(new java.awt.Dimension(270, 70));
+        jMenu2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu2ActionPerformed(evt);
+            }
+        });
+
+        jMenuItem10.setText("PARCELAS");
+        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem10ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem10);
+        jMenu2.add(jSeparator16);
+
+        jMenuItem7.setText("ESTABLECIMIENTOS");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem7);
+        jMenu2.add(jSeparator14);
+
+        jMenuItem2.setText("SOCIOS");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem2);
+
+        jMenuBar1.add(jMenu2);
 
         jMenu4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoUsuario.png"))); // NOI18N
         jMenu4.setText("USUARIOS");
@@ -626,8 +627,8 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        /*ABMZafra abmzafra = new ABMZafra(this, false);
-        abmzafra.setVisible(true);*/
+        ABMEmpleado abmempleado = new ABMEmpleado(this, false);
+        abmempleado.setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jMenuItem18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem18ActionPerformed
