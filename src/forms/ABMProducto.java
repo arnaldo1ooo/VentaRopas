@@ -274,11 +274,10 @@ public final class ABMProducto extends javax.swing.JDialog {
         metodoscombo.setSelectedNombreItem(cbSubcategoria, "SIN ESPECIFICAR");
         taObs.setText("");
 
-        txtCodigo.setForeground(new Color(102, 102, 102));
-        txtCodigoProducto.setForeground(new Color(102, 102, 102));
-        txtDescripcion.setForeground(new Color(102, 102, 102));
-        txtPrecio.setForeground(new Color(102, 102, 102));
-        txtExistencia.setForeground(new Color(102, 102, 102));
+        lblCodigoProducto.setForeground(new Color(102, 102, 102));
+        lblDescripcion.setForeground(new Color(102, 102, 102));
+        lblPrecio.setForeground(new Color(102, 102, 102));
+        lblExistencia.setForeground(new Color(102, 102, 102));
 
         URL url = this.getClass().getResource("imagenproductos\\imageproducto_0.png");
         lbImagen.setIcon(new ImageIcon(url));

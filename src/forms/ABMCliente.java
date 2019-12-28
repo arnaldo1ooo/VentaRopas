@@ -224,11 +224,10 @@ public final class ABMCliente extends javax.swing.JDialog {
         txtTelefono.setText("");
         taObs.setText("");
         
-        txtCodigo.setForeground(new Color(102,102,102));
-        txtRucCedula.setForeground(new Color(102,102,102));
-        txtNombre.setForeground(new Color(102,102,102));
-        txtApellido.setForeground(new Color(102,102,102));
-        txtDireccion.setForeground(new Color(102,102,102));
+        lblRucCedula.setForeground(new Color(102,102,102));
+        lblNombre.setForeground(new Color(102,102,102));
+        lblApellido.setForeground(new Color(102,102,102));
+        lblDireccion.setForeground(new Color(102,102,102));
 
         txtBuscar.requestFocus();
     }
