@@ -40,6 +40,7 @@ public final class ABMProducto extends javax.swing.JDialog {
     Metodos metodos = new Metodos();
     MetodosCombo metodoscombo = new MetodosCombo();
     MetodosImagen metodosimagen = new MetodosImagen();
+    private String rutaimagenproducto = "imagenproductos\\imageproducto_";
 
     public ABMProducto(java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
@@ -102,6 +103,11 @@ public final class ABMProducto extends javax.swing.JDialog {
 
                         con.close();
                         st.close();
+
+                        String ultimoid = metodosimagen.ObtenerUltimoID();
+                        //Guardarimagen
+                        metodosimagen.GuardarImagen(rutaimagenproducto + ultimoid);
+
                         JOptionPane.showMessageDialog(this, "Se agrego correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
                         ModoEdicion(false);
                         Limpiar();
@@ -113,10 +119,6 @@ public final class ABMProducto extends javax.swing.JDialog {
                 } else {
                     System.out.println("No se guardo el registro");
                 }
-
-                String ultimoid = metodosimagen.ObtenerUltimoID();
-                //Guardarimagen
-                metodosimagen.GuardarImagen("imagenproductos\\imageproducto_" + ultimoid);
             }
         } catch (HeadlessException ex) {
             JOptionPane.showMessageDialog(null, "Completar los campos obligarios marcados con * ", "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -159,7 +161,7 @@ public final class ABMProducto extends javax.swing.JDialog {
                     pst.close();
 
                     //Guardarimagen
-                    metodosimagen.GuardarImagen("imagenproductos\\imageproducto_" + codigo);
+                    metodosimagen.GuardarImagen(rutaimagenproducto + codigo);
                 } catch (SQLException ex) {
                     System.out.println("Error al modificar registro " + ex);
                     JOptionPane.showMessageDialog(null, "Error al intentar modificar el registro", "Error", JOptionPane.INFORMATION_MESSAGE);
@@ -234,8 +236,8 @@ public final class ABMProducto extends javax.swing.JDialog {
         metodoscombo.setSelectedNombreItem(cbSubcategoria, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 6).toString());
         taObs.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 7).toString());
 
-        if (metodosimagen.LeerImagen(lbImagen, "imagenproductos\\imageproducto_" + txtCodigo.getText()) == false) {
-            URL url = this.getClass().getResource("imagenproductos\\imageproducto_0.png");
+        if (metodosimagen.LeerImagen(lbImagen, rutaimagenproducto + txtCodigo.getText()) == false) {
+            URL url = this.getClass().getResource(rutaimagenproducto + "0.png");
             lbImagen.setIcon(new ImageIcon(url));
         }
 
@@ -279,7 +281,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         lblPrecio.setForeground(new Color(102, 102, 102));
         lblExistencia.setForeground(new Color(102, 102, 102));
 
-        URL url = this.getClass().getResource("imagenproductos\\imageproducto_0.png");
+        URL url = this.getClass().getResource("/images/IconoProductoSinFoto.png");
         lbImagen.setIcon(new ImageIcon(url));
 
         txtBuscar.requestFocus();
@@ -755,7 +757,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         lbImagen.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
         lbImagen.setForeground(new java.awt.Color(255, 255, 255));
         lbImagen.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/SinFoto.png"))); // NOI18N
+        lbImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/IconoProductoSinFoto.png"))); // NOI18N
         lbImagen.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
         lbImagen.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
@@ -1144,8 +1146,8 @@ public final class ABMProducto extends javax.swing.JDialog {
 
     private void btnActualizarTablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarTablaActionPerformed
         TablaConsultaBD(txtBuscar.getText()); //Trae todos los registros
-        btnModificar.setEnabled(false);
-        btnEliminar.setEnabled(false);
+        Limpiar();
+        ModoEdicion(false);
     }//GEN-LAST:event_btnActualizarTablaActionPerformed
 
     private void btnCargarImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargarImagenActionPerformed
@@ -1160,7 +1162,7 @@ public final class ABMProducto extends javax.swing.JDialog {
     }//GEN-LAST:event_btnEliminarImagenActionPerformed
 
     private void btnPantallaCompletaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPantallaCompletaActionPerformed
-        VistaCompletaImagen vistacompleta = new VistaCompletaImagen("src/forms/producto/imagenproductos/image_" + txtCodigo.getText());
+        VistaCompletaImagen vistacompleta = new VistaCompletaImagen(rutaimagenproducto + txtCodigo.getText());
         metodos.centrarventanaJDialog(vistacompleta);
         vistacompleta.setVisible(true);
     }//GEN-LAST:event_btnPantallaCompletaActionPerformed
