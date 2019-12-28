@@ -16,7 +16,7 @@ public class Conexion {
     public ResultSet rs;
 
     //Modo host local
-    private static final String controlador = "com.mysql.cj.jdbc.Driver";
+    /* private static final String controlador = "com.mysql.cj.jdbc.Driver";
     private static final String usuarioDB = "root";
     private static final String passDB = "toor5127"; //Contrasena de la BD
     private static final String nombreDB = "ventaropas";
@@ -28,22 +28,20 @@ public class Conexion {
             + "&useLegacyDatetimeCode=false"
             + "&serverTimezone=UTC"
             + "&useSSL=false"
-            + "&allowPublicKeyRetrieval=true";
-
-    //Modo host online
-    /*private static final String controlador = "com.mysql.jdbc.Driver";
-    private static final String usuarioDB = "epiz_24934882";
-    private static final String passDB = "OrA4MhSv0LnhD9f"; //Contrasena de la BD
-    private static final String NombreBD = "epiz_24934882_ventaropas";
-    private static final String host = "sql309.epizy.com";
+            + "&allowPublicKeyRetrieval=true";*/
+    //Modo host remoto
+    private static final String controlador = "com.mysql.cj.jdbc.Driver";
+    private static final String usuarioDB = "visitante";
+    private static final String passDB = "toor5127"; //Contrasena de la BD
+    private static final String nombreBD = "ventaropas";
+    private static final String host = "192.168.88.240";
     private static final String puerto = "3306";
-    private static final String servidor = "jdbc:mysql://sql309.epizy.com:3306/" + NombreBD
+    private static final String servidor = "jdbc:mysql://" + host + ":" + puerto + "/" + nombreBD
             + "?useUnicode=true"
             + "&useJDBCCompliantTimezoneShift=true"
             + "&useLegacyDatetimeCode=false"
             + "&serverTimezone=UTC"
-            + "&useSSL=false";*/
-
+            + "&useSSL=false";
 
     public static Connection ConectarBasedeDatos() {
         Connection conexion;
@@ -51,7 +49,7 @@ public class Conexion {
             Class.forName(controlador);
             conexion = DriverManager.getConnection(servidor, usuarioDB, passDB);
             if (conexion != null) {
-                System.out.println("CONEXIÓN A " + nombreDB + ", EXITOSA..");
+                System.out.println("CONEXIÓN A " + nombreBD + ", EXITOSA..");
             }
         } catch (ClassNotFoundException ex) {
             System.out.println("Error1 al intentar conectar con la bd: " + ex);
@@ -73,7 +71,7 @@ public class Conexion {
         try {
             if (connection != null) {
                 connection.close();
-                System.out.println("DESCONEXIÓN DE " + nombreDB + ", EXITOSO..");
+                System.out.println("DESCONEXIÓN DE " + nombreBD + ", EXITOSO..");
                 if (st != null) {
                     st.close();
                     System.out.println("DESCONEXIÓN DE STATEMENT, EXITOSO..");
