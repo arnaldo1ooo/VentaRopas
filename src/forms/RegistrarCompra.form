@@ -30,12 +30,12 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jpPrincipal" alignment="0" pref="792" max="32767" attributes="0"/>
+          <Component id="jpPrincipal" alignment="0" pref="918" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jpPrincipal" alignment="0" pref="625" max="32767" attributes="0"/>
+          <Component id="jpPrincipal" alignment="0" pref="589" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -53,26 +53,22 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="jpBanner" alignment="1" pref="792" max="32767" attributes="0"/>
+              <Component id="jpBanner" alignment="1" pref="918" max="32767" attributes="0"/>
               <Group type="102" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jpProductos" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                                  <Component id="jpDatosCompra" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="jpDatosProducto" alignment="0" min="-2" pref="649" max="-2" attributes="0"/>
-                              </Group>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="jpDatosProducto" alignment="1" max="32767" attributes="0"/>
+                              <Component id="jpDatosCompra" max="32767" attributes="0"/>
+                              <Component id="jpProductos" alignment="1" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="103" groupAlignment="0" attributes="0">
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="jpBotones" min="-2" pref="122" max="-2" attributes="0"/>
                               <Group type="102" attributes="0">
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jpBotones1" min="-2" pref="125" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
-                                  <Component id="jpBotones" min="-2" pref="122" max="-2" attributes="0"/>
+                                  <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
+                                  <Component id="jpBotones1" pref="121" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -81,7 +77,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="lblCodigo9" min="-2" max="-2" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
-                                  <Component id="lblCodigo10" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblTotalCompra" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                                   <Component id="lblCodigo11" min="-2" pref="117" max="-2" attributes="0"/>
                               </Group>
@@ -97,30 +93,29 @@
               <Group type="102" alignment="0" attributes="0">
                   <Component id="jpBanner" min="-2" pref="59" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jpDatosCompra" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Component id="jpDatosProducto" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jpProductos" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
+                          <Component id="lblCodigo9" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Component id="lblTotalCompra" min="-2" pref="28" max="-2" attributes="0"/>
+                              <Component id="lblCodigo11" min="-2" pref="26" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
-                      <Group type="102" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
-                          <Component id="jpBotones" min="-2" pref="298" max="-2" attributes="0"/>
+                          <Component id="jpBotones" min="-2" pref="260" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                          <Component id="jpBotones1" min="-2" pref="179" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jpBotones1" min="-2" pref="179" max="-2" attributes="0"/>
-                      <Component id="jpProductos" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="lblCodigo9" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="lblCodigo10" min="-2" pref="28" max="-2" attributes="0"/>
-                      <Component id="lblCodigo11" min="-2" pref="26" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="9" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -217,13 +212,13 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
                       <Component id="btnNuevo" min="-2" pref="72" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnGuardar" min="-2" pref="72" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnCancelar" min="-2" pref="72" max="-2" attributes="0"/>
-                      <EmptySpace pref="35" max="32767" attributes="0"/>
+                      <EmptySpace pref="15" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -329,22 +324,14 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                          <Component id="txtCodigo" alignment="1" max="32767" attributes="0"/>
+                          <Component id="lblCodigo" alignment="0" pref="106" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                  <Component id="txtCodigo" alignment="1" max="32767" attributes="0"/>
-                                  <Component id="lblCodigo" alignment="0" pref="106" max="32767" attributes="0"/>
-                              </Group>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="cbProveedor" min="-2" pref="205" max="-2" attributes="0"/>
-                                  <Component id="lblRucCedula" min="-2" pref="201" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                          <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                              <Component id="txtCodigo1" alignment="1" max="32767" attributes="0"/>
-                              <Component id="lblCodigo1" alignment="0" min="-2" pref="106" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="cbProveedor" min="-2" pref="205" max="-2" attributes="0"/>
+                          <Component id="lblRucCedula" min="-2" pref="201" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                       <Component id="btnProveedor" min="-2" pref="36" max="-2" attributes="0"/>
@@ -358,6 +345,11 @@
                           <Component id="lblRucCedula2" max="32767" attributes="0"/>
                           <Component id="dcFechaCompra" max="32767" attributes="0"/>
                       </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                          <Component id="txtNumCompra" alignment="1" max="32767" attributes="0"/>
+                          <Component id="lblCodigo1" alignment="0" min="-2" pref="106" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -365,25 +357,24 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
+                      <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="2" attributes="0">
                           <Component id="lblCodigo" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="lblRucCedula" alignment="2" min="-2" pref="16" max="-2" attributes="0"/>
                           <Component id="lblRucCedula1" alignment="2" min="-2" pref="16" max="-2" attributes="0"/>
                           <Component id="lblRucCedula2" alignment="2" min="-2" pref="16" max="-2" attributes="0"/>
+                          <Component id="lblCodigo1" alignment="2" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+                      <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="2" attributes="0">
                           <Component id="txtCodigo" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="cbProveedor" alignment="2" min="-2" pref="28" max="-2" attributes="0"/>
                           <Component id="btnProveedor" alignment="2" min="-2" pref="36" max="-2" attributes="0"/>
                           <Component id="cbTipoDocumento" alignment="2" min="-2" pref="28" max="-2" attributes="0"/>
                           <Component id="dcFechaCompra" alignment="2" min="-2" pref="28" max="-2" attributes="0"/>
+                          <Component id="txtNumCompra" alignment="2" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
-                      <Component id="lblCodigo1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
-                      <Component id="txtCodigo1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -429,7 +420,7 @@
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;MetodosCombo&gt;"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JButton" name="btnProveedor">
@@ -489,7 +480,7 @@
                 <Property name="text" type="java.lang.String" value="N&#xb0; de compra"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtCodigo1">
+            <Component class="javax.swing.JTextField" name="txtNumCompra">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="SansSerif" size="12" style="0"/>
@@ -542,93 +533,104 @@
                           <Component id="lblRucCedula6" alignment="0" min="-2" pref="133" max="-2" attributes="0"/>
                           <Component id="txtCodigo6" alignment="0" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="32767" attributes="0"/>
+                      <Component id="lbImagen" min="-2" pref="146" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
-                              <Component id="lblCodigo7" max="32767" attributes="0"/>
-                              <EmptySpace min="-2" pref="104" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="2" attributes="0">
-                                  <Component id="lblDolar" alignment="2" min="-2" pref="51" max="-2" attributes="0"/>
-                                  <Component id="lblParaguay" alignment="2" min="-2" pref="51" max="-2" attributes="0"/>
+                                  <Component id="lblGuaranies" alignment="2" min="-2" pref="51" max="-2" attributes="0"/>
+                                  <Component id="lblEeuu" alignment="2" min="-2" pref="51" max="-2" attributes="0"/>
                                   <Component id="lblBrasil" alignment="2" min="-2" pref="51" max="-2" attributes="0"/>
                                   <Component id="lblDolar3" alignment="2" min="-2" pref="51" max="-2" attributes="0"/>
                               </Group>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="txtCodigo8" alignment="0" min="-2" pref="94" max="-2" attributes="0"/>
-                                  <Component id="txtGuaranies" alignment="0" min="-2" pref="94" max="-2" attributes="0"/>
+                                  <Component id="txtGuarani" alignment="0" min="-2" pref="94" max="-2" attributes="0"/>
+                                  <Component id="txtDolares" alignment="0" min="-2" pref="94" max="-2" attributes="0"/>
                                   <Component id="txtReales" alignment="0" min="-2" pref="94" max="-2" attributes="0"/>
                                   <Component id="txtCodigo14" alignment="0" min="-2" pref="94" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
                                       <Component id="lblCodigo13" alignment="0" max="32767" attributes="0"/>
                                       <Component id="lblReales" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="lbldolares" alignment="0" min="-2" pref="91" max="-2" attributes="0"/>
+                                      <Component id="lblGuaraniess" alignment="0" min="-2" pref="91" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="lbldolares1" min="-2" pref="91" max="-2" attributes="0"/>
+                                  <Component id="lblDolares" min="-2" pref="91" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+                              <Component id="lblCodigo7" min="-2" pref="238" max="-2" attributes="0"/>
                           </Group>
                       </Group>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="2" attributes="0">
-                          <Component id="lblCodigo4" alignment="2" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblCodigo6" alignment="2" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="2" pref="2" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="2" attributes="0">
-                          <Component id="txtCodigoProducto" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
-                          <Component id="btnProducto" alignment="2" min="-2" pref="36" max="-2" attributes="0"/>
-                          <Component id="txtExistenciaActual" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="lblRucCedula6" min="-2" pref="16" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                      <Component id="txtCodigo6" min="-2" pref="28" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="lblCodigo7" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="19" pref="19" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="2" attributes="0">
-                                  <Component id="lblDolar" alignment="2" min="-2" pref="27" max="-2" attributes="0"/>
-                                  <Component id="txtCodigo8" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
-                                  <Component id="lbldolares" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
+                                  <Component id="lblCodigo4" alignment="2" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblCodigo6" alignment="2" min="-2" max="-2" attributes="0"/>
                               </Group>
+                              <EmptySpace min="2" pref="2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="2" attributes="0">
+                                  <Component id="txtCodigoProducto" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
+                                  <Component id="btnProducto" alignment="2" min="-2" pref="36" max="-2" attributes="0"/>
+                                  <Component id="txtExistenciaActual" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="lblRucCedula6" min="-2" pref="16" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                              <Component id="txtCodigo6" min="-2" pref="28" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="2" attributes="0">
-                                  <Component id="lblParaguay" alignment="2" min="-2" pref="27" max="-2" attributes="0"/>
-                                  <Component id="txtGuaranies" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
-                                  <Component id="lbldolares1" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="lbImagen" min="-2" pref="146" max="-2" attributes="0"/>
+                                  <Group type="102" attributes="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="lblCodigo7" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <EmptySpace min="19" pref="19" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="2" attributes="0">
+                                                  <Component id="lblGuaranies" alignment="2" min="-2" pref="27" max="-2" attributes="0"/>
+                                                  <Component id="txtGuarani" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
+                                                  <Component id="lblGuaraniess" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="2" attributes="0">
+                                                  <Component id="lblEeuu" alignment="2" min="-2" pref="27" max="-2" attributes="0"/>
+                                                  <Component id="txtDolares" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
+                                                  <Component id="lblDolares" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                      </Group>
+                                      <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="2" attributes="0">
+                                          <Component id="lblBrasil" alignment="2" min="-2" pref="27" max="-2" attributes="0"/>
+                                          <Component id="txtReales" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
+                                          <Component id="lblReales" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="2" attributes="0">
+                                          <Component id="lblDolar3" alignment="2" min="-2" pref="27" max="-2" attributes="0"/>
+                                          <Component id="txtCodigo14" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
+                                          <Component id="lblCodigo13" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
                               </Group>
                           </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="2" attributes="0">
-                          <Component id="lblBrasil" alignment="2" min="-2" pref="27" max="-2" attributes="0"/>
-                          <Component id="txtReales" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
-                          <Component id="lblReales" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="2" attributes="0">
-                          <Component id="lblDolar3" alignment="2" min="-2" pref="27" max="-2" attributes="0"/>
-                          <Component id="txtCodigo14" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
-                          <Component id="lblCodigo13" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
-                      </Group>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -712,7 +714,7 @@
                 <Property name="text" type="java.lang.String" value="Precio actual"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtCodigo8">
+            <Component class="javax.swing.JTextField" name="txtGuarani">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="SansSerif" size="14" style="1"/>
@@ -723,30 +725,30 @@
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="lbldolares">
+            <Component class="javax.swing.JLabel" name="lblGuaraniess">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="SansSerif" size="12" style="0"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="2"/>
-                <Property name="text" type="java.lang.String" value="D&#xf3;lares"/>
+                <Property name="text" type="java.lang.String" value="Guaran&#xed;es"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="lblDolar">
-              <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/images/eeuu.png"/>
-                </Property>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JLabel" name="lblParaguay">
+            <Component class="javax.swing.JLabel" name="lblGuaranies">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/images/paraguay.png"/>
                 </Property>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtGuaranies">
+            <Component class="javax.swing.JLabel" name="lblEeuu">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/images/eeuu.png"/>
+                </Property>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="txtDolares">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="SansSerif" size="14" style="1"/>
@@ -757,7 +759,7 @@
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtGuaraniesActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtDolaresActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="lblBrasil">
@@ -820,13 +822,35 @@
                 <Property name="text" type="java.lang.String" value="Pesos argentinos"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="lbldolares1">
+            <Component class="javax.swing.JLabel" name="lblDolares">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="SansSerif" size="12" style="0"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="2"/>
-                <Property name="text" type="java.lang.String" value="Guaran&#xed;es"/>
+                <Property name="text" type="java.lang.String" value="D&#xf3;lares"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="lbImagen">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="sansserif" size="18" style="1"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                </Property>
+                <Property name="horizontalAlignment" type="int" value="0"/>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/images/IconoProductoSinFoto.png"/>
+                </Property>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.MatteColorBorderInfo">
+                    <MatteColorBorder>
+                      <Color PropertyName="color" blue="ff" green="ff" red="ff" type="rgb"/>
+                    </MatteColorBorder>
+                  </Border>
+                </Property>
+                <Property name="horizontalTextPosition" type="int" value="0"/>
               </Properties>
             </Component>
           </SubComponents>
@@ -850,20 +874,20 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="lblCodigo5" max="32767" attributes="0"/>
-                                  <Component id="txtCantidadAdquirida" max="32767" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="lblCodigo8" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="txtPrecioCompra" min="-2" pref="103" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+                                  <Component id="lblCodigo5" min="-2" max="-2" attributes="0"/>
+                                  <Component id="txtCantidadAdquirida" min="-2" pref="105" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="lblCodigo8" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" attributes="0">
+                                      <Component id="txtPrecioCompra" min="-2" pref="153" max="-2" attributes="0"/>
+                                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                                       <Component id="cbMoneda" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace pref="156" max="32767" attributes="0"/>
+                              <EmptySpace pref="239" max="32767" attributes="0"/>
                               <Component id="btnAnadir" min="-2" pref="36" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="btnEliminar" min="-2" pref="36" max="-2" attributes="0"/>
@@ -888,10 +912,10 @@
                       <Group type="103" groupAlignment="2" attributes="0">
                           <Component id="txtCantidadAdquirida" alignment="2" min="-2" pref="36" max="-2" attributes="0"/>
                           <Component id="txtPrecioCompra" alignment="2" min="-2" pref="36" max="-2" attributes="0"/>
+                          <Component id="cbMoneda" alignment="2" min="-2" pref="36" max="-2" attributes="0"/>
                           <Component id="btnAnadir" alignment="2" min="-2" pref="36" max="-2" attributes="0"/>
                           <Component id="btnEliminar" alignment="2" min="-2" pref="36" max="-2" attributes="0"/>
                           <Component id="jButton6" alignment="2" min="-2" pref="36" max="-2" attributes="0"/>
-                          <Component id="cbMoneda" alignment="1" min="-2" pref="36" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
                       <Component id="scPrincipal" min="-2" pref="103" max="-2" attributes="0"/>
@@ -982,6 +1006,7 @@
                     <StringItem index="3" value="Pesos argentinos"/>
                   </StringArray>
                 </Property>
+                <Property name="selectedIndex" type="int" value="1"/>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <AuxValues>
@@ -1016,9 +1041,9 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="lbldolares7" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="lbldolares4" alignment="0" max="32767" attributes="0"/>
-                          <Component id="lbldolares3" alignment="0" pref="99" max="32767" attributes="0"/>
+                          <Component id="lbldolares3" alignment="0" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="14" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -1137,7 +1162,7 @@
             <Property name="text" type="java.lang.String" value="Total de la compra"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="lblCodigo10">
+        <Component class="javax.swing.JLabel" name="lblTotalCompra">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="SansSerif" size="24" style="1"/>

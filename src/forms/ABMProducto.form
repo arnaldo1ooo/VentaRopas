@@ -30,7 +30,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jpPrincipal" alignment="0" pref="1064" max="32767" attributes="0"/>
+          <Component id="jpPrincipal" alignment="0" pref="1119" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -53,26 +53,26 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="jpBanner" alignment="1" pref="1064" max="32767" attributes="0"/>
-              <Group type="102" alignment="1" attributes="0">
-                  <Group type="103" groupAlignment="1" attributes="0">
-                      <Group type="102" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jtpEdicion" pref="0" max="32767" attributes="0"/>
-                      </Group>
+              <Component id="jpBanner" alignment="1" pref="1119" max="32767" attributes="0"/>
+              <Group type="102" attributes="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jpTabla" max="32767" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jpBotones" min="-2" pref="155" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                              <Group type="102" alignment="1" attributes="0">
+                                  <Component id="jpTabla" max="32767" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="jpBotones" min="-2" pref="155" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="jtpEdicion" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="369" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="380" max="-2" attributes="0"/>
                           <Component id="jpBotones2" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -114,7 +114,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
                       <Component id="lbBanner" min="-2" pref="965" max="-2" attributes="0"/>
-                      <EmptySpace pref="61" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -510,15 +510,16 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="1" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="lblCodigo" alignment="1" min="-2" pref="152" max="-2" attributes="0"/>
+                              <Component id="lblCodigoProducto" alignment="1" min="-2" pref="152" max="-2" attributes="0"/>
+                              <Component id="lblDescripcion" alignment="1" min="-2" pref="152" max="-2" attributes="0"/>
+                              <Component id="lblPrecio" alignment="1" min="-2" pref="152" max="-2" attributes="0"/>
+                              <Component id="lblTamano" alignment="1" min="-2" pref="152" max="-2" attributes="0"/>
+                              <Component id="lblExistencia" alignment="1" min="-2" pref="152" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Group type="102" attributes="0">
-                                  <Group type="103" groupAlignment="1" attributes="0">
-                                      <Component id="lblCodigoProducto" min="-2" pref="152" max="-2" attributes="0"/>
-                                      <Component id="lblCodigo" alignment="1" min="-2" pref="152" max="-2" attributes="0"/>
-                                      <Component id="lblDescripcion" alignment="1" min="-2" pref="152" max="-2" attributes="0"/>
-                                      <Component id="lblPrecio" alignment="1" min="-2" pref="152" max="-2" attributes="0"/>
-                                      <Component id="lblExistencia" alignment="1" min="-2" pref="152" max="-2" attributes="0"/>
-                                  </Group>
                                   <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
@@ -531,27 +532,27 @@
                                       <Component id="txtPrecio" alignment="0" min="-2" pref="259" max="-2" attributes="0"/>
                                       <Component id="txtExistencia" alignment="0" min="-2" pref="259" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="1" attributes="0">
-                                      <Group type="102" attributes="0">
-                                          <Component id="lblMoneda" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="lblObs" min="-2" pref="92" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Component id="lblCategoria" max="32767" attributes="0"/>
-                                          <Component id="lblSubcategoria" pref="138" max="32767" attributes="0"/>
-                                      </Group>
-                                  </Group>
                               </Group>
-                              <Component id="lblSubcategoria1" min="-2" pref="155" max="-2" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="cbTamano" min="-2" pref="257" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="lblMoneda" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="lblSubcategoria" alignment="0" min="-2" pref="92" max="-2" attributes="0"/>
+                              <Component id="lblObs" min="-2" pref="92" max="-2" attributes="0"/>
+                              <Component id="lblCategoria" alignment="0" min="-2" pref="92" max="-2" attributes="0"/>
+                              <Component id="lblSubcategoria1" min="-2" pref="92" max="-2" attributes="0"/>
                           </Group>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Group type="102" alignment="1" attributes="0">
                                   <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                                   <Component id="scpObs" min="-2" pref="245" max="-2" attributes="0"/>
                               </Group>
-                              <Group type="102" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="cbCategoria" alignment="0" min="-2" pref="243" max="-2" attributes="0"/>
@@ -560,7 +561,7 @@
                                   </Group>
                               </Group>
                           </Group>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
                           <Component id="lbImagen" min="-2" pref="168" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -574,67 +575,73 @@
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                              <Component id="lbImagen" alignment="0" min="-2" pref="168" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
-                                  <Component id="btnCargarImagen" min="-2" pref="31" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="btnEliminarImagen" min="-2" pref="31" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="btnPantallaCompleta" min="-2" pref="31" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="2" attributes="0">
-                                      <Component id="lblCodigo" alignment="2" min="-2" pref="28" max="-2" attributes="0"/>
-                                      <Component id="txtCodigo" alignment="2" min="-2" max="-2" attributes="0"/>
+                                      <Component id="cbCategoria" alignment="2" min="-2" pref="28" max="-2" attributes="0"/>
+                                      <Component id="lblCategoria" alignment="2" min="-2" pref="28" max="-2" attributes="0"/>
                                       <Component id="jLabel2" alignment="2" min="-2" pref="28" max="-2" attributes="0"/>
+                                      <Component id="txtCodigo" alignment="2" min="-2" max="-2" attributes="0"/>
+                                      <Component id="lblCodigo" alignment="2" min="-2" pref="28" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="2" attributes="0">
                                       <Component id="lblCodigoProducto" alignment="2" min="-2" pref="28" max="-2" attributes="0"/>
                                       <Component id="txtCodigoProducto" alignment="2" min="-2" max="-2" attributes="0"/>
+                                      <Component id="lblSubcategoria" alignment="2" min="-2" pref="28" max="-2" attributes="0"/>
+                                      <Component id="cbSubcategoria" alignment="2" min="-2" pref="28" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="2" attributes="0">
                                       <Component id="lblDescripcion" alignment="2" min="-2" pref="28" max="-2" attributes="0"/>
                                       <Component id="txtDescripcion" alignment="2" min="-2" max="-2" attributes="0"/>
+                                      <Component id="lblObs" alignment="2" min="-2" pref="28" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="lblPrecio" alignment="3" min="-2" pref="28" max="-2" attributes="0"/>
-                                      <Component id="txtPrecio" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="lblMoneda" alignment="3" min="-2" pref="28" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="2" attributes="0">
+                                      <Component id="lblPrecio" alignment="2" min="-2" pref="28" max="-2" attributes="0"/>
+                                      <Component id="txtPrecio" alignment="2" min="-2" max="-2" attributes="0"/>
+                                      <Component id="lblMoneda" alignment="2" min="-2" pref="28" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="lblExistencia" alignment="3" min="-2" pref="28" max="-2" attributes="0"/>
-                                      <Component id="txtExistencia" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="2" attributes="0">
+                                      <Component id="lblTamano" alignment="2" min="-2" pref="28" max="-2" attributes="0"/>
+                                      <Component id="cbTamano" alignment="2" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace pref="10" max="32767" attributes="0"/>
+                                  <Group type="103" groupAlignment="2" attributes="0">
+                                      <Component id="lblExistencia" alignment="2" min="-2" pref="28" max="-2" attributes="0"/>
+                                      <Component id="txtExistencia" alignment="2" min="-2" max="-2" attributes="0"/>
+                                      <Component id="lblSubcategoria1" alignment="2" min="-2" pref="28" max="-2" attributes="0"/>
+                                      <Component id="cbEstado" alignment="2" min="-2" pref="28" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="lblCategoria" alignment="3" min="-2" pref="28" max="-2" attributes="0"/>
-                                      <Component id="cbCategoria" alignment="3" min="-2" pref="28" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="lblSubcategoria" alignment="3" min="-2" pref="28" max="-2" attributes="0"/>
-                                      <Component id="cbSubcategoria" alignment="3" min="-2" pref="28" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace max="-2" attributes="0"/>
+                              <Group type="102" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="lblObs" min="-2" pref="28" max="-2" attributes="0"/>
-                                      <Component id="scpObs" min="-2" max="-2" attributes="0"/>
+                                      <Group type="102" attributes="0">
+                                          <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <Component id="btnCargarImagen" min="-2" pref="31" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="btnEliminarImagen" min="-2" pref="31" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="btnPantallaCompleta" min="-2" pref="31" max="-2" attributes="0"/>
+                                              </Group>
+                                              <Component id="lbImagen" alignment="0" min="-2" pref="168" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                      <Group type="102" attributes="0">
+                                          <EmptySpace min="74" pref="74" max="-2" attributes="0"/>
+                                          <Component id="scpObs" min="-2" max="-2" attributes="0"/>
+                                      </Group>
                                   </Group>
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
-                          <EmptySpace max="32767" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="lblSubcategoria1" alignment="3" min="-2" pref="28" max="-2" attributes="0"/>
-                              <Component id="cbEstado" alignment="3" min="-2" pref="28" max="-2" attributes="0"/>
-                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -748,7 +755,7 @@
                     <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtPrecioKeyTyped"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JLabel" name="lblExistencia">
+                <Component class="javax.swing.JLabel" name="lblTamano">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="SansSerif" size="12" style="0"/>
@@ -757,24 +764,8 @@
                       <Color blue="66" green="66" red="66" type="rgb"/>
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="4"/>
-                    <Property name="text" type="java.lang.String" value="Existencia*:"/>
+                    <Property name="text" type="java.lang.String" value="Tama&#xf1;o:"/>
                   </Properties>
-                </Component>
-                <Component class="javax.swing.JTextField" name="txtExistencia">
-                  <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="SansSerif" size="12" style="0"/>
-                    </Property>
-                    <Property name="horizontalAlignment" type="int" value="4"/>
-                    <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="0" green="0" red="0" type="rgb"/>
-                    </Property>
-                    <Property name="enabled" type="boolean" value="false"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtExistenciaKeyReleased"/>
-                    <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtExistenciaKeyTyped"/>
-                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="lblCategoria">
                   <Properties>
@@ -876,7 +867,7 @@
                       <Color blue="66" green="66" red="66" type="rgb"/>
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="2"/>
-                    <Property name="text" type="java.lang.String" value="D&#xf3;lares."/>
+                    <Property name="text" type="java.lang.String" value="Guaran&#xed;es"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="lbImagen">
@@ -971,6 +962,62 @@
                       </StringArray>
                     </Property>
                     <Property name="selectedIndex" type="int" value="1"/>
+                  </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                  </AuxValues>
+                </Component>
+                <Component class="javax.swing.JLabel" name="lblExistencia">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="SansSerif" size="12" style="0"/>
+                    </Property>
+                    <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="66" green="66" red="66" type="rgb"/>
+                    </Property>
+                    <Property name="horizontalAlignment" type="int" value="4"/>
+                    <Property name="text" type="java.lang.String" value="Existencia:"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JTextField" name="txtExistencia">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="SansSerif" size="12" style="0"/>
+                    </Property>
+                    <Property name="horizontalAlignment" type="int" value="4"/>
+                    <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="0" green="0" red="0" type="rgb"/>
+                    </Property>
+                    <Property name="enabled" type="boolean" value="false"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtExistenciaKeyReleased"/>
+                    <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtExistenciaKeyTyped"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JComboBox" name="cbTamano">
+                  <Properties>
+                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                      <StringArray count="16">
+                        <StringItem index="0" value="SIN DEFINIR"/>
+                        <StringItem index="1" value="1"/>
+                        <StringItem index="2" value="2"/>
+                        <StringItem index="3" value="3"/>
+                        <StringItem index="4" value="4"/>
+                        <StringItem index="5" value="5"/>
+                        <StringItem index="6" value="6"/>
+                        <StringItem index="7" value="7"/>
+                        <StringItem index="8" value="8"/>
+                        <StringItem index="9" value="9"/>
+                        <StringItem index="10" value="10"/>
+                        <StringItem index="11" value="11"/>
+                        <StringItem index="12" value="12"/>
+                        <StringItem index="13" value="13"/>
+                        <StringItem index="14" value="14"/>
+                        <StringItem index="15" value="15"/>
+                      </StringArray>
+                    </Property>
+                    <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
