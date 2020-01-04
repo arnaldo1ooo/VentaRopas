@@ -82,113 +82,119 @@ public class MetodosTXT {
     }
 
     //Poner puntos miles cada 3 numeros
-    public void PonerPuntosMilesKeyReleased(JTextField ElTXT) {
+    public String PonerPuntosMilesKeyReleased(String elNumero) {
+        String elNumeroModi = "";
         try {
-            String elNumero = ElTXT.getText();
             if (elNumero.equals("") == false) {
                 int siEsDecimal = elNumero.indexOf(",");
                 if (siEsDecimal != -1) { //Si es decimal
                     int parteEntera = (int) Double.parseDouble(elNumero.replace(",", "."));
                     String parteDecimal = elNumero.substring(elNumero.indexOf(','));
 
-                    elNumero = parteEntera + "";
-                    int longitud = elNumero.length();
+                    String parteEnteraString = parteEntera + "";
+                    int longitud = parteEnteraString.length();
+                    if (longitud == 1 || longitud == 2 || longitud == 3) {
+                        return elNumero;
+                    }
                     if (longitud == 4) {
-                        String sub1 = elNumero.substring(0, 1);
-                        String sub2 = elNumero.substring(1, 4);
-                        ElTXT.setText(sub1 + "." + sub2 + parteDecimal);
-                        return;
+                        String sub1 = parteEnteraString.substring(0, 1);
+                        String sub2 = parteEnteraString.substring(1, 4);
+                        elNumeroModi = sub1 + "." + sub2 + parteDecimal;
+                        return elNumeroModi;
                     }
                     if (longitud == 5) {
-                        String sub1 = elNumero.substring(0, 2);
-                        String sub2 = elNumero.substring(2, 5);
-                        ElTXT.setText(sub1 + "." + sub2 + parteDecimal);
-                        return;
+                        String sub1 = parteEnteraString.substring(0, 2);
+                        String sub2 = parteEnteraString.substring(2, 5);
+                        elNumeroModi = sub1 + "." + sub2 + parteDecimal;
+                        return elNumeroModi;
                     }
 
                     if (longitud == 6) {
-                        String sub1 = elNumero.substring(0, 3);
-                        String sub2 = elNumero.substring(3, 6);
-                        ElTXT.setText(sub1 + "." + sub2 + parteDecimal);
-                        return;
+                        String sub1 = parteEnteraString.substring(0, 3);
+                        String sub2 = parteEnteraString.substring(3, 6);
+                        elNumeroModi = sub1 + "." + sub2 + parteDecimal;
+                        return elNumeroModi;
                     }
 
                     if (longitud == 7) {
-                        String sub1 = elNumero.substring(0, 1);
-                        String sub2 = elNumero.substring(1, 4);
-                        String sub3 = elNumero.substring(4, 7);
-                        ElTXT.setText(sub1 + "." + sub2 + "." + sub3 + parteDecimal);
-                        return;
+                        String sub1 = parteEnteraString.substring(0, 1);
+                        String sub2 = parteEnteraString.substring(1, 4);
+                        String sub3 = parteEnteraString.substring(4, 7);
+                        elNumeroModi = sub1 + "." + sub2 + "." + sub3 + parteDecimal;
+                        return elNumeroModi;
                     }
 
                     if (longitud == 8) {
-                        String sub1 = elNumero.substring(0, 2);
-                        String sub2 = elNumero.substring(2, 5);
-                        String sub3 = elNumero.substring(5, 8);
-                        ElTXT.setText(sub1 + "." + sub2 + "." + sub3 + parteDecimal);
-                        return;
+                        String sub1 = parteEnteraString.substring(0, 2);
+                        String sub2 = parteEnteraString.substring(2, 5);
+                        String sub3 = parteEnteraString.substring(5, 8);
+                        elNumeroModi = sub1 + "." + sub2 + "." + sub3 + parteDecimal;
+                        return elNumeroModi;
                     }
 
                     if (longitud == 9) {
-                        String sub1 = elNumero.substring(0, 3);
-                        String sub2 = elNumero.substring(3, 6);
-                        String sub3 = elNumero.substring(6, 9);
-                        ElTXT.setText(sub1 + "." + sub2 + "." + sub3 + parteDecimal);
-                        return;
+                        String sub1 = parteEnteraString.substring(0, 3);
+                        String sub2 = parteEnteraString.substring(3, 6);
+                        String sub3 = parteEnteraString.substring(6, 9);
+                        elNumeroModi = sub1 + "." + sub2 + "." + sub3 + parteDecimal;
+                        return elNumeroModi;
                     }
                 } else { //Si no es decimal
                     elNumero = elNumero.replace(".", "");
-                    ElTXT.setText(elNumero);
+                    elNumeroModi = elNumero;
                     int longitud = elNumero.length();
 
                     if (longitud == 4) {
                         String sub1 = elNumero.substring(0, 1);
                         String sub2 = elNumero.substring(1, 4);
-                        ElTXT.setText(sub1 + "." + sub2);
-                        return;
+                        elNumeroModi = sub1 + "." + sub2;
+                        return elNumeroModi;
                     }
                     if (longitud == 5) {
                         String sub1 = elNumero.substring(0, 2);
                         String sub2 = elNumero.substring(2, 5);
-                        ElTXT.setText(sub1 + "." + sub2);
-                        return;
+                        elNumeroModi = sub1 + "." + sub2;
+                        return elNumeroModi;
                     }
 
                     if (longitud == 6) {
                         String sub1 = elNumero.substring(0, 3);
                         String sub2 = elNumero.substring(3, 6);
-                        ElTXT.setText(sub1 + "." + sub2);
-                        return;
+                        elNumeroModi = sub1 + "." + sub2;
+                        return elNumeroModi;
                     }
 
                     if (longitud == 7) {
                         String sub1 = elNumero.substring(0, 1);
                         String sub2 = elNumero.substring(1, 4);
                         String sub3 = elNumero.substring(4, 7);
-                        ElTXT.setText(sub1 + "." + sub2 + "." + sub3);
-                        return;
+                        elNumeroModi = sub1 + "." + sub2 + "." + sub3;
+                        return elNumeroModi;
                     }
 
                     if (longitud == 8) {
                         String sub1 = elNumero.substring(0, 2);
                         String sub2 = elNumero.substring(2, 5);
                         String sub3 = elNumero.substring(5, 8);
-                        ElTXT.setText(sub1 + "." + sub2 + "." + sub3);
-                        return;
+                        elNumeroModi = sub1 + "." + sub2 + "." + sub3;
+                        return elNumeroModi;
                     }
 
                     if (longitud == 9) {
                         String sub1 = elNumero.substring(0, 3);
                         String sub2 = elNumero.substring(3, 6);
                         String sub3 = elNumero.substring(6, 9);
-                        ElTXT.setText(sub1 + "." + sub2 + "." + sub3);
-                        return;
+                        elNumeroModi = sub1 + "." + sub2 + "." + sub3;
+                        return elNumeroModi;
                     }
                 }
             }
         } catch (NumberFormatException e) {
-            System.out.println("Numero no valido " + e);
+            elNumeroModi = elNumero;
+            System.out.println("Numero no valido, error al poner puntos decimales " + e);
+            e.printStackTrace();
         }
+        return elNumeroModi;
     }
 
     //Formatear double para que tenga solo dos numeros despues de la coma

@@ -17,7 +17,6 @@ import javax.swing.JComboBox;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
-import javax.swing.text.StyledEditorKit;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /**
@@ -72,14 +71,13 @@ public class MetodosCombo {
     public void CargarComboBox(JComboBox ElCombo, String sentencia) {
         ElCombo.removeAllItems(); //Vaciamos el combo
 
-        ElCombo.setRenderer(new DefaultListCellRenderer() {//Cambiar color de texto del combo cuando esta disabled
+        /*ElCombo.setRenderer(new DefaultListCellRenderer() {//Cambiar color de texto del combo cuando esta disabled
             @Override
             public void paint(Graphics g) {
                 setForeground(Color.BLACK);
                 super.paint(g);
             }
-        });
-
+        });*/
         try {
             AutoCompleteDecorator.decorate(ElCombo);
             System.out.println("Cargar combo (" + ElCombo.getName() + "): " + sentencia);

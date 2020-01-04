@@ -30,12 +30,15 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jpPrincipal" alignment="0" pref="918" max="32767" attributes="0"/>
+          <Component id="jpPrincipal" min="-2" pref="920" max="-2" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jpPrincipal" alignment="0" pref="589" max="32767" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <Component id="jpPrincipal" min="-2" pref="595" max="-2" attributes="0"/>
+              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -53,38 +56,35 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="jpBanner" alignment="1" pref="918" max="32767" attributes="0"/>
+              <Component id="jpBanner" alignment="1" pref="922" max="32767" attributes="0"/>
               <Group type="102" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="jpDatosProducto" alignment="1" max="32767" attributes="0"/>
-                              <Component id="jpDatosCompra" max="32767" attributes="0"/>
-                              <Component id="jpProductos" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                              <Component id="jpDatosCompra" alignment="0" max="32767" attributes="0"/>
+                              <Component id="jpDatosProducto" alignment="0" max="32767" attributes="0"/>
+                              <Component id="jpProductos" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jpBotones" min="-2" pref="122" max="-2" attributes="0"/>
-                              <Group type="102" attributes="0">
-                                  <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
-                                  <Component id="jpBotones1" pref="121" max="32767" attributes="0"/>
-                              </Group>
+                              <Component id="jpBotones1" min="-2" pref="123" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="lblCodigo9" min="-2" max="-2" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="lblTotalCompra" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                                   <Component id="lblCodigo11" min="-2" pref="117" max="-2" attributes="0"/>
                               </Group>
+                              <Component id="lblCodigo9" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace min="14" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -93,12 +93,20 @@
               <Group type="102" alignment="0" attributes="0">
                   <Component id="jpBanner" min="-2" pref="59" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
+                      <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jpDatosCompra" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Component id="jpDatosProducto" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
+                          <Component id="jpBotones" min="-2" pref="268" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
                           <Component id="jpProductos" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Component id="lblCodigo9" min="-2" max="-2" attributes="0"/>
@@ -108,14 +116,9 @@
                               <Component id="lblCodigo11" min="-2" pref="26" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
-                          <Component id="jpBotones" min="-2" pref="260" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                          <Component id="jpBotones1" min="-2" pref="179" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="jpBotones1" min="-2" pref="178" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="9" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -212,13 +215,13 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
                       <Component id="btnNuevo" min="-2" pref="72" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnGuardar" min="-2" pref="72" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnCancelar" min="-2" pref="72" max="-2" attributes="0"/>
-                      <EmptySpace pref="15" max="32767" attributes="0"/>
+                      <EmptySpace pref="19" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -279,7 +282,7 @@
             <Component class="javax.swing.JButton" name="btnCancelar">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="8a" green="8a" red="ff" type="rgb"/>
+                  <Color blue="65" green="65" red="ff" type="rgb"/>
                 </Property>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="sansserif" size="12" style="1"/>
@@ -324,11 +327,11 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                          <Component id="txtCodigo" alignment="1" max="32767" attributes="0"/>
-                          <Component id="lblCodigo" alignment="0" pref="106" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="lblCodigo1" min="-2" pref="106" max="-2" attributes="0"/>
+                          <Component id="txtNumCompra" min="-2" pref="133" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="cbProveedor" min="-2" pref="205" max="-2" attributes="0"/>
                           <Component id="lblRucCedula" min="-2" pref="201" max="-2" attributes="0"/>
@@ -336,70 +339,45 @@
                       <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                       <Component id="btnProveedor" min="-2" pref="36" max="-2" attributes="0"/>
                       <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="lblRucCedula1" min="-2" pref="126" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
                           <Component id="cbTipoDocumento" max="32767" attributes="0"/>
-                          <Component id="lblRucCedula1" pref="114" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                          <Component id="lblRucCedula2" max="32767" attributes="0"/>
-                          <Component id="dcFechaCompra" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="lblRucCedula2" min="-2" pref="106" max="-2" attributes="0"/>
+                          <Component id="dcFechaCompra" min="-2" pref="128" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                          <Component id="txtNumCompra" alignment="1" max="32767" attributes="0"/>
-                          <Component id="lblCodigo1" alignment="0" min="-2" pref="106" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="2" attributes="0">
-                          <Component id="lblCodigo" alignment="2" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblCodigo1" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="lblRucCedula" alignment="2" min="-2" pref="16" max="-2" attributes="0"/>
                           <Component id="lblRucCedula1" alignment="2" min="-2" pref="16" max="-2" attributes="0"/>
                           <Component id="lblRucCedula2" alignment="2" min="-2" pref="16" max="-2" attributes="0"/>
-                          <Component id="lblCodigo1" alignment="2" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="2" attributes="0">
-                          <Component id="txtCodigo" alignment="2" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtNumCompra" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="cbProveedor" alignment="2" min="-2" pref="28" max="-2" attributes="0"/>
                           <Component id="btnProveedor" alignment="2" min="-2" pref="36" max="-2" attributes="0"/>
                           <Component id="cbTipoDocumento" alignment="2" min="-2" pref="28" max="-2" attributes="0"/>
                           <Component id="dcFechaCompra" alignment="2" min="-2" pref="28" max="-2" attributes="0"/>
-                          <Component id="txtNumCompra" alignment="2" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace pref="10" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JLabel" name="lblCodigo">
-              <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="SansSerif" size="12" style="0"/>
-                </Property>
-                <Property name="horizontalAlignment" type="int" value="2"/>
-                <Property name="text" type="java.lang.String" value="C&#xf3;digo"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JTextField" name="txtCodigo">
-              <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="SansSerif" size="12" style="0"/>
-                </Property>
-                <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="0" green="0" red="0" type="rgb"/>
-                </Property>
-                <Property name="enabled" type="boolean" value="false"/>
-              </Properties>
-            </Component>
             <Component class="javax.swing.JLabel" name="lblRucCedula">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -413,9 +391,7 @@
             <Component class="javax.swing.JComboBox" name="cbProveedor">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="1">
-                    <StringItem index="0" value="SIN PROVEEDOR"/>
-                  </StringArray>
+                  <StringArray count="0"/>
                 </Property>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
@@ -434,9 +410,11 @@
             <Component class="javax.swing.JComboBox" name="cbTipoDocumento">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="2">
-                    <StringItem index="0" value="Factura"/>
-                    <StringItem index="1" value="Recibo"/>
+                  <StringArray count="4">
+                    <StringItem index="0" value="SIN ESPECIFICAR"/>
+                    <StringItem index="1" value="NOTA"/>
+                    <StringItem index="2" value="RECIBO"/>
+                    <StringItem index="3" value="FACTURA"/>
                   </StringArray>
                 </Property>
                 <Property name="selectedIndex" type="int" value="1"/>
@@ -531,41 +509,43 @@
                               </Group>
                           </Group>
                           <Component id="lblRucCedula6" alignment="0" min="-2" pref="133" max="-2" attributes="0"/>
-                          <Component id="txtCodigo6" alignment="0" max="32767" attributes="0"/>
+                          <Component id="txtDescripcionProducto" alignment="0" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace type="separate" max="32767" attributes="0"/>
+                      <EmptySpace pref="38" max="32767" attributes="0"/>
                       <Component id="lbImagen" min="-2" pref="146" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="2" attributes="0">
-                                  <Component id="lblGuaranies" alignment="2" min="-2" pref="51" max="-2" attributes="0"/>
-                                  <Component id="lblEeuu" alignment="2" min="-2" pref="51" max="-2" attributes="0"/>
-                                  <Component id="lblBrasil" alignment="2" min="-2" pref="51" max="-2" attributes="0"/>
-                                  <Component id="lblDolar3" alignment="2" min="-2" pref="51" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="txtGuarani" alignment="0" min="-2" pref="94" max="-2" attributes="0"/>
-                                  <Component id="txtDolares" alignment="0" min="-2" pref="94" max="-2" attributes="0"/>
-                                  <Component id="txtReales" alignment="0" min="-2" pref="94" max="-2" attributes="0"/>
-                                  <Component id="txtCodigo14" alignment="0" min="-2" pref="94" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="lblCodigo13" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="lblReales" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="lblGuaraniess" alignment="0" min="-2" pref="91" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="lblDolares" min="-2" pref="91" max="-2" attributes="0"/>
-                              </Group>
+                          <Group type="103" alignment="0" groupAlignment="2" attributes="0">
+                              <Component id="lblFlagBrasil" alignment="2" min="-2" pref="51" max="-2" attributes="0"/>
+                              <Component id="lblFlagPesosArg" alignment="2" min="-2" pref="51" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
-                              <Component id="lblCodigo7" min="-2" pref="238" max="-2" attributes="0"/>
+                          <Group type="103" alignment="0" groupAlignment="0" attributes="0">
+                              <Component id="lblFlagGuaranies" alignment="0" min="-2" pref="51" max="-2" attributes="0"/>
+                              <Component id="lblFlagEeuu" alignment="1" min="-2" pref="51" max="-2" attributes="0"/>
                           </Group>
+                      </Group>
+                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="txtPrecioDolares" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
+                          <Component id="txtPrecioGuaranies" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
+                          <Component id="txtPrecioReales" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
+                          <Component id="txtPrecioPesosArg" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="lblCodigo13" max="32767" attributes="0"/>
+                              <Component id="lblReales" min="-2" pref="65" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="lblDolares" alignment="1" min="-2" pref="65" max="-2" attributes="0"/>
+                          <Component id="lblGuaraniess" alignment="1" min="-2" pref="65" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="lblCodigo7" min="-2" pref="212" max="-2" attributes="0"/>
+                      <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -588,42 +568,36 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="lblRucCedula6" min="-2" pref="16" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                              <Component id="txtCodigo6" min="-2" pref="28" max="-2" attributes="0"/>
+                              <Component id="txtDescripcionProducto" min="-2" pref="28" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="lbImagen" min="-2" pref="146" max="-2" attributes="0"/>
                                   <Group type="102" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="lblCodigo7" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <EmptySpace min="19" pref="19" max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="2" attributes="0">
-                                                  <Component id="lblGuaranies" alignment="2" min="-2" pref="27" max="-2" attributes="0"/>
-                                                  <Component id="txtGuarani" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
-                                                  <Component id="lblGuaraniess" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
-                                              </Group>
-                                          </Group>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="2" attributes="0">
-                                                  <Component id="lblEeuu" alignment="2" min="-2" pref="27" max="-2" attributes="0"/>
-                                                  <Component id="txtDolares" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
-                                                  <Component id="lblDolares" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
-                                              </Group>
-                                          </Group>
+                                      <Component id="lblCodigo7" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="2" attributes="0">
+                                          <Component id="lblFlagEeuu" alignment="2" min="-2" pref="27" max="-2" attributes="0"/>
+                                          <Component id="txtPrecioDolares" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
+                                          <Component id="lblDolares" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="2" attributes="0">
-                                          <Component id="lblBrasil" alignment="2" min="-2" pref="27" max="-2" attributes="0"/>
-                                          <Component id="txtReales" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
+                                          <Component id="lblFlagGuaranies" alignment="2" min="-2" pref="27" max="-2" attributes="0"/>
+                                          <Component id="txtPrecioGuaranies" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
+                                          <Component id="lblGuaraniess" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="2" attributes="0">
+                                          <Component id="lblFlagBrasil" alignment="2" min="-2" pref="27" max="-2" attributes="0"/>
+                                          <Component id="txtPrecioReales" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
                                           <Component id="lblReales" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="2" attributes="0">
-                                          <Component id="lblDolar3" alignment="2" min="-2" pref="27" max="-2" attributes="0"/>
-                                          <Component id="txtCodigo14" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
+                                          <Component id="lblFlagPesosArg" alignment="2" min="-2" pref="27" max="-2" attributes="0"/>
+                                          <Component id="txtPrecioPesosArg" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
                                           <Component id="lblCodigo13" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
@@ -655,6 +629,9 @@
                 </Property>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
+              <Events>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtCodigoProductoKeyReleased"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="lblRucCedula6">
               <Properties>
@@ -674,7 +651,7 @@
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtCodigo6">
+            <Component class="javax.swing.JTextField" name="txtDescripcionProducto">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="SansSerif" size="12" style="0"/>
@@ -699,6 +676,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="SansSerif" size="14" style="1"/>
                 </Property>
+                <Property name="horizontalAlignment" type="int" value="4"/>
                 <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="0" green="0" red="0" type="rgb"/>
                 </Property>
@@ -714,11 +692,12 @@
                 <Property name="text" type="java.lang.String" value="Precio actual"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtGuarani">
+            <Component class="javax.swing.JTextField" name="txtPrecioGuaranies">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="SansSerif" size="14" style="1"/>
                 </Property>
+                <Property name="horizontalAlignment" type="int" value="4"/>
                 <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="0" green="0" red="0" type="rgb"/>
                 </Property>
@@ -734,53 +713,33 @@
                 <Property name="text" type="java.lang.String" value="Guaran&#xed;es"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="lblGuaranies">
+            <Component class="javax.swing.JLabel" name="lblFlagGuaranies">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/images/paraguay.png"/>
                 </Property>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="lblEeuu">
-              <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/images/eeuu.png"/>
-                </Property>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JTextField" name="txtDolares">
-              <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="SansSerif" size="14" style="1"/>
-                </Property>
-                <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="0" green="0" red="0" type="rgb"/>
-                </Property>
-                <Property name="enabled" type="boolean" value="false"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtDolaresActionPerformed"/>
-              </Events>
-            </Component>
-            <Component class="javax.swing.JLabel" name="lblBrasil">
+            <Component class="javax.swing.JLabel" name="lblFlagBrasil">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/images/brasil.png"/>
                 </Property>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtReales">
+            <Component class="javax.swing.JTextField" name="txtPrecioReales">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="SansSerif" size="14" style="1"/>
                 </Property>
+                <Property name="horizontalAlignment" type="int" value="4"/>
                 <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="0" green="0" red="0" type="rgb"/>
                 </Property>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtRealesActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtPrecioRealesActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="lblReales">
@@ -792,25 +751,26 @@
                 <Property name="text" type="java.lang.String" value="Reales"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="lblDolar3">
+            <Component class="javax.swing.JLabel" name="lblFlagPesosArg">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/images/argentina.png"/>
                 </Property>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtCodigo14">
+            <Component class="javax.swing.JTextField" name="txtPrecioPesosArg">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="SansSerif" size="14" style="1"/>
                 </Property>
+                <Property name="horizontalAlignment" type="int" value="4"/>
                 <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="0" green="0" red="0" type="rgb"/>
                 </Property>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCodigo14ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtPrecioPesosArgActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="lblCodigo13">
@@ -819,16 +779,7 @@
                   <Font name="SansSerif" size="12" style="0"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="2"/>
-                <Property name="text" type="java.lang.String" value="Pesos argentinos"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JLabel" name="lblDolares">
-              <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="SansSerif" size="12" style="0"/>
-                </Property>
-                <Property name="horizontalAlignment" type="int" value="2"/>
-                <Property name="text" type="java.lang.String" value="D&#xf3;lares"/>
+                <Property name="text" type="java.lang.String" value="Pesos arg."/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="lbImagen">
@@ -851,6 +802,37 @@
                   </Border>
                 </Property>
                 <Property name="horizontalTextPosition" type="int" value="0"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="lblFlagEeuu">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/images/eeuu.png"/>
+                </Property>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="txtPrecioDolares">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="SansSerif" size="14" style="1"/>
+                </Property>
+                <Property name="horizontalAlignment" type="int" value="4"/>
+                <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="0" type="rgb"/>
+                </Property>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtPrecioDolaresActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JLabel" name="lblDolares">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="SansSerif" size="12" style="0"/>
+                </Property>
+                <Property name="horizontalAlignment" type="int" value="2"/>
+                <Property name="text" type="java.lang.String" value="D&#xf3;lares"/>
               </Properties>
             </Component>
           </SubComponents>
@@ -880,14 +862,18 @@
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="lblCodigo8" min="-2" max="-2" attributes="0"/>
-                                  <Group type="102" attributes="0">
-                                      <Component id="txtPrecioCompra" min="-2" pref="153" max="-2" attributes="0"/>
-                                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                                      <Component id="cbMoneda" min="-2" max="-2" attributes="0"/>
+                                  <Component id="txtPrecioCompra" alignment="0" min="-2" pref="153" max="-2" attributes="0"/>
+                                  <Component id="lblCodigo8" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="cbMoneda" min="-2" pref="143" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                                      <Component id="lblCodigo10" min="-2" pref="64" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace pref="239" max="32767" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
                               <Component id="btnAnadir" min="-2" pref="36" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="btnEliminar" min="-2" pref="36" max="-2" attributes="0"/>
@@ -903,21 +889,29 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="2" attributes="0">
-                          <Component id="lblCodigo5" alignment="2" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblCodigo8" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="2" attributes="0">
+                                  <Component id="lblCodigo5" alignment="2" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblCodigo8" alignment="2" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                              <Component id="lblCodigo10" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="2" attributes="0">
                           <Component id="txtCantidadAdquirida" alignment="2" min="-2" pref="36" max="-2" attributes="0"/>
                           <Component id="txtPrecioCompra" alignment="2" min="-2" pref="36" max="-2" attributes="0"/>
-                          <Component id="cbMoneda" alignment="2" min="-2" pref="36" max="-2" attributes="0"/>
                           <Component id="btnAnadir" alignment="2" min="-2" pref="36" max="-2" attributes="0"/>
                           <Component id="btnEliminar" alignment="2" min="-2" pref="36" max="-2" attributes="0"/>
                           <Component id="jButton6" alignment="2" min="-2" pref="36" max="-2" attributes="0"/>
+                          <Component id="cbMoneda" alignment="2" min="-2" pref="36" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                       <Component id="scPrincipal" min="-2" pref="103" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
@@ -952,8 +946,11 @@
             <Component class="javax.swing.JTextField" name="txtPrecioCompra">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="SansSerif" size="12" style="0"/>
+                  <Font name="SansSerif" size="14" style="0"/>
                 </Property>
+                <Property name="horizontalAlignment" type="int" value="4"/>
+                <Property name="text" type="java.lang.String" value="0"/>
+                <Property name="toolTipText" type="java.lang.String" value=""/>
                 <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="0" green="0" red="0" type="rgb"/>
                 </Property>
@@ -972,8 +969,10 @@
             <Component class="javax.swing.JTextField" name="txtCantidadAdquirida">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="SansSerif" size="12" style="0"/>
+                  <Font name="SansSerif" size="14" style="0"/>
                 </Property>
+                <Property name="horizontalAlignment" type="int" value="4"/>
+                <Property name="text" type="java.lang.String" value="0"/>
                 <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="0" green="0" red="0" type="rgb"/>
                 </Property>
@@ -1000,18 +999,26 @@
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="4">
-                    <StringItem index="0" value="D&#xf3;lares"/>
-                    <StringItem index="1" value="Guaran&#xed;es"/>
+                    <StringItem index="0" value="Dolares"/>
+                    <StringItem index="1" value="Guaranies"/>
                     <StringItem index="2" value="Reales"/>
                     <StringItem index="3" value="Pesos argentinos"/>
                   </StringArray>
                 </Property>
-                <Property name="selectedIndex" type="int" value="1"/>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
+            </Component>
+            <Component class="javax.swing.JLabel" name="lblCodigo10">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="SansSerif" size="12" style="0"/>
+                </Property>
+                <Property name="horizontalAlignment" type="int" value="2"/>
+                <Property name="text" type="java.lang.String" value="Moneda"/>
+              </Properties>
             </Component>
           </SubComponents>
         </Container>
@@ -1041,15 +1048,15 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="lbldolares7" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="lbldolares4" alignment="0" max="32767" attributes="0"/>
-                          <Component id="lbldolares3" alignment="0" max="32767" attributes="0"/>
+                          <Component id="lbldolares3" alignment="0" pref="98" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace pref="13" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="lbldolares2" max="32767" attributes="0"/>
-                          <Component id="lbldolares5" alignment="0" max="32767" attributes="0"/>
-                          <Component id="lbldolares6" alignment="0" max="32767" attributes="0"/>
+                          <Component id="lblCambioGuaranies" max="32767" attributes="0"/>
+                          <Component id="lblCambioReales" alignment="0" max="32767" attributes="0"/>
+                          <Component id="lblCambioPesosArg" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
@@ -1061,22 +1068,22 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="lbldolares3" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
-                      <Component id="lbldolares2" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblCambioGuaranies" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="lbldolares4" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
-                      <Component id="lbldolares5" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblCambioReales" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="lbldolares7" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
-                      <Component id="lbldolares6" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="21" max="32767" attributes="0"/>
+                      <Component id="lblCambioPesosArg" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="20" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JLabel" name="lbldolares2">
+            <Component class="javax.swing.JLabel" name="lblCambioGuaranies">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="SansSerif" size="14" style="1"/>
@@ -1085,7 +1092,8 @@
                   <Color blue="99" green="0" red="0" type="rgb"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="2"/>
-                <Property name="text" type="java.lang.String" value="6.305"/>
+                <Property name="text" type="java.lang.String" value="0,000"/>
+                <Property name="toolTipText" type="java.lang.String" value=""/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="lbldolares3">
@@ -1112,7 +1120,7 @@
                 <Property name="text" type="java.lang.String" value="D&#xf3;lar x Real"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="lbldolares5">
+            <Component class="javax.swing.JLabel" name="lblCambioReales">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="SansSerif" size="14" style="1"/>
@@ -1121,10 +1129,10 @@
                   <Color blue="99" green="0" red="0" type="rgb"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="2"/>
-                <Property name="text" type="java.lang.String" value="4,205"/>
+                <Property name="text" type="java.lang.String" value="0,000"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="lbldolares6">
+            <Component class="javax.swing.JLabel" name="lblCambioPesosArg">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="SansSerif" size="14" style="1"/>
@@ -1133,7 +1141,7 @@
                   <Color blue="99" green="0" red="0" type="rgb"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="2"/>
-                <Property name="text" type="java.lang.String" value="85,00"/>
+                <Property name="text" type="java.lang.String" value="0,000"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="lbldolares7">
@@ -1171,7 +1179,7 @@
               <Color blue="33" green="66" red="0" type="rgb"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="2"/>
-            <Property name="text" type="java.lang.String" value="0,00"/>
+            <Property name="text" type="java.lang.String" value="0,000"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lblCodigo11">

@@ -9,6 +9,7 @@ import conexion.Conexion;
 import forms.ABMCliente;
 import forms.ABMEmpleado;
 import forms.ABMProducto;
+import forms.RegistrarCompra;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,6 +21,7 @@ import javax.swing.JOptionPane;
 import static login.Login.Alias;
 import metodos.ImagenFondo;
 import metodos.Metodos;
+import metodos.MetodosTXT;
 
 /**
  *
@@ -28,6 +30,7 @@ import metodos.Metodos;
 public class Principal extends javax.swing.JFrame implements Runnable {
 
     Metodos metodos = new Metodos();
+    MetodosTXT metodostxt = new MetodosTXT();
     Thread hilo;
 
     public Principal() {
@@ -35,10 +38,14 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         dpEscritorio.setBorder(new ImagenFondo());//Imagen de fondo al jdesktopane
         this.setExtendedState(Principal.MAXIMIZED_BOTH);//Maximizar ventana
         ObtenerHorayFecha();
-        setVisible(true);
         lbAlias.setText(Alias);
-
         PerfilUsuario();
+
+        lblCambioGuaranies.setText(metodos.ObtenerCambios("Dolares", "Guaranies"));
+        lblCambioReales.setText(metodos.ObtenerCambios("Dolares", "Reales"));
+        lblCambioPesosArg.setText(metodos.ObtenerCambios("Dolares", "Pesos argentinos"));
+
+        setVisible(true);
     }
 
     private void PerfilUsuario() {
@@ -77,6 +84,19 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jpBotones1 = new javax.swing.JPanel();
+        lblCambioGuaranies = new javax.swing.JLabel();
+        lbldolares3 = new javax.swing.JLabel();
+        lbldolares4 = new javax.swing.JLabel();
+        lblCambioReales = new javax.swing.JLabel();
+        lblCambioPesosArg = new javax.swing.JLabel();
+        lbldolares7 = new javax.swing.JLabel();
+        lblFlagEeuu = new javax.swing.JLabel();
+        lblFlagGuaranies = new javax.swing.JLabel();
+        lblFlagBrasil = new javax.swing.JLabel();
+        lblFlagArgentina = new javax.swing.JLabel();
+        lblEeuu1 = new javax.swing.JLabel();
+        lblEeuu2 = new javax.swing.JLabel();
         jpBarra = new javax.swing.JPanel();
         lbAlias = new javax.swing.JLabel();
         lbFechaTitulo = new javax.swing.JLabel();
@@ -87,6 +107,16 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jLabel2 = new javax.swing.JLabel();
         lblPerfil = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu8 = new javax.swing.JMenu();
+        jMenuItem11 = new javax.swing.JMenuItem();
+        jSeparator11 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem18 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuItem10 = new javax.swing.JMenuItem();
+        jSeparator16 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem7 = new javax.swing.JMenuItem();
+        jSeparator14 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem2 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem22 = new javax.swing.JMenuItem();
         jSeparator5 = new javax.swing.JPopupMenu.Separator();
@@ -101,16 +131,6 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jMenuItem20 = new javax.swing.JMenuItem();
         jSeparator13 = new javax.swing.JPopupMenu.Separator();
         jMenuItem23 = new javax.swing.JMenuItem();
-        jMenu8 = new javax.swing.JMenu();
-        jMenuItem11 = new javax.swing.JMenuItem();
-        jSeparator11 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem18 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        jMenuItem10 = new javax.swing.JMenuItem();
-        jSeparator16 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem7 = new javax.swing.JMenuItem();
-        jSeparator14 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem2 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
         jSeparator7 = new javax.swing.JPopupMenu.Separator();
@@ -165,32 +185,146 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             }
         });
 
+        jpBotones1.setBackground(new java.awt.Color(255, 255, 255));
+        jpBotones1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Cambio"));
+        jpBotones1.setPreferredSize(new java.awt.Dimension(100, 50));
+
+        lblCambioGuaranies.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
+        lblCambioGuaranies.setForeground(new java.awt.Color(0, 0, 153));
+        lblCambioGuaranies.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblCambioGuaranies.setText("  0,000");
+
+        lbldolares3.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lbldolares3.setForeground(new java.awt.Color(0, 0, 153));
+        lbldolares3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lbldolares3.setText("Dólar x Guaraníes");
+
+        lbldolares4.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lbldolares4.setForeground(new java.awt.Color(0, 0, 153));
+        lbldolares4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lbldolares4.setText("Dólar x Reales");
+
+        lblCambioReales.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
+        lblCambioReales.setForeground(new java.awt.Color(0, 0, 153));
+        lblCambioReales.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblCambioReales.setText("0,000");
+
+        lblCambioPesosArg.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
+        lblCambioPesosArg.setForeground(new java.awt.Color(0, 0, 153));
+        lblCambioPesosArg.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblCambioPesosArg.setText("0,000");
+
+        lbldolares7.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lbldolares7.setForeground(new java.awt.Color(0, 0, 153));
+        lbldolares7.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lbldolares7.setText("Dólar x Pesos arg.");
+
+        lblFlagEeuu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/eeuu.png"))); // NOI18N
+
+        lblFlagGuaranies.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/paraguay.png"))); // NOI18N
+
+        lblFlagBrasil.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/brasil.png"))); // NOI18N
+
+        lblFlagArgentina.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/argentina.png"))); // NOI18N
+
+        lblEeuu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/eeuu.png"))); // NOI18N
+
+        lblEeuu2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/eeuu.png"))); // NOI18N
+
+        javax.swing.GroupLayout jpBotones1Layout = new javax.swing.GroupLayout(jpBotones1);
+        jpBotones1.setLayout(jpBotones1Layout);
+        jpBotones1Layout.setHorizontalGroup(
+            jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpBotones1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpBotones1Layout.createSequentialGroup()
+                        .addComponent(lblCambioReales, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE)
+                        .addGap(114, 114, 114))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpBotones1Layout.createSequentialGroup()
+                        .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lbldolares7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblCambioGuaranies, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lbldolares3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lbldolares4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblCambioPesosArg, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap())
+                    .addGroup(jpBotones1Layout.createSequentialGroup()
+                        .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jpBotones1Layout.createSequentialGroup()
+                                .addComponent(lblFlagEeuu, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(lblFlagGuaranies, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jpBotones1Layout.createSequentialGroup()
+                                .addComponent(lblEeuu1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(lblFlagBrasil, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jpBotones1Layout.createSequentialGroup()
+                                .addComponent(lblEeuu2, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(lblFlagArgentina, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+        );
+        jpBotones1Layout.setVerticalGroup(
+            jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpBotones1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblFlagEeuu, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblFlagGuaranies, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbldolares3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblCambioGuaranies)
+                .addGap(18, 18, 18)
+                .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblEeuu1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblFlagBrasil, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbldolares4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblCambioReales)
+                .addGap(18, 18, 18)
+                .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblFlagArgentina, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblEeuu2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbldolares7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblCambioPesosArg)
+                .addContainerGap(185, Short.MAX_VALUE))
+        );
+
         dpEscritorio.setLayer(jButton1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dpEscritorio.setLayer(jButton2, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dpEscritorio.setLayer(jButton3, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dpEscritorio.setLayer(jpBotones1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout dpEscritorioLayout = new javax.swing.GroupLayout(dpEscritorio);
         dpEscritorio.setLayout(dpEscritorioLayout);
         dpEscritorioLayout.setHorizontalGroup(
             dpEscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dpEscritorioLayout.createSequentialGroup()
-                .addGap(57, 57, 57)
+                .addGap(39, 39, 39)
                 .addGroup(dpEscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jpBotones1, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0))
         );
         dpEscritorioLayout.setVerticalGroup(
             dpEscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jpBotones1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE)
             .addGroup(dpEscritorioLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
+                .addGap(32, 32, 32)
                 .addComponent(jButton2)
                 .addGap(18, 18, 18)
                 .addComponent(jButton3)
                 .addGap(18, 18, 18)
                 .addComponent(jButton1)
-                .addContainerGap(159, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jpBarra.setPreferredSize(new java.awt.Dimension(1586, 25));
@@ -281,6 +415,76 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jMenuBar1.setMinimumSize(new java.awt.Dimension(120, 70));
         jMenuBar1.setPreferredSize(new java.awt.Dimension(120, 70));
 
+        jMenu8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoCompra.png"))); // NOI18N
+        jMenu8.setText("COMPRAS");
+        jMenu8.setFont(new java.awt.Font("Sitka Text", 1, 14)); // NOI18N
+        jMenu8.setPreferredSize(new java.awt.Dimension(270, 70));
+        jMenu8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu8ActionPerformed(evt);
+            }
+        });
+
+        jMenuItem11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoRegistrarCompra.png"))); // NOI18N
+        jMenuItem11.setText("Registrar compra");
+        jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem11ActionPerformed(evt);
+            }
+        });
+        jMenu8.add(jMenuItem11);
+        jMenu8.add(jSeparator11);
+
+        jMenuItem18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoSalida.png"))); // NOI18N
+        jMenuItem18.setText("Compras");
+        jMenuItem18.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem18ActionPerformed(evt);
+            }
+        });
+        jMenu8.add(jMenuItem18);
+
+        jMenuBar1.add(jMenu8);
+
+        jMenu2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoEmpleados.png"))); // NOI18N
+        jMenu2.setText("VENTAS");
+        jMenu2.setFont(new java.awt.Font("Sitka Text", 1, 14)); // NOI18N
+        jMenu2.setMinimumSize(new java.awt.Dimension(200, 70));
+        jMenu2.setPreferredSize(new java.awt.Dimension(270, 70));
+        jMenu2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu2ActionPerformed(evt);
+            }
+        });
+
+        jMenuItem10.setText("PARCELAS");
+        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem10ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem10);
+        jMenu2.add(jSeparator16);
+
+        jMenuItem7.setText("ESTABLECIMIENTOS");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem7);
+        jMenu2.add(jSeparator14);
+
+        jMenuItem2.setText("SOCIOS");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem2);
+
+        jMenuBar1.add(jMenu2);
+
         jMenu3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoProducto.png"))); // NOI18N
         jMenu3.setText("PRODUCTOS");
         jMenu3.setToolTipText("");
@@ -358,76 +562,6 @@ public class Principal extends javax.swing.JFrame implements Runnable {
 
         jMenuBar1.add(jMenu3);
 
-        jMenu8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoInventario.png"))); // NOI18N
-        jMenu8.setText("INVENTARIOS");
-        jMenu8.setFont(new java.awt.Font("Sitka Text", 1, 14)); // NOI18N
-        jMenu8.setPreferredSize(new java.awt.Dimension(270, 70));
-        jMenu8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenu8ActionPerformed(evt);
-            }
-        });
-
-        jMenuItem11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoEntrada.png"))); // NOI18N
-        jMenuItem11.setText("ENTRADAS");
-        jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem11ActionPerformed(evt);
-            }
-        });
-        jMenu8.add(jMenuItem11);
-        jMenu8.add(jSeparator11);
-
-        jMenuItem18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoSalida.png"))); // NOI18N
-        jMenuItem18.setText("SALIDAS");
-        jMenuItem18.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem18ActionPerformed(evt);
-            }
-        });
-        jMenu8.add(jMenuItem18);
-
-        jMenuBar1.add(jMenu8);
-
-        jMenu2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoEmpleados.png"))); // NOI18N
-        jMenu2.setText("ZAFRAS");
-        jMenu2.setFont(new java.awt.Font("Sitka Text", 1, 14)); // NOI18N
-        jMenu2.setMinimumSize(new java.awt.Dimension(200, 70));
-        jMenu2.setPreferredSize(new java.awt.Dimension(270, 70));
-        jMenu2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenu2ActionPerformed(evt);
-            }
-        });
-
-        jMenuItem10.setText("PARCELAS");
-        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem10ActionPerformed(evt);
-            }
-        });
-        jMenu2.add(jMenuItem10);
-        jMenu2.add(jSeparator16);
-
-        jMenuItem7.setText("ESTABLECIMIENTOS");
-        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem7ActionPerformed(evt);
-            }
-        });
-        jMenu2.add(jMenuItem7);
-        jMenu2.add(jSeparator14);
-
-        jMenuItem2.setText("SOCIOS");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
-            }
-        });
-        jMenu2.add(jMenuItem2);
-
-        jMenuBar1.add(jMenu2);
-
         jMenu4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoUsuario.png"))); // NOI18N
         jMenu4.setText("USUARIOS");
         jMenu4.setFont(new java.awt.Font("Sitka Text", 1, 14)); // NOI18N
@@ -466,7 +600,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jMenu7.setFont(new java.awt.Font("Sitka Text", 1, 14)); // NOI18N
         jMenu7.setPreferredSize(new java.awt.Dimension(270, 70));
 
-        jMenuItem6.setText("TRUNCAR TABLAS");
+        jMenuItem6.setText("Cambio de moneda");
         jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem6ActionPerformed(evt);
@@ -641,8 +775,8 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_jMenu8ActionPerformed
 
     private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
-        /* TablaEntrada tablaentrada = new TablaEntrada(this, false);
-        tablaentrada.setVisible(true);*/
+        RegistrarCompra registrarcompra = new RegistrarCompra(this, false);
+        registrarcompra.setVisible(true);
     }//GEN-LAST:event_jMenuItem11ActionPerformed
 
     /**
@@ -727,12 +861,25 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     private javax.swing.JPopupMenu.Separator jSeparator8;
     private javax.swing.JPopupMenu.Separator jSeparator9;
     private javax.swing.JPanel jpBarra;
+    private javax.swing.JPanel jpBotones1;
     private javax.swing.JLabel lbAlias;
     private javax.swing.JLabel lbFecha;
     private javax.swing.JLabel lbFechaTitulo;
     private javax.swing.JLabel lbHora;
     private javax.swing.JLabel lbHoraTitulo;
+    private javax.swing.JLabel lblCambioGuaranies;
+    private javax.swing.JLabel lblCambioPesosArg;
+    private javax.swing.JLabel lblCambioReales;
+    private javax.swing.JLabel lblEeuu1;
+    private javax.swing.JLabel lblEeuu2;
+    private javax.swing.JLabel lblFlagArgentina;
+    private javax.swing.JLabel lblFlagBrasil;
+    private javax.swing.JLabel lblFlagEeuu;
+    private javax.swing.JLabel lblFlagGuaranies;
     private javax.swing.JLabel lblPerfil;
+    private javax.swing.JLabel lbldolares3;
+    private javax.swing.JLabel lbldolares4;
+    private javax.swing.JLabel lbldolares7;
     // End of variables declaration//GEN-END:variables
 
     @Override

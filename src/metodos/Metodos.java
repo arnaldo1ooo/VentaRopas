@@ -27,6 +27,7 @@ import javax.swing.table.TableColumnModel;
 import conexion.Conexion;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.text.DecimalFormat;
 import javax.swing.JDialog;
 import javax.swing.JInternalFrame;
 
@@ -69,9 +70,10 @@ public class Metodos {
 
         } catch (SQLException e) {
             System.out.println("Error al EjecutarSentencia ObtenerRSSentencia,  sentencia: " + sentencia + ",  ERROR " + e);
-        }
-        catch (NullPointerException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
             System.out.println("ObtenerRSSentencia no trajo ningun resultado (null),  sentencia: " + sentencia + ",  ERROR " + e);
+            e.printStackTrace();
         }
         return conexion;
     }
@@ -193,6 +195,7 @@ public class Metodos {
             rs.close();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex);
+            ex.printStackTrace();
         }
     }
 
@@ -208,5 +211,24 @@ public class Metodos {
         int x = (int) ((dimension.getWidth() - LaVentana.getWidth()) / 2);
         int y = (int) ((dimension.getHeight() - LaVentana.getHeight()) / 2);
         LaVentana.setLocation(x, y);
+    }
+
+    public String ObtenerCambios(String de, String a) {
+        Metodos metodos = new Metodos();
+        String valor = "";
+        try {
+            DecimalFormat df = new DecimalFormat("#.###");
+            Conexion con = metodos.ObtenerRSSentencia("SELECT cam_valor FROM cambio WHERE cam_de = '" + de + "' AND cam_a = '" + a + "'");
+            if (con.rs.next() == true) {
+                valor = df.format(Double.parseDouble(con.rs.getString(1)));
+                valor = valor.replace(".", ",");
+            }
+            con.DesconectarBasedeDatos();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al intentar obtener cambio " + ex);
+            System.out.println("Error al intentar obtener cambio " + ex);
+            ex.printStackTrace();
+        }
+        return valor;
     }
 }

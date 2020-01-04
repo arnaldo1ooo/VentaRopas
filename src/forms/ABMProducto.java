@@ -35,25 +35,22 @@ import metodos.VistaCompletaImagen;
  * @author Arnaldo Cantero
  */
 public final class ABMProducto extends javax.swing.JDialog {
-    
+
     MetodosTXT metodostxt = new MetodosTXT();
     Metodos metodos = new Metodos();
     MetodosCombo metodoscombo = new MetodosCombo();
     MetodosImagen metodosimagen = new MetodosImagen();
-    private String rutaimagenproducto = "imagenproductos\\imageproducto_";
-    
+    private final String rutaimagenproducto = "imagenproductos\\imageproducto_";
+
     public ABMProducto(java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
         initComponents();
 
-        /*ImagenBanner p = new ImagenBanner(); //Produce error, al ejecutar en el jar la ventana se ve blanco
-        jpBanner.add(p);*/
         TablaConsultaBD(txtBuscar.getText()); //Trae todos los registros
         txtBuscar.requestFocus();
-        
-        OrdenTabulador();
-        CargarComboBoxes();
 
+        CargarComboBoxes();
+        OrdenTabulador();
         //Shortcuts 
         btnGuardar.setMnemonic(KeyEvent.VK_F5);
     }
@@ -61,59 +58,67 @@ public final class ABMProducto extends javax.swing.JDialog {
 //--------------------------METODOS----------------------------//
     public void CargarComboBoxes() {
         //Carga los combobox con las consultas
+        metodoscombo.CargarComboBox(cbMarca, "SELECT mar_codigo, mar_descripcion FROM marca ORDER BY mar_descripcion");
+        metodoscombo.setSelectedNombreItem(cbMarca, "SIN ESPECIFICAR");
+
         metodoscombo.CargarComboBox(cbCategoria, "SELECT cat_codigo, cat_descripcion FROM categoria ORDER BY cat_descripcion");
         metodoscombo.setSelectedNombreItem(cbCategoria, "SIN ESPECIFICAR");
-        
+
         if (metodoscombo.ObtenerIdComboBox(cbCategoria) > -1) {
             metodoscombo.CargarComboBox(cbSubcategoria, "SELECT subcat_codigo, subcat_descripcion FROM subcategoria "
                     + "WHERE subcat_categoria = " + metodoscombo.ObtenerIdComboBox(cbCategoria) + " ORDER BY subcat_descripcion");
             metodoscombo.setSelectedNombreItem(cbSubcategoria, "SIN ESPECIFICAR");
         }
-        
+
         ModoEdicion(false);
     }
-    
+
     public void RegistroNuevo() {
         try {
             if (ComprobarCampos() == true) {
                 String codigoproducto = txtCodigoProducto.getText();
                 String descripcion = txtDescripcion.getText();
+                int marca = metodoscombo.ObtenerIdComboBox(cbMarca);
+                String tamano = cbTamano.getSelectedItem().toString();
+
                 String precio = (txtPrecio.getText().replace(".", "")).replace(",", ".");
                 precio = metodostxt.DosDecimalesDouble(precio); //Redondear double para que tenga solo dos numeros decimales
-                String tamano = cbTamano.getSelectedItem().toString();
+
                 String existencia = txtExistencia.getText();
                 int idsubcategoria = metodoscombo.ObtenerIdComboBox(cbSubcategoria);
                 String obs = taObs.getText();
                 int estado = cbEstado.getSelectedIndex();
-                
+
                 int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro crear este nuevo registro?", "Confirmación", JOptionPane.YES_OPTION);
-                
+
                 if (JOptionPane.YES_OPTION == confirmado) {
                     //REGISTRAR NUEVO
                     try {
                         Connection con;
                         con = (Connection) Conexion.ConectarBasedeDatos();
                         String sentencia = "CALL SP_ProductoAlta ('" + codigoproducto + "','" + descripcion + "','"
-                                + precio + "','" + tamano + "','" + existencia + "','" + idsubcategoria + "','" + obs + "','" + estado + "')";
+                                + marca + "','" + tamano + "','" + precio + "','" + existencia + "','" + idsubcategoria + "','"
+                                + obs + "','" + estado + "')";
                         System.out.println("Insertar registro: " + sentencia);
                         Statement st;
                         st = (Statement) con.createStatement();
                         st.executeUpdate(sentencia);
-                        
+
                         con.close();
                         st.close();
 
                         //Guardarimagen
                         String ultimoid = metodosimagen.ObtenerUltimoID();
                         metodosimagen.GuardarImagen(rutaimagenproducto + ultimoid);
-                        
+
                         JOptionPane.showMessageDialog(this, "Se agrego correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
+
                         ModoEdicion(false);
                         Limpiar();
                     } catch (HeadlessException ex) {
-                        JOptionPane.showMessageDialog(this, "Ocurrió un Error al intentar guardar el registro " + ex.getMessage());
+                        JOptionPane.showMessageDialog(this, "Ocurrió un Error al intentar guardar el registro:  " + ex.getMessage());
                     } catch (SQLException ex) {
-                        JOptionPane.showMessageDialog(this, "Ocurrió un Error al intentar guardar el registro " + ex.getMessage());
+                        JOptionPane.showMessageDialog(this, "Ocurrió un Error al intentar guardar el registro:  " + ex.getMessage());
                     }
                 } else {
                     System.out.println("No se guardo el registro");
@@ -125,7 +130,7 @@ public final class ABMProducto extends javax.swing.JDialog {
             txtDescripcion.requestFocus();
         }
     }
-    
+
     public void RegistroModificar() {
         if (ComprobarCampos() == true) {
             int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro de modificar este registro?", "Confirmación", JOptionPane.YES_OPTION);
@@ -135,19 +140,22 @@ public final class ABMProducto extends javax.swing.JDialog {
                     String codigo = txtCodigo.getText();
                     String codigoproducto = txtCodigoProducto.getText();
                     String descripcion = txtDescripcion.getText();
-                    
+                    int marca = metodoscombo.ObtenerIdComboBox(cbMarca);
+                    String tamano = cbTamano.getSelectedItem().toString();
+
                     String precio = (txtPrecio.getText().replace(".", "")).replace(",", ".");
                     precio = metodostxt.DosDecimalesDouble(precio); //Redondear double para que tenga solo dos numeros decimales
-                    String tamano = cbTamano.getSelectedItem().toString();
+
                     String existencia = txtExistencia.getText();
-                    int idsubcategoria = metodoscombo.ObtenerIdComboBox(cbSubcategoria);
+                    int subcategoria = metodoscombo.ObtenerIdComboBox(cbSubcategoria);
                     String obs = taObs.getText();
                     int estado = cbEstado.getSelectedIndex();
-                    
+
                     String sentencia = "CALL SP_ProductoModificar(" + codigo + ",'" + codigoproducto + "','" + descripcion + "','"
-                            + precio + "','" + tamano + "','" + existencia + "','" + idsubcategoria + "','" + obs + "','" + estado + "')";
+                            + marca + "','" + tamano + "','" + precio + "','" + existencia + "','" + subcategoria + "','"
+                            + obs + "','" + estado + "')";
                     System.out.println("Actualizar registro: " + sentencia);
-                    
+
                     Connection con;
                     con = conexion.Conexion.ConectarBasedeDatos();
                     PreparedStatement pst;
@@ -155,7 +163,7 @@ public final class ABMProducto extends javax.swing.JDialog {
                     pst.executeUpdate();
                     getToolkit().beep();
                     JOptionPane.showMessageDialog(null, "Registro modificado correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
-                    
+
                     con.close();
                     pst.close();
 
@@ -163,7 +171,7 @@ public final class ABMProducto extends javax.swing.JDialog {
                     metodosimagen.GuardarImagen(rutaimagenproducto + codigo);
                 } catch (SQLException ex) {
                     System.out.println("Error al modificar registro " + ex);
-                    JOptionPane.showMessageDialog(null, "Error al intentar modificar el registro", "Error", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Error al intentar modificar el registro:  " + ex.getMessage(), "Error", JOptionPane.INFORMATION_MESSAGE);
                 }
                 ModoEdicion(false);
                 Limpiar();
@@ -172,7 +180,7 @@ public final class ABMProducto extends javax.swing.JDialog {
             }
         }
     }
-    
+
     private void RegistroEliminar() {
         int filasel;
         String codigo;
@@ -194,12 +202,12 @@ public final class ABMProducto extends javax.swing.JDialog {
                         pst = con.prepareStatement(sentence);
                         pst.executeUpdate();
                         JOptionPane.showMessageDialog(null, "Registro eliminado correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
-                        
+
                         con.close();
                         pst.close();
                     } catch (SQLException ex) {
-                        JOptionPane.showMessageDialog(null, ex);
                         JOptionPane.showMessageDialog(null, "Error al intentar eliminar el registro", "Error", JOptionPane.INFORMATION_MESSAGE);
+                        ex.printStackTrace();
                     }
                 } else {
                     ModoEdicion(false);
@@ -211,44 +219,47 @@ public final class ABMProducto extends javax.swing.JDialog {
             System.out.println("Error al intentar eliminar registro" + e);
         }
     }
-    
+
     public void TablaConsultaBD(String filtro) {//Realiza la consulta de los productos que tenemos en la base de datos
         String nombresp = "SP_ProductoConsulta";
-        String titlesJtabla[] = {"Código", "Código del producto", "Descripción", "Precio", "Tamaño", "Existencia", "Categoria", "Subcategoria", "Observación", "Estado"}; //Debe tener la misma cantidad que titlesconsulta
-        String titlesconsulta[] = {"pro_codigo", "pro_identificador", "pro_descripcion", "pro_precio", "pro_tamano", "pro_existencia", "pro_categoria", "pro_subcategoria", "pro_obs", "pro_estado"};
-        
+        String titlesJtabla[] = {"Código", "Código del producto", "Descripción", "Marca", "Tamaño", "Precio", "Existencia", "Categoria", "Subcategoria", "Observación", "Estado"}; //Debe tener la misma cantidad que titlesconsulta
+        String titlesconsulta[] = {"pro_codigo", "pro_identificador", "pro_descripcion", "pro_marca", "pro_tamano", "pro_precio", "pro_existencia", "pro_categoria", "pro_subcategoria", "pro_obs", "pro_estado"};
+
         metodos.ConsultaFiltroTablaBD(tbPrincipal, titlesJtabla, titlesconsulta, nombresp, filtro, cbCampoBuscar);
         metodos.AnchuraColumna(tbPrincipal);
         lbCantRegistros.setText(metodos.CantRegistros + " Registros encontrados");
     }
-    
+
     private void ModoVistaPrevia() {
         txtCodigo.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0).toString());
         txtCodigoProducto.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 1).toString());
         txtDescripcion.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 2).toString());
-        
-        txtPrecio.setText((tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 3).toString()).replace(".", ","));
-        metodostxt.PonerPuntosMilesKeyReleased(txtPrecio);
+        metodoscombo.setSelectedNombreItem(cbMarca, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 3).toString());
         cbTamano.setSelectedItem(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 4).toString());
-        txtExistencia.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 5).toString());
-        metodoscombo.setSelectedNombreItem(cbCategoria, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 6).toString());
-        metodoscombo.setSelectedNombreItem(cbSubcategoria, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 7).toString());
-        taObs.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 8).toString());
-        cbEstado.setSelectedIndex(Integer.parseInt(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 9).toString()));
-        
+
+        txtPrecio.setText((tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 5).toString()).replace(".", ","));
+        txtPrecio.setText(metodostxt.PonerPuntosMilesKeyReleased(txtPrecio.getText().replace(",0", "")));
+
+        txtExistencia.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 6).toString());
+        metodoscombo.setSelectedNombreItem(cbCategoria, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 7).toString());
+        metodoscombo.setSelectedNombreItem(cbSubcategoria, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 8).toString());
+        taObs.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 9).toString());
+        cbEstado.setSelectedIndex(Integer.parseInt(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 10).toString()));
+
         if (metodosimagen.LeerImagen(lbImagen, rutaimagenproducto + txtCodigo.getText()) == false) {
             URL url = this.getClass().getResource("/images/IconoProductoSinFoto.png");
             lbImagen.setIcon(new ImageIcon(url));
         }
     }
-    
+
     private void ModoEdicion(boolean valor) {
         txtBuscar.setEnabled(!valor);
         tbPrincipal.setEnabled(!valor);
         txtCodigoProducto.setEnabled(valor);
         txtDescripcion.setEnabled(valor);
-        txtPrecio.setEnabled(valor);
+        cbMarca.setEnabled(valor);
         cbTamano.setEnabled(valor);
+        txtPrecio.setEnabled(valor);
         cbCategoria.setEnabled(valor);
         cbSubcategoria.setEnabled(valor);
         taObs.setEnabled(valor);
@@ -262,34 +273,35 @@ public final class ABMProducto extends javax.swing.JDialog {
         btnCargarImagen.setEnabled(valor);
         btnEliminarImagen.setEnabled(valor);
         btnPantallaCompleta.setEnabled(!valor);
-        
+
         txtCodigoProducto.requestFocus();
     }
-    
+
     private void Limpiar() {
         txtCodigo.setText("");
         txtCodigoProducto.setText("");
         txtDescripcion.setText("");
-        txtPrecio.setText("");
+        metodoscombo.setSelectedNombreItem(cbMarca, "SIN ESPECIFICAR");
         cbTamano.setSelectedIndex(0);
-        txtExistencia.setText("");
+        txtPrecio.setText("");
+        txtExistencia.setText("0");
         metodoscombo.setSelectedNombreItem(cbCategoria, "SIN ESPECIFICAR");
         metodoscombo.setSelectedNombreItem(cbSubcategoria, "SIN ESPECIFICAR");
         taObs.setText("");
         cbEstado.setSelectedIndex(1);
-        
+
         lblCodigoProducto.setForeground(new Color(102, 102, 102));
         lblDescripcion.setForeground(new Color(102, 102, 102));
         lblPrecio.setForeground(new Color(102, 102, 102));
         lblTamano.setForeground(new Color(102, 102, 102));
-        
+
         URL url = this.getClass().getResource("/images/IconoProductoSinFoto.png");
         lbImagen.setIcon(new ImageIcon(url));
-        
+
         txtBuscar.requestFocus();
         tbPrincipal.clearSelection();
     }
-    
+
     public boolean ComprobarCampos() {
         if (txtCodigoProducto.getText().equals("")) {
             lblCodigoProducto.setText("Ingrese el código del producto:");
@@ -298,7 +310,7 @@ public final class ABMProducto extends javax.swing.JDialog {
             Toolkit.getDefaultToolkit().beep();
             return false;
         }
-        
+
         if (txtCodigo.getText().equals("")) {
             try {
                 Conexion con = metodos.ObtenerRSSentencia("SELECT pro_identificador FROM producto "
@@ -316,7 +328,7 @@ public final class ABMProducto extends javax.swing.JDialog {
                 System.out.println("El codigo de producto ingresado no existe en la bd, aprobado: " + e);
             }
         }
-        
+
         if (txtDescripcion.getText().equals("")) {
             lblDescripcion.setText("Ingrese la descripción:");
             lblDescripcion.setForeground(Color.RED);
@@ -409,9 +421,8 @@ public final class ABMProducto extends javax.swing.JDialog {
         lblExistencia = new javax.swing.JLabel();
         txtExistencia = new javax.swing.JTextField();
         cbTamano = new javax.swing.JComboBox<>();
-        cbTamano1 = new javax.swing.JComboBox<>();
-        lblTamano1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        cbMarca = new javax.swing.JComboBox<>();
+        lblMarca = new javax.swing.JLabel();
         jpBotones2 = new javax.swing.JPanel();
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
@@ -455,6 +466,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/iconos40x40/IconoBuscar.png"))); // NOI18N
         jLabel10.setText("  BUSCAR ");
+        jLabel10.setIconTextGap(1);
 
         txtBuscar.setFont(new java.awt.Font("Tahoma", 1, 17)); // NOI18N
         txtBuscar.setForeground(new java.awt.Color(0, 153, 153));
@@ -523,7 +535,7 @@ public final class ABMProducto extends javax.swing.JDialog {
                     .addGroup(jpTablaLayout.createSequentialGroup()
                         .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtBuscar)
+                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 488, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lblBuscarCampo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -624,13 +636,13 @@ public final class ABMProducto extends javax.swing.JDialog {
             jpBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpBotonesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, 61, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnModificar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnModificar, javax.swing.GroupLayout.DEFAULT_SIZE, 61, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, 61, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnReporte, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnReporte, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -714,12 +726,12 @@ public final class ABMProducto extends javax.swing.JDialog {
         lblCategoria.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         lblCategoria.setForeground(new java.awt.Color(102, 102, 102));
         lblCategoria.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblCategoria.setText("Categoria*:");
+        lblCategoria.setText("Categoria:");
 
         lblSubcategoria.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         lblSubcategoria.setForeground(new java.awt.Color(102, 102, 102));
         lblSubcategoria.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblSubcategoria.setText("Subcategoría*:");
+        lblSubcategoria.setText("Subcategoría:");
 
         lblObs.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         lblObs.setForeground(new java.awt.Color(102, 102, 102));
@@ -741,6 +753,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel2.setText("Campos con (*) son obligatorios");
 
+        cbCategoria.setEnabled(false);
         cbCategoria.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cbCategoriaItemStateChanged(evt);
@@ -752,6 +765,7 @@ public final class ABMProducto extends javax.swing.JDialog {
             }
         });
 
+        cbSubcategoria.setEnabled(false);
         cbSubcategoria.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 cbSubcategoriaKeyReleased(evt);
@@ -760,7 +774,7 @@ public final class ABMProducto extends javax.swing.JDialog {
 
         lblMoneda.setForeground(new java.awt.Color(102, 102, 102));
         lblMoneda.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblMoneda.setText("Guaraníes");
+        lblMoneda.setText("Dolares");
 
         lbImagen.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
         lbImagen.setForeground(new java.awt.Color(255, 255, 255));
@@ -808,6 +822,7 @@ public final class ABMProducto extends javax.swing.JDialog {
 
         cbEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "INACTIVO", "ACTIVO" }));
         cbEstado.setSelectedIndex(1);
+        cbEstado.setEnabled(false);
 
         lblExistencia.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         lblExistencia.setForeground(new java.awt.Color(102, 102, 102));
@@ -816,6 +831,7 @@ public final class ABMProducto extends javax.swing.JDialog {
 
         txtExistencia.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         txtExistencia.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtExistencia.setText("0");
         txtExistencia.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         txtExistencia.setEnabled(false);
         txtExistencia.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -827,67 +843,61 @@ public final class ABMProducto extends javax.swing.JDialog {
             }
         });
 
-        cbTamano.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SIN DEFINIR", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15" }));
+        cbTamano.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SIN ESPECIFICAR", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15" }));
         cbTamano.setEnabled(false);
 
-        cbTamano1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SIN DEFINIR", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15" }));
-        cbTamano1.setEnabled(false);
+        cbMarca.setEnabled(false);
 
-        lblTamano1.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        lblTamano1.setForeground(new java.awt.Color(102, 102, 102));
-        lblTamano1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblTamano1.setText("Marca:");
+        lblMarca.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lblMarca.setForeground(new java.awt.Color(102, 102, 102));
+        lblMarca.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblMarca.setText("Marca:");
 
         javax.swing.GroupLayout jpEdicionLayout = new javax.swing.GroupLayout(jpEdicion);
         jpEdicion.setLayout(jpEdicionLayout);
         jpEdicionLayout.setHorizontalGroup(
             jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpEdicionLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpEdicionLayout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblCodigo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblCodigoProducto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblDescripcion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblTamano1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblMarca, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblTamano, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblPrecio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblExistencia, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(4, 4, 4)
-                .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpEdicionLayout.createSequentialGroup()
-                        .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2))
-                    .addComponent(txtCodigoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cbTamano1, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cbTamano, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtExistencia, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(2, 2, 2)
-                .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblMoneda)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(txtCodigoProducto, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtDescripcion, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpEdicionLayout.createSequentialGroup()
                         .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblSubcategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblObs, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpEdicionLayout.createSequentialGroup()
-                                .addGap(4, 4, 4)
-                                .addComponent(scpObs, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jpEdicionLayout.createSequentialGroup()
+                            .addComponent(txtExistencia)
+                            .addComponent(txtPrecio))
+                        .addGap(2, 2, 2)
+                        .addComponent(lblMoneda))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpEdicionLayout.createSequentialGroup()
+                        .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(cbMarca, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbTamano, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpEdicionLayout.createSequentialGroup()
+                                .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(cbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(cbSubcategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                    .addGroup(jpEdicionLayout.createSequentialGroup()
-                        .addComponent(lblSubcategoria1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jLabel2)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(45, 45, 45)
+                .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblSubcategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblObs, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblSubcategoria1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(2, 2, 2)
+                .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbSubcategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(scpObs, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lbImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -895,7 +905,7 @@ public final class ABMProducto extends javax.swing.JDialog {
                     .addComponent(btnEliminarImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCargarImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnPantallaCompleta, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(10, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jpEdicionLayout.setVerticalGroup(
             jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -917,9 +927,8 @@ public final class ABMProducto extends javax.swing.JDialog {
                             .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                            .addComponent(lblTamano1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cbTamano1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblMarca, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbMarca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                             .addComponent(lblTamano, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -938,7 +947,7 @@ public final class ABMProducto extends javax.swing.JDialog {
                 .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(lblPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblMoneda, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblSubcategoria1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -986,7 +995,7 @@ public final class ABMProducto extends javax.swing.JDialog {
             }
         });
 
-        btnCancelar.setBackground(new java.awt.Color(255, 138, 138));
+        btnCancelar.setBackground(new java.awt.Color(255, 101, 101));
         btnCancelar.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
         btnCancelar.setForeground(new java.awt.Color(255, 255, 255));
         btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos20x20/IconoCancelar.png"))); // NOI18N
@@ -1024,29 +1033,32 @@ public final class ABMProducto extends javax.swing.JDialog {
         jpPrincipal.setLayout(jpPrincipalLayout);
         jpPrincipalLayout.setHorizontalGroup(
             jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpBanner, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1119, Short.MAX_VALUE)
-            .addGroup(jpPrincipalLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jtpEdicion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpPrincipalLayout.createSequentialGroup()
-                        .addComponent(jpTabla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jpBotones, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jpBanner, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1091, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpPrincipalLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jpBotones2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(388, 388, 388))
+            .addGroup(jpPrincipalLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jtpEdicion, javax.swing.GroupLayout.PREFERRED_SIZE, 1079, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jpPrincipalLayout.createSequentialGroup()
+                        .addComponent(jpTabla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jpBotones, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jpPrincipalLayout.setVerticalGroup(
             jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpPrincipalLayout.createSequentialGroup()
                 .addComponent(jpBanner, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jpBotones, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
-                    .addComponent(jpTabla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpPrincipalLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jpTabla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jpPrincipalLayout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addComponent(jpBotones, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jtpEdicion, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -1061,7 +1073,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 1119, Short.MAX_VALUE)
+            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 1091, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1089,7 +1101,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         if (Character.isLetter(s)) {
             txtBuscar.setText(txtBuscar.getText().toUpperCase());
         }
-        
+
         if (tbPrincipal.getSelectedRowCount() != 0) {
             ModoVistaPrevia();
         } else {
@@ -1101,7 +1113,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         if (tbPrincipal.isEnabled() == true) {
             btnModificar.setEnabled(true);
             btnEliminar.setEnabled(true);
-            
+
             ModoVistaPrevia();
         }
     }//GEN-LAST:event_tbPrincipalMouseClicked
@@ -1146,7 +1158,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         if (tbPrincipal.isEnabled() == true) {
             btnModificar.setEnabled(true);
             btnEliminar.setEnabled(true);
-            
+
             ModoVistaPrevia();
         }
     }//GEN-LAST:event_tbPrincipalMousePressed
@@ -1166,7 +1178,7 @@ public final class ABMProducto extends javax.swing.JDialog {
     }//GEN-LAST:event_txtCodigoProductoKeyReleased
 
     private void txtPrecioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioKeyReleased
-        metodostxt.PonerPuntosMilesKeyReleased(txtPrecio);
+        txtPrecio.setText(metodostxt.PonerPuntosMilesKeyReleased(txtPrecio.getText()));
         metodostxt.TxtColorLabelKeyReleased(txtPrecio, lblPrecio, "Precio*:");
     }//GEN-LAST:event_txtPrecioKeyReleased
 
@@ -1189,7 +1201,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         if (metodoscombo.ObtenerIdComboBox(cbCategoria) > -1) {
             metodoscombo.CargarComboBox(cbSubcategoria, "SELECT subcat_codigo, subcat_descripcion FROM subcategoria "
                     + "WHERE subcat_categoria = " + metodoscombo.ObtenerIdComboBox(cbCategoria) + " ORDER BY subcat_descripcion");
-            
+
             if (cbSubcategoria.getItemCount() > 0 && cbSubcategoria.isEnabled()) {
                 cbSubcategoria.setSelectedIndex(0);
             }
@@ -1256,9 +1268,9 @@ public final class ABMProducto extends javax.swing.JDialog {
     private void txtExistenciaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtExistenciaKeyTyped
         // TODO add your handling code here:
     }//GEN-LAST:event_txtExistenciaKeyTyped
-    
+
     List<Component> ordenTabulador;
-    
+
     private void OrdenTabulador() {
         ordenTabulador = new ArrayList<>();
         ordenTabulador.add(txtCodigoProducto);
@@ -1270,31 +1282,31 @@ public final class ABMProducto extends javax.swing.JDialog {
         ordenTabulador.add(taObs);
         ordenTabulador.add(btnGuardar);
         setFocusTraversalPolicy(new PersonalizadoFocusTraversalPolicy());
-        
+
     }
-    
+
     private class PersonalizadoFocusTraversalPolicy extends FocusTraversalPolicy {
-        
+
         public Component getComponentAfter(Container focusCycleRoot, Component aComponent) {
             int currentPosition = ordenTabulador.indexOf(aComponent);
             currentPosition = (currentPosition + 1) % ordenTabulador.size();
             return (Component) ordenTabulador.get(currentPosition);
         }
-        
+
         public Component getComponentBefore(Container focusCycleRoot, Component aComponent) {
             int currentPosition = ordenTabulador.indexOf(aComponent);
             currentPosition = (ordenTabulador.size() + currentPosition - 1) % ordenTabulador.size();
             return (Component) ordenTabulador.get(currentPosition);
         }
-        
+
         public Component getFirstComponent(Container cntnr) {
             return (Component) ordenTabulador.get(0);
         }
-        
+
         public Component getLastComponent(Container cntnr) {
             return (Component) ordenTabulador.get(ordenTabulador.size() - 1);
         }
-        
+
         public Component getDefaultComponent(Container cntnr) {
             return (Component) ordenTabulador.get(0);
         }
@@ -1314,10 +1326,9 @@ public final class ABMProducto extends javax.swing.JDialog {
     private javax.swing.JComboBox cbCampoBuscar;
     private javax.swing.JComboBox<MetodosCombo> cbCategoria;
     private javax.swing.JComboBox<String> cbEstado;
+    private javax.swing.JComboBox<MetodosCombo> cbMarca;
     private javax.swing.JComboBox<MetodosCombo> cbSubcategoria;
     private javax.swing.JComboBox<String> cbTamano;
-    private javax.swing.JComboBox<String> cbTamano1;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jpBanner;
@@ -1336,13 +1347,13 @@ public final class ABMProducto extends javax.swing.JDialog {
     private javax.swing.JLabel lblCodigoProducto;
     private javax.swing.JLabel lblDescripcion;
     private javax.swing.JLabel lblExistencia;
+    private javax.swing.JLabel lblMarca;
     private javax.swing.JLabel lblMoneda;
     private javax.swing.JLabel lblObs;
     private javax.swing.JLabel lblPrecio;
     private javax.swing.JLabel lblSubcategoria;
     private javax.swing.JLabel lblSubcategoria1;
     private javax.swing.JLabel lblTamano;
-    private javax.swing.JLabel lblTamano1;
     private javax.swing.JScrollPane scPrincipal;
     private javax.swing.JScrollPane scpObs;
     private javax.swing.JTextArea taObs;
