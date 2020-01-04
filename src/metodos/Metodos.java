@@ -37,6 +37,7 @@ import javax.swing.JInternalFrame;
  */
 public class Metodos {
 
+    MetodosTXT metodostxt = new MetodosTXT();
     public int CantRegistros = 0;
 
     public Conexion ObtenerRSSentencia(String sentencia) { //con.Desconectar luego de usar el metodo
@@ -230,5 +231,27 @@ public class Metodos {
             ex.printStackTrace();
         }
         return valor;
+    }
+
+    public String SumarColumna(JTable LaTabla, int LaColumna) {
+        double valor = 0;
+        double totalDouble = 0;
+        String totalString = "0";
+
+        if (LaTabla.getRowCount() > 0) {
+            for (int i = 0; i < LaTabla.getRowCount(); i++) {
+                valor = Double.parseDouble(LaTabla.getValueAt(i, LaColumna).toString());
+                totalDouble = totalDouble + valor;
+            }
+
+            totalString = (totalDouble + "").replace(".", ",");
+            if ((totalDouble - (int) totalDouble) == 0) { //Si termina en ,0
+                totalString = totalString.replace(",0", "");
+                totalString = metodostxt.PonerPuntosMilesKeyReleased(totalString);
+            } else {
+                totalString = metodostxt.PonerPuntosMilesKeyReleased(totalString);
+            }
+        }
+        return totalString;
     }
 }
