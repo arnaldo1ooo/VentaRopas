@@ -17,7 +17,7 @@ public class Conexion {
 
     String TipoHost = "local";
     //Modo host local
-    private static final String controlador = "com.mysql.cj.jdbc.Driver";
+    /*private static final String controlador = "com.mysql.cj.jdbc.Driver";
     private static final String usuarioDB = "root";
     private static final String passDB = "toor5127"; //Contrasena de la BD
     private static final String nombreBD = "ventaropas";
@@ -29,11 +29,11 @@ public class Conexion {
             + "&useLegacyDatetimeCode=false"
             + "&serverTimezone=UTC"
             + "&useSSL=false"
-            + "&allowPublicKeyRetrieval=true";
+            + "&allowPublicKeyRetrieval=true";*/
 
     //Modo host remoto
-    /*private static final String controlador = "com.mysql.cj.jdbc.Driver";
-    private static final String usuarioDB = "visitante";
+    private static final String controlador = "com.mysql.cj.jdbc.Driver";
+    private static final String usuarioDB = "invitado";
     private static final String passDB = "toor5127"; //Contrasena de la BD
     private static final String nombreBD = "ventaropas";
     private static final String host = "192.168.88.240";
@@ -43,7 +43,7 @@ public class Conexion {
             + "&useJDBCCompliantTimezoneShift=true"
             + "&useLegacyDatetimeCode=false"
             + "&serverTimezone=UTC"
-            + "&useSSL=false";*/
+            + "&useSSL=false";
     public static Connection ConectarBasedeDatos() {
         Connection conexion;
         try {
@@ -54,15 +54,15 @@ public class Conexion {
             }
         } catch (ClassNotFoundException ex) {
             System.out.println("Error1 al intentar conectar con la bd: " + ex);
-            JOptionPane.showMessageDialog(null, ex, "Error1 en la Conexión con la BD " + ex.getMessage(), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Verifique que el nombre de la bd, el usuario y la contraseña esten correctas: " + ex, "Error1 en la Conexión con la BD " + ex.getMessage(), JOptionPane.ERROR_MESSAGE);
             conexion = null;
         } catch (SQLException ex) {
             System.out.println("Error2 al intentar conectar con la bd, verifique que el nombre de la bd, el usuario y la contraseña esten correctas: " + ex);
-            JOptionPane.showMessageDialog(null, ex, "Error2 en la Conexión con la BD, verifique que el nombre de la bd, el usuario y la contraseña esten correctas: " + ex.getMessage(), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Verifique que el nombre de la bd, el usuario y la contraseña esten correctas: " + ex, "Error2 en la Conexión con la BD" + ex.getMessage(), JOptionPane.ERROR_MESSAGE);
             conexion = null;
         } catch (Exception ex) {
             System.out.println("Error3 al intentar conectar con la bd: " + ex);
-            JOptionPane.showMessageDialog(null, ex, "Error3 en la Conexión con la BD " + ex.getMessage(), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Verifique que el nombre de la bd, el usuario y la contraseña esten correctas: " + ex, "Error3 en la Conexión con la BD " + ex.getMessage(), JOptionPane.ERROR_MESSAGE);
             conexion = null;
         }
         return conexion;
