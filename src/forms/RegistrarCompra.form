@@ -323,7 +323,7 @@
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="lblCodigo1" min="-2" pref="106" max="-2" attributes="0"/>
+                          <Component id="lblNumCompra" min="-2" pref="106" max="-2" attributes="0"/>
                           <Component id="txtNumCompra" min="-2" pref="133" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -339,11 +339,11 @@
                               <Component id="lblRucCedula1" min="-2" pref="126" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
-                          <Component id="cbTipoDocumento" max="32767" attributes="0"/>
+                          <Component id="cbTipoDocumento" pref="177" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="lblRucCedula2" min="-2" pref="106" max="-2" attributes="0"/>
+                          <Component id="lblFecha" min="-2" pref="106" max="-2" attributes="0"/>
                           <Component id="dcFechaCompra" min="-2" pref="128" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
@@ -354,10 +354,10 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="2" attributes="0">
-                          <Component id="lblCodigo1" alignment="2" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblNumCompra" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="lblRucCedula" alignment="2" min="-2" pref="16" max="-2" attributes="0"/>
                           <Component id="lblRucCedula1" alignment="2" min="-2" pref="16" max="-2" attributes="0"/>
-                          <Component id="lblRucCedula2" alignment="2" min="-2" pref="16" max="-2" attributes="0"/>
+                          <Component id="lblFecha" alignment="2" min="-2" pref="16" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="2" attributes="0">
@@ -429,7 +429,7 @@
                 <Property name="toolTipText" type="java.lang.String" value=""/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="lblRucCedula2">
+            <Component class="javax.swing.JLabel" name="lblFecha">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="SansSerif" size="12" style="0"/>
@@ -444,7 +444,7 @@
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="lblCodigo1">
+            <Component class="javax.swing.JLabel" name="lblNumCompra">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="SansSerif" size="12" style="0"/>
@@ -463,6 +463,9 @@
                 </Property>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
+              <Events>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtNumCompraKeyReleased"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -490,10 +493,10 @@
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="lblCodigo4" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
+                                  <Component id="lblCodigoProducto" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="txtCodigoProducto" min="-2" pref="161" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                                       <Component id="btnProducto" min="-2" pref="36" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
@@ -506,8 +509,8 @@
                           <Component id="lblTituloDescripcion" alignment="0" min="-2" pref="133" max="-2" attributes="0"/>
                           <Component id="txtDescripcionProducto" alignment="0" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="38" max="32767" attributes="0"/>
-                      <Component id="lbImagen" min="-2" pref="146" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="lbImagen" min="-2" pref="131" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="103" alignment="0" groupAlignment="2" attributes="0">
@@ -549,7 +552,7 @@
                           <Group type="102" attributes="0">
                               <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="2" attributes="0">
-                                  <Component id="lblCodigo4" alignment="2" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblCodigoProducto" alignment="2" min="-2" max="-2" attributes="0"/>
                                   <Component id="lblCodigo6" alignment="2" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="2" pref="2" max="-2" attributes="0"/>
@@ -603,7 +606,7 @@
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JLabel" name="lblCodigo4">
+            <Component class="javax.swing.JLabel" name="lblCodigoProducto">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="SansSerif" size="12" style="0"/>
@@ -643,6 +646,9 @@
                 </Property>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnProductoActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="txtDescripcionProducto">
               <Properties>
@@ -785,7 +791,7 @@
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/images/IconoProductoSinFoto.png"/>
+                  <Image iconType="3" name="/images/ImagenProductoSinFoto.png"/>
                 </Property>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.MatteColorBorderInfo">
@@ -850,13 +856,13 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="lblCodigo5" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblCantidadAdquirida" min="-2" max="-2" attributes="0"/>
                                   <Component id="txtCantidadAdquirida" min="-2" pref="105" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="txtPrecioCompra" alignment="0" min="-2" pref="153" max="-2" attributes="0"/>
-                                  <Component id="lblCodigo8" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblPrecioCompra" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -886,8 +892,8 @@
                           <Group type="102" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="2" attributes="0">
-                                  <Component id="lblCodigo5" alignment="2" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblCodigo8" alignment="2" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblCantidadAdquirida" alignment="2" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblPrecioCompra" alignment="2" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
@@ -951,8 +957,11 @@
                 </Property>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
+              <Events>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtPrecioCompraKeyReleased"/>
+              </Events>
             </Component>
-            <Component class="javax.swing.JLabel" name="lblCodigo8">
+            <Component class="javax.swing.JLabel" name="lblPrecioCompra">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="SansSerif" size="12" style="0"/>
@@ -973,10 +982,11 @@
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtCantidadAdquiridaKeyReleased"/>
                 <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtCantidadAdquiridaKeyTyped"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JLabel" name="lblCodigo5">
+            <Component class="javax.swing.JLabel" name="lblCantidadAdquirida">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="SansSerif" size="12" style="0"/>

@@ -55,12 +55,15 @@ public class MetodosTXT {
     }
 
     //Metodo en cual si el texto esta vacio, su label queda en gris, si esta cargado queda en verde
-    public void TxtColorLabelKeyReleased(JTextField ElTXT, JLabel ElLabel, String ElTexto) {
+    public void TxtColorLabelKeyReleased(JTextField ElTXT, JLabel ElLabel) {
         if (ElTXT.getText().equals("")) {
-            ElLabel.setForeground(new Color(102, 102, 102));
+            if (ElLabel.getForeground() == Color.RED) { //Si esta en rojo, y es vacio entonces no hace nada
+                return;
+            }
+
+            ElLabel.setForeground(new Color(102, 102, 102)); //Gris
         } else {
-            ElLabel.setText(ElTexto); //Vuelve a poner el texto original ya que cuando hay un error cambia
-            ElLabel.setForeground(new Color(0, 153, 51));
+            ElLabel.setForeground(new Color(0, 153, 51)); //Verde
         }
     }
 

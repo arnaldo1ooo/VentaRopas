@@ -512,12 +512,12 @@
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" attributes="0">
                               <Component id="lblCodigo" alignment="1" max="-2" attributes="0"/>
                               <Component id="lblNombre" alignment="1" max="-2" attributes="0"/>
                               <Component id="lblApellido" alignment="1" max="-2" attributes="0"/>
-                              <Component id="lblRucCedula" min="-2" pref="142" max="-2" attributes="0"/>
+                              <Component id="lblRucCedula" min="-2" pref="94" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" max="-2" attributes="0">
@@ -535,7 +535,7 @@
                               <Component id="lblObs" alignment="1" max="32767" attributes="0"/>
                               <Component id="lblEmail" alignment="1" max="32767" attributes="0"/>
                               <Component id="lblTelefono" alignment="1" max="32767" attributes="0"/>
-                              <Component id="lblDireccion" alignment="1" pref="81" max="32767" attributes="0"/>
+                              <Component id="lblDireccion" alignment="1" pref="105" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" max="-2" attributes="0">
@@ -544,7 +544,7 @@
                               <Component id="txtDireccion" alignment="0" max="32767" attributes="0"/>
                               <Component id="scpObs" pref="274" max="32767" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="80" max="32767" attributes="0"/>
+                          <EmptySpace pref="104" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>

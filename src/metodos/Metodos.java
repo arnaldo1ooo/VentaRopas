@@ -30,6 +30,8 @@ import java.awt.Toolkit;
 import java.text.DecimalFormat;
 import javax.swing.JDialog;
 import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 /**
  *
@@ -207,7 +209,7 @@ public class Metodos {
         LaVentana.setLocation(x, y);
     }
 
-    public void centrarventanaJDialog(JDialog LaVentana) {
+    public void CentrarVentanaJDialog(JDialog LaVentana) {
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((dimension.getWidth() - LaVentana.getWidth()) / 2);
         int y = (int) ((dimension.getHeight() - LaVentana.getHeight()) / 2);
@@ -253,5 +255,16 @@ public class Metodos {
             }
         }
         return totalString;
+    }
+
+    //Comprueba si el campo está vacio, pone el titulo en rojo si es vacio
+    public boolean ValidarCampoVacio(JTextField ElTXT, JLabel ElTitulo) {
+        if (ElTXT.getText().equals("")) { //Si es vacio pone el titulo en rojo
+            ElTitulo.setForeground(Color.RED);
+            ElTXT.requestFocus();
+            JOptionPane.showMessageDialog(null, "Complete el campo con titulo en rojo", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
     }
 }

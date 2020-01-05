@@ -234,11 +234,19 @@ public final class ABMCliente extends javax.swing.JDialog {
     }
 
     public boolean ComprobarCampos() {
-        if (txtRucCedula.getText().equals("")) {
-            lblRucCedula.setText("Ingrese el RUC/CI:");
-            lblRucCedula.setForeground(Color.RED);
-            lblRucCedula.requestFocus();
-            Toolkit.getDefaultToolkit().beep();
+        if (metodos.ValidarCampoVacio(txtRucCedula, lblRucCedula) == false) {
+            return false;
+        }
+
+        if (metodos.ValidarCampoVacio(txtNombre, lblNombre) == false) {
+            return false;
+        }
+
+        if (metodos.ValidarCampoVacio(txtApellido, lblApellido) == false) {
+            return false;
+        }
+
+        if (metodos.ValidarCampoVacio(txtDireccion, lblDireccion) == false) {
             return false;
         }
 
@@ -248,7 +256,7 @@ public final class ABMCliente extends javax.swing.JDialog {
                         + "WHERE cli_ruccedula='" + txtRucCedula.getText() + "'");
                 if (con.rs.next() == true) { //Si ya existe el numero de cedula en la bd de clientes
                     System.out.println("El CI ingresado ya existe en la bd");
-                    lblRucCedula.setText("El Ruc o CI ya existe: ");
+                    JOptionPane.showMessageDialog(null, "El RUC o CI ya se encuentra registrado", "Error", JOptionPane.ERROR_MESSAGE);
                     lblRucCedula.setForeground(Color.RED);
                     lblRucCedula.requestFocus();
                     con.DesconectarBasedeDatos();
@@ -260,28 +268,6 @@ public final class ABMCliente extends javax.swing.JDialog {
             } catch (NullPointerException e) {
                 System.out.println("La CI ingresada no existe en la bd, aprobado: " + e);
             }
-        }
-
-        if (txtNombre.getText().equals("")) {
-            lblNombre.setText("Ingrese el nombre:");
-            lblNombre.setForeground(Color.RED);
-            lblNombre.requestFocus();
-            Toolkit.getDefaultToolkit().beep();
-            return false;
-        }
-        if (txtApellido.getText().equals("")) {
-            lblApellido.setText("Ingrese el apellido:");
-            lblApellido.setForeground(Color.RED);
-            lblApellido.requestFocus();
-            Toolkit.getDefaultToolkit().beep();
-            return false;
-        }
-        if (txtDireccion.getText().equals("")) {
-            lblDireccion.setText("Ingrese la dirección:");
-            lblDireccion.setForeground(Color.RED);
-            lblDireccion.requestFocus();
-            Toolkit.getDefaultToolkit().beep();
-            return false;
         }
         return true;
     }
@@ -707,7 +693,7 @@ public final class ABMCliente extends javax.swing.JDialog {
                     .addComponent(lblCodigo)
                     .addComponent(lblNombre)
                     .addComponent(lblApellido)
-                    .addComponent(lblRucCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblRucCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(4, 4, 4)
                 .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(txtNombre, javax.swing.GroupLayout.Alignment.LEADING)
@@ -722,14 +708,14 @@ public final class ABMCliente extends javax.swing.JDialog {
                     .addComponent(lblObs, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblEmail, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblTelefono, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblDireccion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE))
+                    .addComponent(lblDireccion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE))
                 .addGap(4, 4, 4)
                 .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(txtEmail)
                     .addComponent(txtTelefono)
                     .addComponent(txtDireccion, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(scpObs, javax.swing.GroupLayout.DEFAULT_SIZE, 274, Short.MAX_VALUE))
-                .addContainerGap(80, Short.MAX_VALUE))
+                .addContainerGap(104, Short.MAX_VALUE))
         );
         jpEdicionLayout.setVerticalGroup(
             jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -973,7 +959,7 @@ public final class ABMCliente extends javax.swing.JDialog {
 
     private void txtDireccionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDireccionKeyReleased
         metodostxt.TxtMayusKeyReleased(txtDireccion, evt);
-        metodostxt.TxtColorLabelKeyReleased(txtDireccion, lblDireccion, "Dirección*:");
+        metodostxt.TxtColorLabelKeyReleased(txtDireccion, lblDireccion);
     }//GEN-LAST:event_txtDireccionKeyReleased
 
     private void txtDireccionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDireccionKeyPressed
@@ -992,7 +978,7 @@ public final class ABMCliente extends javax.swing.JDialog {
     }//GEN-LAST:event_txtRucCedulaKeyTyped
 
     private void txtRucCedulaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRucCedulaKeyReleased
-        metodostxt.TxtColorLabelKeyReleased(txtRucCedula, lblRucCedula, "RUC/CI*:");
+        metodostxt.TxtColorLabelKeyReleased(txtRucCedula, lblRucCedula);
     }//GEN-LAST:event_txtRucCedulaKeyReleased
 
     private void txtRucCedulaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRucCedulaKeyPressed
@@ -1015,7 +1001,7 @@ public final class ABMCliente extends javax.swing.JDialog {
     }//GEN-LAST:event_txtApellidoKeyTyped
 
     private void txtApellidoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidoKeyReleased
-        metodostxt.TxtColorLabelKeyReleased(txtApellido, lblApellido, "Apellido*:");
+        metodostxt.TxtColorLabelKeyReleased(txtApellido, lblApellido);
         metodostxt.TxtMayusKeyReleased(txtApellido, evt);
     }//GEN-LAST:event_txtApellidoKeyReleased
 
@@ -1027,7 +1013,7 @@ public final class ABMCliente extends javax.swing.JDialog {
     }//GEN-LAST:event_txtNombreKeyTyped
 
     private void txtNombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyReleased
-        metodostxt.TxtColorLabelKeyReleased(txtNombre, lblNombre, "Nombre*:");
+        metodostxt.TxtColorLabelKeyReleased(txtNombre, lblNombre);
         metodostxt.TxtMayusKeyReleased(txtNombre, evt);
     }//GEN-LAST:event_txtNombreKeyReleased
 

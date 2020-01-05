@@ -68,6 +68,17 @@ public class MetodosCombo {
         }
     }
 
+    public void setSelectedCodigoItem(JComboBox ElCombo, int codigoitem) {
+        MetodosCombo item;
+        for (int i = 0; i < ElCombo.getItemCount(); i++) {
+            item = (MetodosCombo) ElCombo.getItemAt(i);
+            if (item.getCodigo() == codigoitem) {
+                ElCombo.setSelectedIndex(i);
+                break;
+            }
+        }
+    }
+
     public void CargarComboBox(JComboBox ElCombo, String sentencia) {
         ElCombo.removeAllItems(); //Vaciamos el combo
 

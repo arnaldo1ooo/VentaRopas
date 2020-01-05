@@ -48,7 +48,7 @@ public final class ABMEmpleado extends javax.swing.JDialog {
         txtBuscar.requestFocus();
 
         OrdenTabulador();
-        
+
         //Poner fecha actual
         Calendar c2 = new GregorianCalendar();
         dcFechaIngreso.setCalendar(c2);
@@ -250,18 +250,11 @@ public final class ABMEmpleado extends javax.swing.JDialog {
     }
 
     public boolean ComprobarCampos() {
-        if (txtNombre.getText().equals("")) {
-            lblNombre.setText("Ingrese el nombre:");
-            lblNombre.setForeground(Color.RED);
-            lblNombre.requestFocus();
-            Toolkit.getDefaultToolkit().beep();
+        if (metodos.ValidarCampoVacio(txtNombre, lblNombre) == false) {
             return false;
         }
-        if (txtApellido.getText().equals("")) {
-            lblApellido.setText("Ingrese el apellido:");
-            lblApellido.setForeground(Color.RED);
-            lblApellido.requestFocus();
-            Toolkit.getDefaultToolkit().beep();
+
+        if (metodos.ValidarCampoVacio(txtApellido, lblApellido) == false) {
             return false;
         }
         return true;
@@ -652,7 +645,7 @@ public final class ABMEmpleado extends javax.swing.JDialog {
         lblSexo.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         lblSexo.setForeground(new java.awt.Color(102, 102, 102));
         lblSexo.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblSexo.setText("Sexo*:");
+        lblSexo.setText("Sexo:");
         lblSexo.setToolTipText("");
 
         cbSexo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "MASCULINO", "FEMENINO", "SIN ESPECIFICAR" }));
@@ -954,7 +947,7 @@ public final class ABMEmpleado extends javax.swing.JDialog {
     }//GEN-LAST:event_txtApellidoKeyTyped
 
     private void txtApellidoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidoKeyReleased
-        metodostxt.TxtColorLabelKeyReleased(txtApellido, lblApellido, "Apellido*:");
+        metodostxt.TxtColorLabelKeyReleased(txtApellido, lblApellido);
         metodostxt.TxtMayusKeyReleased(txtApellido, evt);
     }//GEN-LAST:event_txtApellidoKeyReleased
 
@@ -966,7 +959,7 @@ public final class ABMEmpleado extends javax.swing.JDialog {
     }//GEN-LAST:event_txtNombreKeyTyped
 
     private void txtNombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyReleased
-        metodostxt.TxtColorLabelKeyReleased(txtNombre, lblNombre, "Nombre*:");
+        metodostxt.TxtColorLabelKeyReleased(txtNombre, lblNombre);
         metodostxt.TxtMayusKeyReleased(txtNombre, evt);
     }//GEN-LAST:event_txtNombreKeyReleased
 
