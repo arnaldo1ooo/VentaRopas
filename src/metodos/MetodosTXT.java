@@ -62,7 +62,7 @@ public class MetodosTXT {
             }
 
             ElLabel.setForeground(new Color(102, 102, 102)); //Gris
-        } else {
+        } else { //Si es distinto a vacio
             ElLabel.setForeground(new Color(0, 153, 51)); //Verde
         }
     }
