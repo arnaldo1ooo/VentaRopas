@@ -110,7 +110,6 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu8 = new javax.swing.JMenu();
         jMenuItem11 = new javax.swing.JMenuItem();
-        jSeparator11 = new javax.swing.JPopupMenu.Separator();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem10 = new javax.swing.JMenuItem();
         jSeparator16 = new javax.swing.JPopupMenu.Separator();
@@ -441,7 +440,6 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             }
         });
         jMenu8.add(jMenuItem11);
-        jMenu8.add(jSeparator11);
 
         jMenuBar1.add(jMenu8);
 
@@ -835,7 +833,6 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JPopupMenu.Separator jSeparator10;
-    private javax.swing.JPopupMenu.Separator jSeparator11;
     private javax.swing.JPopupMenu.Separator jSeparator12;
     private javax.swing.JPopupMenu.Separator jSeparator13;
     private javax.swing.JPopupMenu.Separator jSeparator14;
