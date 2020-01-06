@@ -427,6 +427,8 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         lblFecha.setToolTipText("");
 
         dcFechaCompra.setEnabled(false);
+        dcFechaCompra.setMaxSelectableDate(new java.util.Date(4102455600000L));
+        dcFechaCompra.setMinSelectableDate(new java.util.Date(631162800000L));
 
         lblNumCompra.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         lblNumCompra.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -935,7 +937,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         lblTotalMoneda.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
         lblTotalMoneda.setForeground(new java.awt.Color(0, 102, 51));
         lblTotalMoneda.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblTotalMoneda.setText("Dólares");
+        lblTotalMoneda.setText("Dolares");
         lblTotalMoneda.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
 
         javax.swing.GroupLayout jpPrincipalLayout = new javax.swing.GroupLayout(jpPrincipal);

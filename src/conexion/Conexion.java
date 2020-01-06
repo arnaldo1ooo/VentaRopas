@@ -14,39 +14,65 @@ public class Conexion {
     public Connection connection;
     public Statement st;
     public ResultSet rs;
+    private static String controlador;
+    private static String usuarioDB;
+    private static String passDB; //Contrasena de la BD
+    private static String nombreBD;
+    private static String host;
+    private static String puerto;
+    private static String servidor;
 
-    String TipoHost = "local";
-    //Modo host local
-    private static final String controlador = "com.mysql.cj.jdbc.Driver";
-    private static final String usuarioDB = "root";
-    private static final String passDB = "toor5127"; //Contrasena de la BD
-    private static final String nombreBD = "ventaropas";
-    private static final String host = "localhost";
-    private static final String puerto = "3306";
-    private static final String servidor = "jdbc:mysql://" + host + ":" + puerto + "/" + nombreBD
-            + "?useUnicode=true"
-            + "&useJDBCCompliantTimezoneShift=true"
-            + "&useLegacyDatetimeCode=false"
-            + "&serverTimezone=UTC"
-            + "&useSSL=false"
-            + "&allowPublicKeyRetrieval=true";
-
-    //Modo host remoto
-    /*private static final String controlador = "com.mysql.cj.jdbc.Driver";
-    private static final String usuarioDB = "invitado";
-    private static final String passDB = "toor5127"; //Contrasena de la BD
-    private static final String nombreBD = "ventaropas";
-    private static final String host = "192.168.88.240";
-    private static final String puerto = "3306";
-    private static final String servidor = "jdbc:mysql://" + host + ":" + puerto + "/" + nombreBD
-            + "?useUnicode=true"
-            + "&useJDBCCompliantTimezoneShift=true"
-            + "&useLegacyDatetimeCode=false"
-            + "&serverTimezone=UTC"
-            + "&useSSL=false";*/
-    
-    
     public static Connection ConectarBasedeDatos() {
+        String tipoHost = "remoto";
+        if (tipoHost.equals("local")) {
+            //Modo host local
+            controlador = "com.mysql.cj.jdbc.Driver";
+            usuarioDB = "root";
+            passDB = "toor5127"; //Contrasena de la BD
+            nombreBD = "ventaropas";
+            host = "localhost";
+            puerto = "3306";
+            servidor = "jdbc:mysql://" + host + ":" + puerto + "/" + nombreBD
+                    + "?useUnicode=true"
+                    + "&useJDBCCompliantTimezoneShift=true"
+                    + "&useLegacyDatetimeCode=false"
+                    + "&serverTimezone=UTC"
+                    + "&useSSL=false"
+                    + "&allowPublicKeyRetrieval=true";
+        } else {
+            if (tipoHost.equals("remoto")) {
+                //Modo host remoto
+                controlador = "com.mysql.cj.jdbc.Driver";
+                usuarioDB = "invitado";
+                passDB = "toor5127"; //Contrasena de la BD
+                nombreBD = "ventaropas";
+                host = "192.168.88.240";
+                puerto = "3306";
+                servidor = "jdbc:mysql://" + host + ":" + puerto + "/" + nombreBD
+                        + "?useUnicode=true"
+                        + "&useJDBCCompliantTimezoneShift=true"
+                        + "&useLegacyDatetimeCode=false"
+                        + "&serverTimezone=UTC"
+                        + "&useSSL=false";
+            } else {
+                if (tipoHost.equals("online")) {
+                    //Modo host online
+                    controlador = "com.mysql.cj.jdbc.Driver";
+                    usuarioDB = "invitado";
+                    passDB = "toor5127"; //Contrasena de la BD
+                    nombreBD = "ventaropas";
+                    host = "bdarnaldo.ddns.net";
+                    puerto = "3306";
+                    servidor = "jdbc:mysql://" + host + ":" + puerto + "/" + nombreBD
+                            + "?useUnicode=true"
+                            + "&useJDBCCompliantTimezoneShift=true"
+                            + "&useLegacyDatetimeCode=false"
+                            + "&serverTimezone=UTC"
+                            + "&useSSL=false";
+                }
+            }
+        }
+
         Connection conexion;
         try {
             Class.forName(controlador);
@@ -95,7 +121,8 @@ public class Conexion {
         try {
             NumColumnsRS = rs.getMetaData().getColumnCount();
         } catch (SQLException ex) {
-            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Conexion.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         return NumColumnsRS;
     }
