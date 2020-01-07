@@ -5,6 +5,7 @@
  */
 package forms;
 
+import com.lowagie.text.Document;
 import conexion.Conexion;
 import java.awt.Color;
 import java.awt.Component;
@@ -14,6 +15,7 @@ import java.awt.FocusTraversalPolicy;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -28,7 +30,9 @@ import metodos.Metodos;
 import metodos.MetodosCombo;
 import metodos.MetodosImagen;
 import metodos.MetodosTXT;
+import metodos.ObtenerCotizacion;
 import metodos.VistaCompletaImagen;
+import org.jsoup.Jsoup;
 
 /**
  *
@@ -52,11 +56,11 @@ public final class ABMProducto extends javax.swing.JDialog {
         TablaConsultaBD(txtBuscar.getText()); //Trae todos los registros
         txtBuscar.requestFocus();
 
+        ObtenerCotizacion obtenercotizacion = new ObtenerCotizacion();
         CargarComboBoxes();
         OrdenTabulador();
-        //Shortcuts 
-        btnGuardar.setMnemonic(KeyEvent.VK_F5);
     }
+
 
 //--------------------------METODOS----------------------------//
     public void CargarComboBoxes() {

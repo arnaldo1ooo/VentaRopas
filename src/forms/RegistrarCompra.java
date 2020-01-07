@@ -627,7 +627,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         lblDolares.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblDolares.setText("Dólares");
 
-        txtIDProducto.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        txtIDProducto.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
         txtIDProducto.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         txtIDProducto.setEnabled(false);
 
@@ -904,7 +904,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         );
 
         jpBotones1.setBackground(new java.awt.Color(233, 255, 255));
-        jpBotones1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Cambio"));
+        jpBotones1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Cotización"));
         jpBotones1.setPreferredSize(new java.awt.Dimension(100, 50));
 
         lblCambioGuaranies.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N

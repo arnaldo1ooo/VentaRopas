@@ -22,6 +22,7 @@ import static login.Login.Alias;
 import metodos.ImagenFondo;
 import metodos.Metodos;
 import metodos.MetodosTXT;
+import metodos.ObtenerCotizacion;
 
 /**
  *
@@ -184,7 +185,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             }
         });
 
-        jpBotones1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Cambio"));
+        jpBotones1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Cotización"));
         jpBotones1.setPreferredSize(new java.awt.Dimension(100, 50));
 
         lblCambioGuaranies.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N

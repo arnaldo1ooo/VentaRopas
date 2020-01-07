@@ -6,6 +6,7 @@ package login;
 
 import conexion.Conexion;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import principal.Principal;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -15,6 +16,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import metodos.PlaceHolder;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class Login extends javax.swing.JFrame {
 
@@ -28,10 +31,40 @@ public class Login extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
         lblError.setVisible(false);
-
+        Scraping();
         PlaceHolder placeholder;
         placeholder = new PlaceHolder("Alias", txtAlias);
         placeholder = new PlaceHolder("Contraseña", txtContrasena);
+
+    }
+
+    private void Scraping() {
+        try {
+            org.jsoup.nodes.Document doc = org.jsoup.Jsoup.connect("http://www.cambioschaco.com.py/").validateTLSCertificates(false).get();
+
+            //Obtiene el titulo de la pagina
+            String title = doc.title();
+            System.out.println("Titulo:  " + title + "\n");
+
+            Elements LosDiv;
+            Elements LosTr;
+            Element fila1;
+            Element fila2;
+
+            LosDiv = doc.select("div." + "col-sm-7"); //Las tablas, div.
+            LosTr = LosDiv.select("tr"); //Las filas, tr.
+            fila1 = LosTr.get(1); //el get(0) seria los titulos
+            System.out.println("Cotizacion Dolar x Guaranies: " + fila1.getElementsByClass("sale").text()); //La columna sale
+
+            LosDiv = doc.select("div." + "col-sm-5"); //Las tablas, div.
+            LosTr = LosDiv.select("tr"); //Las filas, tr.
+            fila1 = LosTr.get(1); //el get(0) seria los titulos
+            fila2 = LosTr.get(2); //el get(0) seria los titulos
+            System.out.println("Cotizacion Dolar x Reales: " + fila1.getElementsByClass("sale").text()); //La columna sale
+            System.out.println("Cotizacion Dolar x Pesos Argentinos: " + fila2.getElementsByClass("sale").text()); //La columna sale
+        } catch (IOException e) {
+            System.out.println("Error al realizar el scraping web " + e);
+        }
     }
 
     //-------------METODOS----------//
