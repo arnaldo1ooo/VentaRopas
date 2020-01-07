@@ -24,7 +24,7 @@ public class Conexion {
 
     public static Connection ConectarBasedeDatos() {
         String tipoHost = "remoto";
-        
+
         if (tipoHost.equals("local")) {
             //Modo host local
             controlador = "com.mysql.cj.jdbc.Driver";
@@ -37,7 +37,8 @@ public class Conexion {
                     + "?useUnicode=true"
                     + "&useJDBCCompliantTimezoneShift=true"
                     + "&useLegacyDatetimeCode=false"
-                    + "&serverTimezone=UTC"
+                    + "&serverTimezone=America/Mexico_City"
+                    //+ "&serverTimezone=UTC"
                     + "&useSSL=false"
                     + "&allowPublicKeyRetrieval=true";
         } else {

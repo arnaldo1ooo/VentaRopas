@@ -58,7 +58,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
                     + "FROM cotizacion WHERE coti_de='Dolares' AND coti_a='Guaranies'");
             con.rs.next();
             SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");  //25/08/2015
-            lblFechaCotizacion.setText("Fecha de cotización: " + formato.format(con.rs.getDate("coti_fecha")));
+            lblFechaCotizacion.setText("Fecha de cotización: " + con.rs.getDate("coti_fecha"));
 
             cotiUsdGsCompra = Double.parseDouble(con.rs.getString("coti_valorcompra"));
             lblCotiUsdGsCompra.setText(cotiUsdGsCompra + "");
