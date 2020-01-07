@@ -166,6 +166,18 @@ public class MetodosImagen {
         }
     }
 
+    public void EscalarImagenALabel(JLabel ElLabel, String UrlImagen) {
+        //Escala la imagen al Jlabel sin perder la proporcion
+        ImageIcon imicImagen = new ImageIcon(UrlImagen);
+        float delta = ((ElLabel.getWidth() * 100) / imicImagen.getIconWidth()) / 100f;
+        if (imicImagen.getIconHeight() > ElLabel.getHeight()) {
+            delta = ((ElLabel.getHeight() * 100) / imicImagen.getIconHeight()) / 100f;
+        }
+        int ancho = (int) (imicImagen.getIconWidth() * delta);
+        int alto = (int) (imicImagen.getIconHeight() * delta);
+        ElLabel.setIcon(new ImageIcon(imicImagen.getImage().getScaledInstance(ancho, alto, Image.SCALE_AREA_AVERAGING)));
+    }
+
     public void CambiarLookSwing(String look) {
         if (look.equals("windows")) {
             look = "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";

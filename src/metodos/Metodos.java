@@ -28,10 +28,13 @@ import conexion.Conexion;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.text.DecimalFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import principal.Principal;
 
 /**
  *
@@ -79,6 +82,24 @@ public class Metodos {
             e.printStackTrace();
         }
         return conexion;
+    }
+
+    public void EjecutarUpdate(String sentencia) {
+        try {
+            Connection con;
+            con = (Connection) Conexion.ConectarBasedeDatos();
+
+            System.out.println("Modificar registro: " + sentencia);
+
+            Statement st;
+            st = (Statement) con.createStatement();
+            st.executeUpdate(sentencia);
+
+            con.close();
+            st.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void AnchuraColumna(JTable LaTabla) {
@@ -216,12 +237,12 @@ public class Metodos {
         LaVentana.setLocation(x, y);
     }
 
-    public String ObtenerCambios(String de, String a) {
+    public String ObtenerCotizacion(String de, String a) {
         Metodos metodos = new Metodos();
         String valor = "";
         try {
             DecimalFormat df = new DecimalFormat("#.###");
-            Conexion con = metodos.ObtenerRSSentencia("SELECT cam_valor FROM cambio WHERE cam_de = '" + de + "' AND cam_a = '" + a + "'");
+            Conexion con = metodos.ObtenerRSSentencia("SELECT coti_valor FROM cambio WHERE cam_de = '" + de + "' AND cam_a = '" + a + "'");
             if (con.rs.next() == true) {
                 valor = df.format(Double.parseDouble(con.rs.getString(1)));
                 valor = valor.replace(".", ",");

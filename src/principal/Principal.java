@@ -4,12 +4,12 @@
  * and open the template in the editor.
  */
 package principal;
-
 import conexion.Conexion;
 import forms.ABMCliente;
 import forms.ABMEmpleado;
 import forms.ABMProducto;
 import forms.RegistrarCompra;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,12 +18,14 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
-import static login.Login.Alias;
 import metodos.ImagenFondo;
 import metodos.Metodos;
 import metodos.MetodosTXT;
-import metodos.ObtenerCotizacion;
-
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+//Variables globales
+import static login.Login.Alias;
+//
 /**
  *
  * @author Lic. Arnaldo Cantero
@@ -33,6 +35,9 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     Metodos metodos = new Metodos();
     MetodosTXT metodostxt = new MetodosTXT();
     Thread hilo;
+    public static double cotiUsdGsCompra; //USD: Dolar americano, Gs: Guaranies
+    public static double cotiUsdRsCompra; //RS: Reales
+    public static double cotiUsdPaCompra; //PA: Peso Argentino
 
     public Principal() {
         initComponents();
@@ -42,11 +47,110 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         lbAlias.setText(Alias);
         PerfilUsuario();
 
-        lblCambioGuaranies.setText(metodos.ObtenerCambios("Dolares", "Guaranies"));
-        lblCambioReales.setText(metodos.ObtenerCambios("Dolares", "Reales"));
-        lblCambioPesosArg.setText(metodos.ObtenerCambios("Dolares", "Pesos argentinos"));
-
         setVisible(true);
+        ObtenerCotizacionScrapingWeb();
+        AsignarCotizaciones();
+    }
+
+    private void AsignarCotizaciones() {
+        try {
+            Conexion con = metodos.ObtenerRSSentencia("SELECT coti_valorcompra, coti_valorventa, coti_fecha "
+                    + "FROM cotizacion WHERE coti_de='Dolares' AND coti_a='Guaranies'");
+            con.rs.next();
+            SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");  //25/08/2015
+            lblFechaCotizacion.setText("Fecha de cotización: " + formato.format(con.rs.getDate("coti_fecha")));
+
+            cotiUsdGsCompra = Double.parseDouble(con.rs.getString("coti_valorcompra"));
+            lblCotiUsdGsCompra.setText(cotiUsdGsCompra + "");
+            lblCotiUsdGsVenta.setText(con.rs.getString("coti_valorventa"));
+
+            con = metodos.ObtenerRSSentencia("SELECT coti_valorcompra, coti_valorventa, coti_fecha "
+                    + "FROM cotizacion WHERE coti_de='Dolares' AND coti_a='Reales'");
+            con.rs.next();
+            cotiUsdRsCompra = Double.parseDouble(con.rs.getString("coti_valorcompra"));
+            lblCotiUsdRsCompra.setText(cotiUsdRsCompra + "");
+            lblCotiUsdRsVenta.setText(con.rs.getString("coti_valorventa"));
+
+            con = metodos.ObtenerRSSentencia("SELECT coti_valorcompra, coti_valorventa, coti_fecha "
+                    + "FROM cotizacion WHERE coti_de='Dolares' AND coti_a='Pesos argentinos'");
+            con.rs.next();
+            cotiUsdPaCompra = Double.parseDouble(con.rs.getString("coti_valorcompra"));
+            lblCotiUsdPaCompra.setText(cotiUsdPaCompra + "");
+            lblCotiUsdPaVenta.setText(con.rs.getString("coti_valorventa"));
+
+            con.DesconectarBasedeDatos();
+        } catch (SQLException e) {
+            System.out.println("Error al asignar cotizaciones desde bd" + e);
+        }
+    }
+
+    private void ObtenerCotizacionScrapingWeb() {
+        try {
+            org.jsoup.nodes.Document doc = org.jsoup.Jsoup.connect("http://www.cambioschaco.com.py/").validateTLSCertificates(false).get();
+
+            //Obtiene el titulo de la pagina
+            String title = doc.title();
+            System.out.println("\nScraping Web (CAMBIOS CHACO)");
+            System.out.println("Titulo de la pagina:  " + title + "\n");
+
+            Elements losDiv;
+            Elements losTr;
+            Element fila1;
+            Element fila2;
+
+            losDiv = doc.select("div." + "col-sm-7"); //Las tablas, div.
+            losTr = losDiv.select("tr"); //Las filas, tr.
+            fila1 = losTr.get(1); //el get(0) seria los titulos
+            String usdGsCompraString = fila1.getElementsByClass("purchase").text();
+            double usdGsCompraDouble = Double.parseDouble(((usdGsCompraString).replace(".", "")).replace(",", "."));
+            System.out.println("Compra Dolar x Guaranies: " + usdGsCompraString
+                    + "     Compra Dolar x Guaranies Double: " + usdGsCompraDouble);
+
+            String usdGsVentaString = fila1.getElementsByClass("sale").text();
+            double usdGsVentaDouble = Double.parseDouble(((usdGsVentaString).replace(".", "")).replace(",", "."));
+            System.out.println("Venta Dolar x Guaranies: " + usdGsVentaString
+                    + "     Venta Dolar x Guaranies Double: " + usdGsVentaDouble + "\n");
+            metodos.EjecutarUpdate("CALL SP_CotizacionModificar('Dolares','Guaranies','" + usdGsCompraDouble + "','"
+                    + usdGsVentaDouble + "','" + FechaActual() + "')");
+
+            losDiv = doc.select("div." + "col-sm-5"); //Las tablas, div.
+            losTr = losDiv.select("tr"); //Las filas, tr.
+            fila1 = losTr.get(1); //el get(0) seria los titulos
+            fila2 = losTr.get(2); //el get(0) seria los titulos
+
+            String usdRsCompraString = fila1.getElementsByClass("purchase").text();
+            double usdRsCompraDouble = Double.parseDouble(((usdRsCompraString).replace(".", "")).replace(",", "."));
+            System.out.println("Compra Dolar x Reales: " + usdRsCompraString
+                    + "     Compra Dolar x Reales Double: " + usdRsCompraDouble);
+
+            String usdRsVentaString = fila1.getElementsByClass("sale").text();
+            double usdRsVentaDouble = Double.parseDouble(((usdRsVentaString).replace(".", "")).replace(",", "."));
+            System.out.println("Venta Dolar x Reales: " + usdRsVentaString
+                    + "     Venta Dolar x Reales Double: " + usdRsVentaDouble + "\n");
+            metodos.EjecutarUpdate("CALL SP_CotizacionModificar('Dolares','Reales','" + usdRsCompraDouble + "','"
+                    + usdRsVentaDouble + "','" + FechaActual() + "')");
+
+            String usdPaCompraString = fila2.getElementsByClass("purchase").text();
+            double usdPaCompraDouble = Double.parseDouble(((usdPaCompraString).replace(".", "")).replace(",", "."));
+            System.out.println("Compra Dolar x PesoArg: " + usdPaCompraString
+                    + "     Compra Dolar x PesoArg Double: " + usdPaCompraDouble);
+
+            String usdPaVentaString = fila2.getElementsByClass("sale").text();
+            double usdPaVentaDouble = Double.parseDouble(((usdPaVentaString).replace(".", "")).replace(",", "."));
+            System.out.println("Venta Dolar x PesoArg: " + usdPaVentaString
+                    + "     Venta Dolar x PesoArg Double: " + usdPaVentaDouble + "\n");
+            metodos.EjecutarUpdate("CALL SP_CotizacionModificar('Dolares','Pesos argentinos','" + usdPaCompraDouble + "','"
+                    + usdPaVentaDouble + "','" + FechaActual() + "')");
+        } catch (IOException e) {
+            System.out.println("Error al realizar el scraping web " + e);
+        }
+    }
+
+    private String FechaActual() {
+        Date fechaactual = new Date();
+        DateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+        String fechaactualString = formatoFecha.format(fechaactual);
+        return fechaactualString;
     }
 
     private void PerfilUsuario() {
@@ -86,11 +190,11 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jpBotones1 = new javax.swing.JPanel();
-        lblCambioGuaranies = new javax.swing.JLabel();
+        lblCotiUsdGsCompra = new javax.swing.JLabel();
         lbldolares3 = new javax.swing.JLabel();
         lbldolares4 = new javax.swing.JLabel();
-        lblCambioReales = new javax.swing.JLabel();
-        lblCambioPesosArg = new javax.swing.JLabel();
+        lblCotiUsdRsCompra = new javax.swing.JLabel();
+        lblCotiUsdPaCompra = new javax.swing.JLabel();
         lbldolares7 = new javax.swing.JLabel();
         lblFlagEeuu = new javax.swing.JLabel();
         lblFlagGuaranies = new javax.swing.JLabel();
@@ -98,6 +202,13 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         lblFlagArgentina = new javax.swing.JLabel();
         lblEeuu1 = new javax.swing.JLabel();
         lblEeuu2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        lblCotiUsdGsVenta = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        lblCotiUsdRsVenta = new javax.swing.JLabel();
+        lblCotiUsdPaVenta = new javax.swing.JLabel();
+        lblFechaCotizacion = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
         jpBarra = new javax.swing.JPanel();
         lbAlias = new javax.swing.JLabel();
@@ -144,7 +255,6 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Menu Principal");
         setName("Fm_Principal"); // NOI18N
-        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -185,38 +295,39 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             }
         });
 
+        jpBotones1.setBackground(new java.awt.Color(255, 255, 255));
         jpBotones1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Cotización"));
         jpBotones1.setPreferredSize(new java.awt.Dimension(100, 50));
 
-        lblCambioGuaranies.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
-        lblCambioGuaranies.setForeground(new java.awt.Color(0, 0, 153));
-        lblCambioGuaranies.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblCambioGuaranies.setText("0,000");
+        lblCotiUsdGsCompra.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblCotiUsdGsCompra.setForeground(new java.awt.Color(102, 102, 102));
+        lblCotiUsdGsCompra.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblCotiUsdGsCompra.setText("0,000");
 
-        lbldolares3.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        lbldolares3.setForeground(new java.awt.Color(0, 0, 153));
+        lbldolares3.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+        lbldolares3.setForeground(new java.awt.Color(102, 102, 102));
         lbldolares3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lbldolares3.setText("Dólar x Guaraníes");
+        lbldolares3.setText("Dólar americano x Guaraníes");
 
-        lbldolares4.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        lbldolares4.setForeground(new java.awt.Color(0, 0, 153));
+        lbldolares4.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+        lbldolares4.setForeground(new java.awt.Color(102, 102, 102));
         lbldolares4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lbldolares4.setText("Dólar x Reales");
+        lbldolares4.setText("Dólar americano x Reales");
 
-        lblCambioReales.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
-        lblCambioReales.setForeground(new java.awt.Color(0, 0, 153));
-        lblCambioReales.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblCambioReales.setText("0,000");
+        lblCotiUsdRsCompra.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblCotiUsdRsCompra.setForeground(new java.awt.Color(102, 102, 102));
+        lblCotiUsdRsCompra.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblCotiUsdRsCompra.setText("0,000");
 
-        lblCambioPesosArg.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
-        lblCambioPesosArg.setForeground(new java.awt.Color(0, 0, 153));
-        lblCambioPesosArg.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblCambioPesosArg.setText("0,000");
+        lblCotiUsdPaCompra.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblCotiUsdPaCompra.setForeground(new java.awt.Color(102, 102, 102));
+        lblCotiUsdPaCompra.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblCotiUsdPaCompra.setText("0,000");
 
-        lbldolares7.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        lbldolares7.setForeground(new java.awt.Color(0, 0, 153));
+        lbldolares7.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+        lbldolares7.setForeground(new java.awt.Color(102, 102, 102));
         lbldolares7.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lbldolares7.setText("Dólar x Pesos arg.");
+        lbldolares7.setText("Dólar x Pesos argentinos");
 
         lblFlagEeuu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/eeuu.png"))); // NOI18N
 
@@ -230,6 +341,37 @@ public class Principal extends javax.swing.JFrame implements Runnable {
 
         lblEeuu2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/eeuu.png"))); // NOI18N
 
+        jLabel3.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel3.setText("COMPRA");
+
+        jLabel4.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel4.setText("VENTA");
+
+        lblCotiUsdGsVenta.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblCotiUsdGsVenta.setForeground(new java.awt.Color(102, 102, 102));
+        lblCotiUsdGsVenta.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblCotiUsdGsVenta.setText("0,000");
+
+        jLabel5.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel5.setText("MONEDA");
+
+        lblCotiUsdRsVenta.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblCotiUsdRsVenta.setForeground(new java.awt.Color(102, 102, 102));
+        lblCotiUsdRsVenta.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblCotiUsdRsVenta.setText("0,000");
+
+        lblCotiUsdPaVenta.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblCotiUsdPaVenta.setForeground(new java.awt.Color(102, 102, 102));
+        lblCotiUsdPaVenta.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblCotiUsdPaVenta.setText("0,000");
+
+        lblFechaCotizacion.setFont(new java.awt.Font("sansserif", 0, 10)); // NOI18N
+        lblFechaCotizacion.setForeground(new java.awt.Color(51, 51, 51));
+        lblFechaCotizacion.setText("Fecha de cotización: 00/00/0000");
+
         javax.swing.GroupLayout jpBotones1Layout = new javax.swing.GroupLayout(jpBotones1);
         jpBotones1.setLayout(jpBotones1Layout);
         jpBotones1Layout.setHorizontalGroup(
@@ -237,58 +379,73 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             .addGroup(jpBotones1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbldolares7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblCambioGuaranies, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lbldolares3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lbldolares4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblCambioPesosArg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblFechaCotizacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jpBotones1Layout.createSequentialGroup()
-                        .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(lblCambioReales, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jpBotones1Layout.createSequentialGroup()
+                        .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jpBotones1Layout.createSequentialGroup()
+                                .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                                     .addComponent(lblFlagEeuu, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(lblFlagGuaranies, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jpBotones1Layout.createSequentialGroup()
                                     .addComponent(lblEeuu1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(lblFlagBrasil, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jpBotones1Layout.createSequentialGroup()
-                                    .addComponent(lblEeuu2, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(lblFlagArgentina, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                    .addComponent(lblEeuu2, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                                    .addComponent(lblFlagGuaranies, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblFlagBrasil, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblFlagArgentina, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lbldolares3)
+                                    .addComponent(lbldolares4, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lbldolares7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 62, Short.MAX_VALUE)
+                                .addComponent(lblCotiUsdGsCompra, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(lblCotiUsdPaCompra, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 62, Short.MAX_VALUE)
+                                .addComponent(lblCotiUsdRsCompra, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblCotiUsdGsVenta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblCotiUsdRsVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblCotiUsdPaVenta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jpBotones1Layout.setVerticalGroup(
             jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpBotones1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(7, 7, 7)
+                .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(lblFlagEeuu, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblFlagGuaranies, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbldolares3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblCambioGuaranies)
+                    .addComponent(lblFlagGuaranies, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbldolares3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblCotiUsdGsCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblCotiUsdGsVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(lblEeuu1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblFlagBrasil, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbldolares4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblCambioReales)
+                    .addComponent(lblFlagBrasil, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbldolares4, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblCotiUsdRsCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblCotiUsdRsVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblFlagArgentina, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblEeuu2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbldolares7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblCambioPesosArg)
-                .addContainerGap(185, Short.MAX_VALUE))
+                    .addComponent(lblEeuu2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lbldolares7, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblCotiUsdPaCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblCotiUsdPaVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                .addComponent(lblFechaCotizacion))
         );
 
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoCompra.png"))); // NOI18N
@@ -318,11 +475,10 @@ public class Principal extends javax.swing.JFrame implements Runnable {
                     .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jpBotones1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jpBotones1, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         dpEscritorioLayout.setVerticalGroup(
             dpEscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpBotones1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE)
             .addGroup(dpEscritorioLayout.createSequentialGroup()
                 .addGap(32, 32, 32)
                 .addComponent(jButton2)
@@ -332,7 +488,10 @@ public class Principal extends javax.swing.JFrame implements Runnable {
                 .addComponent(jButton1)
                 .addGap(18, 18, 18)
                 .addComponent(jButton4)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(91, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dpEscritorioLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jpBotones1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jpBarra.setPreferredSize(new java.awt.Dimension(1586, 25));
@@ -811,6 +970,9 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
@@ -850,11 +1012,15 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     private javax.swing.JLabel lbFechaTitulo;
     private javax.swing.JLabel lbHora;
     private javax.swing.JLabel lbHoraTitulo;
-    private javax.swing.JLabel lblCambioGuaranies;
-    private javax.swing.JLabel lblCambioPesosArg;
-    private javax.swing.JLabel lblCambioReales;
+    private javax.swing.JLabel lblCotiUsdGsCompra;
+    private javax.swing.JLabel lblCotiUsdGsVenta;
+    private javax.swing.JLabel lblCotiUsdPaCompra;
+    private javax.swing.JLabel lblCotiUsdPaVenta;
+    private javax.swing.JLabel lblCotiUsdRsCompra;
+    private javax.swing.JLabel lblCotiUsdRsVenta;
     private javax.swing.JLabel lblEeuu1;
     private javax.swing.JLabel lblEeuu2;
+    private javax.swing.JLabel lblFechaCotizacion;
     private javax.swing.JLabel lblFlagArgentina;
     private javax.swing.JLabel lblFlagBrasil;
     private javax.swing.JLabel lblFlagEeuu;
