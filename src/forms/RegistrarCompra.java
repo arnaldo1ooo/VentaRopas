@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package forms;
+
 import conexion.Conexion;
 import java.awt.Component;
 import java.awt.Container;
@@ -13,6 +14,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -62,6 +64,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
     }
 
     public void RegistroNuevo() {
+        //Registra la compra
         try {
             int cantidadProductos = tbPrincipal.getModel().getRowCount();
             if (ComprobarCamposCompra() == true && cantidadProductos > 0) {
@@ -71,15 +74,9 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                 Date fecharegistro = dcFechaRegistro.getDate();
                 Date fechacompra = dcFechaCompra.getDate();
 
-                String idproducto;
-                String codproducto;
-                String cantidadadquirida;
-                double preciocompra;
-
                 int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro crear este nuevo registro?", "Confirmación", JOptionPane.YES_OPTION);
-
                 if (JOptionPane.YES_OPTION == confirmado) {
-                    //REGISTRAR NUEVO
+                    //REGISTRAR NUEVA COMPRA
                     try {
                         Connection con;
                         con = (Connection) Conexion.ConectarBasedeDatos();
@@ -90,9 +87,52 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                         st = (Statement) con.createStatement();
                         st.executeUpdate(sentencia);
 
+                        //Obtener el id de la compra
+                        Conexion conexion = metodos.ObtenerRSSentencia("SELECT MAX(pro_codigo) AS ultimoid FROM producto");
+                        conexion.rs.next();
+                        int idultimacompra = conexion.rs.getInt("ultimoid");
+                        conexion.DesconectarBasedeDatos();
+
+                        //Registra los productos de la compra                      
+                        String idproducto;
+                        int cantidadadquirida;
+                        double preciocompra;
+
+                        int cantfila = tbPrincipal.getRowCount();
+                        for (int fila = 0; fila < cantfila; fila++) {
+                            idproducto = tbPrincipal.getValueAt(fila, 0).toString();
+                            cantidadadquirida = Integer.parseInt(tbPrincipal.getValueAt(fila, 1).toString());
+                            preciocompra = Double.parseDouble(tbPrincipal.getValueAt(fila, 1).toString());
+
+                            //Comprobar en que moneda se guarda, en caso de ser distinto a dolares, se convierte a dolares
+                            if (cbMoneda.getSelectedItem() != "Dolares") {
+                                if (cbMoneda.getSelectedItem() == "Guaranies") {
+                                    preciocompra = preciocompra * cotiUsdGsCompra;
+                                }
+                                if (cbMoneda.getSelectedItem() == "Reales") {
+                                    preciocompra = preciocompra * cotiUsdRsCompra;
+                                }
+                                if (cbMoneda.getSelectedItem() == "Peso") {
+                                    preciocompra = preciocompra * cotiUsdPaCompra;
+                                }
+                            }
+
+                            sentencia = "CALL SP_CompraProductosAlta('" + idultimacompra + "','" + idproducto + "','"
+                                    + cantidadadquirida + "','" + preciocompra + "')";
+                            System.out.println("Insertar registro: " + sentencia);
+                            st = (Statement) con.createStatement();
+                            st.executeUpdate(sentencia);
+
+                            //Suma la cantidad al stock
+                            sentencia = "CALL SP_SumarStock('" + idproducto + "','" + cantidadadquirida + "')";
+                            System.out.println("Insertar registro: " + sentencia);
+                            st = (Statement) con.createStatement();
+                            st.executeUpdate(sentencia);
+                        }
+
                         con.close();
                         st.close();
-                        JOptionPane.showMessageDialog(this, "Se agrego correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "Se agregó correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
                         ModoEdicion(false);
                         Limpiar();
                     } catch (HeadlessException ex) {
@@ -481,12 +521,13 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(jpDatosCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(lblFechaRegistro, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dcFechaRegistro, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE))
+                    .addComponent(dcFechaRegistro, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(jpDatosCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblFechaCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dcFechaCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jpDatosCompraLayout.createSequentialGroup()
+                        .addComponent(lblFechaCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addComponent(dcFechaCompra, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         jpDatosCompraLayout.setVerticalGroup(
             jpDatosCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -673,10 +714,10 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                                 .addComponent(lblFlagEeuu, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, 0)
                         .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtPrecioDolares, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtPrecioGs, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtPrecioReales, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtPrecioPesosArg, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtPrecioDolares)
+                            .addComponent(txtPrecioGs)
+                            .addComponent(txtPrecioReales)
+                            .addComponent(txtPrecioPesosArg, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE))
                         .addGap(2, 2, 2)
                         .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblDolares, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -871,15 +912,11 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         jpProductosLayout.setVerticalGroup(
             jpProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpProductosLayout.createSequentialGroup()
-                .addGroup(jpProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpProductosLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jpProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                            .addComponent(lblCantidadAdquirida)
-                            .addComponent(lblPrecioCompra)))
-                    .addGroup(jpProductosLayout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addComponent(lblCodigo10)))
+                .addContainerGap()
+                .addGroup(jpProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(lblCantidadAdquirida)
+                    .addComponent(lblPrecioCompra)
+                    .addComponent(lblCodigo10))
                 .addGap(2, 2, 2)
                 .addGroup(jpProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(txtCantidadAdquirida, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -913,13 +950,13 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         jpPrincipal.setLayout(jpPrincipalLayout);
         jpPrincipalLayout.setHorizontalGroup(
             jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpBanner, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 952, Short.MAX_VALUE)
+            .addComponent(jpBanner, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 951, Short.MAX_VALUE)
             .addGroup(jpPrincipalLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jpProductos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jpDatosProducto, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 805, Short.MAX_VALUE)
+                        .addComponent(jpDatosProducto, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jpDatosCompra, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jpBotones, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -964,7 +1001,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 945, Short.MAX_VALUE)
+            .addComponent(jpPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 945, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1017,9 +1054,11 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         if (ConsultaProducto() == true) {
             //Convertir precio a las distintas monedas
             if (txtPrecioDolares.getText().equals("") == false) {
+                DecimalFormat df3Decimales = new DecimalFormat("#.##");
                 //Precio Dolares
                 String precioDolaresString = txtPrecioDolares.getText().replace(".", "");
                 double precioDolaresDouble = Double.parseDouble(precioDolaresString.replace(",", "."));
+                precioDolaresDouble = Double.parseDouble((df3Decimales.format(precioDolaresDouble)).replace(",", "."));
                 if ((precioDolaresDouble - (int) precioDolaresDouble) == 0) { //Si termina en ,0
                     precioDolaresString = precioDolaresString.replace(",0", "");
                     txtPrecioDolares.setText(metodostxt.PonerPuntosMilesKeyReleased(precioDolaresString));
@@ -1029,7 +1068,8 @@ public final class RegistrarCompra extends javax.swing.JDialog {
 
                 //Precio, cambio a Guaranies
                 double precioGsDouble = precioDolaresDouble * cotiUsdGsCompra;
-                String precioGsString = (precioGsDouble + "").replace(".", ",");;
+                precioGsDouble = Double.parseDouble((df3Decimales.format(precioGsDouble)).replace(",", "."));
+                String precioGsString = (precioGsDouble + "").replace(".", ",");
                 if ((precioGsDouble - (int) precioGsDouble) == 0) { //Si termina en ,0
                     precioGsString = precioGsString.replace(",0", "");
                     txtPrecioGs.setText(metodostxt.PonerPuntosMilesKeyReleased(precioGsString));
@@ -1038,9 +1078,10 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                 }
 
                 //Precio, cambio a Reales
-                double precioRealesDouble = precioDolaresDouble * cotiUsdRsCompra;
-                String precioRsString = (precioRealesDouble + "").replace(".", ",");;
-                if ((precioRealesDouble - (int) precioRealesDouble) == 0) { //Si termina en ,0
+                double precioRsDouble = precioDolaresDouble * cotiUsdRsCompra;
+                precioRsDouble = Double.parseDouble((df3Decimales.format(precioRsDouble)).replace(",", "."));
+                String precioRsString = (precioRsDouble + "").replace(".", ",");
+                if ((precioRsDouble - (int) precioRsDouble) == 0) { //Si termina en ,0
                     precioRsString = precioRsString.replace(",0", "");
                     txtPrecioReales.setText(metodostxt.PonerPuntosMilesKeyReleased(precioRsString));
                 } else {
@@ -1049,6 +1090,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
 
                 //Precio, cambio a Pesos argentinos
                 double precioPesosArgDouble = precioDolaresDouble * cotiUsdPaCompra;
+                precioPesosArgDouble = Double.parseDouble((df3Decimales.format(precioPesosArgDouble)).replace(",", "."));
                 String precioPesosArgString = (precioPesosArgDouble + "").replace(".", ",");;
                 if ((precioPesosArgDouble - (int) precioPesosArgDouble) == 0) { //Si termina en ,0
                     precioPesosArgString = precioPesosArgString.replace(",0", "");

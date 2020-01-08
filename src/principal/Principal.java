@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package principal;
+
 import conexion.Conexion;
 import forms.ABMCliente;
 import forms.ABMEmpleado;
@@ -15,8 +16,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import metodos.ImagenFondo;
 import metodos.Metodos;
@@ -26,6 +30,7 @@ import org.jsoup.select.Elements;
 //Variables globales
 import static login.Login.Alias;
 //
+
 /**
  *
  * @author Lic. Arnaldo Cantero
@@ -57,30 +62,37 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             Conexion con = metodos.ObtenerRSSentencia("SELECT coti_valorcompra, coti_valorventa, coti_fecha "
                     + "FROM cotizacion WHERE coti_de='Dolares' AND coti_a='Guaranies'");
             con.rs.next();
-            SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");  //25/08/2015
-            lblFechaCotizacion.setText("Fecha de cotización: " + con.rs.getDate("coti_fecha"));
+            SimpleDateFormat formatoFechaAmericano = new SimpleDateFormat("yyyy/MM/dd");
+            SimpleDateFormat formatoFechaSudamerica = new SimpleDateFormat("dd/MM/yyyy");
+            Date fechaFormatoAmericano = formatoFechaAmericano.parse(con.rs.getString("coti_fecha").replace("-", "/"));
+            lblFechaCotizacion.setText("Fecha de cotización: " + formatoFechaSudamerica.format(fechaFormatoAmericano));
 
-            cotiUsdGsCompra = Double.parseDouble(con.rs.getString("coti_valorcompra"));
-            lblCotiUsdGsCompra.setText(cotiUsdGsCompra + "");
-            lblCotiUsdGsVenta.setText(con.rs.getString("coti_valorventa"));
+            cotiUsdGsCompra = Double.parseDouble(con.rs.getString("coti_valorcompra")); //Variable global
+            
+            lblCotiUsdGsCompra.setText(metodostxt.PonerPuntosMilesKeyReleased((cotiUsdGsCompra + "").replace(".", ",")));
+            lblCotiUsdGsVenta.setText(metodostxt.PonerPuntosMilesKeyReleased((con.rs.getString("coti_valorventa")).replace(".", ",")));
 
             con = metodos.ObtenerRSSentencia("SELECT coti_valorcompra, coti_valorventa, coti_fecha "
                     + "FROM cotizacion WHERE coti_de='Dolares' AND coti_a='Reales'");
             con.rs.next();
             cotiUsdRsCompra = Double.parseDouble(con.rs.getString("coti_valorcompra"));
-            lblCotiUsdRsCompra.setText(cotiUsdRsCompra + "");
-            lblCotiUsdRsVenta.setText(con.rs.getString("coti_valorventa"));
+            
+            lblCotiUsdRsCompra.setText(metodostxt.PonerPuntosMilesKeyReleased((cotiUsdRsCompra + "").replace(".", ",")));
+            lblCotiUsdRsVenta.setText(metodostxt.PonerPuntosMilesKeyReleased((con.rs.getString("coti_valorventa")).replace(".", ",")));
 
             con = metodos.ObtenerRSSentencia("SELECT coti_valorcompra, coti_valorventa, coti_fecha "
                     + "FROM cotizacion WHERE coti_de='Dolares' AND coti_a='Pesos argentinos'");
             con.rs.next();
             cotiUsdPaCompra = Double.parseDouble(con.rs.getString("coti_valorcompra"));
-            lblCotiUsdPaCompra.setText(cotiUsdPaCompra + "");
-            lblCotiUsdPaVenta.setText(con.rs.getString("coti_valorventa"));
+            
+            lblCotiUsdPaCompra.setText(metodostxt.PonerPuntosMilesKeyReleased((cotiUsdPaCompra + "").replace(".", ",")));
+            lblCotiUsdPaVenta.setText(metodostxt.PonerPuntosMilesKeyReleased((con.rs.getString("coti_valorventa")).replace(".", ",")));
 
             con.DesconectarBasedeDatos();
         } catch (SQLException e) {
             System.out.println("Error al asignar cotizaciones desde bd" + e);
+        } catch (ParseException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -502,7 +514,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
 
         lbFechaTitulo.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         lbFechaTitulo.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lbFechaTitulo.setText("Fecha:");
+        lbFechaTitulo.setText("Fecha de hoy:");
         lbFechaTitulo.setFocusable(false);
         lbFechaTitulo.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
@@ -513,7 +525,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
 
         lbHoraTitulo.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         lbHoraTitulo.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lbHoraTitulo.setText("Hora:");
+        lbHoraTitulo.setText("Hora actual:");
         lbHoraTitulo.setFocusable(false);
         lbHoraTitulo.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
@@ -545,17 +557,17 @@ public class Principal extends javax.swing.JFrame implements Runnable {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbAlias, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+                .addComponent(lbAlias, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblPerfil, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
-                .addGap(634, 634, 634)
-                .addComponent(lbFechaTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblPerfil, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
+                .addGap(573, 573, 573)
+                .addComponent(lbFechaTitulo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lbFecha)
-                .addGap(29, 29, 29)
-                .addComponent(lbHoraTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lbHoraTitulo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lbHora, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
