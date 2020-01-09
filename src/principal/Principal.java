@@ -5,6 +5,7 @@
  */
 package principal;
 
+import codigobarras.GenerarCodigoBarras;
 import conexion.Conexion;
 import forms.ABMCliente;
 import forms.ABMEmpleado;
@@ -33,7 +34,7 @@ import static login.Login.Alias;
  * @author Lic. Arnaldo Cantero
  */
 public class Principal extends javax.swing.JFrame implements Runnable {
-
+    
     Metodos metodos = new Metodos();
     MetodosTXT metodostxt = new MetodosTXT();
     Thread hilo;
@@ -49,10 +50,10 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         lbAlias.setText(Alias);
         PerfilUsuario();
         AsignarCotizaciones();
-
+        
         setVisible(true);
     }
-
+    
     private void AsignarCotizaciones() {
         try {
             Conexion con = metodos.ObtenerRSSentencia("SELECT coti_valorcompra, coti_valorventa, coti_fecha "
@@ -62,28 +63,28 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             SimpleDateFormat formatoFechaSudamerica = new SimpleDateFormat("dd/MM/yyyy");
             Date fechaFormatoAmericano = formatoFechaAmericano.parse(con.rs.getString("coti_fecha").replace("-", "/"));
             lblFechaCotizacion.setText("Fecha de cotización: " + formatoFechaSudamerica.format(fechaFormatoAmericano));
-
+            
             cotiUsdGsCompra = Double.parseDouble(con.rs.getString("coti_valorcompra")); //Variable global
 
-            lblCotiUsdGsCompra.setText(metodostxt.PonerPuntosMilesKeyReleased((cotiUsdGsCompra + "").replace(".", ",")));
-            lblCotiUsdGsVenta.setText(metodostxt.PonerPuntosMilesKeyReleased((con.rs.getString("coti_valorventa")).replace(".", ",")));
-
+            lblCotiUsdGsCompra.setText(metodos.Sacar0ADouble(cotiUsdGsCompra));
+            lblCotiUsdGsVenta.setText(metodos.Sacar0ADouble(con.rs.getDouble("coti_valorventa")));
+            
             con = metodos.ObtenerRSSentencia("SELECT coti_valorcompra, coti_valorventa, coti_fecha "
                     + "FROM cotizacion WHERE coti_de='Dolares' AND coti_a='Reales'");
             con.rs.next();
             cotiUsdRsCompra = Double.parseDouble(con.rs.getString("coti_valorcompra"));
-
-            lblCotiUsdRsCompra.setText(metodostxt.PonerPuntosMilesKeyReleased((cotiUsdRsCompra + "").replace(".", ",")));
-            lblCotiUsdRsVenta.setText(metodostxt.PonerPuntosMilesKeyReleased((con.rs.getString("coti_valorventa")).replace(".", ",")));
-
+            
+            lblCotiUsdRsCompra.setText(metodos.Sacar0ADouble(cotiUsdRsCompra));
+            lblCotiUsdRsVenta.setText(metodos.Sacar0ADouble(con.rs.getDouble("coti_valorventa")));
+            
             con = metodos.ObtenerRSSentencia("SELECT coti_valorcompra, coti_valorventa, coti_fecha "
                     + "FROM cotizacion WHERE coti_de='Dolares' AND coti_a='Pesos argentinos'");
             con.rs.next();
             cotiUsdPaCompra = Double.parseDouble(con.rs.getString("coti_valorcompra"));
-
-            lblCotiUsdPaCompra.setText(metodostxt.PonerPuntosMilesKeyReleased((cotiUsdPaCompra + "").replace(".", ",")));
-            lblCotiUsdPaVenta.setText(metodostxt.PonerPuntosMilesKeyReleased((con.rs.getString("coti_valorventa")).replace(".", ",")));
-
+            
+            lblCotiUsdPaCompra.setText(metodos.Sacar0ADouble(cotiUsdPaCompra));
+            lblCotiUsdPaVenta.setText(metodos.Sacar0ADouble(con.rs.getDouble("coti_valorventa")));
+            
             con.DesconectarBasedeDatos();
         } catch (SQLException e) {
             System.out.println("Error al asignar cotizaciones desde bd" + e);
@@ -91,7 +92,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     private void PerfilUsuario() {
         String consulta = "CALL SP_UsuarioPerfilConsulta('" + Alias + "')";
         System.out.println("consulta: " + consulta);
@@ -114,7 +115,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             System.out.println("Error en SQL " + SQL.getMessage());
         }
     }
-
+    
     private void ObtenerHorayFecha() {
         //Obtener fecha y hora
         hilo = new Thread(this);
@@ -186,6 +187,8 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jMenuItem9 = new javax.swing.JMenuItem();
         jSeparator6 = new javax.swing.JPopupMenu.Separator();
         jMenuItem17 = new javax.swing.JMenuItem();
+        jMenu5 = new javax.swing.JMenu();
+        jMenuItem5 = new javax.swing.JMenuItem();
         jMenu7 = new javax.swing.JMenu();
         jMenuItem6 = new javax.swing.JMenuItem();
         jMenu6 = new javax.swing.JMenu();
@@ -524,7 +527,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jMenu8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoCompra.png"))); // NOI18N
         jMenu8.setText("COMPRAS");
         jMenu8.setFont(new java.awt.Font("Sitka Text", 1, 14)); // NOI18N
-        jMenu8.setPreferredSize(new java.awt.Dimension(270, 70));
+        jMenu8.setPreferredSize(new java.awt.Dimension(200, 70));
         jMenu8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenu8ActionPerformed(evt);
@@ -653,6 +656,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jMenu4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoUsuario.png"))); // NOI18N
         jMenu4.setText("USUARIOS");
         jMenu4.setFont(new java.awt.Font("Sitka Text", 1, 14)); // NOI18N
+        jMenu4.setMinimumSize(new java.awt.Dimension(210, 70));
         jMenu4.setPreferredSize(new java.awt.Dimension(270, 70));
 
         jMenuItem4.setText("CLIENTE");
@@ -682,6 +686,21 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jMenu4.add(jMenuItem17);
 
         jMenuBar1.add(jMenu4);
+
+        jMenu5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoUsuario.png"))); // NOI18N
+        jMenu5.setText("UTILIDADES");
+        jMenu5.setFont(new java.awt.Font("Sitka Text", 1, 14)); // NOI18N
+        jMenu5.setPreferredSize(new java.awt.Dimension(270, 70));
+
+        jMenuItem5.setText("Generar código de barras");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem5);
+
+        jMenuBar1.add(jMenu5);
 
         jMenu7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoConfiguracion.png"))); // NOI18N
         jMenu7.setText("CONFIGURACIÓN");
@@ -750,12 +769,12 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
 
     }//GEN-LAST:event_jMenuItem9ActionPerformed
-
+    
 
     private void jMenuItem17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem17ActionPerformed
 
     }//GEN-LAST:event_jMenuItem17ActionPerformed
-
+    
     private void ObtenerFechayHora() {
         Date fecha = new Date();
         //Formateando la fecha:
@@ -764,7 +783,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         DateFormat formatoHora = new SimpleDateFormat("HH:mm:ss");
         lbHora.setText(formatoHora.format(fecha));
     }
-
+    
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
 
@@ -862,6 +881,11 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         abmempresaregistrante.setVisible(true);*/
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        GenerarCodigoBarras generarcodigobarras = new GenerarCodigoBarras(this, true);
+        generarcodigobarras.setVisible(true);
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -915,6 +939,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenu jMenu6;
     private javax.swing.JMenu jMenu7;
     private javax.swing.JMenu jMenu8;
@@ -930,6 +955,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     private javax.swing.JMenuItem jMenuItem23;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
@@ -975,10 +1001,10 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 
         Thread current = Thread.currentThread();
-
+        
         while (current == hilo) {
             ObtenerFechayHora();
-
+            
         }
     }
 }

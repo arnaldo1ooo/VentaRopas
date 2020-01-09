@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -56,11 +57,18 @@ public final class ABMProducto extends javax.swing.JDialog {
         TablaConsultaBD(txtBuscar.getText()); //Trae todos los registros
         txtBuscar.requestFocus();
 
-        ObtenerCotizacion obtenercotizacion = new ObtenerCotizacion();
         CargarComboBoxes();
+
         OrdenTabulador();
     }
 
+    private long GenerarNumAlAzar() {
+        Random r = new Random();
+        long numMin = 000000000001L;
+        long numMax = 999999999999L;
+        long resultado = numMin + ((long) (r.nextDouble() * (numMax - numMin)));
+        return resultado;
+    }
 
 //--------------------------METODOS----------------------------//
     public void CargarComboBoxes() {
@@ -1101,6 +1109,7 @@ public final class ABMProducto extends javax.swing.JDialog {
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         Limpiar();
+        txtCodigoProducto.setText(GenerarNumAlAzar() + "");
         ModoEdicion(true);
     }//GEN-LAST:event_btnNuevoActionPerformed
 

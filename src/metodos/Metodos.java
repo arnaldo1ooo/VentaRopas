@@ -288,4 +288,14 @@ public class Metodos {
         }
         return true;
     }
+
+    public String Sacar0ADouble(double elNumDouble) {
+        String elNumString = (elNumDouble + "").replace(".", ",");
+        if ((elNumDouble - (int) elNumDouble) == 0) { //Si termina en ,0
+            elNumString = elNumString.replace(",0", "");
+            return metodostxt.PonerPuntosMilesKeyReleased(elNumString);
+        } else {
+            return metodostxt.PonerPuntosMilesKeyReleased(elNumString);
+        }
+    }
 }

@@ -9,8 +9,6 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import metodos.Metodos;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -42,8 +40,10 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
     private void initComponents() {
 
         panel1 = new org.edisoncor.gui.panel.Panel();
-        rSProgressCircleAnimated1 = new rojerusan.componentes.RSProgressCircleAnimated();
+        rSProgressMaterial1 = new rojerusan.componentes.RSProgressMaterial();
+        labelMetric1 = new org.edisoncor.gui.label.LabelMetric();
         panelCurves1 = new org.edisoncor.gui.panel.PanelCurves();
+        labelHeader1 = new org.edisoncor.gui.label.LabelHeader();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setAlwaysOnTop(true);
@@ -54,7 +54,16 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
         panel1.setColorSecundario(new java.awt.Color(204, 204, 204));
         panel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/iconos/FondoSplash.png"))); // NOI18N
 
-        rSProgressCircleAnimated1.setColorText(new java.awt.Color(255, 255, 255));
+        rSProgressMaterial1.setForeground(new java.awt.Color(0, 153, 153));
+
+        labelMetric1.setText("Cargando sistema...");
+        labelMetric1.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
+
+        panelCurves1.setForeground(new java.awt.Color(204, 51, 0));
+
+        labelHeader1.setText("SISTEMA DE VENTAS");
+        labelHeader1.setColor(new java.awt.Color(255, 51, 51));
+        labelHeader1.setFont(new java.awt.Font("Copperplate Gothic Bold", 1, 18)); // NOI18N
 
         javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
         panel1.setLayout(panel1Layout);
@@ -62,19 +71,35 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
             panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panelCurves1, javax.swing.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE)
             .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(labelHeader1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE))
+            .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
-                    .addContainerGap(33, Short.MAX_VALUE)
-                    .addComponent(rSProgressCircleAnimated1, javax.swing.GroupLayout.PREFERRED_SIZE, 435, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(34, Short.MAX_VALUE)))
+                    .addContainerGap(108, Short.MAX_VALUE)
+                    .addComponent(rSProgressMaterial1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(339, Short.MAX_VALUE)))
+            .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
+                    .addContainerGap(169, Short.MAX_VALUE)
+                    .addComponent(labelMetric1, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(96, Short.MAX_VALUE)))
         );
         panel1Layout.setVerticalGroup(
             panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panelCurves1, javax.swing.GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE)
             .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panel1Layout.createSequentialGroup()
+                    .addComponent(labelHeader1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 309, Short.MAX_VALUE)))
+            .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
-                    .addContainerGap(213, Short.MAX_VALUE)
-                    .addComponent(rSProgressCircleAnimated1, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(53, Short.MAX_VALUE)))
+                    .addContainerGap(243, Short.MAX_VALUE)
+                    .addComponent(rSProgressMaterial1, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(56, Short.MAX_VALUE)))
+            .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
+                    .addContainerGap(247, Short.MAX_VALUE)
+                    .addComponent(labelMetric1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(56, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -135,19 +160,21 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private org.edisoncor.gui.label.LabelHeader labelHeader1;
+    private org.edisoncor.gui.label.LabelMetric labelMetric1;
     private org.edisoncor.gui.panel.Panel panel1;
     private org.edisoncor.gui.panel.PanelCurves panelCurves1;
-    private rojerusan.componentes.RSProgressCircleAnimated rSProgressCircleAnimated1;
+    private rojerusan.componentes.RSProgressMaterial rSProgressMaterial1;
     // End of variables declaration//GEN-END:variables
 
     public void run() {
         //while (tiempo != null) {
-            //Thread.sleep(5000);
-            System.out.println("tiempo");
-            ObtenerCotizacionScrapingWeb();
-            this.dispose();
-            Principal principal = new Principal();
-            principal.setVisible(true);
+        //Thread.sleep(5000);
+        System.out.println("tiempo");
+        ObtenerCotizacionScrapingWeb();
+        this.dispose();
+        Principal principal = new Principal();
+        principal.setVisible(true);
         //}
     }
 

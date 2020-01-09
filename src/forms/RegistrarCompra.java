@@ -1041,45 +1041,22 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                 String precioDolaresString = txtPrecioDolares.getText().replace(".", "");
                 double precioDolaresDouble = Double.parseDouble(precioDolaresString.replace(",", "."));
                 precioDolaresDouble = Double.parseDouble((df3Decimales.format(precioDolaresDouble)).replace(",", "."));
-                if ((precioDolaresDouble - (int) precioDolaresDouble) == 0) { //Si termina en ,0
-                    precioDolaresString = precioDolaresString.replace(",0", "");
-                    txtPrecioDolares.setText(metodostxt.PonerPuntosMilesKeyReleased(precioDolaresString));
-                } else {
-                    txtPrecioDolares.setText(metodostxt.PonerPuntosMilesKeyReleased(precioDolaresString));
-                }
+                txtPrecioDolares.setText(metodos.Sacar0ADouble(precioDolaresDouble));
 
                 //Precio, cambio a Guaranies
                 double precioGsDouble = precioDolaresDouble * cotiUsdGsCompra;
                 precioGsDouble = Double.parseDouble((df3Decimales.format(precioGsDouble)).replace(",", "."));
-                String precioGsString = (precioGsDouble + "").replace(".", ",");
-                if ((precioGsDouble - (int) precioGsDouble) == 0) { //Si termina en ,0
-                    precioGsString = precioGsString.replace(",0", "");
-                    txtPrecioGs.setText(metodostxt.PonerPuntosMilesKeyReleased(precioGsString));
-                } else {
-                    txtPrecioGs.setText(metodostxt.PonerPuntosMilesKeyReleased(precioGsString));
-                }
+                txtPrecioGs.setText(metodos.Sacar0ADouble(precioGsDouble));
 
                 //Precio, cambio a Reales
                 double precioRsDouble = precioDolaresDouble * cotiUsdRsCompra;
                 precioRsDouble = Double.parseDouble((df3Decimales.format(precioRsDouble)).replace(",", "."));
-                String precioRsString = (precioRsDouble + "").replace(".", ",");
-                if ((precioRsDouble - (int) precioRsDouble) == 0) { //Si termina en ,0
-                    precioRsString = precioRsString.replace(",0", "");
-                    txtPrecioReales.setText(metodostxt.PonerPuntosMilesKeyReleased(precioRsString));
-                } else {
-                    txtPrecioReales.setText(metodostxt.PonerPuntosMilesKeyReleased(precioRsString));
-                }
+                txtPrecioReales.setText(metodos.Sacar0ADouble(precioRsDouble));
 
                 //Precio, cambio a Pesos argentinos
                 double precioPesosArgDouble = precioDolaresDouble * cotiUsdPaCompra;
                 precioPesosArgDouble = Double.parseDouble((df3Decimales.format(precioPesosArgDouble)).replace(",", "."));
-                String precioPesosArgString = (precioPesosArgDouble + "").replace(".", ",");;
-                if ((precioPesosArgDouble - (int) precioPesosArgDouble) == 0) { //Si termina en ,0
-                    precioPesosArgString = precioPesosArgString.replace(",0", "");
-                    txtPrecioPesosArg.setText(metodostxt.PonerPuntosMilesKeyReleased(precioPesosArgString));
-                } else {
-                    txtPrecioPesosArg.setText(metodostxt.PonerPuntosMilesKeyReleased(precioPesosArgString));
-                }
+                txtPrecioPesosArg.setText(metodos.Sacar0ADouble(precioPesosArgDouble));
             }
         } else {
             LimpiarProducto();
