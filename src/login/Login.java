@@ -15,6 +15,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import metodos.PlaceHolder;
+import principal.SplashScreen;
 
 public class Login extends javax.swing.JFrame {
 
@@ -54,8 +55,8 @@ public class Login extends javax.swing.JFrame {
                 CodUsuario = rs.getString("usu_codigo");
                 NomApeUsuario = rs.getString("usu_nombre") + " " + rs.getString("usu_apellido");
 
-                Principal principal = new Principal();
-                principal.setEnabled(true);
+                SplashScreen splash = new SplashScreen(this, true);
+                splash.setVisible(true);
                 dispose(); //Cerrar jdialog
             } else {
                 JOptionPane.showMessageDialog(this, "Nombre de usuario o contraseña incorrecta!");

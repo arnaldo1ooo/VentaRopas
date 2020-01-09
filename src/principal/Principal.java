@@ -10,7 +10,6 @@ import forms.ABMCliente;
 import forms.ABMEmpleado;
 import forms.ABMProducto;
 import forms.RegistrarCompra;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,8 +24,6 @@ import javax.swing.JOptionPane;
 import metodos.ImagenFondo;
 import metodos.Metodos;
 import metodos.MetodosTXT;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 //Variables globales
 import static login.Login.Alias;
 //
@@ -51,10 +48,9 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         ObtenerHorayFecha();
         lbAlias.setText(Alias);
         PerfilUsuario();
+        AsignarCotizaciones();
 
         setVisible(true);
-        ObtenerCotizacionScrapingWeb();
-        AsignarCotizaciones();
     }
 
     private void AsignarCotizaciones() {
@@ -68,7 +64,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             lblFechaCotizacion.setText("Fecha de cotización: " + formatoFechaSudamerica.format(fechaFormatoAmericano));
 
             cotiUsdGsCompra = Double.parseDouble(con.rs.getString("coti_valorcompra")); //Variable global
-            
+
             lblCotiUsdGsCompra.setText(metodostxt.PonerPuntosMilesKeyReleased((cotiUsdGsCompra + "").replace(".", ",")));
             lblCotiUsdGsVenta.setText(metodostxt.PonerPuntosMilesKeyReleased((con.rs.getString("coti_valorventa")).replace(".", ",")));
 
@@ -76,7 +72,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
                     + "FROM cotizacion WHERE coti_de='Dolares' AND coti_a='Reales'");
             con.rs.next();
             cotiUsdRsCompra = Double.parseDouble(con.rs.getString("coti_valorcompra"));
-            
+
             lblCotiUsdRsCompra.setText(metodostxt.PonerPuntosMilesKeyReleased((cotiUsdRsCompra + "").replace(".", ",")));
             lblCotiUsdRsVenta.setText(metodostxt.PonerPuntosMilesKeyReleased((con.rs.getString("coti_valorventa")).replace(".", ",")));
 
@@ -84,7 +80,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
                     + "FROM cotizacion WHERE coti_de='Dolares' AND coti_a='Pesos argentinos'");
             con.rs.next();
             cotiUsdPaCompra = Double.parseDouble(con.rs.getString("coti_valorcompra"));
-            
+
             lblCotiUsdPaCompra.setText(metodostxt.PonerPuntosMilesKeyReleased((cotiUsdPaCompra + "").replace(".", ",")));
             lblCotiUsdPaVenta.setText(metodostxt.PonerPuntosMilesKeyReleased((con.rs.getString("coti_valorventa")).replace(".", ",")));
 
@@ -94,75 +90,6 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         } catch (ParseException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    private void ObtenerCotizacionScrapingWeb() {
-        try {
-            org.jsoup.nodes.Document doc = org.jsoup.Jsoup.connect("http://www.cambioschaco.com.py/").validateTLSCertificates(false).get();
-
-            //Obtiene el titulo de la pagina
-            String title = doc.title();
-            System.out.println("\nScraping Web (CAMBIOS CHACO)");
-            System.out.println("Titulo de la pagina:  " + title + "\n");
-
-            Elements losDiv;
-            Elements losTr;
-            Element fila1;
-            Element fila2;
-
-            losDiv = doc.select("div." + "col-sm-7"); //Las tablas, div.
-            losTr = losDiv.select("tr"); //Las filas, tr.
-            fila1 = losTr.get(1); //el get(0) seria los titulos
-            String usdGsCompraString = fila1.getElementsByClass("purchase").text();
-            double usdGsCompraDouble = Double.parseDouble(((usdGsCompraString).replace(".", "")).replace(",", "."));
-            System.out.println("Compra Dolar x Guaranies: " + usdGsCompraString
-                    + "     Compra Dolar x Guaranies Double: " + usdGsCompraDouble);
-
-            String usdGsVentaString = fila1.getElementsByClass("sale").text();
-            double usdGsVentaDouble = Double.parseDouble(((usdGsVentaString).replace(".", "")).replace(",", "."));
-            System.out.println("Venta Dolar x Guaranies: " + usdGsVentaString
-                    + "     Venta Dolar x Guaranies Double: " + usdGsVentaDouble + "\n");
-            metodos.EjecutarUpdate("CALL SP_CotizacionModificar('Dolares','Guaranies','" + usdGsCompraDouble + "','"
-                    + usdGsVentaDouble + "','" + FechaActual() + "')");
-
-            losDiv = doc.select("div." + "col-sm-5"); //Las tablas, div.
-            losTr = losDiv.select("tr"); //Las filas, tr.
-            fila1 = losTr.get(1); //el get(0) seria los titulos
-            fila2 = losTr.get(2); //el get(0) seria los titulos
-
-            String usdRsCompraString = fila1.getElementsByClass("purchase").text();
-            double usdRsCompraDouble = Double.parseDouble(((usdRsCompraString).replace(".", "")).replace(",", "."));
-            System.out.println("Compra Dolar x Reales: " + usdRsCompraString
-                    + "     Compra Dolar x Reales Double: " + usdRsCompraDouble);
-
-            String usdRsVentaString = fila1.getElementsByClass("sale").text();
-            double usdRsVentaDouble = Double.parseDouble(((usdRsVentaString).replace(".", "")).replace(",", "."));
-            System.out.println("Venta Dolar x Reales: " + usdRsVentaString
-                    + "     Venta Dolar x Reales Double: " + usdRsVentaDouble + "\n");
-            metodos.EjecutarUpdate("CALL SP_CotizacionModificar('Dolares','Reales','" + usdRsCompraDouble + "','"
-                    + usdRsVentaDouble + "','" + FechaActual() + "')");
-
-            String usdPaCompraString = fila2.getElementsByClass("purchase").text();
-            double usdPaCompraDouble = Double.parseDouble(((usdPaCompraString).replace(".", "")).replace(",", "."));
-            System.out.println("Compra Dolar x PesoArg: " + usdPaCompraString
-                    + "     Compra Dolar x PesoArg Double: " + usdPaCompraDouble);
-
-            String usdPaVentaString = fila2.getElementsByClass("sale").text();
-            double usdPaVentaDouble = Double.parseDouble(((usdPaVentaString).replace(".", "")).replace(",", "."));
-            System.out.println("Venta Dolar x PesoArg: " + usdPaVentaString
-                    + "     Venta Dolar x PesoArg Double: " + usdPaVentaDouble + "\n");
-            metodos.EjecutarUpdate("CALL SP_CotizacionModificar('Dolares','Pesos argentinos','" + usdPaCompraDouble + "','"
-                    + usdPaVentaDouble + "','" + FechaActual() + "')");
-        } catch (IOException e) {
-            System.out.println("Error al realizar el scraping web " + e);
-        }
-    }
-
-    private String FechaActual() {
-        Date fechaactual = new Date();
-        DateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
-        String fechaactualString = formatoFecha.format(fechaactual);
-        return fechaactualString;
     }
 
     private void PerfilUsuario() {
@@ -486,7 +413,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 959, Short.MAX_VALUE)
                 .addComponent(jpBotones1, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         dpEscritorioLayout.setVerticalGroup(
@@ -557,11 +484,11 @@ public class Principal extends javax.swing.JFrame implements Runnable {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbAlias, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)
+                .addComponent(lbAlias, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblPerfil, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
+                .addComponent(lblPerfil, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
                 .addGap(573, 573, 573)
                 .addComponent(lbFechaTitulo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -796,7 +723,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(dpEscritorio)
-                    .addComponent(jpBarra, javax.swing.GroupLayout.DEFAULT_SIZE, 1597, Short.MAX_VALUE))
+                    .addComponent(jpBarra, javax.swing.GroupLayout.DEFAULT_SIZE, 1606, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
         layout.setVerticalGroup(

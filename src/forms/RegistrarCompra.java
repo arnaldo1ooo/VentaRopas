@@ -160,7 +160,6 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         dcFechaRegistro.setEnabled(valor);
         dcFechaCompra.setEnabled(valor);
         txtCodigoProducto.setEnabled(valor);
-        btnProducto.setEnabled(valor);
         txtCantidadAdquirida.setEnabled(valor);
         txtPrecioCompra.setEnabled(valor);
         btnNuevo.setEnabled(!valor);
@@ -293,7 +292,6 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         lblCodigoProducto = new javax.swing.JLabel();
         txtCodigoProducto = new javax.swing.JTextField();
         lblTituloDescripcion = new javax.swing.JLabel();
-        btnProducto = new javax.swing.JButton();
         txtDescripcionProducto = new javax.swing.JTextField();
         lblCodigo6 = new javax.swing.JLabel();
         txtExistenciaActual = new javax.swing.JTextField();
@@ -314,7 +312,6 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         txtIDProducto = new javax.swing.JTextField();
         lblIDProducto = new javax.swing.JLabel();
         jpProductos = new javax.swing.JPanel();
-        jButton6 = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnAnadir = new javax.swing.JButton();
         txtPrecioCompra = new javax.swing.JTextField();
@@ -570,14 +567,6 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         lblTituloDescripcion.setText("Descripción del producto");
         lblTituloDescripcion.setToolTipText("");
 
-        btnProducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos20x20/IconoBuscar.png"))); // NOI18N
-        btnProducto.setEnabled(false);
-        btnProducto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnProductoActionPerformed(evt);
-            }
-        });
-
         txtDescripcionProducto.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         txtDescripcionProducto.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         txtDescripcionProducto.setEnabled(false);
@@ -685,11 +674,8 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblCodigoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jpDatosProductoLayout.createSequentialGroup()
-                                .addComponent(txtCodigoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(2, 2, 2)
-                                .addComponent(btnProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
+                            .addComponent(txtCodigoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(56, 56, 56)
                         .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(lblCodigo6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtExistenciaActual, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -762,10 +748,9 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                             .addComponent(lblCodigoProducto)
                             .addComponent(lblCodigo6)
                             .addComponent(lblIDProducto))
-                        .addGap(2, 2, 2)
+                        .addGap(4, 4, 4)
                         .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                             .addComponent(txtCodigoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtExistenciaActual, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtIDProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -778,13 +763,12 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         jpProductos.setBackground(new java.awt.Color(233, 255, 255));
         jpProductos.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos20x20/IconoBuscar.png"))); // NOI18N
-        jButton6.setEnabled(false);
-
         btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos20x20/IconoEliminar.png"))); // NOI18N
+        btnEliminar.setText("Retirar");
         btnEliminar.setEnabled(false);
 
         btnAnadir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos20x20/IconoNuevo.png"))); // NOI18N
+        btnAnadir.setText("Añadir");
         btnAnadir.setEnabled(false);
         btnAnadir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -896,16 +880,15 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                             .addComponent(lblPrecioCompra))
                         .addGap(1, 1, 1)
                         .addGroup(jpProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cbMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jpProductosLayout.createSequentialGroup()
                                 .addGap(4, 4, 4)
-                                .addComponent(lblCodigo10, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 255, Short.MAX_VALUE)
-                        .addComponent(btnAnadir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(lblCodigo10, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jpProductosLayout.createSequentialGroup()
+                                .addComponent(cbMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 196, Short.MAX_VALUE)
+                                .addComponent(btnAnadir)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnEliminar))))
                     .addComponent(scPrincipal))
                 .addContainerGap())
         );
@@ -923,7 +906,6 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                     .addComponent(txtPrecioCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAnadir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cbMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(4, 4, 4)
                 .addComponent(scPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1169,11 +1151,6 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         metodostxt.TxtColorLabelKeyReleased(txtPrecioCompra, lblPrecioCompra);
     }//GEN-LAST:event_txtPrecioCompraKeyReleased
 
-    private void btnProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductoActionPerformed
-        ABMProducto abmproducto = new ABMProducto(null, true);
-        abmproducto.setVisible(true);
-    }//GEN-LAST:event_btnProductoActionPerformed
-
     private void txtNumCompraKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumCompraKeyReleased
         metodostxt.TxtColorLabelKeyReleased(txtNumCompra, lblNumCompra);
     }//GEN-LAST:event_txtNumCompraKeyReleased
@@ -1227,14 +1204,12 @@ public final class RegistrarCompra extends javax.swing.JDialog {
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnNuevo;
-    private javax.swing.JButton btnProducto;
     private javax.swing.JButton btnProveedor;
     private javax.swing.JComboBox<String> cbMoneda;
     private javax.swing.JComboBox<MetodosCombo> cbProveedor;
     private javax.swing.JComboBox<String> cbTipoDocumento;
     private com.toedter.calendar.JDateChooser dcFechaCompra;
     private com.toedter.calendar.JDateChooser dcFechaRegistro;
-    private javax.swing.JButton jButton6;
     private javax.swing.JPanel jpBanner;
     private javax.swing.JPanel jpBotones;
     private javax.swing.JPanel jpDatosCompra;

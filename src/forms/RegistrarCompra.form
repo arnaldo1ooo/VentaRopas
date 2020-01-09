@@ -531,13 +531,9 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="lblCodigoProducto" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="txtCodigoProducto" min="-2" pref="161" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
-                                      <Component id="btnProducto" min="-2" pref="36" max="-2" attributes="0"/>
-                                  </Group>
+                                  <Component id="txtCodigoProducto" alignment="0" min="-2" pref="161" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="lblCodigo6" max="32767" attributes="0"/>
                                   <Component id="txtExistenciaActual" min="-2" pref="114" max="-2" attributes="0"/>
@@ -632,10 +628,9 @@
                                   <Component id="lblCodigo6" alignment="2" min="-2" max="-2" attributes="0"/>
                                   <Component id="lblIDProducto" alignment="2" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="2" pref="2" max="-2" attributes="0"/>
+                              <EmptySpace min="4" pref="4" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="2" attributes="0">
                                   <Component id="txtCodigoProducto" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
-                                  <Component id="btnProducto" alignment="2" min="-2" pref="36" max="-2" attributes="0"/>
                                   <Component id="txtExistenciaActual" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
                                   <Component id="txtIDProducto" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
                               </Group>
@@ -683,17 +678,6 @@
                 <Property name="text" type="java.lang.String" value="Descripci&#xf3;n del producto"/>
                 <Property name="toolTipText" type="java.lang.String" value=""/>
               </Properties>
-            </Component>
-            <Component class="javax.swing.JButton" name="btnProducto">
-              <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/iconos/Iconos20x20/IconoBuscar.png"/>
-                </Property>
-                <Property name="enabled" type="boolean" value="false"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnProductoActionPerformed"/>
-              </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="txtDescripcionProducto">
               <Properties>
@@ -931,18 +915,18 @@
                               </Group>
                               <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="cbMoneda" min="-2" pref="143" max="-2" attributes="0"/>
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                                       <Component id="lblCodigo10" min="-2" pref="64" max="-2" attributes="0"/>
                                   </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="cbMoneda" min="-2" pref="143" max="-2" attributes="0"/>
+                                      <EmptySpace pref="196" max="32767" attributes="0"/>
+                                      <Component id="btnAnadir" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="btnEliminar" min="-2" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
-                              <EmptySpace pref="255" max="32767" attributes="0"/>
-                              <Component id="btnAnadir" min="-2" pref="36" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btnEliminar" min="-2" pref="36" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jButton6" min="-2" pref="36" max="-2" attributes="0"/>
                           </Group>
                           <Component id="scPrincipal" alignment="0" max="32767" attributes="0"/>
                       </Group>
@@ -965,7 +949,6 @@
                           <Component id="txtPrecioCompra" alignment="2" min="-2" pref="36" max="-2" attributes="0"/>
                           <Component id="btnAnadir" alignment="2" min="-2" pref="36" max="-2" attributes="0"/>
                           <Component id="btnEliminar" alignment="2" min="-2" pref="36" max="-2" attributes="0"/>
-                          <Component id="jButton6" alignment="2" min="-2" pref="36" max="-2" attributes="0"/>
                           <Component id="cbMoneda" alignment="2" min="-2" pref="36" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
@@ -976,19 +959,12 @@
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JButton" name="jButton6">
-              <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/iconos/Iconos20x20/IconoBuscar.png"/>
-                </Property>
-                <Property name="enabled" type="boolean" value="false"/>
-              </Properties>
-            </Component>
             <Component class="javax.swing.JButton" name="btnEliminar">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/iconos/Iconos20x20/IconoEliminar.png"/>
                 </Property>
+                <Property name="text" type="java.lang.String" value="Retirar"/>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
             </Component>
@@ -997,6 +973,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/iconos/Iconos20x20/IconoNuevo.png"/>
                 </Property>
+                <Property name="text" type="java.lang.String" value="A&#xf1;adir"/>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>

@@ -522,7 +522,6 @@
                           </Group>
                           <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                              <Component id="txtCodigoProducto" alignment="0" max="32767" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="txtCodigo" min="-2" pref="85" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
@@ -537,6 +536,7 @@
                               </Group>
                               <Component id="cbTamano" alignment="0" max="32767" attributes="0"/>
                               <Component id="cbMarca" alignment="0" max="32767" attributes="0"/>
+                              <Component id="txtCodigoProducto" alignment="0" min="-2" pref="184" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -728,7 +728,7 @@
                       <Color blue="66" green="66" red="66" type="rgb"/>
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="4"/>
-                    <Property name="text" type="java.lang.String" value="Precio*:"/>
+                    <Property name="text" type="java.lang.String" value="Precio de venta*:"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtPrecio">
