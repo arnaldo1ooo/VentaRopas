@@ -96,7 +96,6 @@ public class MetodosTXT {
                 if (siEsDecimal != -1) { //Si es decimal
                     int parteEntera = (int) Double.parseDouble(elNumero.replace(",", "."));
                     String parteDecimal = elNumero.substring(elNumero.indexOf(','));
-
                     String parteEnteraString = parteEntera + "";
                     int longitud = parteEnteraString.length();
                     if (longitud == 1 || longitud == 2 || longitud == 3) {
@@ -197,7 +196,7 @@ public class MetodosTXT {
             }
         } catch (NumberFormatException e) {
             elNumeroModi = elNumero;
-            System.out.println("Numero no valido, error al poner puntos decimales " + e);
+            System.out.println("Numero " + elNumero + " no valido, error al poner puntos decimales " + e);
             e.printStackTrace();
         }
         return elNumeroModi;
