@@ -41,10 +41,10 @@ import principal.Principal;
  * @author Lic. Arnaldo Cantero
  */
 public class Metodos {
-
+    
     MetodosTXT metodostxt = new MetodosTXT();
     public int CantRegistros = 0;
-
+    
     public Conexion ObtenerRSSentencia(String sentencia) { //con.Desconectar luego de usar el metodo
         Conexion conexion = new Conexion();
         try {
@@ -56,7 +56,7 @@ public class Metodos {
             while (conexion.rs.next() && cantreg < 2) { //Revisamos cuantos registro trajo la consulta
                 cantreg++;
             }
-
+            
             switch (cantreg) {
                 case 0:
                     System.out.println("ObtenerRSSentencia no trajo ningun resultado");
@@ -73,7 +73,7 @@ public class Metodos {
                 default:
                 //aca se escribe lo que si o si se ejecuta
             }
-
+            
         } catch (SQLException e) {
             System.out.println("Error al EjecutarSentencia ObtenerRSSentencia,  sentencia: " + sentencia + ",  ERROR " + e);
             e.printStackTrace();
@@ -83,25 +83,25 @@ public class Metodos {
         }
         return conexion;
     }
-
+    
     public void EjecutarUpdate(String sentencia) {
         try {
             Connection con;
             con = (Connection) Conexion.ConectarBasedeDatos();
-
+            
             System.out.println("Modificar registro: " + sentencia);
-
+            
             Statement st;
             st = (Statement) con.createStatement();
             st.executeUpdate(sentencia);
-
+            
             con.close();
             st.close();
         } catch (SQLException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     public void AnchuraColumna(JTable LaTabla) {
         LaTabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); //Desactiva el autoresize
         TableColumnModel ModeloColumna = LaTabla.getColumnModel();
@@ -122,7 +122,7 @@ public class Metodos {
         FontMetrics fontmetrics = graphics2d.getFontMetrics(font);
         //System.out.println(fm.stringWidth("Este es un ejemplo"));
         graphics2d.dispose();
-
+        
         for (int numdecolumna = 0; numdecolumna < cantidadcolumns; numdecolumna++) {
             int anchomax = 50; // Min width 
             columnactual = ModeloColumna.getColumn(numdecolumna);
@@ -155,7 +155,7 @@ public class Metodos {
             }
         }
     }
-
+    
     public void CambiarColorAlternadoTabla(JTable LaTabla, final Color colorback1, final Color colorback2) {
         LaTabla.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
@@ -166,11 +166,11 @@ public class Metodos {
         }
         );
     }
-
+    
     public void ConsultaFiltroTablaBD(JTable LaTabla, String titlesJtabla[], String campoconsulta[], String nombresp, String filtro, JComboBox cbCampoBuscar) {
         String sentencia;
         DefaultTableModel modelotabla = new DefaultTableModel(null, titlesJtabla);
-
+        
         if (cbCampoBuscar.getItemCount() == 0) {//Si combo esta vacio
             for (int i = 0; i < titlesJtabla.length; i++) {
                 cbCampoBuscar.addItem(titlesJtabla[i]);
@@ -178,7 +178,7 @@ public class Metodos {
             cbCampoBuscar.addItem("Todos");
             cbCampoBuscar.setSelectedIndex(1);
         }
-
+        
         if (cbCampoBuscar.getSelectedItem() == "Todos") {
             String todoscamposconsulta = campoconsulta[0]; //Cargar el combo campobuscar
             //Cargamos todos los titulos en un String separado por comas
@@ -189,11 +189,11 @@ public class Metodos {
         } else {
             sentencia = "CALL " + nombresp + " ('" + campoconsulta[cbCampoBuscar.getSelectedIndex()] + "', '" + filtro + "');";
         }
-
+        
         cbCampoBuscar.setEnabled(true);
-
+        
         System.out.println("sentencia filtro tabla BD: " + sentencia);
-
+        
         Connection conexion;
         Statement st;
         ResultSet rs;
@@ -222,21 +222,21 @@ public class Metodos {
             ex.printStackTrace();
         }
     }
-
+    
     public void centrarventanaJInternalFrame(JInternalFrame LaVentana) {
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((dimension.getWidth() - LaVentana.getWidth()) / 2);
         int y = 0; //(int) ((dimension.getHeight() - LaVentana.getHeight()) / 2);
         LaVentana.setLocation(x, y);
     }
-
+    
     public void CentrarVentanaJDialog(JDialog LaVentana) {
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((dimension.getWidth() - LaVentana.getWidth()) / 2);
         int y = (int) ((dimension.getHeight() - LaVentana.getHeight()) / 2);
         LaVentana.setLocation(x, y);
     }
-
+    
     public String ObtenerCotizacion(String de, String a) {
         Metodos metodos = new Metodos();
         String valor = "";
@@ -255,27 +255,18 @@ public class Metodos {
         }
         return valor;
     }
-
-    public String SumarColumna(JTable LaTabla, int LaColumna) {
+    
+    public String SumarColumnaDouble(JTable LaTabla, int LaColumna) {
         double valor = 0;
         double totalDouble = 0;
-        String totalString = "0";
-
+        
         if (LaTabla.getRowCount() > 0) {
             for (int i = 0; i < LaTabla.getRowCount(); i++) {
                 valor = Double.parseDouble(LaTabla.getValueAt(i, LaColumna).toString());
                 totalDouble = totalDouble + valor;
             }
-
-            totalString = (totalDouble + "").replace(".", ",");
-            if ((totalDouble - (int) totalDouble) == 0) { //Si termina en ,0
-                totalString = totalString.replace(",0", "");
-                totalString = metodostxt.PonerPuntosMilesKeyReleased(totalString);
-            } else {
-                totalString = metodostxt.PonerPuntosMilesKeyReleased(totalString);
-            }
         }
-        return totalString;
+        return metodostxt.DoubleAFormatoSudamerica(totalDouble);
     }
 
     //Comprueba si el campo está vacio, pone el titulo en rojo si es vacio
@@ -287,15 +278,5 @@ public class Metodos {
             return false;
         }
         return true;
-    }
-
-    public String Sacar0ADouble(double elNumDouble) {
-        String elNumString = (elNumDouble + "").replace(".", ",");
-        if ((elNumDouble - (int) elNumDouble) == 0) { //Si termina en ,0
-            elNumString = elNumString.replace(",0", "");
-            return metodostxt.PonerPuntosMilesKeyReleased(elNumString);
-        } else {
-            return metodostxt.PonerPuntosMilesKeyReleased(elNumString);
-        }
     }
 }

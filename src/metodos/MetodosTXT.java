@@ -46,11 +46,16 @@ public class MetodosTXT {
 
     public void SoloNumeroDecimalKeyTyped(KeyEvent evt, JTextField ElTXT) {
 // Que solo entre numeros y .
-        char caracter = evt.getKeyChar();
-        if ((((caracter < '0') || (caracter > '9'))
-                && (caracter != KeyEvent.VK_BACK_SPACE)
-                && (caracter != ',' || ElTXT.getText().contains(",")))) {
+        char teclaoprimida = evt.getKeyChar();
+        if ((teclaoprimida < '0' || teclaoprimida > '9')
+                && teclaoprimida != KeyEvent.VK_BACK_SPACE //Para que no entre espacio
+                && teclaoprimida != KeyEvent.VK_LEFT
+                && (teclaoprimida != ',' && teclaoprimida != '.' || ElTXT.getText().contains(",") == true)) { //Para que solo tenga una coma
             evt.consume(); // ignorar el evento de teclado
+        } else {
+            if (teclaoprimida == '.') { //Si se oprime . lo reemplaza con ,
+                evt.setKeyChar(',');
+            }
         }
     }
 
@@ -60,8 +65,7 @@ public class MetodosTXT {
             if (ElLabel.getForeground() == Color.RED) { //Si esta en rojo, y es vacio entonces no hace nada
                 return;
             }
-
-            ElLabel.setForeground(new Color(102, 102, 102)); //Gris
+            ElLabel.setForeground(new Color(0, 0, 0)); //Negro
         } else { //Si es distinto a vacio
             ElLabel.setForeground(new Color(0, 153, 51)); //Verde
         }
@@ -84,8 +88,7 @@ public class MetodosTXT {
         }
     }
 
-    //Poner puntos miles cada 3 numeros
-    public String PonerPuntosMilesKeyReleased(String elNumero) {
+    public String DoubleFormatoSudamericaKeyReleased(String elNumero) {
         String elNumeroModi = "";
         try {
             if (elNumero.equals("") == false) {
@@ -200,12 +203,88 @@ public class MetodosTXT {
         return elNumeroModi;
     }
 
-    //Formatear double para que tenga solo dos numeros despues de la coma
-    public String DosDecimalesDouble(String ElDouble) {
-        DecimalFormat df = new DecimalFormat("#.##");
-        Double elNumero = Double.parseDouble(ElDouble);
-        String elNumeroFormateado = df.format(elNumero);
-        return elNumeroFormateado.replace(",", ".");
+    //Convertir de Double americano a Double Sudamericano
+    public String DoubleAFormatoSudamerica(double elDoubleAmericano) {
+        String elDoubleSudamerica = "";
+        try {
+            String parteEntera = ((int) elDoubleAmericano) + "";
+            String parteDecimal = (elDoubleAmericano + "").substring((elDoubleAmericano + "").indexOf('.'));
+
+            parteDecimal = parteDecimal.replace(".", ",");
+            if (parteDecimal.equals(",0")) {
+                parteDecimal = "";
+            }
+            int longitud = parteEntera.length();
+            if (longitud == 1 || longitud == 2 || longitud == 3) {
+                elDoubleSudamerica = parteEntera + parteDecimal;
+                return elDoubleSudamerica;
+            }
+            if (longitud == 4) {
+                String sub1 = parteEntera.substring(0, 1);
+                String sub2 = parteEntera.substring(1, 4);
+                elDoubleSudamerica = sub1 + "." + sub2 + parteDecimal;
+                return elDoubleSudamerica;
+            }
+            if (longitud == 5) {
+                String sub1 = parteEntera.substring(0, 2);
+                String sub2 = parteEntera.substring(2, 5);
+                elDoubleSudamerica = sub1 + "." + sub2 + parteDecimal;
+                return elDoubleSudamerica;
+            }
+
+            if (longitud == 6) {
+                String sub1 = parteEntera.substring(0, 3);
+                String sub2 = parteEntera.substring(3, 6);
+                elDoubleSudamerica = sub1 + "." + sub2 + parteDecimal;
+                return elDoubleSudamerica;
+            }
+
+            if (longitud == 7) {
+                String sub1 = parteEntera.substring(0, 1);
+                String sub2 = parteEntera.substring(1, 4);
+                String sub3 = parteEntera.substring(4, 7);
+                elDoubleSudamerica = sub1 + "." + sub2 + "." + sub3 + parteDecimal;
+                return elDoubleSudamerica;
+            }
+
+            if (longitud == 8) {
+                String sub1 = parteEntera.substring(0, 2);
+                String sub2 = parteEntera.substring(2, 5);
+                String sub3 = parteEntera.substring(5, 8);
+                elDoubleSudamerica = sub1 + "." + sub2 + "." + sub3 + parteDecimal;
+                return elDoubleSudamerica;
+            }
+
+            if (longitud == 9) {
+                String sub1 = parteEntera.substring(0, 3);
+                String sub2 = parteEntera.substring(3, 6);
+                String sub3 = parteEntera.substring(6, 9);
+                elDoubleSudamerica = sub1 + "." + sub2 + "." + sub3 + parteDecimal;
+                return elDoubleSudamerica;
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("El Numero " + elDoubleAmericano + "  no es valido, error al convertir a formato sudamericano " + e);
+            e.printStackTrace();
+        }
+        return elDoubleSudamerica;
+    }
+
+    public Double DoubleAFormatoAmericano(String ElNumero) {
+        ElNumero = ElNumero.replace(".", ""); //Saca los puntos de miles
+        ElNumero = ElNumero.replace(",", "."); //Cambia la coma en punto
+        double ElNumeroDouble = Double.parseDouble(ElNumero);
+        return ElNumeroDouble;
+    }
+
+    //Formatear double para que tenga solo dos numeros despues de la coma, y la coma es punto
+    public double FormatearADosDecimales(double ElDouble) {
+        try {
+            DecimalFormat df2 = new DecimalFormat("#.##");
+            ElDouble = Double.parseDouble(df2.format(ElDouble));
+        } catch (NumberFormatException e) {
+            System.out.println("Error al poner DosDecimales en el numero " + ElDouble + ":  " + e);
+        }
+        return ElDouble;
     }
 
     public void BloquearTeclaKeyTyped(KeyEvent evt, int tecla) {

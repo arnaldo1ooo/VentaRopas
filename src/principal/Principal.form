@@ -193,6 +193,8 @@
             </Property>
           </Properties>
           <SubComponents>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator17">
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem4">
               <Properties>
                 <Property name="text" type="java.lang.String" value="CLIENTE"/>
@@ -221,6 +223,8 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem17ActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator18">
+            </MenuItem>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu5">
@@ -236,7 +240,12 @@
               <Dimension value="[270, 70]"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenu5ActionPerformed"/>
+          </Events>
           <SubComponents>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator11">
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem5">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Generar c&#xf3;digo de barras"/>
@@ -244,6 +253,8 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem5ActionPerformed"/>
               </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator15">
             </MenuItem>
           </SubComponents>
         </Menu>
@@ -374,7 +385,7 @@
                       <Component id="jButton4" min="-2" pref="193" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="959" max="32767" attributes="0"/>
-                  <Component id="jpBotones1" min="-2" pref="415" max="-2" attributes="0"/>
+                  <Component id="jpCotizaciones" min="-2" pref="415" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -393,7 +404,7 @@
               </Group>
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                  <Component id="jpBotones1" min="-2" pref="207" max="-2" attributes="0"/>
+                  <Component id="jpCotizaciones" min="-2" pref="207" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -435,7 +446,19 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton3ActionPerformed"/>
           </Events>
         </Component>
-        <Container class="javax.swing.JPanel" name="jpBotones1">
+        <Component class="javax.swing.JButton" name="jButton4">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/iconos/Iconos70x70/IconoCompra.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="COMPRAS"/>
+            <Property name="horizontalAlignment" type="int" value="2"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton4ActionPerformed"/>
+          </Events>
+        </Component>
+        <Container class="javax.swing.JPanel" name="jpCotizaciones">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
@@ -746,18 +769,6 @@
             </Component>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JButton" name="jButton4">
-          <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/iconos/Iconos70x70/IconoCompra.png"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="COMPRAS"/>
-            <Property name="horizontalAlignment" type="int" value="2"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton4ActionPerformed"/>
-          </Events>
-        </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="jpBarra">

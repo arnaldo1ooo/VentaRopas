@@ -5,6 +5,22 @@
  */
 package codigobarras;
 
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.Barcode128;
+import com.itextpdf.text.pdf.Barcode39;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import metodos.Metodos;
+import metodos.MetodosTXT;
+
 /**
  *
  * @author Arnaldo_Cantero
@@ -13,10 +29,74 @@ public class GenerarCodigoBarras extends javax.swing.JDialog {
 
     /**
      * Creates new form GenerarCodigoBarras
+     *
+     * @param parent
+     * @param modal
+     * @param elCodigo
      */
-    public GenerarCodigoBarras(java.awt.Frame parent, boolean modal) {
+    Metodos metodos = new Metodos();
+    MetodosTXT metodostxt = new MetodosTXT();
+
+    public GenerarCodigoBarras(java.awt.Frame parent, boolean modal, String elCodigo) {
         super(parent, modal);
         initComponents();
+        setLocationRelativeTo(null);
+        txtCodigo.setText(elCodigo);
+
+    }
+
+    private void GenerarCodigoDeBarras() {
+        try {
+            String codigo = txtCodigo.getText();
+            int cantidad = Integer.parseInt(txtCantidad.getText());
+            String nombrepdf = "CodigosBarras.pdf";
+            int escala = SlrEscala.getValue();
+            Document doc = new Document();
+            PdfWriter pdf;
+
+            String directorio = System.getProperty("user.home") + "/Desktop/" + nombrepdf + ".pdf";
+            pdf = PdfWriter.getInstance(doc, new FileOutputStream(directorio));
+
+            doc.open();
+            if (cbTipoCodigo.getSelectedItem().equals("CODE 39")) {
+                //Formato 39
+                Barcode39 barcode39 = new Barcode39();
+                barcode39.setCode(codigo);
+                Image img39 = barcode39.createImageWithBarcode(pdf.getDirectContent(), BaseColor.BLACK, BaseColor.BLACK);
+                img39.scalePercent(escala);
+                for (int i = 0; i < cantidad; i++) {
+                    doc.add(img39);
+                    //doc.add(new Paragraph(" ")); //SALTO DE LINEA
+                }
+            }
+
+            if (cbTipoCodigo.getSelectedItem().equals("CODE 128")) {
+                //Formato 128
+                Barcode128 barcode128 = new Barcode128();
+                barcode128.setCode(codigo);
+                Image img128 = barcode128.createImageWithBarcode(pdf.getDirectContent(), BaseColor.BLACK, BaseColor.BLACK);
+                img128.scalePercent(escala);
+                for (int i = 0; i < cantidad; i++) {
+                    doc.add(img128);
+                    doc.add(new Paragraph(" ")); //SALTO DE LINEA
+                }
+            }
+            Runtime.getRuntime().exec(new String[]{"cmd.exe", "/c", "start", directorio}); //Abre el archivo pdf generado
+            doc.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(GenerarCodigoBarras.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DocumentException ex) {
+            Logger.getLogger(GenerarCodigoBarras.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(GenerarCodigoBarras.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public boolean ComprobarCampos() {
+        if (metodos.ValidarCampoVacio(txtCantidad, lblCantidad) == false) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -28,21 +108,140 @@ public class GenerarCodigoBarras extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        labelTask1 = new org.edisoncor.gui.label.LabelTask();
+        panel1 = new org.edisoncor.gui.panel.Panel();
+        buttonAction1 = new org.edisoncor.gui.button.ButtonAction();
+        txtCantidad = new org.edisoncor.gui.textField.TextFieldRoundBackground();
+        lblCantidad = new javax.swing.JLabel();
+        cbTipoCodigo = new javax.swing.JComboBox<>();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        txtCodigo = new org.edisoncor.gui.textField.TextFieldRoundBackground();
+        SlrEscala = new javax.swing.JSlider();
+        jLabel4 = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Generar código de barras");
+        setResizable(false);
+
+        panel1.setColorPrimario(new java.awt.Color(255, 255, 255));
+        panel1.setColorSecundario(new java.awt.Color(194, 228, 255));
+
+        buttonAction1.setText("Generar");
+        buttonAction1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonAction1ActionPerformed(evt);
+            }
+        });
+
+        txtCantidad.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtCantidad.setText("1");
+        txtCantidad.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtCantidadKeyReleased(evt);
+            }
+        });
+
+        lblCantidad.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
+        lblCantidad.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblCantidad.setText("Cantidad");
+
+        cbTipoCodigo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CODE 39", "CODE 128" }));
+        cbTipoCodigo.setSelectedIndex(1);
+
+        jLabel2.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel2.setText("Formato de código");
+
+        jLabel3.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel3.setText("Código");
+
+        txtCodigo.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtCodigo.setEnabled(false);
+
+        SlrEscala.setMajorTickSpacing(50);
+        SlrEscala.setMaximum(200);
+        SlrEscala.setPaintLabels(true);
+        SlrEscala.setPaintTicks(true);
+        SlrEscala.setSnapToTicks(true);
+        SlrEscala.setValue(100);
+
+        jLabel4.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel4.setText("Escala");
+
+        javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
+        panel1.setLayout(panel1Layout);
+        panel1Layout.setHorizontalGroup(
+            panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel1Layout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(buttonAction1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(SlrEscala, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtCodigo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbTipoCodigo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtCantidad, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(36, Short.MAX_VALUE))
+        );
+        panel1Layout.setVerticalGroup(
+            panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(2, 2, 2)
+                        .addComponent(cbTipoCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(2, 2, 2)
+                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(SlrEscala, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(28, 28, 28)
+                .addComponent(buttonAction1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(61, 61, 61))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 720, Short.MAX_VALUE)
+            .addComponent(panel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 514, Short.MAX_VALUE)
+            .addComponent(panel1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void buttonAction1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAction1ActionPerformed
+        if (ComprobarCampos() == true) {
+            GenerarCodigoDeBarras();
+        }
+    }//GEN-LAST:event_buttonAction1ActionPerformed
+
+    private void txtCantidadKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyReleased
+        metodostxt.TxtColorLabelKeyReleased(txtCantidad, lblCantidad);
+    }//GEN-LAST:event_txtCantidadKeyReleased
 
     /**
      * @param args the command line arguments
@@ -74,7 +273,7 @@ public class GenerarCodigoBarras extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                GenerarCodigoBarras dialog = new GenerarCodigoBarras(new javax.swing.JFrame(), true);
+                GenerarCodigoBarras dialog = new GenerarCodigoBarras(new javax.swing.JFrame(), true, "");
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -87,5 +286,16 @@ public class GenerarCodigoBarras extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JSlider SlrEscala;
+    private org.edisoncor.gui.button.ButtonAction buttonAction1;
+    private javax.swing.JComboBox<String> cbTipoCodigo;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private org.edisoncor.gui.label.LabelTask labelTask1;
+    private javax.swing.JLabel lblCantidad;
+    private org.edisoncor.gui.panel.Panel panel1;
+    private org.edisoncor.gui.textField.TextFieldRoundBackground txtCantidad;
+    private org.edisoncor.gui.textField.TextFieldRoundBackground txtCodigo;
     // End of variables declaration//GEN-END:variables
 }

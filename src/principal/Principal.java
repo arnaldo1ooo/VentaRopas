@@ -34,7 +34,7 @@ import static login.Login.Alias;
  * @author Lic. Arnaldo Cantero
  */
 public class Principal extends javax.swing.JFrame implements Runnable {
-    
+
     Metodos metodos = new Metodos();
     MetodosTXT metodostxt = new MetodosTXT();
     Thread hilo;
@@ -50,10 +50,10 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         lbAlias.setText(Alias);
         PerfilUsuario();
         AsignarCotizaciones();
-        
+
         setVisible(true);
     }
-    
+
     private void AsignarCotizaciones() {
         try {
             Conexion con = metodos.ObtenerRSSentencia("SELECT coti_valorcompra, coti_valorventa, coti_fecha "
@@ -63,28 +63,26 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             SimpleDateFormat formatoFechaSudamerica = new SimpleDateFormat("dd/MM/yyyy");
             Date fechaFormatoAmericano = formatoFechaAmericano.parse(con.rs.getString("coti_fecha").replace("-", "/"));
             lblFechaCotizacion.setText("Fecha de cotización: " + formatoFechaSudamerica.format(fechaFormatoAmericano));
-            
-            cotiUsdGsCompra = Double.parseDouble(con.rs.getString("coti_valorcompra")); //Variable global
 
-            lblCotiUsdGsCompra.setText(metodos.Sacar0ADouble(cotiUsdGsCompra));
-            lblCotiUsdGsVenta.setText(metodos.Sacar0ADouble(con.rs.getDouble("coti_valorventa")));
-            
+            cotiUsdGsCompra = con.rs.getDouble("coti_valorcompra"); //Variable global
+            lblCotiUsdGsCompra.setText(metodostxt.DoubleAFormatoSudamerica(cotiUsdGsCompra));
+            lblCotiUsdGsVenta.setText(metodostxt.DoubleAFormatoSudamerica(con.rs.getDouble("coti_valorventa")));
+
             con = metodos.ObtenerRSSentencia("SELECT coti_valorcompra, coti_valorventa, coti_fecha "
                     + "FROM cotizacion WHERE coti_de='Dolares' AND coti_a='Reales'");
             con.rs.next();
             cotiUsdRsCompra = Double.parseDouble(con.rs.getString("coti_valorcompra"));
-            
-            lblCotiUsdRsCompra.setText(metodos.Sacar0ADouble(cotiUsdRsCompra));
-            lblCotiUsdRsVenta.setText(metodos.Sacar0ADouble(con.rs.getDouble("coti_valorventa")));
+            System.out.println("cotiUsdRsCompra " + cotiUsdRsCompra);
+            lblCotiUsdRsCompra.setText(metodostxt.DoubleAFormatoSudamerica(cotiUsdRsCompra));
+            lblCotiUsdRsVenta.setText(metodostxt.DoubleAFormatoSudamerica(con.rs.getDouble("coti_valorventa")));
             
             con = metodos.ObtenerRSSentencia("SELECT coti_valorcompra, coti_valorventa, coti_fecha "
                     + "FROM cotizacion WHERE coti_de='Dolares' AND coti_a='Pesos argentinos'");
             con.rs.next();
             cotiUsdPaCompra = Double.parseDouble(con.rs.getString("coti_valorcompra"));
-            
-            lblCotiUsdPaCompra.setText(metodos.Sacar0ADouble(cotiUsdPaCompra));
-            lblCotiUsdPaVenta.setText(metodos.Sacar0ADouble(con.rs.getDouble("coti_valorventa")));
-            
+            lblCotiUsdPaCompra.setText(metodostxt.DoubleAFormatoSudamerica(cotiUsdPaCompra));
+            lblCotiUsdPaVenta.setText(metodostxt.DoubleAFormatoSudamerica(con.rs.getDouble("coti_valorventa")));
+
             con.DesconectarBasedeDatos();
         } catch (SQLException e) {
             System.out.println("Error al asignar cotizaciones desde bd" + e);
@@ -92,7 +90,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private void PerfilUsuario() {
         String consulta = "CALL SP_UsuarioPerfilConsulta('" + Alias + "')";
         System.out.println("consulta: " + consulta);
@@ -115,7 +113,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             System.out.println("Error en SQL " + SQL.getMessage());
         }
     }
-    
+
     private void ObtenerHorayFecha() {
         //Obtener fecha y hora
         hilo = new Thread(this);
@@ -129,7 +127,8 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jpBotones1 = new javax.swing.JPanel();
+        jButton4 = new javax.swing.JButton();
+        jpCotizaciones = new javax.swing.JPanel();
         lblCotiUsdGsCompra = new javax.swing.JLabel();
         lbldolares3 = new javax.swing.JLabel();
         lbldolares4 = new javax.swing.JLabel();
@@ -149,7 +148,6 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         lblCotiUsdRsVenta = new javax.swing.JLabel();
         lblCotiUsdPaVenta = new javax.swing.JLabel();
         lblFechaCotizacion = new javax.swing.JLabel();
-        jButton4 = new javax.swing.JButton();
         jpBarra = new javax.swing.JPanel();
         lbAlias = new javax.swing.JLabel();
         lbFechaTitulo = new javax.swing.JLabel();
@@ -182,13 +180,17 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jSeparator13 = new javax.swing.JPopupMenu.Separator();
         jMenuItem23 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
+        jSeparator17 = new javax.swing.JPopupMenu.Separator();
         jMenuItem4 = new javax.swing.JMenuItem();
         jSeparator7 = new javax.swing.JPopupMenu.Separator();
         jMenuItem9 = new javax.swing.JMenuItem();
         jSeparator6 = new javax.swing.JPopupMenu.Separator();
         jMenuItem17 = new javax.swing.JMenuItem();
+        jSeparator18 = new javax.swing.JPopupMenu.Separator();
         jMenu5 = new javax.swing.JMenu();
+        jSeparator11 = new javax.swing.JPopupMenu.Separator();
         jMenuItem5 = new javax.swing.JMenuItem();
+        jSeparator15 = new javax.swing.JPopupMenu.Separator();
         jMenu7 = new javax.swing.JMenu();
         jMenuItem6 = new javax.swing.JMenuItem();
         jMenu6 = new javax.swing.JMenu();
@@ -237,9 +239,18 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             }
         });
 
-        jpBotones1.setBackground(new java.awt.Color(255, 255, 255));
-        jpBotones1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Cotización"));
-        jpBotones1.setPreferredSize(new java.awt.Dimension(100, 50));
+        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoCompra.png"))); // NOI18N
+        jButton4.setText("COMPRAS");
+        jButton4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jpCotizaciones.setBackground(new java.awt.Color(255, 255, 255));
+        jpCotizaciones.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Cotización"));
+        jpCotizaciones.setPreferredSize(new java.awt.Dimension(100, 50));
 
         lblCotiUsdGsCompra.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         lblCotiUsdGsCompra.setForeground(new java.awt.Color(102, 102, 102));
@@ -314,75 +325,75 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         lblFechaCotizacion.setForeground(new java.awt.Color(51, 51, 51));
         lblFechaCotizacion.setText("Fecha de cotización: 00/00/0000");
 
-        javax.swing.GroupLayout jpBotones1Layout = new javax.swing.GroupLayout(jpBotones1);
-        jpBotones1.setLayout(jpBotones1Layout);
-        jpBotones1Layout.setHorizontalGroup(
-            jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpBotones1Layout.createSequentialGroup()
+        javax.swing.GroupLayout jpCotizacionesLayout = new javax.swing.GroupLayout(jpCotizaciones);
+        jpCotizaciones.setLayout(jpCotizacionesLayout);
+        jpCotizacionesLayout.setHorizontalGroup(
+            jpCotizacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpCotizacionesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jpCotizacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblFechaCotizacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jpBotones1Layout.createSequentialGroup()
-                        .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jpBotones1Layout.createSequentialGroup()
-                                .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addGroup(jpCotizacionesLayout.createSequentialGroup()
+                        .addGroup(jpCotizacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jpCotizacionesLayout.createSequentialGroup()
+                                .addGroup(jpCotizacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                                     .addComponent(lblFlagEeuu, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(lblEeuu1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(lblEeuu2, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                                .addGroup(jpCotizacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                                     .addComponent(lblFlagGuaranies, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(lblFlagBrasil, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(lblFlagArgentina, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jpCotizacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lbldolares3)
                                     .addComponent(lbldolares4, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(lbldolares7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jpCotizacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jpCotizacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 62, Short.MAX_VALUE)
                                 .addComponent(lblCotiUsdGsCompra, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(jpCotizacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(lblCotiUsdPaCompra, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 62, Short.MAX_VALUE)
                                 .addComponent(lblCotiUsdRsCompra, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jpCotizacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(lblCotiUsdGsVenta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(lblCotiUsdRsVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblCotiUsdPaVenta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
-        jpBotones1Layout.setVerticalGroup(
-            jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpBotones1Layout.createSequentialGroup()
+        jpCotizacionesLayout.setVerticalGroup(
+            jpCotizacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpCotizacionesLayout.createSequentialGroup()
                 .addGap(7, 7, 7)
-                .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jpCotizacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5)
                     .addComponent(jLabel3)
                     .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                .addGroup(jpCotizacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(lblFlagEeuu, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblFlagGuaranies, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbldolares3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblCotiUsdGsCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblCotiUsdGsVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                .addGroup(jpCotizacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(lblEeuu1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblFlagBrasil, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbldolares4, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblCotiUsdRsCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblCotiUsdRsVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jpCotizacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblFlagArgentina, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblEeuu2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addGroup(jpCotizacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(lbldolares7, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(lblCotiUsdPaCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(lblCotiUsdPaVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -390,20 +401,11 @@ public class Principal extends javax.swing.JFrame implements Runnable {
                 .addComponent(lblFechaCotizacion))
         );
 
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoCompra.png"))); // NOI18N
-        jButton4.setText("COMPRAS");
-        jButton4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
-
         dpEscritorio.setLayer(jButton1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dpEscritorio.setLayer(jButton2, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dpEscritorio.setLayer(jButton3, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dpEscritorio.setLayer(jpBotones1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         dpEscritorio.setLayer(jButton4, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        dpEscritorio.setLayer(jpCotizaciones, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout dpEscritorioLayout = new javax.swing.GroupLayout(dpEscritorio);
         dpEscritorio.setLayout(dpEscritorioLayout);
@@ -417,7 +419,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
                     .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 959, Short.MAX_VALUE)
-                .addComponent(jpBotones1, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jpCotizaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         dpEscritorioLayout.setVerticalGroup(
             dpEscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -433,7 +435,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
                 .addContainerGap(91, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dpEscritorioLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jpBotones1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jpCotizaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jpBarra.setPreferredSize(new java.awt.Dimension(1586, 25));
@@ -658,6 +660,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jMenu4.setFont(new java.awt.Font("Sitka Text", 1, 14)); // NOI18N
         jMenu4.setMinimumSize(new java.awt.Dimension(210, 70));
         jMenu4.setPreferredSize(new java.awt.Dimension(270, 70));
+        jMenu4.add(jSeparator17);
 
         jMenuItem4.setText("CLIENTE");
         jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
@@ -684,6 +687,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             }
         });
         jMenu4.add(jMenuItem17);
+        jMenu4.add(jSeparator18);
 
         jMenuBar1.add(jMenu4);
 
@@ -691,6 +695,12 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jMenu5.setText("UTILIDADES");
         jMenu5.setFont(new java.awt.Font("Sitka Text", 1, 14)); // NOI18N
         jMenu5.setPreferredSize(new java.awt.Dimension(270, 70));
+        jMenu5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu5ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jSeparator11);
 
         jMenuItem5.setText("Generar código de barras");
         jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
@@ -699,6 +709,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             }
         });
         jMenu5.add(jMenuItem5);
+        jMenu5.add(jSeparator15);
 
         jMenuBar1.add(jMenu5);
 
@@ -769,12 +780,12 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
 
     }//GEN-LAST:event_jMenuItem9ActionPerformed
-    
+
 
     private void jMenuItem17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem17ActionPerformed
 
     }//GEN-LAST:event_jMenuItem17ActionPerformed
-    
+
     private void ObtenerFechayHora() {
         Date fecha = new Date();
         //Formateando la fecha:
@@ -783,7 +794,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         DateFormat formatoHora = new SimpleDateFormat("HH:mm:ss");
         lbHora.setText(formatoHora.format(fecha));
     }
-    
+
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
 
@@ -882,9 +893,12 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
-        GenerarCodigoBarras generarcodigobarras = new GenerarCodigoBarras(this, true);
-        generarcodigobarras.setVisible(true);
+
     }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenu5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu5ActionPerformed
+
+    }//GEN-LAST:event_jMenu5ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -961,17 +975,21 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JPopupMenu.Separator jSeparator10;
+    private javax.swing.JPopupMenu.Separator jSeparator11;
     private javax.swing.JPopupMenu.Separator jSeparator12;
     private javax.swing.JPopupMenu.Separator jSeparator13;
     private javax.swing.JPopupMenu.Separator jSeparator14;
+    private javax.swing.JPopupMenu.Separator jSeparator15;
     private javax.swing.JPopupMenu.Separator jSeparator16;
+    private javax.swing.JPopupMenu.Separator jSeparator17;
+    private javax.swing.JPopupMenu.Separator jSeparator18;
     private javax.swing.JPopupMenu.Separator jSeparator5;
     private javax.swing.JPopupMenu.Separator jSeparator6;
     private javax.swing.JPopupMenu.Separator jSeparator7;
     private javax.swing.JPopupMenu.Separator jSeparator8;
     private javax.swing.JPopupMenu.Separator jSeparator9;
     private javax.swing.JPanel jpBarra;
-    private javax.swing.JPanel jpBotones1;
+    private javax.swing.JPanel jpCotizaciones;
     private javax.swing.JLabel lbAlias;
     private javax.swing.JLabel lbFecha;
     private javax.swing.JLabel lbFechaTitulo;
@@ -1001,10 +1019,10 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 
         Thread current = Thread.currentThread();
-        
+
         while (current == hilo) {
             ObtenerFechayHora();
-            
+
         }
     }
 }

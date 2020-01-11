@@ -170,7 +170,6 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
     public void run() {
         //while (tiempo != null) {
         //Thread.sleep(5000);
-        System.out.println("tiempo");
         ObtenerCotizacionScrapingWeb();
         this.dispose();
         Principal principal = new Principal();

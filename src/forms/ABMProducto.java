@@ -5,7 +5,7 @@
  */
 package forms;
 
-import com.lowagie.text.Document;
+import codigobarras.GenerarCodigoBarras;
 import conexion.Conexion;
 import java.awt.Color;
 import java.awt.Component;
@@ -14,8 +14,6 @@ import java.awt.FocusTraversalPolicy;
 
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
-import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -31,9 +29,7 @@ import metodos.Metodos;
 import metodos.MetodosCombo;
 import metodos.MetodosImagen;
 import metodos.MetodosTXT;
-import metodos.ObtenerCotizacion;
 import metodos.VistaCompletaImagen;
-import org.jsoup.Jsoup;
 
 /**
  *
@@ -96,8 +92,8 @@ public final class ABMProducto extends javax.swing.JDialog {
                 int marca = metodoscombo.ObtenerIdComboBox(cbMarca);
                 String tamano = cbTamano.getSelectedItem().toString();
 
-                String precio = (txtPrecio.getText().replace(".", "")).replace(",", ".");
-                precio = metodostxt.DosDecimalesDouble(precio); //Redondear double para que tenga solo dos numeros decimales
+                double precio = metodostxt.DoubleAFormatoAmericano(txtPrecio.getText());
+                precio = metodostxt.FormatearADosDecimales(precio); //Redondear double para que tenga solo dos numeros decimales
 
                 String existencia = txtExistencia.getText();
                 int idsubcategoria = metodoscombo.ObtenerIdComboBox(cbSubcategoria);
@@ -158,8 +154,8 @@ public final class ABMProducto extends javax.swing.JDialog {
                     int marca = metodoscombo.ObtenerIdComboBox(cbMarca);
                     String tamano = cbTamano.getSelectedItem().toString();
 
-                    String precio = (txtPrecio.getText().replace(".", "")).replace(",", ".");
-                    precio = metodostxt.DosDecimalesDouble(precio); //Redondear double para que tenga solo dos numeros decimales
+                    double precio = metodostxt.DoubleAFormatoAmericano(txtPrecio.getText());
+                    precio = metodostxt.FormatearADosDecimales(precio); //Redondear double para que tenga solo dos numeros decimales
 
                     String existencia = txtExistencia.getText();
                     int subcategoria = metodoscombo.ObtenerIdComboBox(cbSubcategoria);
@@ -251,9 +247,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         txtDescripcion.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 2).toString());
         metodoscombo.setSelectedNombreItem(cbMarca, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 3).toString());
         cbTamano.setSelectedItem(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 4).toString());
-
-        txtPrecio.setText((tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 5).toString()).replace(".", ","));
-        txtPrecio.setText(metodostxt.PonerPuntosMilesKeyReleased(txtPrecio.getText().replace(",0", "")));
+        txtPrecio.setText(metodostxt.DoubleAFormatoSudamerica(Double.parseDouble(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 5).toString())));
 
         txtExistencia.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 6).toString());
         metodoscombo.setSelectedNombreItem(cbCategoria, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 7).toString());
@@ -373,6 +367,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         cbCampoBuscar = new javax.swing.JComboBox();
         lbCantRegistros = new javax.swing.JLabel();
         btnActualizarTabla = new javax.swing.JButton();
+        btnCancelar1 = new javax.swing.JButton();
         jpBotones = new javax.swing.JPanel();
         btnNuevo = new javax.swing.JButton();
         btnModificar = new javax.swing.JButton();
@@ -412,6 +407,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         jpBotones2 = new javax.swing.JPanel();
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+        btnCancelar2 = new javax.swing.JButton();
 
         setTitle("Ventana Productos");
         setBackground(new java.awt.Color(45, 62, 80));
@@ -510,6 +506,17 @@ public final class ABMProducto extends javax.swing.JDialog {
             }
         });
 
+        btnCancelar1.setBackground(new java.awt.Color(0, 153, 153));
+        btnCancelar1.setForeground(new java.awt.Color(255, 255, 255));
+        btnCancelar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos20x20/iconoCodigoBarras.png"))); // NOI18N
+        btnCancelar1.setText("Generar Codigo de Barras");
+        btnCancelar1.setToolTipText("");
+        btnCancelar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelar1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jpTablaLayout = new javax.swing.GroupLayout(jpTabla);
         jpTabla.setLayout(jpTablaLayout);
         jpTablaLayout.setHorizontalGroup(
@@ -519,7 +526,9 @@ public final class ABMProducto extends javax.swing.JDialog {
                 .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(jpTablaLayout.createSequentialGroup()
                         .addComponent(btnActualizarTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnCancelar1, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, Short.MAX_VALUE)
                         .addComponent(lbCantRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, 587, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(scPrincipal, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpTablaLayout.createSequentialGroup()
@@ -543,11 +552,12 @@ public final class ABMProducto extends javax.swing.JDialog {
                     .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                 .addComponent(scPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lbCantRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnActualizarTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(4, 4, 4))
+                .addGap(13, 13, 13)
+                .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(btnActualizarTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCancelar1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbCantRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(8, 8, 8))
         );
 
         jpBotones.setBackground(new java.awt.Color(255, 255, 255));
@@ -986,6 +996,19 @@ public final class ABMProducto extends javax.swing.JDialog {
             }
         });
 
+        btnCancelar2.setBackground(new java.awt.Color(255, 101, 101));
+        btnCancelar2.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
+        btnCancelar2.setForeground(new java.awt.Color(255, 255, 255));
+        btnCancelar2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos20x20/IconoCancelar.png"))); // NOI18N
+        btnCancelar2.setText("Cancelar");
+        btnCancelar2.setToolTipText("Cancela la acción");
+        btnCancelar2.setEnabled(false);
+        btnCancelar2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelar2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jpBotones2Layout = new javax.swing.GroupLayout(jpBotones2);
         jpBotones2.setLayout(jpBotones2Layout);
         jpBotones2Layout.setHorizontalGroup(
@@ -995,7 +1018,12 @@ public final class ABMProducto extends javax.swing.JDialog {
                 .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnCancelar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(138, Short.MAX_VALUE))
+            .addGroup(jpBotones2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpBotones2Layout.createSequentialGroup()
+                    .addContainerGap(174, Short.MAX_VALUE)
+                    .addComponent(btnCancelar2)
+                    .addGap(128, 128, 128)))
         );
         jpBotones2Layout.setVerticalGroup(
             jpBotones2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1005,6 +1033,11 @@ public final class ABMProducto extends javax.swing.JDialog {
                     .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
+            .addGroup(jpBotones2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jpBotones2Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(btnCancelar2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout jpPrincipalLayout = new javax.swing.GroupLayout(jpPrincipal);
@@ -1053,7 +1086,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 686, Short.MAX_VALUE)
+            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 697, Short.MAX_VALUE)
         );
 
         getAccessibleContext().setAccessibleName("Inventario");
@@ -1155,7 +1188,7 @@ public final class ABMProducto extends javax.swing.JDialog {
     }//GEN-LAST:event_txtCodigoProductoKeyReleased
 
     private void txtPrecioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioKeyReleased
-        txtPrecio.setText(metodostxt.PonerPuntosMilesKeyReleased(txtPrecio.getText()));
+        txtPrecio.setText(metodostxt.DoubleFormatoSudamericaKeyReleased(txtPrecio.getText()));
         metodostxt.TxtColorLabelKeyReleased(txtPrecio, lblPrecio);
     }//GEN-LAST:event_txtPrecioKeyReleased
 
@@ -1247,6 +1280,20 @@ public final class ABMProducto extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtExistenciaKeyTyped
 
+    private void btnCancelar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelar1ActionPerformed
+        if (txtCodigoProducto.getText().equals("") == false) {
+            GenerarCodigoBarras generarCodigoBarras = new GenerarCodigoBarras(null, true, txtCodigoProducto.getText());
+            generarCodigoBarras.setVisible(true);
+        } else {
+
+            JOptionPane.showMessageDialog(null, "Seleccione un producto", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnCancelar1ActionPerformed
+
+    private void btnCancelar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelar2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCancelar2ActionPerformed
+
     List<Component> ordenTabulador;
 
     private void OrdenTabulador() {
@@ -1293,6 +1340,8 @@ public final class ABMProducto extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizarTabla;
     private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnCancelar1;
+    private javax.swing.JButton btnCancelar2;
     private javax.swing.JButton btnCargarImagen;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnEliminarImagen;
