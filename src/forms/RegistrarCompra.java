@@ -189,7 +189,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         txtDescripcionProducto.setText("");
 
         URL url = this.getClass().getResource(rutaFotoDefault);
-        lbImagen.setIcon(new ImageIcon(url));
+        piImagen.setIcon(new ImageIcon(url));
 
         txtPrecioDolares.setText("");
         txtPrecioGs.setText("");
@@ -250,9 +250,9 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                 txtExistenciaActual.setText(con.rs.getString(2));
                 txtDescripcionProducto.setText(con.rs.getString(3));
 
-                if (metodosimagen.LeerImagen(lbImagen, rutaFotoProducto + con.rs.getString(4)) == false) {
+                if (metodosimagen.LeerImagen(piImagen, rutaFotoProducto + con.rs.getString(4)) == false) {
                     URL url = this.getClass().getResource(rutaFotoDefault);
-                    lbImagen.setIcon(new ImageIcon(url));
+                    piImagen.setIcon(new ImageIcon(url));
                 }
                 double precio = con.rs.getDouble(5);
                 String precioString = metodostxt.DoubleAFormatoSudamerica(precio); //Formato sudamerica: 10.100,25
@@ -308,12 +308,12 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         lblFlagPesosArg = new javax.swing.JLabel();
         txtPrecioPesosArg = new javax.swing.JTextField();
         lblCodigo13 = new javax.swing.JLabel();
-        lbImagen = new javax.swing.JLabel();
         lblFlagEeuu = new javax.swing.JLabel();
         txtPrecioDolares = new javax.swing.JTextField();
         lblDolares = new javax.swing.JLabel();
         txtIDProducto = new javax.swing.JTextField();
         lblIDProducto = new javax.swing.JLabel();
+        piImagen = new org.edisoncor.gui.panel.PanelImage();
         jpProductos = new javax.swing.JPanel();
         btnEliminar = new javax.swing.JButton();
         btnAnadir = new javax.swing.JButton();
@@ -633,13 +633,6 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         lblCodigo13.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblCodigo13.setText("Pesos arg.");
 
-        lbImagen.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
-        lbImagen.setForeground(new java.awt.Color(255, 255, 255));
-        lbImagen.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/ImagenProductoSinFoto.png"))); // NOI18N
-        lbImagen.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)));
-        lbImagen.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
         lblFlagEeuu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/eeuu.png"))); // NOI18N
 
         txtPrecioDolares.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
@@ -664,6 +657,21 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         lblIDProducto.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblIDProducto.setText("ID");
 
+        piImagen.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        piImagen.setFocusable(false);
+        piImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/ImagenProductoSinFoto.png"))); // NOI18N
+
+        javax.swing.GroupLayout piImagenLayout = new javax.swing.GroupLayout(piImagen);
+        piImagen.setLayout(piImagenLayout);
+        piImagenLayout.setHorizontalGroup(
+            piImagenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 127, Short.MAX_VALUE)
+        );
+        piImagenLayout.setVerticalGroup(
+            piImagenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout jpDatosProductoLayout = new javax.swing.GroupLayout(jpDatosProducto);
         jpDatosProducto.setLayout(jpDatosProductoLayout);
         jpDatosProductoLayout.setHorizontalGroup(
@@ -674,7 +682,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                     .addGroup(jpDatosProductoLayout.createSequentialGroup()
                         .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jpDatosProductoLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGap(0, 2, Short.MAX_VALUE)
                                 .addComponent(txtIDProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(lblIDProducto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -693,10 +701,10 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                                 .addComponent(txtDescripcionProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                .addComponent(piImagen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpDatosProductoLayout.createSequentialGroup()
-                        .addComponent(lbImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                                 .addComponent(lblFlagBrasil, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -705,11 +713,11 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                                 .addComponent(lblFlagGuaranies, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(lblFlagEeuu, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, 0)
-                        .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtPrecioDolares, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtPrecioGs, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtPrecioReales, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtPrecioPesosArg, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtPrecioDolares, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)
+                            .addComponent(txtPrecioGs, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)
+                            .addComponent(txtPrecioReales, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)
+                            .addComponent(txtPrecioPesosArg, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE))
                         .addGap(2, 2, 2)
                         .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblDolares, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -726,7 +734,6 @@ public final class RegistrarCompra extends javax.swing.JDialog {
             .addGroup(jpDatosProductoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jpDatosProductoLayout.createSequentialGroup()
                         .addComponent(lblCodigo7)
                         .addGap(2, 2, 2)
@@ -763,7 +770,11 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                         .addComponent(lblTituloDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(3, 3, 3)
                         .addComponent(txtDescripcionProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(7, Short.MAX_VALUE))
+            .addGroup(jpDatosProductoLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(piImagen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jpProductos.setBackground(new java.awt.Color(233, 255, 255));
@@ -950,7 +961,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         jpPrincipal.setLayout(jpPrincipalLayout);
         jpPrincipalLayout.setHorizontalGroup(
             jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpBanner, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 951, Short.MAX_VALUE)
+            .addComponent(jpBanner, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 962, Short.MAX_VALUE)
             .addGroup(jpPrincipalLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1003,7 +1014,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 949, Short.MAX_VALUE)
+            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 962, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1071,7 +1082,6 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                 //Precio, cambio a Reales
                 double precioRsDouble = precioUSDsDouble * cotiUsdRsCompra;
                 precioRsDouble = metodostxt.FormatearADosDecimales(precioRsDouble);
-                System.out.println("precioRSDouble " + precioRsDouble);
                 String precioRsString = metodostxt.DoubleAFormatoSudamerica(precioRsDouble);
                 txtPrecioReales.setText(precioRsString);
 
@@ -1091,7 +1101,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         txtExistenciaActual.setText("");
         txtDescripcionProducto.setText("");
         URL url = this.getClass().getResource(rutaFotoDefault);
-        lbImagen.setIcon(new ImageIcon(url));
+        piImagen.setIcon(new ImageIcon(url));
         txtPrecioDolares.setText("");
         txtPrecioGs.setText("");
         txtPrecioReales.setText("");
@@ -1241,7 +1251,6 @@ public final class RegistrarCompra extends javax.swing.JDialog {
     private javax.swing.JPanel jpPrincipal;
     private javax.swing.JPanel jpProductos;
     private javax.swing.JLabel lbBanner;
-    private javax.swing.JLabel lbImagen;
     private javax.swing.JLabel lblCantidadAdquirida;
     private javax.swing.JLabel lblCodigo10;
     private javax.swing.JLabel lblCodigo13;
@@ -1266,6 +1275,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
     private javax.swing.JLabel lblTituloTotalCompra;
     private javax.swing.JLabel lblTotalCompra;
     private javax.swing.JLabel lblTotalMoneda;
+    private org.edisoncor.gui.panel.PanelImage piImagen;
     private javax.swing.JScrollPane scPrincipal;
     private javax.swing.JTable tbPrincipal;
     private javax.swing.JTextField txtCantidadAdquirida;

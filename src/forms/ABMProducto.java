@@ -13,7 +13,9 @@ import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
 
 import java.awt.HeadlessException;
+import java.awt.Image;
 import java.awt.Toolkit;
+import java.io.File;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -30,6 +32,7 @@ import metodos.MetodosCombo;
 import metodos.MetodosImagen;
 import metodos.MetodosTXT;
 import metodos.VistaCompletaImagen;
+import org.edisoncor.gui.panel.PanelImage;
 
 /**
  *
@@ -41,7 +44,7 @@ public final class ABMProducto extends javax.swing.JDialog {
     Metodos metodos = new Metodos();
     MetodosCombo metodoscombo = new MetodosCombo();
     MetodosImagen metodosimagen = new MetodosImagen();
-    private final String rutaFotoProducto = "Fotos\\fotoproductos\\imageproducto_";
+    private final String rutaFotoProducto = "/fotoproductos/imageproducto_";
     private final String rutaFotoDefault = "/images/ImagenProductoSinFoto.png";
     private Icon fotoProductoDefault;
 
@@ -255,7 +258,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         taObs.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 9).toString());
         cbEstado.setSelectedIndex(Integer.parseInt(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 10).toString()));
 
-        if (metodosimagen.LeerImagen(piImagen, rutaFotoProducto + txtCodigo.getText()) == false) {
+        if (LeerImagen(piImagen, rutaFotoProducto + txtCodigo.getText()) == false) {
             URL url = this.getClass().getResource(rutaFotoDefault);
             piImagen.setIcon(new ImageIcon(url));
         }
@@ -842,7 +845,13 @@ public final class ABMProducto extends javax.swing.JDialog {
         lblMarca.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblMarca.setText("Marca:");
 
+        piImagen.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         piImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/ImagenProductoSinFoto.png"))); // NOI18N
+        piImagen.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                piImagenMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout piImagenLayout = new javax.swing.GroupLayout(piImagen);
         piImagen.setLayout(piImagenLayout);
@@ -1049,7 +1058,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         jpPrincipal.setLayout(jpPrincipalLayout);
         jpPrincipalLayout.setHorizontalGroup(
             jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpBanner, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1039, Short.MAX_VALUE)
+            .addComponent(jpBanner, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1043, Short.MAX_VALUE)
             .addGroup(jpPrincipalLayout.createSequentialGroup()
                 .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpPrincipalLayout.createSequentialGroup()
@@ -1057,7 +1066,7 @@ public final class ABMProducto extends javax.swing.JDialog {
                         .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jtpEdicion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpPrincipalLayout.createSequentialGroup()
-                                .addComponent(jpTabla, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
+                                .addComponent(jpTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jpBotones, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jpPrincipalLayout.createSequentialGroup()
@@ -1087,7 +1096,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 1039, Short.MAX_VALUE)
+            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 1043, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1242,7 +1251,7 @@ public final class ABMProducto extends javax.swing.JDialog {
     }//GEN-LAST:event_btnActualizarTablaActionPerformed
 
     private void btnCargarImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargarImagenActionPerformed
-        metodosimagen.CargarImagenFC(piImagen);
+        metodosimagen.CargarImagenDesdeFC(piImagen);
 
         btnEliminarImagen.setEnabled(!(piImagen.getIcon().toString().equals(fotoProductoDefault.toString()))); //Revisa si el icono es default
     }//GEN-LAST:event_btnCargarImagenActionPerformed
@@ -1299,6 +1308,10 @@ public final class ABMProducto extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnCancelar2ActionPerformed
 
+    private void piImagenMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_piImagenMouseClicked
+
+    }//GEN-LAST:event_piImagenMouseClicked
+
     List<Component> ordenTabulador;
 
     private void OrdenTabulador() {
@@ -1340,6 +1353,33 @@ public final class ABMProducto extends javax.swing.JDialog {
         public Component getDefaultComponent(Container cntnr) {
             return (Component) ordenTabulador.get(0);
         }
+    }
+
+    public boolean LeerImagen(PanelImage elPanelImage, String rutaimagen) {
+        Image imagenInterna;
+        String ruta = "/fotoproductos/imageproducto_0.png";
+
+        try {
+            imagenInterna = new ImageIcon(getClass().getResource(rutaimagen + ".png")).getImage();
+            if (imagenInterna != null) { //Si png existe
+                ruta = rutaimagen + ".png";
+            }
+        } catch (Exception e) {
+            try {
+                imagenInterna = new ImageIcon(getClass().getResource(rutaimagen + ".jpg")).getImage();
+                if (imagenInterna != null) { //Si jpg existe
+                    ruta = rutaimagen + ".jpg";
+                }
+            } catch (Exception e2) {
+                imagenInterna = new ImageIcon(getClass().getResource(ruta)).getImage(); //Si no existe ninguno se pone la imagen por defecto
+            }
+        }
+ 
+
+        elPanelImage.setIcon(new javax.swing.ImageIcon(imagenInterna));
+        elPanelImage.repaint();
+        System.out.println("Se cargó la imagen: " + ruta);
+        return true;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

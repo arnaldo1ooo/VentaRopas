@@ -37,7 +37,7 @@ public class MetodosImagen {
     JFileChooser fc;
     Boolean fcEstaCargado = false;
 
-    public void CargarImagenFC(JLabel ElLabelImagen) throws HeadlessException {
+    public void CargarImagenDesdeFC(PanelImage ElLabelImagen) throws HeadlessException {
         CambiarLookSwing("windows"); //Cambiamos el look a Windows
 
         //Traducir
@@ -63,8 +63,8 @@ public class MetodosImagen {
         fc.setFileFilter(new FileNameExtensionFilter("JPG & PNG", "jpg", "png"));
 
         if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-            EscalarImagen(ElLabelImagen, fc, null);
-            ElLabelImagen.setText("");
+            //EscalarImagen(ElLabelImagen, fc, null);
+            //ElLabelImagen.setText("");
             fcEstaCargado = true;
         } else {
             System.out.println("Cargar Imagen Cancelado");
@@ -104,7 +104,6 @@ public class MetodosImagen {
 
     public boolean LeerImagen(PanelImage ElLabel, String rutaimagen) {
         //rutaimagen = System.getProperty("user.dir") + rutaimagen;
-        //ObtenerImagen Escalado al Label
         String ruta = rutaimagen + ".png";
         File ficheroimagen = new File(ruta);
         if (ficheroimagen.exists() == false) {
@@ -112,11 +111,13 @@ public class MetodosImagen {
             ficheroimagen = new File(ruta);
         }
 
-        if (ficheroimagen.exists()) {
-            Icon icon = FileSystemView.getFileSystemView().getSystemIcon(ficheroimagen);
-            ElLabel.setIcon(icon);
-            //EscalarImagen(ElLabel, null, ruta);
+        if (ficheroimagen.exists() == true) {
+            ruta = "/fotoproductos/imageproducto_1.png";
+            Image imagenInterna = new ImageIcon(getClass().getResource(ruta)).getImage();
+            ElLabel.setIcon(new javax.swing.ImageIcon(imagenInterna));
+            ElLabel.repaint();
             System.out.println("Se cargó la imagen: " + ruta);
+
             return true;
         } else {
             System.out.println("Error al LeerImagen, La imagen solicitada no existe o la ruta esta mal, revise la extension o ruta: " + ficheroimagen.getAbsolutePath());
