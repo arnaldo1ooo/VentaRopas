@@ -16,7 +16,7 @@ public class VistaCompletaImagen extends javax.swing.JDialog {
         initComponents();
 
         MetodosImagen metodosimagen = new MetodosImagen();
-        metodosimagen.LeerImagen(lbImagen, rutaimagen);
+        metodosimagen.LeerImagen(piImagen, rutaimagen);
         System.out.println("Se cargo la imagen a la VistaCompleta " + rutaimagen);
 
         //this.setSize(this.getToolkit().getScreenSize());
@@ -27,7 +27,7 @@ public class VistaCompletaImagen extends javax.swing.JDialog {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        lbImagen = new javax.swing.JLabel();
+        piImagen = new org.edisoncor.gui.panel.PanelImage();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Vista Completa");
@@ -37,12 +37,18 @@ public class VistaCompletaImagen extends javax.swing.JDialog {
         setSize(new java.awt.Dimension(800, 800));
         setType(java.awt.Window.Type.POPUP);
 
-        lbImagen.setFont(new java.awt.Font("sansserif", 1, 24)); // NOI18N
-        lbImagen.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbImagen.setText("SIN IMAGEN");
-        jScrollPane1.setViewportView(lbImagen);
-        lbImagen.getAccessibleContext().setAccessibleName("");
-        lbImagen.getAccessibleContext().setAccessibleDescription("");
+        javax.swing.GroupLayout piImagenLayout = new javax.swing.GroupLayout(piImagen);
+        piImagen.setLayout(piImagenLayout);
+        piImagenLayout.setHorizontalGroup(
+            piImagenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 794, Short.MAX_VALUE)
+        );
+        piImagenLayout.setVerticalGroup(
+            piImagenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 794, Short.MAX_VALUE)
+        );
+
+        jScrollPane1.setViewportView(piImagen);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -80,6 +86,6 @@ public class VistaCompletaImagen extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lbImagen;
+    private org.edisoncor.gui.panel.PanelImage piImagen;
     // End of variables declaration//GEN-END:variables
 }

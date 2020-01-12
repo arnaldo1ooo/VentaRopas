@@ -102,27 +102,29 @@ public class MetodosImagen {
         }
     }
 
-    public boolean LeerImagen(PanelImage ElLabel, String rutaimagen) {
-        //rutaimagen = System.getProperty("user.dir") + rutaimagen;
-        String ruta = rutaimagen + ".png";
-        File ficheroimagen = new File(ruta);
-        if (ficheroimagen.exists() == false) {
-            ruta = rutaimagen + ".jpg";
-            ficheroimagen = new File(ruta);
+    public void LeerImagen(PanelImage elPanelImage, String rutaimagen) {
+        Image imagenInterna;
+        String ruta = "/fotoproductos/imageproducto_0.png";
+
+        try {
+            imagenInterna = new ImageIcon(getClass().getResource(rutaimagen + ".png")).getImage();
+            if (imagenInterna != null) { //Si png existe
+                ruta = rutaimagen + ".png";
+            }
+        } catch (Exception e) {
+            try {
+                imagenInterna = new ImageIcon(getClass().getResource(rutaimagen + ".jpg")).getImage();
+                if (imagenInterna != null) { //Si jpg existe
+                    ruta = rutaimagen + ".jpg";
+                }
+            } catch (Exception e2) {
+                imagenInterna = new ImageIcon(getClass().getResource(ruta)).getImage(); //Si no existe ninguno se pone la imagen por defecto
+            }
         }
 
-        if (ficheroimagen.exists() == true) {
-            ruta = "/fotoproductos/imageproducto_1.png";
-            Image imagenInterna = new ImageIcon(getClass().getResource(ruta)).getImage();
-            ElLabel.setIcon(new javax.swing.ImageIcon(imagenInterna));
-            ElLabel.repaint();
-            System.out.println("Se cargó la imagen: " + ruta);
-
-            return true;
-        } else {
-            System.out.println("Error al LeerImagen, La imagen solicitada no existe o la ruta esta mal, revise la extension o ruta: " + ficheroimagen.getAbsolutePath());
-            return false;
-        }
+        elPanelImage.setIcon(new javax.swing.ImageIcon(imagenInterna));
+        elPanelImage.repaint();
+        System.out.println("Se cargó la imagen: " + ruta);
     }
 
     public void EliminarImagen(String rutaimagen) {

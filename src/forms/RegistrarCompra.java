@@ -11,7 +11,6 @@ import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -19,10 +18,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import metodos.Metodos;
@@ -45,8 +42,8 @@ public final class RegistrarCompra extends javax.swing.JDialog {
     Metodos metodos = new Metodos();
     MetodosCombo metodoscombo = new MetodosCombo();
     MetodosImagen metodosimagen = new MetodosImagen();
-    private final String rutaFotoProducto = "Fotos\\fotoproductos\\imageproducto_";
-    private final String rutaFotoDefault = "/images/ImagenProductoSinFoto.png";
+    private final String rutaFotoProducto = "/fotoproductos/imageproducto_";
+    private final String rutaFotoPorDefecto = "/fotoproductos/imageproducto_0.png";
     DefaultTableModel tablemodelo;
 
     public RegistrarCompra(java.awt.Frame parent, Boolean modal) {
@@ -188,8 +185,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         txtExistenciaActual.setText("");
         txtDescripcionProducto.setText("");
 
-        URL url = this.getClass().getResource(rutaFotoDefault);
-        piImagen.setIcon(new ImageIcon(url));
+        metodosimagen.LeerImagen(piImagen, rutaFotoPorDefecto);
 
         txtPrecioDolares.setText("");
         txtPrecioGs.setText("");
@@ -224,7 +220,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         if (metodos.ValidarCampoVacio(txtCodigoProducto, lblCodigoProducto) == false) {
             return false;
         } else {
-            if (ConsultaProducto() == false) {
+            if (txtPrecioDolares.getText().equals("")) { //Si no aparece su precio es por que el producto no existe en la bd
                 JOptionPane.showMessageDialog(this, "El Codigo de producto ingresado no existe", "Error", JOptionPane.ERROR_MESSAGE);
                 return false;
             }
@@ -250,10 +246,9 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                 txtExistenciaActual.setText(con.rs.getString(2));
                 txtDescripcionProducto.setText(con.rs.getString(3));
 
-                if (metodosimagen.LeerImagen(piImagen, rutaFotoProducto + con.rs.getString(4)) == false) {
-                    URL url = this.getClass().getResource(rutaFotoDefault);
-                    piImagen.setIcon(new ImageIcon(url));
-                }
+                System.out.println("");
+                metodosimagen.LeerImagen(piImagen, rutaFotoProducto + con.rs.getString(4));
+
                 double precio = con.rs.getDouble(5);
                 String precioString = metodostxt.DoubleAFormatoSudamerica(precio); //Formato sudamerica: 10.100,25
                 txtPrecioDolares.setText(precioString);
@@ -1100,8 +1095,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         txtIDProducto.setText("");
         txtExistenciaActual.setText("");
         txtDescripcionProducto.setText("");
-        URL url = this.getClass().getResource(rutaFotoDefault);
-        piImagen.setIcon(new ImageIcon(url));
+        metodosimagen.LeerImagen(piImagen, rutaFotoPorDefecto);
         txtPrecioDolares.setText("");
         txtPrecioGs.setText("");
         txtPrecioReales.setText("");
@@ -1143,7 +1137,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                 txtCodigoProducto.setText("");
                 txtCantidadAdquirida.setText("");
                 txtPrecioUnitario.setText("");
-            } catch (Exception e) {
+            } catch (NumberFormatException e) {
                 System.out.println("Error al añadir producto a la tabla " + e);
             }
         }

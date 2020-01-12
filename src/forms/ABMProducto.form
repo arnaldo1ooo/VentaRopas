@@ -1049,7 +1049,7 @@
                       </Border>
                     </Property>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/images/ImagenProductoSinFoto.png"/>
+                      <Image iconType="3" name="/fotoproductos/imageproducto_0.png"/>
                     </Property>
                   </Properties>
                   <Events>

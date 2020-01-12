@@ -13,10 +13,7 @@ import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
 
 import java.awt.HeadlessException;
-import java.awt.Image;
 import java.awt.Toolkit;
-import java.io.File;
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -25,14 +22,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import metodos.Metodos;
 import metodos.MetodosCombo;
 import metodos.MetodosImagen;
 import metodos.MetodosTXT;
 import metodos.VistaCompletaImagen;
-import org.edisoncor.gui.panel.PanelImage;
 
 /**
  *
@@ -45,7 +40,7 @@ public final class ABMProducto extends javax.swing.JDialog {
     MetodosCombo metodoscombo = new MetodosCombo();
     MetodosImagen metodosimagen = new MetodosImagen();
     private final String rutaFotoProducto = "/fotoproductos/imageproducto_";
-    private final String rutaFotoDefault = "/images/ImagenProductoSinFoto.png";
+    private final String rutaFotoPorDefecto = "/fotoproductos/imageproducto_0.png";
     private Icon fotoProductoDefault;
 
     public ABMProducto(java.awt.Frame parent, Boolean modal) {
@@ -258,10 +253,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         taObs.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 9).toString());
         cbEstado.setSelectedIndex(Integer.parseInt(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 10).toString()));
 
-        if (LeerImagen(piImagen, rutaFotoProducto + txtCodigo.getText()) == false) {
-            URL url = this.getClass().getResource(rutaFotoDefault);
-            piImagen.setIcon(new ImageIcon(url));
-        }
+        metodosimagen.LeerImagen(piImagen, rutaFotoProducto + txtCodigo.getText());
     }
 
     private void ModoEdicion(boolean valor) {
@@ -307,8 +299,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         lblPrecio.setForeground(new Color(102, 102, 102));
         lblTamano.setForeground(new Color(102, 102, 102));
 
-        URL url = this.getClass().getResource(rutaFotoDefault);
-        piImagen.setIcon(new ImageIcon(url));
+        metodosimagen.LeerImagen(piImagen, rutaFotoPorDefecto);
 
         txtBuscar.requestFocus();
         tbPrincipal.clearSelection();
@@ -846,7 +837,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         lblMarca.setText("Marca:");
 
         piImagen.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        piImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/ImagenProductoSinFoto.png"))); // NOI18N
+        piImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fotoproductos/imageproducto_0.png"))); // NOI18N
         piImagen.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 piImagenMouseClicked(evt);
@@ -1257,8 +1248,7 @@ public final class ABMProducto extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCargarImagenActionPerformed
 
     private void btnEliminarImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarImagenActionPerformed
-        URL url = this.getClass().getResource(rutaFotoDefault);
-        piImagen.setIcon(new ImageIcon(url));
+        metodosimagen.LeerImagen(piImagen, rutaFotoPorDefecto);
         btnEliminarImagen.setEnabled(!(piImagen.getIcon().toString().equals(fotoProductoDefault.toString()))); //Revisa si el icono es default
     }//GEN-LAST:event_btnEliminarImagenActionPerformed
 
@@ -1353,33 +1343,6 @@ public final class ABMProducto extends javax.swing.JDialog {
         public Component getDefaultComponent(Container cntnr) {
             return (Component) ordenTabulador.get(0);
         }
-    }
-
-    public boolean LeerImagen(PanelImage elPanelImage, String rutaimagen) {
-        Image imagenInterna;
-        String ruta = "/fotoproductos/imageproducto_0.png";
-
-        try {
-            imagenInterna = new ImageIcon(getClass().getResource(rutaimagen + ".png")).getImage();
-            if (imagenInterna != null) { //Si png existe
-                ruta = rutaimagen + ".png";
-            }
-        } catch (Exception e) {
-            try {
-                imagenInterna = new ImageIcon(getClass().getResource(rutaimagen + ".jpg")).getImage();
-                if (imagenInterna != null) { //Si jpg existe
-                    ruta = rutaimagen + ".jpg";
-                }
-            } catch (Exception e2) {
-                imagenInterna = new ImageIcon(getClass().getResource(ruta)).getImage(); //Si no existe ninguno se pone la imagen por defecto
-            }
-        }
- 
-
-        elPanelImage.setIcon(new javax.swing.ImageIcon(imagenInterna));
-        elPanelImage.repaint();
-        System.out.println("Se cargó la imagen: " + ruta);
-        return true;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
