@@ -44,7 +44,6 @@ public class Principal extends javax.swing.JFrame implements Runnable {
 
     public Principal() {
         initComponents();
-        dpEscritorio.setBorder(new ImagenFondo());//Imagen de fondo al jdesktopane
         this.setExtendedState(Principal.MAXIMIZED_BOTH);//Maximizar ventana
         ObtenerHorayFecha();
         lbAlias.setText(Alias);
@@ -123,11 +122,16 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        dpEscritorio = new javax.swing.JDesktopPane();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        jpBarra = new javax.swing.JPanel();
+        lbAlias = new javax.swing.JLabel();
+        lbFechaTitulo = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        lbHoraTitulo = new javax.swing.JLabel();
+        lbHora = new javax.swing.JLabel();
+        lbFecha = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        lblPerfil = new javax.swing.JLabel();
+        piPrincipal = new org.edisoncor.gui.panel.PanelImage();
         jpCotizaciones = new javax.swing.JPanel();
         lblCotiUsdGsCompra = new javax.swing.JLabel();
         lbldolares3 = new javax.swing.JLabel();
@@ -148,15 +152,10 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         lblCotiUsdRsVenta = new javax.swing.JLabel();
         lblCotiUsdPaVenta = new javax.swing.JLabel();
         lblFechaCotizacion = new javax.swing.JLabel();
-        jpBarra = new javax.swing.JPanel();
-        lbAlias = new javax.swing.JLabel();
-        lbFechaTitulo = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        lbHoraTitulo = new javax.swing.JLabel();
-        lbHora = new javax.swing.JLabel();
-        lbFecha = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        lblPerfil = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu8 = new javax.swing.JMenu();
         jMenuItem11 = new javax.swing.JMenuItem();
@@ -205,48 +204,93 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             }
         });
 
-        dpEscritorio.setBackground(new java.awt.Color(204, 204, 204));
-        dpEscritorio.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                dpEscritorioKeyPressed(evt);
-            }
-        });
+        jpBarra.setPreferredSize(new java.awt.Dimension(1586, 25));
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoProducto.png"))); // NOI18N
-        jButton1.setText("PRODUCTOS");
-        jButton1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+        lbAlias.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        lbAlias.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lbAlias.setText("Error de usuario");
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoClientes.png"))); // NOI18N
-        jButton2.setText("CLIENTES");
-        jButton2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
+        lbFechaTitulo.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        lbFechaTitulo.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lbFechaTitulo.setText("Fecha de hoy:");
+        lbFechaTitulo.setFocusable(false);
+        lbFechaTitulo.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoEmpleados.png"))); // NOI18N
-        jButton3.setText("EMPLEADOS");
-        jButton3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos20x20/IconoUsuario.png"))); // NOI18N
+        jLabel1.setText("Usuario:");
 
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoCompra.png"))); // NOI18N
-        jButton4.setText("COMPRAS");
-        jButton4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
+        lbHoraTitulo.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        lbHoraTitulo.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lbHoraTitulo.setText("Hora actual:");
+        lbHoraTitulo.setFocusable(false);
+        lbHoraTitulo.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+
+        lbHora.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        lbHora.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lbHora.setText("00:00:00");
+        lbHora.setFocusable(false);
+        lbHora.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+
+        lbFecha.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        lbFecha.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lbFecha.setText("00/00/0000");
+        lbFecha.setFocusable(false);
+        lbFecha.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel2.setText("Perfil:");
+
+        lblPerfil.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        lblPerfil.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblPerfil.setText("Error de perfil");
+
+        javax.swing.GroupLayout jpBarraLayout = new javax.swing.GroupLayout(jpBarra);
+        jpBarra.setLayout(jpBarraLayout);
+        jpBarraLayout.setHorizontalGroup(
+            jpBarraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpBarraLayout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbAlias, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblPerfil, javax.swing.GroupLayout.DEFAULT_SIZE, 685, Short.MAX_VALUE)
+                .addGap(573, 573, 573)
+                .addComponent(lbFechaTitulo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbFecha)
+                .addGap(18, 18, 18)
+                .addComponent(lbHoraTitulo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbHora, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jpBarraLayout.setVerticalGroup(
+            jpBarraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpBarraLayout.createSequentialGroup()
+                .addGroup(jpBarraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpBarraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                        .addComponent(lbAlias, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jpBarraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                        .addComponent(lbFechaTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lbFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lbHoraTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lbHora, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        lbFechaTitulo.getAccessibleContext().setAccessibleName("");
+
+        piPrincipal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/iconos/fondo1.png"))); // NOI18N
+        piPrincipal.setPreferredSize(new java.awt.Dimension(2000, 655));
 
         jpCotizaciones.setBackground(new java.awt.Color(255, 255, 255));
         jpCotizaciones.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Cotización"));
@@ -401,127 +445,72 @@ public class Principal extends javax.swing.JFrame implements Runnable {
                 .addComponent(lblFechaCotizacion))
         );
 
-        dpEscritorio.setLayer(jButton1, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dpEscritorio.setLayer(jButton2, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dpEscritorio.setLayer(jButton3, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dpEscritorio.setLayer(jButton4, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        dpEscritorio.setLayer(jpCotizaciones, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoClientes.png"))); // NOI18N
+        jButton2.setText("CLIENTES");
+        jButton2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
-        javax.swing.GroupLayout dpEscritorioLayout = new javax.swing.GroupLayout(dpEscritorio);
-        dpEscritorio.setLayout(dpEscritorioLayout);
-        dpEscritorioLayout.setHorizontalGroup(
-            dpEscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(dpEscritorioLayout.createSequentialGroup()
-                .addGap(39, 39, 39)
-                .addGroup(dpEscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoEmpleados.png"))); // NOI18N
+        jButton3.setText("EMPLEADOS");
+        jButton3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoProducto.png"))); // NOI18N
+        jButton1.setText("PRODUCTOS");
+        jButton1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoCompra.png"))); // NOI18N
+        jButton4.setText("COMPRAS");
+        jButton4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout piPrincipalLayout = new javax.swing.GroupLayout(piPrincipal);
+        piPrincipal.setLayout(piPrincipalLayout);
+        piPrincipalLayout.setHorizontalGroup(
+            piPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(piPrincipalLayout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addGroup(piPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 959, Short.MAX_VALUE)
+                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, piPrincipalLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jpCotizaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
-        dpEscritorioLayout.setVerticalGroup(
-            dpEscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(dpEscritorioLayout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addComponent(jButton2)
+        piPrincipalLayout.setVerticalGroup(
+            piPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, piPrincipalLayout.createSequentialGroup()
+                .addGap(47, 47, 47)
+                .addComponent(jButton1)
                 .addGap(18, 18, 18)
                 .addComponent(jButton3)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addComponent(jButton2)
                 .addGap(18, 18, 18)
                 .addComponent(jButton4)
-                .addContainerGap(91, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dpEscritorioLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
                 .addComponent(jpCotizaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
-
-        jpBarra.setPreferredSize(new java.awt.Dimension(1586, 25));
-
-        lbAlias.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        lbAlias.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lbAlias.setText("Error de usuario");
-
-        lbFechaTitulo.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        lbFechaTitulo.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lbFechaTitulo.setText("Fecha de hoy:");
-        lbFechaTitulo.setFocusable(false);
-        lbFechaTitulo.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos20x20/IconoUsuario.png"))); // NOI18N
-        jLabel1.setText("Usuario:");
-
-        lbHoraTitulo.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        lbHoraTitulo.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lbHoraTitulo.setText("Hora actual:");
-        lbHoraTitulo.setFocusable(false);
-        lbHoraTitulo.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-
-        lbHora.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        lbHora.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lbHora.setText("00:00:00");
-        lbHora.setFocusable(false);
-        lbHora.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-
-        lbFecha.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        lbFecha.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lbFecha.setText("00/00/0000");
-        lbFecha.setFocusable(false);
-        lbFecha.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel2.setText("Perfil:");
-
-        lblPerfil.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        lblPerfil.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblPerfil.setText("Error de perfil");
-
-        javax.swing.GroupLayout jpBarraLayout = new javax.swing.GroupLayout(jpBarra);
-        jpBarra.setLayout(jpBarraLayout);
-        jpBarraLayout.setHorizontalGroup(
-            jpBarraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpBarraLayout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbAlias, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblPerfil, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
-                .addGap(573, 573, 573)
-                .addComponent(lbFechaTitulo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbFecha)
-                .addGap(18, 18, 18)
-                .addComponent(lbHoraTitulo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbHora, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-        jpBarraLayout.setVerticalGroup(
-            jpBarraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpBarraLayout.createSequentialGroup()
-                .addGroup(jpBarraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpBarraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                        .addComponent(lbAlias, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lblPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jpBarraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                        .addComponent(lbFechaTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lbFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lbHoraTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lbHora, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        lbFechaTitulo.getAccessibleContext().setAccessibleName("");
 
         jMenuBar1.setMinimumSize(new java.awt.Dimension(120, 70));
         jMenuBar1.setPreferredSize(new java.awt.Dimension(120, 70));
@@ -750,17 +739,14 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(dpEscritorio)
-                    .addComponent(jpBarra, javax.swing.GroupLayout.DEFAULT_SIZE, 1606, Short.MAX_VALUE))
-                .addGap(0, 0, 0))
+            .addComponent(jpBarra, javax.swing.GroupLayout.DEFAULT_SIZE, 2553, Short.MAX_VALUE)
+            .addComponent(piPrincipal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 2553, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(dpEscritorio)
-                .addGap(0, 0, 0)
+                .addComponent(piPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 683, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jpBarra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -811,10 +797,6 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         ABMProducto abmproducto = new ABMProducto(this, false);
         abmproducto.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void dpEscritorioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dpEscritorioKeyPressed
-
-    }//GEN-LAST:event_dpEscritorioKeyPressed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
         /*TruncarTabla truncartabla = new TruncarTabla(this, true);
@@ -940,7 +922,6 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    public static javax.swing.JDesktopPane dpEscritorio;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -1012,6 +993,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     private javax.swing.JLabel lbldolares3;
     private javax.swing.JLabel lbldolares4;
     private javax.swing.JLabel lbldolares7;
+    private org.edisoncor.gui.panel.PanelImage piPrincipal;
     // End of variables declaration//GEN-END:variables
 
     @Override

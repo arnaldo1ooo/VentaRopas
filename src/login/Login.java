@@ -13,6 +13,7 @@ import java.sql.Statement;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
+import metodos.MetodosTXT;
 import metodos.PlaceHolder;
 import principal.SplashScreen;
 
@@ -31,7 +32,6 @@ public class Login extends javax.swing.JFrame {
         PlaceHolder placeholder;
         placeholder = new PlaceHolder("Alias", txtAlias);
         placeholder = new PlaceHolder("Contraseña", txtContrasena);
-
     }
 
     //-------------METODOS----------//

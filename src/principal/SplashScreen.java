@@ -194,15 +194,12 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
             losDiv = doc.select("div." + "col-sm-7"); //Las tablas, div.
             losTr = losDiv.select("tr"); //Las filas, tr.
             fila1 = losTr.get(1); //el get(0) seria los titulos
+            
             String usdGsCompraString = fila1.getElementsByClass("purchase").text();
             double usdGsCompraDouble = Double.parseDouble(((usdGsCompraString).replace(".", "")).replace(",", "."));
-            System.out.println("Compra Dolar x Guaranies: " + usdGsCompraString
-                    + "     Compra Dolar x Guaranies Double: " + usdGsCompraDouble);
 
             String usdGsVentaString = fila1.getElementsByClass("sale").text();
             double usdGsVentaDouble = Double.parseDouble(((usdGsVentaString).replace(".", "")).replace(",", "."));
-            System.out.println("Venta Dolar x Guaranies: " + usdGsVentaString
-                    + "     Venta Dolar x Guaranies Double: " + usdGsVentaDouble + "\n");
             metodos.EjecutarUpdate("CALL SP_CotizacionModificar('Dolares','Guaranies','" + usdGsCompraDouble + "','"
                     + usdGsVentaDouble + "','" + FechaActual() + "')");
 
@@ -213,25 +210,17 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
 
             String usdRsCompraString = fila1.getElementsByClass("purchase").text();
             double usdRsCompraDouble = Double.parseDouble(((usdRsCompraString).replace(".", "")).replace(",", "."));
-            System.out.println("Compra Dolar x Reales: " + usdRsCompraString
-                    + "     Compra Dolar x Reales Double: " + usdRsCompraDouble);
 
             String usdRsVentaString = fila1.getElementsByClass("sale").text();
             double usdRsVentaDouble = Double.parseDouble(((usdRsVentaString).replace(".", "")).replace(",", "."));
-            System.out.println("Venta Dolar x Reales: " + usdRsVentaString
-                    + "     Venta Dolar x Reales Double: " + usdRsVentaDouble + "\n");
             metodos.EjecutarUpdate("CALL SP_CotizacionModificar('Dolares','Reales','" + usdRsCompraDouble + "','"
                     + usdRsVentaDouble + "','" + FechaActual() + "')");
 
             String usdPaCompraString = fila2.getElementsByClass("purchase").text();
             double usdPaCompraDouble = Double.parseDouble(((usdPaCompraString).replace(".", "")).replace(",", "."));
-            System.out.println("Compra Dolar x PesoArg: " + usdPaCompraString
-                    + "     Compra Dolar x PesoArg Double: " + usdPaCompraDouble);
 
             String usdPaVentaString = fila2.getElementsByClass("sale").text();
             double usdPaVentaDouble = Double.parseDouble(((usdPaVentaString).replace(".", "")).replace(",", "."));
-            System.out.println("Venta Dolar x PesoArg: " + usdPaVentaString
-                    + "     Venta Dolar x PesoArg Double: " + usdPaVentaDouble + "\n");
             metodos.EjecutarUpdate("CALL SP_CotizacionModificar('Dolares','Pesos argentinos','" + usdPaCompraDouble + "','"
                     + usdPaVentaDouble + "','" + FechaActual() + "')");
         } catch (IOException e) {

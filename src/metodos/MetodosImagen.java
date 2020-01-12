@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -24,6 +25,8 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.filechooser.FileSystemView;
+import org.edisoncor.gui.panel.PanelImage;
 
 /**
  *
@@ -99,7 +102,7 @@ public class MetodosImagen {
         }
     }
 
-    public boolean LeerImagen(JLabel ElLabel, String rutaimagen) {
+    public boolean LeerImagen(PanelImage ElLabel, String rutaimagen) {
         //rutaimagen = System.getProperty("user.dir") + rutaimagen;
         //ObtenerImagen Escalado al Label
         String ruta = rutaimagen + ".png";
@@ -110,8 +113,9 @@ public class MetodosImagen {
         }
 
         if (ficheroimagen.exists()) {
-            ElLabel.setText("");
-            EscalarImagen(ElLabel, null, ruta);
+            Icon icon = FileSystemView.getFileSystemView().getSystemIcon(ficheroimagen);
+            ElLabel.setIcon(icon);
+            //EscalarImagen(ElLabel, null, ruta);
             System.out.println("Se cargó la imagen: " + ruta);
             return true;
         } else {

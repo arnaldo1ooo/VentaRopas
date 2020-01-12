@@ -15,6 +15,8 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -38,7 +40,7 @@ import static principal.Principal.cotiUsdPaCompra;
  * @author Lic. Arnaldo Cantero
  */
 public final class RegistrarCompra extends javax.swing.JDialog {
-    
+
     MetodosTXT metodostxt = new MetodosTXT();
     Metodos metodos = new Metodos();
     MetodosCombo metodoscombo = new MetodosCombo();
@@ -46,11 +48,11 @@ public final class RegistrarCompra extends javax.swing.JDialog {
     private final String rutaFotoProducto = "Fotos\\fotoproductos\\imageproducto_";
     private final String rutaFotoDefault = "/images/ImagenProductoSinFoto.png";
     DefaultTableModel tablemodelo;
-    
+
     public RegistrarCompra(java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
         initComponents();
-        
+
         CargarComboBoxes();
         tablemodelo = (DefaultTableModel) tbPrincipal.getModel();
         OrdenTabulador();
@@ -62,7 +64,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         metodoscombo.CargarComboBox(cbProveedor, "SELECT prov_codigo, prov_nombre FROM proveedor ORDER BY prov_nombre");
         metodoscombo.setSelectedNombreItem(cbProveedor, "SIN PROVEEDOR");
     }
-    
+
     public void RegistroNuevo() {
         //Registra la compra
         try {
@@ -71,9 +73,10 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                 String numcompra = txtNumCompra.getText();
                 int proveedor = metodoscombo.ObtenerIdComboBox(cbProveedor);
                 int tipodocumento = cbTipoDocumento.getSelectedIndex();
-                Date fecharegistro = dcFechaRegistro.getDate();
-                Date fechacompra = dcFechaCompra.getDate();
-                
+                DateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+                String fecharegistro = formatoFecha.format(dcFechaRegistro.getDate());
+                String fechacompra = formatoFecha.format(dcFechaCompra.getDate());
+
                 int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro crear este nuevo registro?", "Confirmación", JOptionPane.YES_OPTION);
                 if (JOptionPane.YES_OPTION == confirmado) {
                     //REGISTRAR NUEVA COMPRA
@@ -97,7 +100,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                         String idproducto;
                         int cantidadadquirida;
                         double preciocompra;
-                        
+
                         int cantfila = tbPrincipal.getRowCount();
                         for (int fila = 0; fila < cantfila; fila++) {
                             idproducto = tbPrincipal.getValueAt(fila, 0).toString();
@@ -116,7 +119,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                                     preciocompra = preciocompra * cotiUsdPaCompra;
                                 }
                             }
-                            
+
                             sentencia = "CALL SP_CompraProductosAlta('" + idultimacompra + "','" + idproducto + "','"
                                     + cantidadadquirida + "','" + preciocompra + "')";
                             System.out.println("Insertar registro: " + sentencia);
@@ -129,7 +132,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                             st = (Statement) con.createStatement();
                             st.executeUpdate(sentencia);
                         }
-                        
+
                         con.close();
                         st.close();
                         JOptionPane.showMessageDialog(this, "Se agregó correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
@@ -151,7 +154,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
             System.out.println("Completar los campos obligarios marcados con * " + ex);
         }
     }
-    
+
     private void ModoEdicion(boolean valor) {
         txtNumCompra.setEnabled(valor);
         cbProveedor.setEnabled(valor);
@@ -168,10 +171,10 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         cbMoneda.setEnabled(valor);
         btnAnadir.setEnabled(valor);
         tbPrincipal.setEnabled(valor);
-        
+
         txtNumCompra.requestFocus();
     }
-    
+
     private void Limpiar() {
         metodoscombo.setSelectedNombreItem(cbProveedor, "SIN PROVEEDOR");
         txtNumCompra.setText("");
@@ -184,22 +187,22 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         txtCodigoProducto.setText("");
         txtExistenciaActual.setText("");
         txtDescripcionProducto.setText("");
-        
+
         URL url = this.getClass().getResource(rutaFotoDefault);
         lbImagen.setIcon(new ImageIcon(url));
-        
+
         txtPrecioDolares.setText("");
         txtPrecioGs.setText("");
         txtPrecioReales.setText("");
         txtPrecioPesosArg.setText("");
-        
+
         txtCantidadAdquirida.setText("");
         txtPrecioUnitario.setText("");
         cbMoneda.setSelectedIndex(0);
-        
+
         tablemodelo.setRowCount(0);
     }
-    
+
     public boolean ComprobarCamposCompra() {
         if (metodos.ValidarCampoVacio(txtNumCompra, lblNumCompra) == false) {
             return false;
@@ -216,7 +219,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         }
         return true;
     }
-    
+
     public boolean ComprobarCamposProducto() {
         if (metodos.ValidarCampoVacio(txtCodigoProducto, lblCodigoProducto) == false) {
             return false;
@@ -226,17 +229,17 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                 return false;
             }
         }
-        
+
         if (metodos.ValidarCampoVacio(txtCantidadAdquirida, lblCantidadAdquirida) == false) {
             return false;
         }
-        
+
         if (metodos.ValidarCampoVacio(txtPrecioUnitario, lblPrecioCompra) == false) {
             return false;
         }
         return true;
     }
-    
+
     public boolean ConsultaProducto() {
         String codProducto = txtCodigoProducto.getText();
         try {
@@ -246,7 +249,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                 txtIDProducto.setText(con.rs.getString(1));
                 txtExistenciaActual.setText(con.rs.getString(2));
                 txtDescripcionProducto.setText(con.rs.getString(3));
-                
+
                 if (metodosimagen.LeerImagen(lbImagen, rutaFotoProducto + con.rs.getString(4)) == false) {
                     URL url = this.getClass().getResource(rutaFotoDefault);
                     lbImagen.setIcon(new ImageIcon(url));
@@ -254,7 +257,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                 double precio = con.rs.getDouble(5);
                 String precioString = metodostxt.DoubleAFormatoSudamerica(precio); //Formato sudamerica: 10.100,25
                 txtPrecioDolares.setText(precioString);
-                
+
                 return true;
             }
             con.DesconectarBasedeDatos();
@@ -1049,29 +1052,31 @@ public final class RegistrarCompra extends javax.swing.JDialog {
 
     private void txtCodigoProductoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoProductoKeyReleased
         metodostxt.TxtColorLabelKeyReleased(txtCodigoProducto, lblCodigoProducto);
-        
+
         if (ConsultaProducto() == true) {
             //Convertir precio a las distintas monedas
             if (txtPrecioDolares.getText().equals("") == false) {
                 //Precio Dolares
-                String precioDolaresString = txtPrecioDolares.getText();
-                double precioDolaresDouble = metodostxt.DoubleAFormatoAmericano(precioDolaresString);
-                txtPrecioDolares.setText(metodostxt.DoubleAFormatoSudamerica(precioDolaresDouble));
+                String precioUSDString = txtPrecioDolares.getText();
+                double precioUSDsDouble = metodostxt.DoubleAFormatoAmericano(precioUSDString);
+                precioUSDsDouble = metodostxt.FormatearADosDecimales(precioUSDsDouble);
+                txtPrecioDolares.setText(metodostxt.DoubleAFormatoSudamerica(precioUSDsDouble));
 
                 //Precio, cambio a Guaranies
-                double precioGsDouble = precioDolaresDouble * cotiUsdGsCompra;
+                double precioGsDouble = precioUSDsDouble * cotiUsdGsCompra;
                 precioGsDouble = metodostxt.FormatearADosDecimales(precioGsDouble);
                 String precioGsString = metodostxt.DoubleAFormatoSudamerica(precioGsDouble);
                 txtPrecioGs.setText(precioGsString);
 
                 //Precio, cambio a Reales
-                double precioRsDouble = precioDolaresDouble * cotiUsdRsCompra;
+                double precioRsDouble = precioUSDsDouble * cotiUsdRsCompra;
                 precioRsDouble = metodostxt.FormatearADosDecimales(precioRsDouble);
+                System.out.println("precioRSDouble " + precioRsDouble);
                 String precioRsString = metodostxt.DoubleAFormatoSudamerica(precioRsDouble);
                 txtPrecioReales.setText(precioRsString);
 
                 //Precio, cambio a Pesos argentinos
-                double precioPesosArgDouble = precioDolaresDouble * cotiUsdPaCompra;
+                double precioPesosArgDouble = precioUSDsDouble * cotiUsdPaCompra;
                 precioPesosArgDouble = metodostxt.FormatearADosDecimales(precioPesosArgDouble);
                 String precioPesosArgString = metodostxt.DoubleAFormatoSudamerica(precioPesosArgDouble);
                 txtPrecioPesosArg.setText(precioPesosArgString);
@@ -1080,7 +1085,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
             LimpiarProducto();
         }
     }//GEN-LAST:event_txtCodigoProductoKeyReleased
-    
+
     private void LimpiarProducto() {
         txtIDProducto.setText("");
         txtExistenciaActual.setText("");
@@ -1119,7 +1124,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                 double subtotal = cantidad * preciounitario;
                 tablemodelo.addRow(new Object[]{idproducto, codigoproducto, descripcion, cantidad, preciounitario,
                     moneda, subtotal});
-                
+
                 lblTotalCompra.setText(metodos.SumarColumnaDouble(tbPrincipal, 6) + ""); //El 5 es la columna 5, comienza de 0
                 lblTotalMoneda.setText(cbMoneda.getSelectedItem().toString());
 
@@ -1173,9 +1178,9 @@ public final class RegistrarCompra extends javax.swing.JDialog {
             evt.consume();
         }
     }//GEN-LAST:event_txtCodigoProductoKeyTyped
-    
+
     List<Component> ordenTabulador;
-    
+
     private void OrdenTabulador() {
         ordenTabulador = new ArrayList<>();
         ordenTabulador.add(txtNumCompra);
@@ -1189,29 +1194,29 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         ordenTabulador.add(btnGuardar);
         setFocusTraversalPolicy(new PersonalizadoFocusTraversalPolicy());
     }
-    
+
     private class PersonalizadoFocusTraversalPolicy extends FocusTraversalPolicy {
-        
+
         public Component getComponentAfter(Container focusCycleRoot, Component aComponent) {
             int currentPosition = ordenTabulador.indexOf(aComponent);
             currentPosition = (currentPosition + 1) % ordenTabulador.size();
             return (Component) ordenTabulador.get(currentPosition);
         }
-        
+
         public Component getComponentBefore(Container focusCycleRoot, Component aComponent) {
             int currentPosition = ordenTabulador.indexOf(aComponent);
             currentPosition = (ordenTabulador.size() + currentPosition - 1) % ordenTabulador.size();
             return (Component) ordenTabulador.get(currentPosition);
         }
-        
+
         public Component getFirstComponent(Container cntnr) {
             return (Component) ordenTabulador.get(0);
         }
-        
+
         public Component getLastComponent(Container cntnr) {
             return (Component) ordenTabulador.get(ordenTabulador.size() - 1);
         }
-        
+
         public Component getDefaultComponent(Container cntnr) {
             return (Component) ordenTabulador.get(0);
         }

@@ -277,13 +277,16 @@ public class MetodosTXT {
 
     //Formatear double para que tenga solo dos numeros despues de la coma, y la coma es punto
     public double FormatearADosDecimales(double ElDouble) {
+        String elDoubleString = "";
+        Double elNumeroDouble = 0.00;
         try {
-            DecimalFormat df2 = new DecimalFormat("#.##");
-            ElDouble = Double.parseDouble(df2.format(ElDouble));
+            elDoubleString = String.format("%.2f", ElDouble);
+            elDoubleString = elDoubleString.replace(",", ".");
+            elNumeroDouble = Double.parseDouble(elDoubleString);
         } catch (NumberFormatException e) {
-            System.out.println("Error al poner DosDecimales en el numero " + ElDouble + ":  " + e);
+            System.out.println("Error al poner DosDecimales al numero " + ElDouble + "   " + e);
         }
-        return ElDouble;
+        return elNumeroDouble;
     }
 
     public void BloquearTeclaKeyTyped(KeyEvent evt, int tecla) {
