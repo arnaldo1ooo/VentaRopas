@@ -32,13 +32,13 @@ import metodos.MetodosTXT;
  *
  * @author Arnaldo Cantero
  */
-public final class ABMEmpleado extends javax.swing.JDialog {
+public final class ABMFuncionario extends javax.swing.JDialog {
 
     MetodosTXT metodostxt = new MetodosTXT();
     Metodos metodos = new Metodos();
     String nombretablasp = "Empleado";
 
-    public ABMEmpleado(java.awt.Frame parent, Boolean modal) {
+    public ABMFuncionario(java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
         initComponents();
 
@@ -265,8 +265,6 @@ public final class ABMEmpleado extends javax.swing.JDialog {
     private void initComponents() {
 
         jpPrincipal = new javax.swing.JPanel();
-        jpBanner = new javax.swing.JPanel();
-        lbBanner = new javax.swing.JLabel();
         jpTabla = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         txtBuscar = new javax.swing.JTextField();
@@ -310,6 +308,8 @@ public final class ABMEmpleado extends javax.swing.JDialog {
         jpBotones2 = new javax.swing.JPanel();
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+        panel1 = new org.edisoncor.gui.panel.Panel();
+        labelMetric1 = new org.edisoncor.gui.label.LabelMetric();
 
         setTitle("Ventana Empleados");
         setBackground(new java.awt.Color(45, 62, 80));
@@ -317,33 +317,6 @@ public final class ABMEmpleado extends javax.swing.JDialog {
 
         jpPrincipal.setBackground(new java.awt.Color(233, 255, 255));
         jpPrincipal.setPreferredSize(new java.awt.Dimension(1580, 478));
-
-        jpBanner.setBackground(new java.awt.Color(0, 51, 102));
-        jpBanner.setPreferredSize(new java.awt.Dimension(1000, 82));
-
-        lbBanner.setFont(new java.awt.Font("Franklin Gothic Medium", 1, 36)); // NOI18N
-        lbBanner.setForeground(new java.awt.Color(255, 255, 255));
-        lbBanner.setText("EMPLEADOS");
-        lbBanner.setToolTipText("");
-        lbBanner.setMaximumSize(new java.awt.Dimension(1100, 52));
-        lbBanner.setMinimumSize(new java.awt.Dimension(1100, 52));
-        lbBanner.setPreferredSize(new java.awt.Dimension(1100, 52));
-
-        javax.swing.GroupLayout jpBannerLayout = new javax.swing.GroupLayout(jpBanner);
-        jpBanner.setLayout(jpBannerLayout);
-        jpBannerLayout.setHorizontalGroup(
-            jpBannerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpBannerLayout.createSequentialGroup()
-                .addGap(38, 38, 38)
-                .addComponent(lbBanner, javax.swing.GroupLayout.PREFERRED_SIZE, 965, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jpBannerLayout.setVerticalGroup(
-            jpBannerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpBannerLayout.createSequentialGroup()
-                .addComponent(lbBanner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 13, Short.MAX_VALUE))
-        );
 
         jpTabla.setBackground(new java.awt.Color(233, 255, 255));
         jpTabla.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -520,13 +493,13 @@ public final class ABMEmpleado extends javax.swing.JDialog {
             jpBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpBotonesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+                .addComponent(btnNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnModificar, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+                .addComponent(btnModificar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+                .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnReporte, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+                .addComponent(btnReporte, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -796,11 +769,35 @@ public final class ABMEmpleado extends javax.swing.JDialog {
                 .addContainerGap())
         );
 
+        panel1.setColorPrimario(new java.awt.Color(0, 153, 153));
+        panel1.setColorSecundario(new java.awt.Color(233, 255, 255));
+
+        labelMetric1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        labelMetric1.setText("FUNCIONARIOS");
+        labelMetric1.setDireccionDeSombra(110);
+        labelMetric1.setFont(new java.awt.Font("Arial Black", 0, 26)); // NOI18N
+
+        javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
+        panel1.setLayout(panel1Layout);
+        panel1Layout.setHorizontalGroup(
+            panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel1Layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addComponent(labelMetric1, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        panel1Layout.setVerticalGroup(
+            panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(labelMetric1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(7, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout jpPrincipalLayout = new javax.swing.GroupLayout(jpPrincipal);
         jpPrincipal.setLayout(jpPrincipalLayout);
         jpPrincipalLayout.setHorizontalGroup(
             jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpBanner, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1009, Short.MAX_VALUE)
             .addGroup(jpPrincipalLayout.createSequentialGroup()
                 .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jpPrincipalLayout.createSequentialGroup()
@@ -815,15 +812,16 @@ public final class ABMEmpleado extends javax.swing.JDialog {
                         .addContainerGap()
                         .addComponent(jtpEdicion, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(panel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jpPrincipalLayout.setVerticalGroup(
             jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpPrincipalLayout.createSequentialGroup()
-                .addComponent(jpBanner, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jpBotones, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jpTabla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jpTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jpBotones, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jtpEdicion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -831,7 +829,6 @@ public final class ABMEmpleado extends javax.swing.JDialog {
                 .addGap(19, 19, 19))
         );
 
-        jpBanner.getAccessibleContext().setAccessibleName("");
         jtpEdicion.getAccessibleContext().setAccessibleName("");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -842,7 +839,7 @@ public final class ABMEmpleado extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 635, Short.MAX_VALUE)
+            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 616, Short.MAX_VALUE)
         );
 
         getAccessibleContext().setAccessibleName("Inventario");
@@ -1041,14 +1038,13 @@ public final class ABMEmpleado extends javax.swing.JDialog {
     private com.toedter.calendar.JDateChooser dcFechaIngreso;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jpBanner;
     private javax.swing.JPanel jpBotones;
     private javax.swing.JPanel jpBotones2;
     private javax.swing.JPanel jpEdicion;
     private javax.swing.JPanel jpPrincipal;
     private javax.swing.JPanel jpTabla;
     private javax.swing.JTabbedPane jtpEdicion;
-    private javax.swing.JLabel lbBanner;
+    private org.edisoncor.gui.label.LabelMetric labelMetric1;
     private javax.swing.JLabel lbCantRegistros;
     private javax.swing.JLabel lblApellido;
     private javax.swing.JLabel lblBuscarCampo;
@@ -1060,6 +1056,7 @@ public final class ABMEmpleado extends javax.swing.JDialog {
     private javax.swing.JLabel lblObs;
     private javax.swing.JLabel lblSexo;
     private javax.swing.JLabel lblTelefono;
+    private org.edisoncor.gui.panel.Panel panel1;
     private javax.swing.JScrollPane scPrincipal;
     private javax.swing.JScrollPane scpObs;
     private javax.swing.JTextArea taObs;

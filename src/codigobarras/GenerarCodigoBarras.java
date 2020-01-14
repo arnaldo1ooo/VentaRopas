@@ -6,8 +6,11 @@
 package codigobarras;
 
 import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Font.FontFamily;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
@@ -23,6 +26,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import metodos.Metodos;
 import metodos.MetodosTXT;
 
@@ -35,20 +39,22 @@ public class GenerarCodigoBarras extends javax.swing.JDialog {
     Metodos metodos = new Metodos();
     MetodosTXT metodostxt = new MetodosTXT();
 
-    public GenerarCodigoBarras(java.awt.Frame parent, boolean modal, String elCodigo) {
+    public GenerarCodigoBarras(java.awt.Frame parent, boolean modal, String elCodigo, String descripcion) {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
         txtCodigo.setText(elCodigo);
-
+        txtDescripcion.setText(descripcion);
     }
 
     private void GenerarCodigoDeBarras() {
         try {
             String codigo = txtCodigo.getText();
+            String descripcion = txtDescripcion.getText();
             int cantidad = Integer.parseInt(txtCantidad.getText());
-            String nombrepdf = "CodigosBarras.pdf";
+            String nombrepdf = "CodigosBarras";
             int escala = 100;
+            BaseColor colorBorde = new BaseColor(224, 224, 224); //Gris claro
 
             //Configuracion pagina
             float anchurapagina = Float.parseFloat("1");//1mm equivale a 2.83, 210mm
@@ -56,6 +62,7 @@ public class GenerarCodigoBarras extends javax.swing.JDialog {
             Rectangle tamPagina;
             int numColumnas = 1;
             PdfPTable tabla = null;
+            Image laImagen = null;
             if (cbTamanoPagina.getSelectedItem().equals("Oficio")) {
                 anchurapagina = Float.parseFloat((216 * 2.83) + "f");//1mm equivale a 2.83, 210mm
                 altopagina = Float.parseFloat((330 * 2.83) + "f");
@@ -70,13 +77,26 @@ public class GenerarCodigoBarras extends javax.swing.JDialog {
             String directorio = System.getProperty("user.home") + "/Desktop/" + nombrepdf + ".pdf";
             PdfWriter pdf;
             pdf = PdfWriter.getInstance(doc, new FileOutputStream(directorio));
+
             doc.open(); // Abrir el documento
-            Paragraph titulo = new Paragraph("Codigo de barras (" + cbTipoCodigo.getSelectedItem() + ") del producto " + codigo + "\n");
+
+            //Titulos
+            Font fontBold = new Font(FontFamily.HELVETICA, 11, Font.BOLD, BaseColor.BLACK); //Negrita
+            Font fontRegular = new Font(FontFamily.HELVETICA, 10, Font.NORMAL, BaseColor.BLACK); //Normal
+            Font fonttitulo = new Font(FontFamily.HELVETICA, 14, Font.BOLD, BaseColor.BLACK);
+
+            Paragraph titulo = new Paragraph("Codigo de barras (" + cbTipoCodigo.getSelectedItem() + ")\n", fonttitulo);
             titulo.setAlignment(Paragraph.ALIGN_CENTER); //Centrar titulo
             doc.add(titulo);
-            Paragraph cantidadParrafo = new Paragraph("Cantidad: " + cantidad + "\n\n");
+
+            Paragraph subtitulo = new Paragraph("Descripción del producto: ", fontBold);
+            subtitulo.add(new Chunk(descripcion, fontRegular));
+            doc.add(subtitulo);
+
+            Paragraph cantidadParrafo = new Paragraph("Cantidad: ", fontBold);
+            cantidadParrafo.add(new Chunk(cantidad + "\n\n", fontRegular));
             doc.add(cantidadParrafo);
-            Image laImagen = null;
+
             if (cbTipoCodigo.getSelectedItem().equals("CODE 39")) {
                 numColumnas = 3;
                 tabla = new PdfPTable(numColumnas);
@@ -100,7 +120,7 @@ public class GenerarCodigoBarras extends javax.swing.JDialog {
             celda.setPaddingTop(5f); //Espaciado arriba celda
             celda.setPaddingBottom(5f); //Espaciado abajo celda
             celda.setBorderWidth(0.2f); //Grosor del borde de la celda
-            celda.setBorderColor(BaseColor.GRAY); //Color de la celda
+            celda.setBorderColor(colorBorde); //Color de la celda
             celda.setHorizontalAlignment(Cell.ALIGN_CENTER);
             celda.setVerticalAlignment(Cell.ALIGN_CENTER);
 
@@ -121,7 +141,7 @@ public class GenerarCodigoBarras extends javax.swing.JDialog {
                     tabla.addCell(celda);
                 }
                 PdfPCell celdavacia = new PdfPCell(new Paragraph(""));
-                celdavacia.setBorderColor(BaseColor.GRAY); //Color de la celda
+                celdavacia.setBorderColor(colorBorde); //Color de la celda
                 for (int i = cantidad; i < numColumnas; i++) {
                     tabla.addCell(celdavacia);
                 }
@@ -135,7 +155,7 @@ public class GenerarCodigoBarras extends javax.swing.JDialog {
                 tabla.addCell(celda); // addCell() agrega una celda a la tabla, el cambio de fila ocurre automaticamente al llenar la fila     
             }
             PdfPCell celdavacia = new PdfPCell(new Paragraph(""));
-            celdavacia.setBorderColor(BaseColor.GRAY); //Color de la celda
+            celdavacia.setBorderColor(colorBorde); //Color de la celda
             for (int i = 0; i < cantidadextra; i++) {
                 tabla.addCell(celdavacia);
             }
@@ -144,6 +164,7 @@ public class GenerarCodigoBarras extends javax.swing.JDialog {
             Runtime.getRuntime().exec(new String[]{"cmd.exe", "/c", "start", directorio}); //Abre el archivo pdf generado
             doc.close();
         } catch (FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "Cierre el pdf creado, y vuelva a intentarlo", "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(GenerarCodigoBarras.class.getName()).log(Level.SEVERE, null, ex);
         } catch (DocumentException | IOException ex) {
             Logger.getLogger(GenerarCodigoBarras.class.getName()).log(Level.SEVERE, null, ex);
@@ -177,6 +198,8 @@ public class GenerarCodigoBarras extends javax.swing.JDialog {
         txtCodigo = new org.edisoncor.gui.textField.TextFieldRoundBackground();
         cbTamanoPagina = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        txtDescripcion = new org.edisoncor.gui.textField.TextFieldRoundBackground();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Generar código de barras");
@@ -217,6 +240,7 @@ public class GenerarCodigoBarras extends javax.swing.JDialog {
 
         txtCodigo.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtCodigo.setEnabled(false);
+        txtCodigo.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
 
         cbTamanoPagina.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Oficio", "A4" }));
 
@@ -224,29 +248,43 @@ public class GenerarCodigoBarras extends javax.swing.JDialog {
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel5.setText("Tamaño de pagina");
 
+        jLabel4.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel4.setText("Descripción");
+
+        txtDescripcion.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        txtDescripcion.setEnabled(false);
+        txtDescripcion.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+
         javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
         panel1.setLayout(panel1Layout);
         panel1Layout.setHorizontalGroup(
             panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel1Layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(buttonAction1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lblCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(txtCantidad, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
-                            .addComponent(txtCodigo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(cbTipoCodigo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(cbTamanoPagina, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel5)))
-                .addContainerGap(51, Short.MAX_VALUE))
+                    .addGroup(panel1Layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtCantidad, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtCodigo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(23, 23, 23)
+                        .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(panel1Layout.createSequentialGroup()
+                                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(cbTamanoPagina, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING))
+                                .addGap(33, 33, 33)
+                                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(cbTipoCodigo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel2)))
+                            .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(panel1Layout.createSequentialGroup()
+                        .addGap(235, 235, 235)
+                        .addComponent(buttonAction1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
         panel1Layout.setVerticalGroup(
             panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -254,26 +292,33 @@ public class GenerarCodigoBarras extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(lblCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(3, 3, 3)
+                                .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(panel1Layout.createSequentialGroup()
+                                .addGap(13, 13, 13)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(2, 2, 2)
+                                .addComponent(cbTipoCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(2, 2, 2)
-                        .addComponent(cbTipoCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panel1Layout.createSequentialGroup()
-                        .addComponent(lblCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(3, 3, 3)
-                        .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panel1Layout.createSequentialGroup()
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(2, 2, 2)
                         .addComponent(cbTamanoPagina, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(28, 28, 28)
+                .addGap(31, 31, 31)
                 .addComponent(buttonAction1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39))
+                .addGap(36, 36, 36))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -330,7 +375,7 @@ public class GenerarCodigoBarras extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                GenerarCodigoBarras dialog = new GenerarCodigoBarras(new javax.swing.JFrame(), true, "");
+                GenerarCodigoBarras dialog = new GenerarCodigoBarras(new javax.swing.JFrame(), true, "", "");
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -348,11 +393,13 @@ public class GenerarCodigoBarras extends javax.swing.JDialog {
     private javax.swing.JComboBox<String> cbTipoCodigo;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private org.edisoncor.gui.label.LabelTask labelTask1;
     private javax.swing.JLabel lblCantidad;
     private org.edisoncor.gui.panel.Panel panel1;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtCantidad;
     private org.edisoncor.gui.textField.TextFieldRoundBackground txtCodigo;
+    private org.edisoncor.gui.textField.TextFieldRoundBackground txtDescripcion;
     // End of variables declaration//GEN-END:variables
 }

@@ -44,6 +44,7 @@ public final class ABMProducto extends javax.swing.JDialog {
     private Icon fotoProductoDefault;
 
     public ABMProducto(java.awt.Frame parent, Boolean modal) {
+
         super(parent, modal);
         initComponents();
 
@@ -401,7 +402,6 @@ public final class ABMProducto extends javax.swing.JDialog {
         jpBotones2 = new javax.swing.JPanel();
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
-        btnCancelar2 = new javax.swing.JButton();
 
         setTitle("Ventana Productos");
         setBackground(new java.awt.Color(45, 62, 80));
@@ -500,7 +500,7 @@ public final class ABMProducto extends javax.swing.JDialog {
             }
         });
 
-        btnCancelar1.setBackground(new java.awt.Color(0, 153, 153));
+        btnCancelar1.setBackground(new java.awt.Color(0, 115, 115));
         btnCancelar1.setForeground(new java.awt.Color(255, 255, 255));
         btnCancelar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos20x20/iconoCodigoBarras.png"))); // NOI18N
         btnCancelar1.setText("Generar Codigo de Barras");
@@ -848,11 +848,11 @@ public final class ABMProducto extends javax.swing.JDialog {
         piImagen.setLayout(piImagenLayout);
         piImagenLayout.setHorizontalGroup(
             piImagenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 156, Short.MAX_VALUE)
+            .addGap(0, 179, Short.MAX_VALUE)
         );
         piImagenLayout.setVerticalGroup(
             piImagenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 175, Short.MAX_VALUE)
+            .addGap(0, 203, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jpEdicionLayout = new javax.swing.GroupLayout(jpEdicion);
@@ -896,7 +896,7 @@ public final class ABMProducto extends javax.swing.JDialog {
                     .addComponent(cbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cbSubcategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(scpObs, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(70, 70, 70)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
                 .addComponent(piImagen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1001,19 +1001,6 @@ public final class ABMProducto extends javax.swing.JDialog {
             }
         });
 
-        btnCancelar2.setBackground(new java.awt.Color(255, 101, 101));
-        btnCancelar2.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
-        btnCancelar2.setForeground(new java.awt.Color(255, 255, 255));
-        btnCancelar2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos20x20/IconoCancelar.png"))); // NOI18N
-        btnCancelar2.setText("Cancelar");
-        btnCancelar2.setToolTipText("Cancela la acción");
-        btnCancelar2.setEnabled(false);
-        btnCancelar2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelar2ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jpBotones2Layout = new javax.swing.GroupLayout(jpBotones2);
         jpBotones2.setLayout(jpBotones2Layout);
         jpBotones2Layout.setHorizontalGroup(
@@ -1023,12 +1010,7 @@ public final class ABMProducto extends javax.swing.JDialog {
                 .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnCancelar)
-                .addContainerGap(138, Short.MAX_VALUE))
-            .addGroup(jpBotones2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpBotones2Layout.createSequentialGroup()
-                    .addContainerGap(174, Short.MAX_VALUE)
-                    .addComponent(btnCancelar2)
-                    .addGap(128, 128, 128)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jpBotones2Layout.setVerticalGroup(
             jpBotones2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1038,11 +1020,6 @@ public final class ABMProducto extends javax.swing.JDialog {
                     .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
-            .addGroup(jpBotones2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jpBotones2Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(btnCancelar2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout jpPrincipalLayout = new javax.swing.GroupLayout(jpPrincipal);
@@ -1286,17 +1263,13 @@ public final class ABMProducto extends javax.swing.JDialog {
 
     private void btnCancelar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelar1ActionPerformed
         if (txtCodigoProducto.getText().equals("") == false) {
-            GenerarCodigoBarras generarCodigoBarras = new GenerarCodigoBarras(null, true, txtCodigoProducto.getText());
+            GenerarCodigoBarras generarCodigoBarras = new GenerarCodigoBarras(null, true, txtCodigoProducto.getText(), txtDescripcion.getText());
             generarCodigoBarras.setVisible(true);
         } else {
 
             JOptionPane.showMessageDialog(null, "Seleccione un producto", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnCancelar1ActionPerformed
-
-    private void btnCancelar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelar2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnCancelar2ActionPerformed
 
     private void piImagenMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_piImagenMouseClicked
 
@@ -1349,7 +1322,6 @@ public final class ABMProducto extends javax.swing.JDialog {
     private javax.swing.JButton btnActualizarTabla;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnCancelar1;
-    private javax.swing.JButton btnCancelar2;
     private javax.swing.JButton btnCargarImagen;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnEliminarImagen;

@@ -147,7 +147,7 @@ public class MetodosImagen {
         }
     }
 
-    public void EscalarImagen(JLabel ElLabel, JFileChooser fc, String UrlImagen) {
+    public void EscalarImagenAFC(JLabel ElLabel, JFileChooser fc, String UrlImagen) {
         if (fc != null) { //Si la imagen viene desde un File Chooser
             //Si se presiona boton aceptar
 

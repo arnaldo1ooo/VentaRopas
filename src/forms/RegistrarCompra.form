@@ -30,7 +30,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jpPrincipal" alignment="0" pref="962" max="32767" attributes="0"/>
+          <Component id="jpPrincipal" alignment="0" pref="983" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -56,7 +56,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="jpBanner" alignment="1" pref="962" max="32767" attributes="0"/>
+              <Component id="jpBanner" alignment="1" pref="983" max="32767" attributes="0"/>
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
@@ -209,13 +209,13 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                       <Component id="btnNuevo" min="-2" pref="72" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnGuardar" min="-2" pref="72" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnCancelar" min="-2" pref="72" max="-2" attributes="0"/>
-                      <EmptySpace pref="12" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -333,22 +333,22 @@
                       <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                       <Component id="btnProveedor" min="-2" pref="36" max="-2" attributes="0"/>
                       <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="lblRucCedula1" pref="103" max="32767" attributes="0"/>
-                          <Component id="cbTipoDocumento" pref="0" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="lblRucCedula1" min="-2" pref="103" max="-2" attributes="0"/>
+                          <Component id="cbTipoDocumento" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="lblFechaRegistro" min="-2" pref="106" max="-2" attributes="0"/>
-                          <Component id="dcFechaRegistro" pref="124" max="32767" attributes="0"/>
+                          <Component id="dcFechaRegistro" min="-2" pref="124" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
                               <Component id="lblFechaCompra" min="-2" pref="106" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
+                              <EmptySpace pref="29" max="32767" attributes="0"/>
                           </Group>
-                          <Component id="dcFechaCompra" max="32767" attributes="0"/>
+                          <Component id="dcFechaCompra" min="-2" pref="124" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -417,7 +417,6 @@
                     <StringItem index="3" value="FACTURA"/>
                   </StringArray>
                 </Property>
-                <Property name="selectedIndex" type="int" value="1"/>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <AuxValues>
@@ -524,19 +523,16 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <EmptySpace min="0" pref="2" max="32767" attributes="0"/>
-                                      <Component id="txtIDProducto" min="-2" pref="46" max="-2" attributes="0"/>
-                                  </Group>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="lblIDProducto" max="32767" attributes="0"/>
+                                  <Component id="txtIDProducto" pref="46" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="lblCodigoProducto" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
-                                  <Component id="txtCodigoProducto" alignment="0" min="-2" pref="161" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="txtCodigoProducto" pref="161" max="32767" attributes="0"/>
+                                  <Component id="lblCodigoProducto" max="32767" attributes="0"/>
                               </Group>
-                              <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="lblCodigo6" max="32767" attributes="0"/>
                                   <Component id="txtExistenciaActual" min="-2" pref="114" max="-2" attributes="0"/>
@@ -548,7 +544,7 @@
                                   <Component id="lblTituloDescripcion" max="32767" attributes="0"/>
                                   <Group type="102" attributes="0">
                                       <Component id="txtDescripcionProducto" min="-2" pref="383" max="-2" attributes="0"/>
-                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                      <EmptySpace min="0" pref="50" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
@@ -626,15 +622,15 @@
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="2" attributes="0">
+                                  <Component id="lblIDProducto" alignment="2" min="-2" max="-2" attributes="0"/>
                                   <Component id="lblCodigoProducto" alignment="2" min="-2" max="-2" attributes="0"/>
                                   <Component id="lblCodigo6" alignment="2" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblIDProducto" alignment="2" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="4" pref="4" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="2" attributes="0">
+                                  <Component id="txtIDProducto" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
                                   <Component id="txtCodigoProducto" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
                                   <Component id="txtExistenciaActual" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
-                                  <Component id="txtIDProducto" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="lblTituloDescripcion" min="-2" pref="16" max="-2" attributes="0"/>
