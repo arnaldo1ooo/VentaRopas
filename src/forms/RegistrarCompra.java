@@ -66,7 +66,11 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         //Registra la compra
         try {
             int cantidadProductos = tbPrincipal.getModel().getRowCount();
-            if (ComprobarCamposCompra() == true && cantidadProductos > 0) {
+            if (cantidadProductos <= 0) {
+                JOptionPane.showMessageDialog(null, "No se cargó ningún producto", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (ComprobarCamposCompra() == true) {
                 String numcompra = txtNumCompra.getText();
                 int proveedor = metodoscombo.ObtenerIdComboBox(cbProveedor);
                 int tipodocumento = cbTipoDocumento.getSelectedIndex();
@@ -233,6 +237,10 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         if (metodos.ValidarCampoVacio(txtPrecioUnitario, lblPrecioCompra) == false) {
             return false;
         }
+
+        if (metodostxt.ValidarDouble(txtPrecioUnitario.getText()) == false) {
+            return false;
+        }
         return true;
     }
 
@@ -246,7 +254,6 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                 txtExistenciaActual.setText(con.rs.getString(2));
                 txtDescripcionProducto.setText(con.rs.getString(3));
 
-                System.out.println("");
                 metodosimagen.LeerImagen(piImagen, rutaFotoProducto + con.rs.getString(4));
 
                 double precio = con.rs.getDouble(5);
@@ -1056,41 +1063,6 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPrecioPesosArgActionPerformed
 
-    private void txtCodigoProductoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoProductoKeyReleased
-        metodostxt.TxtColorLabelKeyReleased(txtCodigoProducto, lblCodigoProducto);
-
-        if (ConsultaProducto() == true) {
-            //Convertir precio a las distintas monedas
-            if (txtPrecioDolares.getText().equals("") == false) {
-                //Precio Dolares
-                String precioUSDString = txtPrecioDolares.getText();
-                double precioUSDsDouble = metodostxt.DoubleAFormatoAmericano(precioUSDString);
-                precioUSDsDouble = metodostxt.FormatearADosDecimales(precioUSDsDouble);
-                txtPrecioDolares.setText(metodostxt.DoubleAFormatoSudamerica(precioUSDsDouble));
-
-                //Precio, cambio a Guaranies
-                double precioGsDouble = precioUSDsDouble * cotiUsdGsCompra;
-                precioGsDouble = metodostxt.FormatearADosDecimales(precioGsDouble);
-                String precioGsString = metodostxt.DoubleAFormatoSudamerica(precioGsDouble);
-                txtPrecioGs.setText(precioGsString);
-
-                //Precio, cambio a Reales
-                double precioRsDouble = precioUSDsDouble * cotiUsdRsCompra;
-                precioRsDouble = metodostxt.FormatearADosDecimales(precioRsDouble);
-                String precioRsString = metodostxt.DoubleAFormatoSudamerica(precioRsDouble);
-                txtPrecioReales.setText(precioRsString);
-
-                //Precio, cambio a Pesos argentinos
-                double precioPesosArgDouble = precioUSDsDouble * cotiUsdPaCompra;
-                precioPesosArgDouble = metodostxt.FormatearADosDecimales(precioPesosArgDouble);
-                String precioPesosArgString = metodostxt.DoubleAFormatoSudamerica(precioPesosArgDouble);
-                txtPrecioPesosArg.setText(precioPesosArgString);
-            }
-        } else {
-            LimpiarProducto();
-        }
-    }//GEN-LAST:event_txtCodigoProductoKeyReleased
-
     private void LimpiarProducto() {
         txtIDProducto.setText("");
         txtExistenciaActual.setText("");
@@ -1182,6 +1154,42 @@ public final class RegistrarCompra extends javax.swing.JDialog {
             evt.consume();
         }
     }//GEN-LAST:event_txtCodigoProductoKeyTyped
+
+    private void txtCodigoProductoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoProductoKeyReleased
+        metodostxt.TxtColorLabelKeyReleased(txtCodigoProducto, lblCodigoProducto);
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            if (ConsultaProducto() == true) {
+                //Convertir precio a las distintas monedas
+                if (txtPrecioDolares.getText().equals("") == false) {
+                    //Precio Dolares
+                    String precioUSDString = txtPrecioDolares.getText();
+                    double precioUSDsDouble = metodostxt.DoubleAFormatoAmericano(precioUSDString);
+                    precioUSDsDouble = metodostxt.FormatearADosDecimales(precioUSDsDouble);
+                    txtPrecioDolares.setText(metodostxt.DoubleAFormatoSudamerica(precioUSDsDouble));
+
+                    //Precio, cambio a Guaranies
+                    double precioGsDouble = precioUSDsDouble * cotiUsdGsCompra;
+                    precioGsDouble = metodostxt.FormatearADosDecimales(precioGsDouble);
+                    String precioGsString = metodostxt.DoubleAFormatoSudamerica(precioGsDouble);
+                    txtPrecioGs.setText(precioGsString);
+
+                    //Precio, cambio a Reales
+                    double precioRsDouble = precioUSDsDouble * cotiUsdRsCompra;
+                    precioRsDouble = metodostxt.FormatearADosDecimales(precioRsDouble);
+                    String precioRsString = metodostxt.DoubleAFormatoSudamerica(precioRsDouble);
+                    txtPrecioReales.setText(precioRsString);
+
+                    //Precio, cambio a Pesos argentinos
+                    double precioPesosArgDouble = precioUSDsDouble * cotiUsdPaCompra;
+                    precioPesosArgDouble = metodostxt.FormatearADosDecimales(precioPesosArgDouble);
+                    String precioPesosArgString = metodostxt.DoubleAFormatoSudamerica(precioPesosArgDouble);
+                    txtPrecioPesosArg.setText(precioPesosArgString);
+                }
+            } else {
+                LimpiarProducto();
+            }
+        }
+    }//GEN-LAST:event_txtCodigoProductoKeyReleased
 
     List<Component> ordenTabulador;
 

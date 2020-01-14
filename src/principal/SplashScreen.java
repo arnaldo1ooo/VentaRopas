@@ -46,7 +46,7 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
         labelHeader1 = new org.edisoncor.gui.label.LabelHeader();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setAlwaysOnTop(true);
+        setTitle("Sistema de ventas");
         setUndecorated(true);
         setResizable(false);
 

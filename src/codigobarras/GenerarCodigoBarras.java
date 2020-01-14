@@ -10,9 +10,14 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.RectangleReadOnly;
 import com.itextpdf.text.pdf.Barcode128;
 import com.itextpdf.text.pdf.Barcode39;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.lowagie.text.Cell;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -27,13 +32,6 @@ import metodos.MetodosTXT;
  */
 public class GenerarCodigoBarras extends javax.swing.JDialog {
 
-    /**
-     * Creates new form GenerarCodigoBarras
-     *
-     * @param parent
-     * @param modal
-     * @param elCodigo
-     */
     Metodos metodos = new Metodos();
     MetodosTXT metodostxt = new MetodosTXT();
 
@@ -50,44 +48,104 @@ public class GenerarCodigoBarras extends javax.swing.JDialog {
             String codigo = txtCodigo.getText();
             int cantidad = Integer.parseInt(txtCantidad.getText());
             String nombrepdf = "CodigosBarras.pdf";
-            int escala = SlrEscala.getValue();
-            Document doc = new Document();
-            PdfWriter pdf;
+            int escala = 100;
 
+            //Configuracion pagina
+            float anchurapagina = Float.parseFloat("1");//1mm equivale a 2.83, 210mm
+            float altopagina = Float.parseFloat("1");
+            Rectangle tamPagina;
+            int numColumnas = 1;
+            PdfPTable tabla = null;
+            if (cbTamanoPagina.getSelectedItem().equals("Oficio")) {
+                anchurapagina = Float.parseFloat((216 * 2.83) + "f");//1mm equivale a 2.83, 210mm
+                altopagina = Float.parseFloat((330 * 2.83) + "f");
+            }
+            if (cbTamanoPagina.getSelectedItem().equals("A4")) {
+                anchurapagina = Float.parseFloat((210 * 2.83) + "f");//1mm equivale a 2.83, 210mm
+                altopagina = Float.parseFloat((297 * 2.83) + "f");
+            }
+            tamPagina = new RectangleReadOnly(anchurapagina, altopagina);
+            Document doc = new Document(tamPagina);
+            doc.setMargins(10, 10, 10, 10);
             String directorio = System.getProperty("user.home") + "/Desktop/" + nombrepdf + ".pdf";
+            PdfWriter pdf;
             pdf = PdfWriter.getInstance(doc, new FileOutputStream(directorio));
-
-            doc.open();
+            doc.open(); // Abrir el documento
+            Paragraph titulo = new Paragraph("Codigo de barras (" + cbTipoCodigo.getSelectedItem() + ") del producto " + codigo + "\n");
+            titulo.setAlignment(Paragraph.ALIGN_CENTER); //Centrar titulo
+            doc.add(titulo);
+            Paragraph cantidadParrafo = new Paragraph("Cantidad: " + cantidad + "\n\n");
+            doc.add(cantidadParrafo);
+            Image laImagen = null;
             if (cbTipoCodigo.getSelectedItem().equals("CODE 39")) {
-                //Formato 39
+                numColumnas = 3;
+                tabla = new PdfPTable(numColumnas);
                 Barcode39 barcode39 = new Barcode39();
                 barcode39.setCode(codigo);
-                Image img39 = barcode39.createImageWithBarcode(pdf.getDirectContent(), BaseColor.BLACK, BaseColor.BLACK);
-                img39.scalePercent(escala);
-                for (int i = 0; i < cantidad; i++) {
-                    doc.add(img39);
-                    //doc.add(new Paragraph(" ")); //SALTO DE LINEA
-                }
+                laImagen = barcode39.createImageWithBarcode(pdf.getDirectContent(), BaseColor.BLACK, BaseColor.BLACK);
+                laImagen.scalePercent(escala);
             }
 
             if (cbTipoCodigo.getSelectedItem().equals("CODE 128")) {
-                //Formato 128
+                numColumnas = 4;
+                tabla = new PdfPTable(numColumnas);
                 Barcode128 barcode128 = new Barcode128();
                 barcode128.setCode(codigo);
-                Image img128 = barcode128.createImageWithBarcode(pdf.getDirectContent(), BaseColor.BLACK, BaseColor.BLACK);
-                img128.scalePercent(escala);
-                for (int i = 0; i < cantidad; i++) {
-                    doc.add(img128);
-                    doc.add(new Paragraph(" ")); //SALTO DE LINEA
+                laImagen = barcode128.createImageWithBarcode(pdf.getDirectContent(), BaseColor.BLACK, BaseColor.BLACK);
+                laImagen.scalePercent(escala);
+            }
+            PdfPCell celda = new PdfPCell(laImagen);
+            celda.setPaddingLeft(5f); //Espaciado izquierda celda
+            celda.setPaddingRight(5f); //Espaciado derecha celda
+            celda.setPaddingTop(5f); //Espaciado arriba celda
+            celda.setPaddingBottom(5f); //Espaciado abajo celda
+            celda.setBorderWidth(0.2f); //Grosor del borde de la celda
+            celda.setBorderColor(BaseColor.GRAY); //Color de la celda
+            celda.setHorizontalAlignment(Cell.ALIGN_CENTER);
+            celda.setVerticalAlignment(Cell.ALIGN_CENTER);
+
+            int cantidadextra = 0;
+            float resultado = (float) cantidad / numColumnas;
+            System.out.println("cantidad " + cantidad + "  numColumnas " + numColumnas + "  numero " + resultado);
+            if (resultado % 2 != 0) { //si columnas es 4, y cantidad es 10, no imprimira todo ya que no completa todas las filas
+                System.out.println("resultado es impar");
+
+                for (int i = cantidad; resultado % 2 != 0; i++) {
+                    resultado = (float) i / numColumnas;
+                    cantidadextra++;
                 }
             }
+
+            if (cantidad < numColumnas) { //Si la cantidad a imprimir no alcanza a llenar una fila entera
+                for (int i = 0; i < cantidad; i++) {
+                    tabla.addCell(celda);
+                }
+                PdfPCell celdavacia = new PdfPCell(new Paragraph(""));
+                celdavacia.setBorderColor(BaseColor.GRAY); //Color de la celda
+                for (int i = cantidad; i < numColumnas; i++) {
+                    tabla.addCell(celdavacia);
+                }
+                doc.add(tabla);
+                Runtime.getRuntime().exec(new String[]{"cmd.exe", "/c", "start", directorio}); //Abre el archivo pdf generado
+                doc.close();
+                return;
+            }
+
+            for (int i = 0; i < cantidad; i++) {
+                tabla.addCell(celda); // addCell() agrega una celda a la tabla, el cambio de fila ocurre automaticamente al llenar la fila     
+            }
+            PdfPCell celdavacia = new PdfPCell(new Paragraph(""));
+            celdavacia.setBorderColor(BaseColor.GRAY); //Color de la celda
+            for (int i = 0; i < cantidadextra; i++) {
+                tabla.addCell(celdavacia);
+            }
+            doc.add(tabla);
+
             Runtime.getRuntime().exec(new String[]{"cmd.exe", "/c", "start", directorio}); //Abre el archivo pdf generado
             doc.close();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(GenerarCodigoBarras.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (DocumentException ex) {
-            Logger.getLogger(GenerarCodigoBarras.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        } catch (DocumentException | IOException ex) {
             Logger.getLogger(GenerarCodigoBarras.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -117,8 +175,8 @@ public class GenerarCodigoBarras extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         txtCodigo = new org.edisoncor.gui.textField.TextFieldRoundBackground();
-        SlrEscala = new javax.swing.JSlider();
-        jLabel4 = new javax.swing.JLabel();
+        cbTamanoPagina = new javax.swing.JComboBox<>();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Generar código de barras");
@@ -160,16 +218,11 @@ public class GenerarCodigoBarras extends javax.swing.JDialog {
         txtCodigo.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtCodigo.setEnabled(false);
 
-        SlrEscala.setMajorTickSpacing(50);
-        SlrEscala.setMaximum(200);
-        SlrEscala.setPaintLabels(true);
-        SlrEscala.setPaintTicks(true);
-        SlrEscala.setSnapToTicks(true);
-        SlrEscala.setValue(100);
+        cbTamanoPagina.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Oficio", "A4" }));
 
-        jLabel4.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel4.setText("Escala");
+        jLabel5.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel5.setText("Tamaño de pagina");
 
         javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
         panel1.setLayout(panel1Layout);
@@ -181,17 +234,19 @@ public class GenerarCodigoBarras extends javax.swing.JDialog {
                     .addComponent(buttonAction1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(SlrEscala, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtCantidad, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
                             .addComponent(txtCodigo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cbTipoCodigo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtCantidad, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(cbTipoCodigo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(cbTamanoPagina, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel5)))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
         panel1Layout.setVerticalGroup(
             panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -206,17 +261,19 @@ public class GenerarCodigoBarras extends javax.swing.JDialog {
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(2, 2, 2)
                         .addComponent(cbTipoCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(2, 2, 2)
-                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(SlrEscala, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(panel1Layout.createSequentialGroup()
+                        .addComponent(lblCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(3, 3, 3)
+                        .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panel1Layout.createSequentialGroup()
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(2, 2, 2)
+                        .addComponent(cbTamanoPagina, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(28, 28, 28)
                 .addComponent(buttonAction1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(61, 61, 61))
+                .addGap(39, 39, 39))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -286,12 +343,12 @@ public class GenerarCodigoBarras extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JSlider SlrEscala;
     private org.edisoncor.gui.button.ButtonAction buttonAction1;
+    private javax.swing.JComboBox<String> cbTamanoPagina;
     private javax.swing.JComboBox<String> cbTipoCodigo;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private org.edisoncor.gui.label.LabelTask labelTask1;
     private javax.swing.JLabel lblCantidad;
     private org.edisoncor.gui.panel.Panel panel1;

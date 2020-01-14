@@ -295,4 +295,13 @@ public class MetodosTXT {
             evt.consume();
         }
     }
+
+    public boolean ValidarDouble(String elDouble) {
+        try {
+            double a = Double.parseDouble(elDouble);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 };
