@@ -8,8 +8,11 @@ package metodos;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import principal.SplashScreen;
 
 /**
  *
@@ -267,9 +270,14 @@ public class MetodosTXT {
     }
 
     public Double DoubleAFormatoAmericano(String ElNumero) {
-        ElNumero = ElNumero.replace(".", ""); //Saca los puntos de miles
-        ElNumero = ElNumero.replace(",", "."); //Cambia la coma en punto
-        double ElNumeroDouble = Double.parseDouble(ElNumero);
+        double ElNumeroDouble = 0.0;
+        try {
+            ElNumero = ElNumero.replace(".", ""); //Saca los puntos de miles
+            ElNumero = ElNumero.replace(",", "."); //Cambia la coma en punto
+            ElNumeroDouble = Double.parseDouble(ElNumero);
+        } catch (NumberFormatException e) {
+            System.out.println("Error DoubleAFormatoAmericano " + e);
+        }
         return ElNumeroDouble;
     }
 
@@ -297,10 +305,14 @@ public class MetodosTXT {
     }
 
     public boolean ValidarDouble(String elDouble) {
+        elDouble = elDouble.replace(".", "");
+        elDouble = elDouble.replace(",", ".");
         try {
             double a = Double.parseDouble(elDouble);
             return true;
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
+            System.out.println("Error double no valido: " + elDouble);
+            Logger.getLogger(SplashScreen.class.getName()).log(Level.SEVERE, null, e);
             return false;
         }
     }

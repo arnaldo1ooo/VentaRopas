@@ -10,9 +10,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
-
 import java.awt.HeadlessException;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.Date;
@@ -36,7 +34,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
 
     MetodosTXT metodostxt = new MetodosTXT();
     Metodos metodos = new Metodos();
-    String nombretablasp = "Empleado";
+    String nombretablasp = "Funcionario";
 
     public ABMFuncionario(java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
@@ -189,7 +187,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
     public void TablaConsultaBD(String filtro) {//Realiza la consulta de los productos que tenemos en la base de datos
         String nombresp = "SP_" + nombretablasp + "Consulta";
         String titlesJtabla[] = {"Código", "Nombre", "Apellido", "Fecha de ingreso", "Sexo", "Teléfono", "Email", "Observación", "Estado"}; //Debe tener la misma cantidad que titlesconsulta
-        String titlesconsulta[] = {"emp_codigo", "emp_nombre", "emp_apellido", "emp_fechaingreso", "emp_sexo", "emp_telefono", "emp_email", "emp_obs", "emp_estado"};
+        String titlesconsulta[] = {"fun_codigo", "fun_nombre", "fun_apellido", "fun_fechaingreso", "fun_sexo", "fun_telefono", "fun_email", "fun_obs", "fun_estado"};
 
         metodos.ConsultaFiltroTablaBD(tbPrincipal, titlesJtabla, titlesconsulta, nombresp, filtro, cbCampoBuscar);
         metodos.AnchuraColumna(tbPrincipal);
@@ -311,7 +309,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
         panel1 = new org.edisoncor.gui.panel.Panel();
         labelMetric1 = new org.edisoncor.gui.label.LabelMetric();
 
-        setTitle("Ventana Empleados");
+        setTitle("Ventana Funcionarios");
         setBackground(new java.awt.Color(45, 62, 80));
         setResizable(false);
 
@@ -775,7 +773,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
         labelMetric1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         labelMetric1.setText("FUNCIONARIOS");
         labelMetric1.setDireccionDeSombra(110);
-        labelMetric1.setFont(new java.awt.Font("Arial Black", 0, 26)); // NOI18N
+        labelMetric1.setFont(new java.awt.Font("Cooper Black", 0, 28)); // NOI18N
 
         javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
         panel1.setLayout(panel1Layout);

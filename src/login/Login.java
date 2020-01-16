@@ -88,7 +88,7 @@ public class Login extends javax.swing.JFrame {
         panelNice1 = new org.edisoncor.gui.panel.PanelNice();
         txtAlias = new javax.swing.JTextField();
         txtContrasena = new javax.swing.JPasswordField();
-        btnok = new javax.swing.JButton();
+        btnIniciarSesion = new org.edisoncor.gui.button.ButtonSeven();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -160,28 +160,21 @@ public class Login extends javax.swing.JFrame {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtContrasenaKeyPressed(evt);
             }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtContrasenaKeyReleased(evt);
+            }
         });
         panelNice1.add(txtContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 60, 240, 30));
 
-        btnok.setBackground(new java.awt.Color(0, 153, 153));
-        btnok.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
-        btnok.setForeground(new java.awt.Color(255, 255, 255));
-        btnok.setText("Registrarse");
-        btnok.setToolTipText("Permite registrarse en el sistema");
-        btnok.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        btnok.setContentAreaFilled(false);
-        btnok.setOpaque(true);
-        btnok.addActionListener(new java.awt.event.ActionListener() {
+        btnIniciarSesion.setBackground(new java.awt.Color(14, 154, 153));
+        btnIniciarSesion.setText("Iniciar sesión");
+        btnIniciarSesion.setColorBrillo(new java.awt.Color(255, 255, 255));
+        btnIniciarSesion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnokActionPerformed(evt);
+                btnIniciarSesionActionPerformed(evt);
             }
         });
-        btnok.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                btnokKeyPressed(evt);
-            }
-        });
-        panelNice1.add(btnok, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 110, 164, -1));
+        panelNice1.add(btnIniciarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 100, -1, -1));
 
         javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
         panel1.setLayout(panel1Layout);
@@ -257,10 +250,6 @@ public class Login extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnokActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnokActionPerformed
-        IniciarSesion();
-    }//GEN-LAST:event_btnokActionPerformed
-
     private void btnCambiarPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarPassActionPerformed
         CambiarPass cambiarpass = new CambiarPass(this, true);
         cambiarpass.setVisible(true);
@@ -273,7 +262,6 @@ public class Login extends javax.swing.JFrame {
 
     private void txtContrasenaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtContrasenaKeyPressed
         lblError.setVisible(false);
-        SiguienteFoco(evt);
     }//GEN-LAST:event_txtContrasenaKeyPressed
 
     private void btncancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncancelarActionPerformed
@@ -294,12 +282,15 @@ public class Login extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void btnokKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnokKeyPressed
-        char car = (char) evt.getKeyCode();
-        if (car == KeyEvent.VK_ENTER) {//Al apretar ENTER QUE HAGA ALGO
-            btnok.doClick();
+    private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
+        IniciarSesion();
+    }//GEN-LAST:event_btnIniciarSesionActionPerformed
+
+    private void txtContrasenaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtContrasenaKeyReleased
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            btnIniciarSesion.doClick();
         }
-    }//GEN-LAST:event_btnokKeyPressed
+    }//GEN-LAST:event_txtContrasenaKeyReleased
 
     /**
      * @param args the command line arguments
@@ -344,8 +335,8 @@ public class Login extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCambiarPass;
+    private org.edisoncor.gui.button.ButtonSeven btnIniciarSesion;
     private javax.swing.JButton btncancelar;
-    private javax.swing.JButton btnok;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;

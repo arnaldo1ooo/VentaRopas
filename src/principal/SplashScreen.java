@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import metodos.Metodos;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -18,14 +20,14 @@ import org.jsoup.select.Elements;
  * @author Arnaldo_Cantero
  */
 public class SplashScreen extends javax.swing.JFrame implements Runnable {
-
+    
     private Thread tiempo = null;
     Metodos metodos = new Metodos();
-
+    
     public SplashScreen(java.awt.Frame parent, boolean modal) {
         initComponents();
         this.setLocationRelativeTo(null);
-
+        
         tiempo = new Thread(this);
         tiempo.start();
     }
@@ -41,12 +43,12 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
 
         panel1 = new org.edisoncor.gui.panel.Panel();
         rSProgressMaterial1 = new rojerusan.componentes.RSProgressMaterial();
-        labelMetric1 = new org.edisoncor.gui.label.LabelMetric();
+        lmCargando = new org.edisoncor.gui.label.LabelMetric();
         panelCurves1 = new org.edisoncor.gui.panel.PanelCurves();
         labelHeader1 = new org.edisoncor.gui.label.LabelHeader();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Sistema de ventas");
+        setTitle("Cargando sistema...");
         setUndecorated(true);
         setResizable(false);
 
@@ -55,9 +57,11 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
         panel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/iconos/FondoSplash.png"))); // NOI18N
 
         rSProgressMaterial1.setForeground(new java.awt.Color(0, 153, 153));
+        rSProgressMaterial1.setAnchoProgress(7);
 
-        labelMetric1.setText("Cargando sistema...");
-        labelMetric1.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
+        lmCargando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lmCargando.setText("Cargando sistema...");
+        lmCargando.setFont(new java.awt.Font("Arial", 1, 22)); // NOI18N
 
         panelCurves1.setForeground(new java.awt.Color(204, 51, 0));
 
@@ -74,14 +78,11 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
                 .addComponent(labelHeader1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE))
             .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
-                    .addContainerGap(108, Short.MAX_VALUE)
+                    .addContainerGap(218, Short.MAX_VALUE)
                     .addComponent(rSProgressMaterial1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(339, Short.MAX_VALUE)))
+                    .addContainerGap(229, Short.MAX_VALUE)))
             .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
-                    .addContainerGap(169, Short.MAX_VALUE)
-                    .addComponent(labelMetric1, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(96, Short.MAX_VALUE)))
+                .addComponent(lmCargando, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE))
         );
         panel1Layout.setVerticalGroup(
             panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -93,13 +94,13 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
             .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
                     .addContainerGap(243, Short.MAX_VALUE)
-                    .addComponent(rSProgressMaterial1, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(56, Short.MAX_VALUE)))
+                    .addComponent(rSProgressMaterial1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(55, Short.MAX_VALUE)))
             .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
-                    .addContainerGap(247, Short.MAX_VALUE)
-                    .addComponent(labelMetric1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(56, Short.MAX_VALUE)))
+                    .addContainerGap(209, Short.MAX_VALUE)
+                    .addComponent(lmCargando, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(108, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -147,7 +148,7 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 SplashScreen dialog = new SplashScreen(new javax.swing.JFrame(), true);
-
+                
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -161,22 +162,27 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.edisoncor.gui.label.LabelHeader labelHeader1;
-    private org.edisoncor.gui.label.LabelMetric labelMetric1;
+    private org.edisoncor.gui.label.LabelMetric lmCargando;
     private org.edisoncor.gui.panel.Panel panel1;
     private org.edisoncor.gui.panel.PanelCurves panelCurves1;
     private rojerusan.componentes.RSProgressMaterial rSProgressMaterial1;
     // End of variables declaration//GEN-END:variables
 
     public void run() {
-        //while (tiempo != null) {
-        //Thread.sleep(5000);
-        ObtenerCotizacionScrapingWeb();
-        this.dispose();
-        Principal principal = new Principal();
-        principal.setVisible(true);
-        //}
+        try {
+            //while (tiempo != null) {
+            Thread.sleep(2000);
+            lmCargando.setText("Obteniendo cotizaciones del día...");
+            ObtenerCotizacionScrapingWeb();
+            this.dispose();
+            Principal principal = new Principal();
+            principal.setVisible(true);
+            //}
+        } catch (InterruptedException ex) {
+            Logger.getLogger(SplashScreen.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-
+    
     private void ObtenerCotizacionScrapingWeb() {
         try {
             org.jsoup.nodes.Document doc = org.jsoup.Jsoup.connect("http://www.cambioschaco.com.py/").validateTLSCertificates(false).get();
@@ -185,24 +191,24 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
             String title = doc.title();
             System.out.println("\nScraping Web (CAMBIOS CHACO)");
             System.out.println("Titulo de la pagina:  " + title + "\n");
-
+            
             Elements losDiv;
             Elements losTr;
             Element fila1;
             Element fila2;
-
+            
             losDiv = doc.select("div." + "col-sm-7"); //Las tablas, div.
             losTr = losDiv.select("tr"); //Las filas, tr.
             fila1 = losTr.get(1); //el get(0) seria los titulos
             
             String usdGsCompraString = fila1.getElementsByClass("purchase").text();
             double usdGsCompraDouble = Double.parseDouble(((usdGsCompraString).replace(".", "")).replace(",", "."));
-
+            
             String usdGsVentaString = fila1.getElementsByClass("sale").text();
             double usdGsVentaDouble = Double.parseDouble(((usdGsVentaString).replace(".", "")).replace(",", "."));
-            metodos.EjecutarUpdate("CALL SP_CotizacionModificar('Dolares','Guaranies','" + usdGsCompraDouble + "','"
+            metodos.EjecutarAltaoModi("CALL SP_CotizacionModificar('Dolares','Guaranies','" + usdGsCompraDouble + "','"
                     + usdGsVentaDouble + "','" + FechaActual() + "')");
-
+            
             losDiv = doc.select("div." + "col-sm-5"); //Las tablas, div.
             losTr = losDiv.select("tr"); //Las filas, tr.
             fila1 = losTr.get(1); //el get(0) seria los titulos
@@ -210,24 +216,24 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
 
             String usdRsCompraString = fila1.getElementsByClass("purchase").text();
             double usdRsCompraDouble = Double.parseDouble(((usdRsCompraString).replace(".", "")).replace(",", "."));
-
+            
             String usdRsVentaString = fila1.getElementsByClass("sale").text();
             double usdRsVentaDouble = Double.parseDouble(((usdRsVentaString).replace(".", "")).replace(",", "."));
-            metodos.EjecutarUpdate("CALL SP_CotizacionModificar('Dolares','Reales','" + usdRsCompraDouble + "','"
+            metodos.EjecutarAltaoModi("CALL SP_CotizacionModificar('Dolares','Reales','" + usdRsCompraDouble + "','"
                     + usdRsVentaDouble + "','" + FechaActual() + "')");
-
+            
             String usdPaCompraString = fila2.getElementsByClass("purchase").text();
             double usdPaCompraDouble = Double.parseDouble(((usdPaCompraString).replace(".", "")).replace(",", "."));
-
+            
             String usdPaVentaString = fila2.getElementsByClass("sale").text();
             double usdPaVentaDouble = Double.parseDouble(((usdPaVentaString).replace(".", "")).replace(",", "."));
-            metodos.EjecutarUpdate("CALL SP_CotizacionModificar('Dolares','Pesos argentinos','" + usdPaCompraDouble + "','"
+            metodos.EjecutarAltaoModi("CALL SP_CotizacionModificar('Dolares','Pesos argentinos','" + usdPaCompraDouble + "','"
                     + usdPaVentaDouble + "','" + FechaActual() + "')");
         } catch (IOException e) {
             System.out.println("Error al realizar el scraping web " + e);
         }
     }
-
+    
     private String FechaActual() {
         Date fechaactual = new Date();
         DateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
