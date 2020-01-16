@@ -39,7 +39,7 @@ import static principal.Principal.cotiUsdPaCompra;
  *
  * @author Lic. Arnaldo Cantero
  */
-public final class RegistrarCompra extends javax.swing.JDialog {
+public final class RegistrarVenta extends javax.swing.JDialog {
 
     MetodosTXT metodostxt = new MetodosTXT();
     Metodos metodos = new Metodos();
@@ -49,7 +49,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
     private final String rutaFotoPorDefecto = "/fotoproductos/imageproducto_0.png";
     DefaultTableModel tablemodelo;
 
-    public RegistrarCompra(java.awt.Frame parent, Boolean modal) {
+    public RegistrarVenta(java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
         initComponents();
 
@@ -272,9 +272,9 @@ public final class RegistrarCompra extends javax.swing.JDialog {
 
                 double precio = con.rs.getDouble(5);
                 String precioString = metodostxt.DoubleAFormatoSudamerica(precio); //Formato sudamerica: 10.100,25
-                txtPrecioDolares.setText(precioString);
-                ñ ConvertirCotizacion
-                ();
+                txtPrecioDolares.setText(precioString);ñ
+
+                ConvertirCotizacion();
                 return true;
             }
             con.DesconectarBasedeDatos();
@@ -582,7 +582,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
 
         lblCodigo7.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         lblCodigo7.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblCodigo7.setText("Precio de compra promedio");
+        lblCodigo7.setText("Precio actual");
 
         txtPrecioGs.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         txtPrecioGs.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
@@ -1229,14 +1229,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
 
     private void txtCodigoProductoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoProductoKeyReleased
         metodostxt.TxtColorLabelKeyReleased(txtCodigoProducto, lblCodigoProducto);
-
-        //Si se oprime espacio se entrara en la ventana de productos en donde se debe seleccionar el  producto
-        if (evt.getKeyCode() == KeyEvent.VK_SPACE) {
-            ABMProducto abmproducto = new ABMProducto(this, true);
-            abmproducto.setVisible(true);
-        }
-
-//Si se oprime ENTER o si el producto ya se encontro y se cambia el codigo de producto, volver a buscar
+        //Si se oprime ENTER o si el producto ya se encontro y se cambia el codigo de producto, volver a buscar
         if (evt.getKeyCode() == KeyEvent.VK_ENTER || txtIDProducto.getText().equals("") == false) {
             if (ConsultaProducto() == true) {
                 //Pedir cantidad y precio unitario con inputmensaje justo luego de escribir el codigo de producto

@@ -43,7 +43,7 @@ public final class ABMProducto extends javax.swing.JDialog {
     private final String rutaFotoPorDefecto = "/fotoproductos/imageproducto_0.png";
     private Icon fotoProductoDefault;
 
-    public ABMProducto(java.awt.Frame parent, Boolean modal) {
+    public ABMProducto(java.awt.Frame parent, javax.swing.JDialog parent2, Boolean modal) {
 
         super(parent, modal);
         initComponents();
@@ -91,9 +91,6 @@ public final class ABMProducto extends javax.swing.JDialog {
                 int marca = metodoscombo.ObtenerIdComboBox(cbMarca);
                 String tamano = cbTamano.getSelectedItem().toString();
 
-                double precio = metodostxt.DoubleAFormatoAmericano(txtPrecio.getText());
-                precio = metodostxt.FormatearADosDecimales(precio); //Redondear double para que tenga solo dos numeros decimales
-
                 String existencia = txtExistencia.getText();
                 int idsubcategoria = metodoscombo.ObtenerIdComboBox(cbSubcategoria);
                 String obs = taObs.getText();
@@ -107,7 +104,7 @@ public final class ABMProducto extends javax.swing.JDialog {
                         Connection con;
                         con = (Connection) Conexion.ConectarBasedeDatos();
                         String sentencia = "CALL SP_ProductoAlta ('" + codigoproducto + "','" + descripcion + "','"
-                                + marca + "','" + tamano + "','" + precio + "','" + existencia + "','" + idsubcategoria + "','"
+                                + marca + "','" + tamano + "','" + existencia + "','" + idsubcategoria + "','"
                                 + obs + "','" + estado + "')";
                         System.out.println("Insertar registro: " + sentencia);
                         Statement st;
@@ -153,16 +150,13 @@ public final class ABMProducto extends javax.swing.JDialog {
                     int marca = metodoscombo.ObtenerIdComboBox(cbMarca);
                     String tamano = cbTamano.getSelectedItem().toString();
 
-                    double precio = metodostxt.DoubleAFormatoAmericano(txtPrecio.getText());
-                    precio = metodostxt.FormatearADosDecimales(precio); //Redondear double para que tenga solo dos numeros decimales
-
                     String existencia = txtExistencia.getText();
                     int subcategoria = metodoscombo.ObtenerIdComboBox(cbSubcategoria);
                     String obs = taObs.getText();
                     int estado = cbEstado.getSelectedIndex();
 
                     String sentencia = "CALL SP_ProductoModificar(" + codigo + ",'" + codigoproducto + "','" + descripcion + "','"
-                            + marca + "','" + tamano + "','" + precio + "','" + existencia + "','" + subcategoria + "','"
+                            + marca + "','" + tamano + "','" + existencia + "','" + subcategoria + "','"
                             + obs + "','" + estado + "')";
                     System.out.println("Actualizar registro: " + sentencia);
 
@@ -232,8 +226,8 @@ public final class ABMProducto extends javax.swing.JDialog {
 
     public void TablaConsultaBD(String filtro) {//Realiza la consulta de los productos que tenemos en la base de datos
         String nombresp = "SP_ProductoConsulta";
-        String titlesJtabla[] = {"Código", "Código del producto", "Descripción", "Marca", "Tamaño", "Precio", "Existencia", "Categoria", "Subcategoria", "Observación", "Estado"}; //Debe tener la misma cantidad que titlesconsulta
-        String titlesconsulta[] = {"pro_codigo", "pro_identificador", "pro_descripcion", "pro_marca", "pro_tamano", "pro_precio", "pro_existencia", "pro_categoria", "pro_subcategoria", "pro_obs", "pro_estado"};
+        String titlesJtabla[] = {"Código", "Código del producto", "Descripción", "Marca", "Tamaño", "Existencia", "Categoria", "Subcategoria", "Observación", "Estado"}; //Debe tener la misma cantidad que titlesconsulta
+        String titlesconsulta[] = {"pro_codigo", "pro_identificador", "pro_descripcion", "pro_marca", "pro_tamano", "pro_existencia", "pro_categoria", "pro_subcategoria", "pro_obs", "pro_estado"};
 
         metodos.ConsultaFiltroTablaBD(tbPrincipal, titlesJtabla, titlesconsulta, nombresp, filtro, cbCampoBuscar);
         metodos.AnchuraColumna(tbPrincipal);
@@ -246,13 +240,12 @@ public final class ABMProducto extends javax.swing.JDialog {
         txtDescripcion.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 2).toString());
         metodoscombo.setSelectedNombreItem(cbMarca, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 3).toString());
         cbTamano.setSelectedItem(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 4).toString());
-        txtPrecio.setText(metodostxt.DoubleAFormatoSudamerica(Double.parseDouble(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 5).toString())));
 
-        txtExistencia.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 6).toString());
-        metodoscombo.setSelectedNombreItem(cbCategoria, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 7).toString());
-        metodoscombo.setSelectedNombreItem(cbSubcategoria, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 8).toString());
-        taObs.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 9).toString());
-        cbEstado.setSelectedIndex(Integer.parseInt(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 10).toString()));
+        txtExistencia.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 5).toString());
+        metodoscombo.setSelectedNombreItem(cbCategoria, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 6).toString());
+        metodoscombo.setSelectedNombreItem(cbSubcategoria, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 7).toString());
+        taObs.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 8).toString());
+        cbEstado.setSelectedIndex(Integer.parseInt(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 9).toString()));
 
         metodosimagen.LeerImagen(piImagen, rutaFotoProducto + txtCodigo.getText());
     }
@@ -264,7 +257,6 @@ public final class ABMProducto extends javax.swing.JDialog {
         txtDescripcion.setEnabled(valor);
         cbMarca.setEnabled(valor);
         cbTamano.setEnabled(valor);
-        txtPrecio.setEnabled(valor);
         cbCategoria.setEnabled(valor);
         cbSubcategoria.setEnabled(valor);
         taObs.setEnabled(valor);
@@ -289,7 +281,6 @@ public final class ABMProducto extends javax.swing.JDialog {
         txtDescripcion.setText("");
         metodoscombo.setSelectedNombreItem(cbMarca, "SIN ESPECIFICAR");
         cbTamano.setSelectedIndex(0);
-        txtPrecio.setText("");
         txtExistencia.setText("0");
         metodoscombo.setSelectedNombreItem(cbCategoria, "SIN ESPECIFICAR");
         metodoscombo.setSelectedNombreItem(cbSubcategoria, "SIN ESPECIFICAR");
@@ -298,7 +289,6 @@ public final class ABMProducto extends javax.swing.JDialog {
 
         lblCodigoProducto.setForeground(new Color(102, 102, 102));
         lblDescripcion.setForeground(new Color(102, 102, 102));
-        lblPrecio.setForeground(new Color(102, 102, 102));
         lblTamano.setForeground(new Color(102, 102, 102));
 
         metodosimagen.LeerImagen(piImagen, rutaFotoPorDefecto);
@@ -313,9 +303,6 @@ public final class ABMProducto extends javax.swing.JDialog {
         }
 
         if (metodos.ValidarCampoVacio(txtDescripcion, lblDescripcion) == false) {
-            return false;
-        }
-        if (metodos.ValidarCampoVacio(txtPrecio, lblPrecio) == false) {
             return false;
         }
 
@@ -375,8 +362,6 @@ public final class ABMProducto extends javax.swing.JDialog {
         txtCodigoProducto = new javax.swing.JTextField();
         lblDescripcion = new javax.swing.JLabel();
         txtDescripcion = new javax.swing.JTextField();
-        lblPrecio = new javax.swing.JLabel();
-        txtPrecio = new javax.swing.JTextField();
         lblTamano = new javax.swing.JLabel();
         lblCategoria = new javax.swing.JLabel();
         lblSubcategoria = new javax.swing.JLabel();
@@ -386,7 +371,6 @@ public final class ABMProducto extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         cbCategoria = new javax.swing.JComboBox<>();
         cbSubcategoria = new javax.swing.JComboBox<>();
-        lblMoneda = new javax.swing.JLabel();
         btnCargarImagen = new javax.swing.JButton();
         btnEliminarImagen = new javax.swing.JButton();
         btnPantallaCompleta = new javax.swing.JButton();
@@ -662,27 +646,6 @@ public final class ABMProducto extends javax.swing.JDialog {
             }
         });
 
-        lblPrecio.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        lblPrecio.setForeground(new java.awt.Color(102, 102, 102));
-        lblPrecio.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblPrecio.setText("Precio de venta*:");
-
-        txtPrecio.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        txtPrecio.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtPrecio.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        txtPrecio.setEnabled(false);
-        txtPrecio.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtPrecioKeyPressed(evt);
-            }
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtPrecioKeyReleased(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtPrecioKeyTyped(evt);
-            }
-        });
-
         lblTamano.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         lblTamano.setForeground(new java.awt.Color(102, 102, 102));
         lblTamano.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -736,10 +699,6 @@ public final class ABMProducto extends javax.swing.JDialog {
                 cbSubcategoriaKeyReleased(evt);
             }
         });
-
-        lblMoneda.setForeground(new java.awt.Color(102, 102, 102));
-        lblMoneda.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblMoneda.setText("Dolares");
 
         btnCargarImagen.setBackground(new java.awt.Color(0, 153, 153));
         btnCargarImagen.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
@@ -837,7 +796,6 @@ public final class ABMProducto extends javax.swing.JDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpEdicionLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblPrecio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblTamano, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblMarca, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblDescripcion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -852,11 +810,7 @@ public final class ABMProducto extends javax.swing.JDialog {
                         .addComponent(jLabel2))
                     .addComponent(txtDescripcion, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtExistencia, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpEdicionLayout.createSequentialGroup()
-                        .addComponent(txtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(2, 2, 2)
-                        .addComponent(lblMoneda, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE))
-                    .addComponent(cbTamano, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cbTamano, javax.swing.GroupLayout.Alignment.LEADING, 0, 260, Short.MAX_VALUE)
                     .addComponent(cbMarca, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtCodigoProducto, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
@@ -916,15 +870,11 @@ public final class ABMProducto extends javax.swing.JDialog {
                             .addComponent(cbTamano, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(2, 2, 2)
                         .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                            .addComponent(lblPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblSubcategoria1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                            .addComponent(lblExistencia, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtExistencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                                .addComponent(lblExistencia, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtExistencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jpEdicionLayout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -935,7 +885,7 @@ public final class ABMProducto extends javax.swing.JDialog {
                                 .addComponent(btnEliminarImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnPantallaCompleta, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
 
         jtpEdicion.addTab("Edición", jpEdicion);
@@ -1167,11 +1117,6 @@ public final class ABMProducto extends javax.swing.JDialog {
         metodostxt.TxtColorLabelKeyReleased(txtCodigoProducto, lblCodigoProducto);
     }//GEN-LAST:event_txtCodigoProductoKeyReleased
 
-    private void txtPrecioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioKeyReleased
-        txtPrecio.setText(metodostxt.DoubleFormatoSudamericaKeyReleased(txtPrecio.getText()));
-        metodostxt.TxtColorLabelKeyReleased(txtPrecio, lblPrecio);
-    }//GEN-LAST:event_txtPrecioKeyReleased
-
     private void txtDescripcionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescripcionKeyTyped
         metodostxt.FiltroCaracteresProhibidos(evt);
 
@@ -1182,10 +1127,6 @@ public final class ABMProducto extends javax.swing.JDialog {
     private void txtDescripcionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescripcionKeyReleased
         metodostxt.TxtColorLabelKeyReleased(txtDescripcion, lblDescripcion);
     }//GEN-LAST:event_txtDescripcionKeyReleased
-
-    private void txtPrecioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioKeyPressed
-
-    }//GEN-LAST:event_txtPrecioKeyPressed
 
     private void cbCategoriaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbCategoriaItemStateChanged
         if (metodoscombo.ObtenerIdComboBox(cbCategoria) > -1) {
@@ -1204,11 +1145,6 @@ public final class ABMProducto extends javax.swing.JDialog {
             btnGuardar.requestFocus();
         }
     }//GEN-LAST:event_taObsKeyPressed
-
-    private void txtPrecioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioKeyTyped
-        metodostxt.TxtCantidadCaracteresKeyTyped(txtPrecio, 11);
-        metodostxt.SoloNumeroDecimalKeyTyped(evt, txtPrecio);
-    }//GEN-LAST:event_txtPrecioKeyTyped
 
     private void btnActualizarTablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarTablaActionPerformed
         TablaConsultaBD(txtBuscar.getText()); //Trae todos los registros
@@ -1278,7 +1214,6 @@ public final class ABMProducto extends javax.swing.JDialog {
         ordenTabulador = new ArrayList<>();
         ordenTabulador.add(txtCodigoProducto);
         ordenTabulador.add(txtDescripcion);
-        ordenTabulador.add(txtPrecio);
         ordenTabulador.add(txtExistencia);
         ordenTabulador.add(cbCategoria);
         ordenTabulador.add(cbSubcategoria);
@@ -1349,9 +1284,7 @@ public final class ABMProducto extends javax.swing.JDialog {
     private javax.swing.JLabel lblDescripcion;
     private javax.swing.JLabel lblExistencia;
     private javax.swing.JLabel lblMarca;
-    private javax.swing.JLabel lblMoneda;
     private javax.swing.JLabel lblObs;
-    private javax.swing.JLabel lblPrecio;
     private javax.swing.JLabel lblSubcategoria;
     private javax.swing.JLabel lblSubcategoria1;
     private javax.swing.JLabel lblTamano;
@@ -1366,6 +1299,5 @@ public final class ABMProducto extends javax.swing.JDialog {
     private javax.swing.JTextField txtCodigoProducto;
     private javax.swing.JTextField txtDescripcion;
     private javax.swing.JTextField txtExistencia;
-    private javax.swing.JTextField txtPrecio;
     // End of variables declaration//GEN-END:variables
 }
