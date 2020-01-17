@@ -266,7 +266,6 @@ public final class ABMProducto extends javax.swing.JDialog {
         btnEliminar.setEnabled(false);
         btnGuardar.setEnabled(valor);
         btnCancelar.setEnabled(valor);
-        btnReporte.setEnabled(!valor);
         btnCargarImagen.setEnabled(valor);
         btnEliminarImagen.setEnabled(valor);
         btnPantallaCompleta.setEnabled(!valor);

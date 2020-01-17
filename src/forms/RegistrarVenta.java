@@ -6,23 +6,20 @@
 package forms;
 
 import conexion.Conexion;
-import java.awt.AWTException;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
 import java.awt.HeadlessException;
-import java.awt.Robot;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import metodos.Metodos;
@@ -33,6 +30,7 @@ import metodos.MetodosTXT;
 import static principal.Principal.cotiUsdGsCompra;
 import static principal.Principal.cotiUsdRsCompra;
 import static principal.Principal.cotiUsdPaCompra;
+import principal.SplashScreen;
 //
 
 /**
@@ -55,14 +53,17 @@ public final class RegistrarVenta extends javax.swing.JDialog {
 
         CargarComboBoxes();
         tablemodelo = (DefaultTableModel) tbPrincipal.getModel();
+        GenerarNumVenta();
+        //ModoEdicion(true);
+
         OrdenTabulador();
     }
 
 //--------------------------METODOS----------------------------//
     public void CargarComboBoxes() {
         //Carga los combobox con las consultas
-        metodoscombo.CargarComboBox(cbProveedor, "SELECT prov_codigo, prov_nombre FROM proveedor ORDER BY prov_nombre");
-        metodoscombo.setSelectedNombreItem(cbProveedor, "SIN PROVEEDOR");
+        metodoscombo.CargarComboBox(cbCliente, "SELECT cli_codigo, cli_nombre FROM cliente ORDER BY cli_nombre");
+        metodoscombo.setSelectedCodigoItem(cbCliente, 1);
     }
 
     public void RegistroNuevo() {
@@ -73,21 +74,20 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(null, "No se cargó ningún producto", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            if (ComprobarCamposCompra() == true) {
-                String numcompra = txtNumCompra.getText();
-                int proveedor = metodoscombo.ObtenerIdComboBox(cbProveedor);
+            if (ComprobarCamposVenta() == true) {
+                String numcompra = txtNumVenta.getText();
+                int cliente = metodoscombo.ObtenerIdComboBox(cbCliente);
                 int tipodocumento = cbTipoDocumento.getSelectedIndex();
                 DateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
-                String fecharegistro = formatoFecha.format(dcFechaRegistro.getDate());
-                String fechacompra = formatoFecha.format(dcFechaCompra.getDate());
+                String fecharegistro = formatoFecha.format(dcFechaVenta.getDate());
 
                 int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro crear este nuevo registro?", "Confirmación", JOptionPane.YES_OPTION);
                 if (JOptionPane.YES_OPTION == confirmado) {
 
                     try {
                         //Registrar nueva compra
-                        String sentencia = "CALL SP_CompraAlta('" + numcompra + "','" + proveedor + "','"
-                                + tipodocumento + "','" + fecharegistro + "','" + fechacompra + "')";
+                        String sentencia = "CALL SP_CompraAlta('" + numcompra + "','" + cliente + "','"
+                                + tipodocumento + "','" + fecharegistro + "')";
                         metodos.EjecutarAltaoModi(sentencia);
 
                         //Obtener el id de la compra
@@ -104,8 +104,8 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                         int cantfila = tbPrincipal.getRowCount();
                         for (int fila = 0; fila < cantfila; fila++) {
                             idproducto = tbPrincipal.getValueAt(fila, 0).toString();
-                            cantidadadquirida = Integer.parseInt(tbPrincipal.getValueAt(fila, 1).toString());
-                            preciocompra = Double.parseDouble(tbPrincipal.getValueAt(fila, 1).toString());
+                            cantidadadquirida = Integer.parseInt(tbPrincipal.getValueAt(fila, 3).toString());
+                            preciocompra = Double.parseDouble(tbPrincipal.getValueAt(fila, 4).toString());
 
                             //Comprobar en que moneda se guarda, en caso de ser distinto a dolares, se convierte a dolares
                             if (cbMoneda.getSelectedItem() != "Dolares") {
@@ -130,14 +130,14 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                         }
 
                         JOptionPane.showMessageDialog(this, "Se agregó correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
-                        ModoEdicion(false);
+                        //ModoEdicion(false);
                         Limpiar();
                     } catch (HeadlessException ex) {
                         JOptionPane.showMessageDialog(this, "Ocurrió un Error " + ex.getMessage());
-                        ex.printStackTrace();
+                        Logger.getLogger(SplashScreen.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (SQLException ex) {
                         JOptionPane.showMessageDialog(this, "Ocurrió un Error " + ex.getMessage());
-                        ex.printStackTrace();
+                        Logger.getLogger(SplashScreen.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 } else {
                     System.out.println("No se guardó el registro");
@@ -149,34 +149,30 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         }
     }
 
-    private void ModoEdicion(boolean valor) {
-        txtNumCompra.setEnabled(valor);
-        cbProveedor.setEnabled(valor);
-        btnProveedor.setEnabled(valor);
+    /*private void ModoEdicion(boolean valor) {
+        txtNumVenta.setEnabled(valor);
+        cbCliente.setEnabled(valor);
+        btnCliente.setEnabled(valor);
         cbTipoDocumento.setEnabled(valor);
         //dcFechaRegistro.setEnabled(valor);
         dcFechaCompra.setEnabled(valor);
         txtCodigoProducto.setEnabled(valor);
         txtCantidadAdquirida.setEnabled(valor);
         txtPrecioUnitario.setEnabled(valor);
-        btnNuevo.setEnabled(!valor);
         btnGuardar.setEnabled(valor);
         btnCancelar.setEnabled(valor);
         cbMoneda.setEnabled(valor);
         btnAnadir.setEnabled(valor);
         tbPrincipal.setEnabled(valor);
 
-        txtNumCompra.requestFocus();
-    }
-
+        txtNumVenta.requestFocus();
+    }*/
     private void Limpiar() {
-        metodoscombo.setSelectedNombreItem(cbProveedor, "SIN PROVEEDOR");
-        txtNumCompra.setText("");
-        metodoscombo.setSelectedCodigoItem(cbProveedor, 1);
+        metodoscombo.setSelectedCodigoItem(cbCliente, 1);
+        txtNumVenta.setText("");
         cbTipoDocumento.setSelectedIndex(1);
         Calendar c2 = new GregorianCalendar();
-        dcFechaRegistro.setCalendar(c2);
-        dcFechaCompra.setDate(null);
+        dcFechaVenta.setCalendar(c2);
         txtIDProducto.setText("");
         txtCodigoProducto.setText("");
         txtExistenciaActual.setText("");
@@ -189,34 +185,23 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         txtPrecioReales.setText("");
         txtPrecioPesosArg.setText("");
 
-        txtCantidadAdquirida.setText("");
-        txtPrecioUnitario.setText("");
+        txtCantidad.setText("");
         cbMoneda.setSelectedIndex(0);
 
         tablemodelo.setRowCount(0);
         btnEliminar.setEnabled(false);
     }
 
-    public boolean ComprobarCamposCompra() {
-        if (metodos.ValidarCampoVacio(txtNumCompra, lblNumCompra) == false) {
+    public boolean ComprobarCamposVenta() {
+        if (metodos.ValidarCampoVacio(txtNumVenta, lblNumCompra) == false) {
             return false;
         }
-        if (dcFechaRegistro.getDate() == null) {
+        if (dcFechaVenta.getDate() == null) {
             JOptionPane.showMessageDialog(null, "Complete la fecha de registro", "Error", JOptionPane.ERROR_MESSAGE);
-            dcFechaRegistro.requestFocus();
-            return false;
-        }
-        if (dcFechaCompra.getDate() == null) {
-            JOptionPane.showMessageDialog(null, "Complete la fecha de compra", "Error", JOptionPane.ERROR_MESSAGE);
-            dcFechaCompra.requestFocus();
+            dcFechaVenta.requestFocus();
             return false;
         }
 
-        if (dcFechaCompra.getDate().after(dcFechaRegistro.getDate())) {
-            JOptionPane.showMessageDialog(null, "La fecha de compra no puede ser despues de la fecha de registro", "Error", JOptionPane.ERROR_MESSAGE);
-            dcFechaCompra.requestFocus();
-            return false;
-        }
         return true;
     }
 
@@ -241,20 +226,11 @@ public final class RegistrarVenta extends javax.swing.JDialog {
             }
         }
 
-        if (metodos.ValidarCampoVacio(txtCantidadAdquirida, lblCantidadAdquirida) == false) {
+        if (metodos.ValidarCampoVacio(txtCantidad, lblCantidad) == false) {
             System.out.println("Validar Cantidad adquirida false");
             return false;
         }
 
-        if (metodos.ValidarCampoVacio(txtPrecioUnitario, lblPrecioCompra) == false) {
-            System.out.println("Validar Precio unitario false");
-            return false;
-        }
-
-        if (metodostxt.ValidarDouble(txtPrecioUnitario.getText()) == false) {
-            System.out.println("Validar Double Precio unitario false");
-            return false;
-        }
         return true;
     }
 
@@ -270,10 +246,9 @@ public final class RegistrarVenta extends javax.swing.JDialog {
 
                 metodosimagen.LeerImagen(piImagen, rutaFotoProducto + con.rs.getString(4));
 
-                double precio = con.rs.getDouble(5);
+                double precio = 0.0;//con.rs.getDouble(5);
                 String precioString = metodostxt.DoubleAFormatoSudamerica(precio); //Formato sudamerica: 10.100,25
-                txtPrecioDolares.setText(precioString);ñ
-
+                txtPrecioDolares.setText(precioString);
                 ConvertirCotizacion();
                 return true;
             }
@@ -281,6 +256,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al intentar obtener cambio " + ex);
             System.out.println("Error al consultar producto: ");
+            Logger.getLogger(SplashScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }
@@ -291,21 +267,18 @@ public final class RegistrarVenta extends javax.swing.JDialog {
 
         jpPrincipal = new javax.swing.JPanel();
         jpBotones = new javax.swing.JPanel();
-        btnNuevo = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         jpDatosCompra = new javax.swing.JPanel();
         lblRucCedula = new javax.swing.JLabel();
-        cbProveedor = new javax.swing.JComboBox<>();
-        btnProveedor = new javax.swing.JButton();
+        cbCliente = new javax.swing.JComboBox<>();
+        btnCliente = new javax.swing.JButton();
         cbTipoDocumento = new javax.swing.JComboBox<>();
         lblRucCedula1 = new javax.swing.JLabel();
         lblFechaRegistro = new javax.swing.JLabel();
-        dcFechaRegistro = new com.toedter.calendar.JDateChooser();
+        dcFechaVenta = new com.toedter.calendar.JDateChooser();
         lblNumCompra = new javax.swing.JLabel();
-        txtNumCompra = new javax.swing.JTextField();
-        dcFechaCompra = new com.toedter.calendar.JDateChooser();
-        lblFechaCompra = new javax.swing.JLabel();
+        txtNumVenta = new javax.swing.JTextField();
         jpDatosProducto = new javax.swing.JPanel();
         lblCodigoProducto = new javax.swing.JLabel();
         txtCodigoProducto = new javax.swing.JTextField();
@@ -332,10 +305,8 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         jpProductos = new javax.swing.JPanel();
         btnEliminar = new javax.swing.JButton();
         btnAnadir = new javax.swing.JButton();
-        txtPrecioUnitario = new javax.swing.JTextField();
-        lblPrecioCompra = new javax.swing.JLabel();
-        txtCantidadAdquirida = new javax.swing.JTextField();
-        lblCantidadAdquirida = new javax.swing.JLabel();
+        txtCantidad = new javax.swing.JTextField();
+        lblCantidad = new javax.swing.JLabel();
         scPrincipal = new javax.swing.JScrollPane();
         tbPrincipal = new javax.swing.JTable(){
             public boolean isCellEditable(int rowIndex, int colIndex) {
@@ -345,8 +316,9 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         cbMoneda = new javax.swing.JComboBox<>();
         lblCodigo10 = new javax.swing.JLabel();
         lblTituloTotalCompra = new javax.swing.JLabel();
-        lblTotalCompra = new javax.swing.JLabel();
         lblTotalMoneda = new javax.swing.JLabel();
+        lblTotalCompra = new javax.swing.JLabel();
+        lblCantidad1 = new javax.swing.JLabel();
         panel2 = new org.edisoncor.gui.panel.Panel();
         labelMetric2 = new org.edisoncor.gui.label.LabelMetric();
 
@@ -361,31 +333,13 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         jpBotones.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder()));
         jpBotones.setPreferredSize(new java.awt.Dimension(100, 50));
 
-        btnNuevo.setBackground(new java.awt.Color(14, 154, 153));
-        btnNuevo.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
-        btnNuevo.setForeground(new java.awt.Color(255, 255, 255));
-        btnNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/iconos40x40/IconoNuevo.png"))); // NOI18N
-        btnNuevo.setText("NUEVO");
-        btnNuevo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnNuevo.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        btnNuevo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnNuevo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNuevoActionPerformed(evt);
-            }
-        });
-
         btnGuardar.setBackground(new java.awt.Color(0, 153, 255));
-        btnGuardar.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
+        btnGuardar.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
         btnGuardar.setForeground(new java.awt.Color(255, 255, 255));
-        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/iconos40x40/IconoGuardar40.png"))); // NOI18N
-        btnGuardar.setText("GUARDAR");
+        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos20x20/IconoGuardar.png"))); // NOI18N
+        btnGuardar.setText("Guardar");
         btnGuardar.setToolTipText("Inserta el nuevo registro");
-        btnGuardar.setEnabled(false);
-        btnGuardar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnGuardar.setPreferredSize(new java.awt.Dimension(128, 36));
-        btnGuardar.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        btnGuardar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGuardarActionPerformed(evt);
@@ -398,15 +352,11 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         });
 
         btnCancelar.setBackground(new java.awt.Color(255, 101, 101));
-        btnCancelar.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
+        btnCancelar.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
         btnCancelar.setForeground(new java.awt.Color(255, 255, 255));
-        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/iconos40x40/IconoCancelar40.png"))); // NOI18N
-        btnCancelar.setText("CANCELAR");
+        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos20x20/IconoCancelar.png"))); // NOI18N
+        btnCancelar.setText("Cancelar");
         btnCancelar.setToolTipText("Cancela la acción");
-        btnCancelar.setEnabled(false);
-        btnCancelar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnCancelar.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        btnCancelar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarActionPerformed(evt);
@@ -419,44 +369,37 @@ public final class RegistrarVenta extends javax.swing.JDialog {
             jpBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpBotonesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jpBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnCancelar)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jpBotonesLayout.setVerticalGroup(
             jpBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpBotonesLayout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(14, 14, 14))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpBotonesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jpBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         jpDatosCompra.setBackground(new java.awt.Color(233, 255, 255));
-        jpDatosCompra.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Datos de la compra"));
+        jpDatosCompra.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Datos de la venta"));
 
         lblRucCedula.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         lblRucCedula.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblRucCedula.setText("Proveedor");
+        lblRucCedula.setText("Cliente");
         lblRucCedula.setToolTipText("");
 
-        cbProveedor.setEnabled(false);
-
-        btnProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos20x20/IconoBuscar.png"))); // NOI18N
-        btnProveedor.setEnabled(false);
-        btnProveedor.addActionListener(new java.awt.event.ActionListener() {
+        btnCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos20x20/IconoBuscar.png"))); // NOI18N
+        btnCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnProveedorActionPerformed(evt);
+                btnClienteActionPerformed(evt);
             }
         });
 
         cbTipoDocumento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SIN ESPECIFICAR", "NOTA", "RECIBO", "FACTURA" }));
-        cbTipoDocumento.setEnabled(false);
 
         lblRucCedula1.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         lblRucCedula1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -465,34 +408,26 @@ public final class RegistrarVenta extends javax.swing.JDialog {
 
         lblFechaRegistro.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         lblFechaRegistro.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblFechaRegistro.setText("Fecha de registro");
+        lblFechaRegistro.setText("Fecha de venta");
         lblFechaRegistro.setToolTipText("");
 
-        dcFechaRegistro.setEnabled(false);
-        dcFechaRegistro.setMaxSelectableDate(new java.util.Date(4102455600000L));
-        dcFechaRegistro.setMinSelectableDate(new java.util.Date(631162800000L));
+        dcFechaVenta.setEnabled(false);
+        dcFechaVenta.setMaxSelectableDate(new java.util.Date(4102455600000L));
+        dcFechaVenta.setMinSelectableDate(new java.util.Date(631162800000L));
 
         lblNumCompra.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         lblNumCompra.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblNumCompra.setText("N° de compra");
+        lblNumCompra.setText("N° de venta");
 
-        txtNumCompra.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        txtNumCompra.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        txtNumCompra.setEnabled(false);
-        txtNumCompra.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtNumVenta.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        txtNumVenta.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtNumVenta.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        txtNumVenta.setEnabled(false);
+        txtNumVenta.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtNumCompraKeyReleased(evt);
+                txtNumVentaKeyReleased(evt);
             }
         });
-
-        dcFechaCompra.setEnabled(false);
-        dcFechaCompra.setMaxSelectableDate(new java.util.Date(4102455600000L));
-        dcFechaCompra.setMinSelectableDate(new java.util.Date(631162800000L));
-
-        lblFechaCompra.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        lblFechaCompra.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblFechaCompra.setText("Fecha de compra");
-        lblFechaCompra.setToolTipText("");
 
         javax.swing.GroupLayout jpDatosCompraLayout = new javax.swing.GroupLayout(jpDatosCompra);
         jpDatosCompra.setLayout(jpDatosCompraLayout);
@@ -502,26 +437,22 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jpDatosCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblNumCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtNumCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(txtNumVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
                 .addGroup(jpDatosCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cbProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblRucCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(2, 2, 2)
-                .addComponent(btnProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(0, 0, 0)
+                .addComponent(btnCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
                 .addGroup(jpDatosCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblRucCedula1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cbTipoDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(30, 30, 30)
                 .addGroup(jpDatosCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(lblFechaRegistro, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dcFechaRegistro, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jpDatosCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblFechaCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dcFechaCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(11, Short.MAX_VALUE))
+                    .addComponent(dcFechaVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jpDatosCompraLayout.setVerticalGroup(
             jpDatosCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -530,16 +461,14 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                     .addComponent(lblNumCompra)
                     .addComponent(lblRucCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblRucCedula1, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblFechaRegistro, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblFechaCompra))
+                    .addComponent(lblFechaRegistro, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(1, 1, 1)
                 .addGroup(jpDatosCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(txtNumCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cbProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNumVenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cbTipoDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dcFechaRegistro, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dcFechaCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(dcFechaVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(10, Short.MAX_VALUE))
         );
 
@@ -552,7 +481,6 @@ public final class RegistrarVenta extends javax.swing.JDialog {
 
         txtCodigoProducto.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         txtCodigoProducto.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        txtCodigoProducto.setEnabled(false);
         txtCodigoProducto.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtCodigoProductoKeyReleased(evt);
@@ -659,11 +587,11 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         piImagen.setLayout(piImagenLayout);
         piImagenLayout.setHorizontalGroup(
             piImagenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 127, Short.MAX_VALUE)
+            .addGap(0, 142, Short.MAX_VALUE)
         );
         piImagenLayout.setVerticalGroup(
             piImagenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 142, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jpDatosProductoLayout = new javax.swing.GroupLayout(jpDatosProducto);
@@ -684,15 +612,12 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                         .addGap(57, 57, 57)
                         .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(lblCodigo6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtExistenciaActual, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(33, 33, 33))
+                            .addComponent(txtExistenciaActual, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(lblTituloDescripcion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jpDatosProductoLayout.createSequentialGroup()
-                        .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblTituloDescripcion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jpDatosProductoLayout.createSequentialGroup()
-                                .addComponent(txtDescripcionProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 50, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                        .addComponent(txtDescripcionProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 50, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(piImagen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -726,6 +651,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
             .addGroup(jpDatosProductoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(piImagen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jpDatosProductoLayout.createSequentialGroup()
                         .addComponent(lblCodigo7)
                         .addGap(2, 2, 2)
@@ -762,11 +688,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                         .addComponent(lblTituloDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(3, 3, 3)
                         .addComponent(txtDescripcionProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(7, Short.MAX_VALUE))
-            .addGroup(jpDatosProductoLayout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(piImagen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jpProductos.setBackground(new java.awt.Color(233, 255, 255));
@@ -785,47 +707,27 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         btnAnadir.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
         btnAnadir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos20x20/IconoNuevo.png"))); // NOI18N
         btnAnadir.setText("Añadir");
-        btnAnadir.setEnabled(false);
         btnAnadir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAnadirActionPerformed(evt);
             }
         });
 
-        txtPrecioUnitario.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        txtPrecioUnitario.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtPrecioUnitario.setToolTipText("");
-        txtPrecioUnitario.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        txtPrecioUnitario.setEnabled(false);
-        txtPrecioUnitario.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtCantidad.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        txtCantidad.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtCantidad.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        txtCantidad.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtPrecioUnitarioKeyReleased(evt);
+                txtCantidadKeyReleased(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtPrecioUnitarioKeyTyped(evt);
+                txtCantidadKeyTyped(evt);
             }
         });
 
-        lblPrecioCompra.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        lblPrecioCompra.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblPrecioCompra.setText("Precio unitario");
-
-        txtCantidadAdquirida.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        txtCantidadAdquirida.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtCantidadAdquirida.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        txtCantidadAdquirida.setEnabled(false);
-        txtCantidadAdquirida.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtCantidadAdquiridaKeyReleased(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtCantidadAdquiridaKeyTyped(evt);
-            }
-        });
-
-        lblCantidadAdquirida.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        lblCantidadAdquirida.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblCantidadAdquirida.setText("Cantidad adquirida");
+        lblCantidad.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lblCantidad.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblCantidad.setText("Cantidad");
 
         tbPrincipal.setAutoCreateRowSorter(true);
         tbPrincipal.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -877,7 +779,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         scPrincipal.setViewportView(tbPrincipal);
 
         cbMoneda.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dolares", "Guaranies", "Reales", "Pesos argentinos" }));
-        cbMoneda.setEnabled(false);
+        cbMoneda.setSelectedIndex(1);
         cbMoneda.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cbMonedaItemStateChanged(evt);
@@ -888,6 +790,26 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         lblCodigo10.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblCodigo10.setText("Moneda");
 
+        lblTituloTotalCompra.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lblTituloTotalCompra.setForeground(new java.awt.Color(0, 102, 51));
+        lblTituloTotalCompra.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblTituloTotalCompra.setText("Total de la venta");
+
+        lblTotalMoneda.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
+        lblTotalMoneda.setForeground(new java.awt.Color(0, 102, 51));
+        lblTotalMoneda.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblTotalMoneda.setText("Moneda");
+        lblTotalMoneda.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+
+        lblTotalCompra.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
+        lblTotalCompra.setForeground(new java.awt.Color(0, 102, 51));
+        lblTotalCompra.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblTotalCompra.setText("0");
+
+        lblCantidad1.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lblCantidad1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblCantidad1.setText("Descuento");
+
         javax.swing.GroupLayout jpProductosLayout = new javax.swing.GroupLayout(jpProductos);
         jpProductos.setLayout(jpProductosLayout);
         jpProductosLayout.setHorizontalGroup(
@@ -896,25 +818,33 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jpProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpProductosLayout.createSequentialGroup()
+                        .addGroup(jpProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jpProductosLayout.createSequentialGroup()
+                                .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(319, 319, 319))
+                            .addGroup(jpProductosLayout.createSequentialGroup()
+                                .addComponent(lblCantidad)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblCantidad1)
+                                .addGap(54, 54, 54)))
                         .addGroup(jpProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblCantidadAdquirida)
-                            .addComponent(txtCantidadAdquirida, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jpProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtPrecioUnitario, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblPrecioCompra))
-                        .addGap(1, 1, 1)
-                        .addGroup(jpProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cbMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jpProductosLayout.createSequentialGroup()
                                 .addGap(4, 4, 4)
-                                .addComponent(lblCodigo10, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(lblCodigo10, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnAnadir)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnEliminar))
+                    .addComponent(scPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 842, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpProductosLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jpProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(lblTituloTotalCompra, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jpProductosLayout.createSequentialGroup()
-                                .addComponent(cbMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnAnadir)
+                                .addComponent(lblTotalCompra)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnEliminar))))
-                    .addComponent(scPrincipal))
+                                .addComponent(lblTotalMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
         jpProductosLayout.setVerticalGroup(
@@ -922,42 +852,31 @@ public final class RegistrarVenta extends javax.swing.JDialog {
             .addGroup(jpProductosLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jpProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(lblCantidadAdquirida)
-                    .addComponent(lblPrecioCompra)
-                    .addComponent(lblCodigo10))
+                    .addComponent(lblCantidad)
+                    .addComponent(lblCodigo10)
+                    .addComponent(lblCantidad1))
                 .addGap(2, 2, 2)
                 .addGroup(jpProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(txtCantidadAdquirida, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtPrecioUnitario, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAnadir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cbMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(4, 4, 4)
-                .addComponent(scPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(scPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addComponent(lblTituloTotalCompra)
+                .addGap(2, 2, 2)
+                .addGroup(jpProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblTotalCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblTotalMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
-
-        lblTituloTotalCompra.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        lblTituloTotalCompra.setForeground(new java.awt.Color(0, 102, 51));
-        lblTituloTotalCompra.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblTituloTotalCompra.setText("Total de la compra");
-
-        lblTotalCompra.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
-        lblTotalCompra.setForeground(new java.awt.Color(0, 102, 51));
-        lblTotalCompra.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblTotalCompra.setText("0");
-
-        lblTotalMoneda.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
-        lblTotalMoneda.setForeground(new java.awt.Color(0, 102, 51));
-        lblTotalMoneda.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblTotalMoneda.setText("Moneda");
-        lblTotalMoneda.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
 
         panel2.setColorPrimario(new java.awt.Color(0, 153, 153));
         panel2.setColorSecundario(new java.awt.Color(233, 255, 255));
 
         labelMetric2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        labelMetric2.setText("REGISTRAR COMPRA");
+        labelMetric2.setText("REGISTRAR VENTA");
         labelMetric2.setDireccionDeSombra(110);
         labelMetric2.setFont(new java.awt.Font("Cooper Black", 0, 28)); // NOI18N
 
@@ -982,62 +901,44 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         jpPrincipal.setLayout(jpPrincipalLayout);
         jpPrincipalLayout.setHorizontalGroup(
             jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpPrincipalLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jpProductos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jpPrincipalLayout.createSequentialGroup()
-                        .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jpDatosProducto, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jpDatosCompra, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jpBotones, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
             .addComponent(panel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpPrincipalLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(lblTituloTotalCompra, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jpPrincipalLayout.createSequentialGroup()
+                .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpPrincipalLayout.createSequentialGroup()
-                        .addComponent(lblTotalCompra)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblTotalMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(17, 17, 17))
+                        .addContainerGap()
+                        .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jpProductos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jpDatosProducto, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jpDatosCompra, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jpPrincipalLayout.createSequentialGroup()
+                        .addGap(262, 262, 262)
+                        .addComponent(jpBotones, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jpPrincipalLayout.setVerticalGroup(
             jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpPrincipalLayout.createSequentialGroup()
                 .addComponent(panel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpPrincipalLayout.createSequentialGroup()
-                        .addComponent(jpDatosCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jpDatosProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(11, 11, 11))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpPrincipalLayout.createSequentialGroup()
-                        .addComponent(jpBotones, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(13, 13, 13)))
+                .addComponent(jpDatosCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jpDatosProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(11, 11, 11)
                 .addComponent(jpProductos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblTituloTotalCompra)
-                .addGap(2, 2, 2)
-                .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblTotalCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblTotalMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jpBotones, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(8, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 983, Short.MAX_VALUE)
+            .addComponent(jpPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 864, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 625, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 658, Short.MAX_VALUE)
         );
 
         getAccessibleContext().setAccessibleName("RegistrarCompra");
@@ -1046,25 +947,27 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        RegistroNuevo();
-    }//GEN-LAST:event_btnGuardarActionPerformed
+    private void GenerarNumVenta() throws NumberFormatException {
+        //Generar numero venta
+        try {
+            Conexion con = metodos.ObtenerRSSentencia("SELECT MAX(ven_numventa) AS numultimaventa FROM venta");
+            String numultimaventa = null;
+            while (con.rs.next()) {
+                numultimaventa = con.rs.getString("numultimaventa");
+            }
 
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        ModoEdicion(false);
-        Limpiar();
-    }//GEN-LAST:event_btnCancelarActionPerformed
+            if (numultimaventa == null) {
+                numultimaventa = String.format("%8s", String.valueOf(1)).replace(' ', '0');
+            } else {
+                numultimaventa = String.format("%8s", String.valueOf((Integer.parseInt(numultimaventa) + 1))).replace(' ', '0');
+            }
+            txtNumVenta.setText(numultimaventa);
 
-    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-        Limpiar();
-        ModoEdicion(true);
-    }//GEN-LAST:event_btnNuevoActionPerformed
-
-    private void btnGuardarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnGuardarKeyPressed
-        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
-            btnGuardar.doClick();
+            con.DesconectarBasedeDatos();
+        } catch (SQLException e) {
+            Logger.getLogger(SplashScreen.class.getName()).log(Level.SEVERE, null, e);
         }
-    }//GEN-LAST:event_btnGuardarKeyPressed
+    }
 
     private void txtPrecioDolaresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPrecioDolaresActionPerformed
         // TODO add your handling code here:
@@ -1142,8 +1045,8 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                 String idproducto = txtIDProducto.getText();
                 String codigoproducto = txtCodigoProducto.getText();
                 String descripcion = txtDescripcionProducto.getText();
-                int cantidad = Integer.parseInt(txtCantidadAdquirida.getText());
-                double preciounitario = metodostxt.DoubleAFormatoAmericano(txtPrecioUnitario.getText());
+                int cantidad = Integer.parseInt(txtCantidad.getText());
+                double preciounitario = 0.0;//metodostxt.DoubleAFormatoAmericano(txtPrecioUnitario.getText());
                 preciounitario = metodostxt.FormatearADosDecimales(preciounitario);
                 String moneda = cbMoneda.getSelectedItem().toString();
                 double subtotal = cantidad * preciounitario;
@@ -1162,8 +1065,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                 //Limpiar
                 LimpiarProducto();
                 txtCodigoProducto.setText("");
-                txtCantidadAdquirida.setText("");
-                txtPrecioUnitario.setText("");
+                txtCantidad.setText("");
 
                 txtCodigoProducto.requestFocus();
             } catch (NumberFormatException e) {
@@ -1184,26 +1086,13 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         lblTotalMoneda.setText(cbMoneda.getSelectedItem().toString());
     }//GEN-LAST:event_cbMonedaItemStateChanged
 
-    private void txtCantidadAdquiridaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadAdquiridaKeyTyped
+    private void txtCantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyTyped
         metodostxt.SoloNumeroEnteroKeyTyped(evt);
-    }//GEN-LAST:event_txtCantidadAdquiridaKeyTyped
+    }//GEN-LAST:event_txtCantidadKeyTyped
 
-    private void txtCantidadAdquiridaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadAdquiridaKeyReleased
-        metodostxt.TxtColorLabelKeyReleased(txtCantidadAdquirida, lblCantidadAdquirida);
-    }//GEN-LAST:event_txtCantidadAdquiridaKeyReleased
-
-    private void txtPrecioUnitarioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioUnitarioKeyReleased
-        txtPrecioUnitario.setText(metodostxt.DoubleFormatoSudamericaKeyReleased(txtPrecioUnitario.getText()));
-        metodostxt.TxtColorLabelKeyReleased(txtPrecioUnitario, lblPrecioCompra);
-
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            btnAnadir.doClick();
-        }
-    }//GEN-LAST:event_txtPrecioUnitarioKeyReleased
-
-    private void txtNumCompraKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumCompraKeyReleased
-        metodostxt.TxtColorLabelKeyReleased(txtNumCompra, lblNumCompra);
-    }//GEN-LAST:event_txtNumCompraKeyReleased
+    private void txtCantidadKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyReleased
+        metodostxt.TxtColorLabelKeyReleased(txtCantidad, lblCantidad);
+    }//GEN-LAST:event_txtCantidadKeyReleased
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         tablemodelo.removeRow(tbPrincipal.getSelectedRow());
@@ -1215,10 +1104,6 @@ public final class RegistrarVenta extends javax.swing.JDialog {
             cbMoneda.setEnabled(true);
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
-
-    private void txtPrecioUnitarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioUnitarioKeyTyped
-        metodostxt.SoloNumeroDecimalKeyTyped(evt, txtPrecioUnitario);
-    }//GEN-LAST:event_txtPrecioUnitarioKeyTyped
 
     private void txtCodigoProductoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoProductoKeyTyped
         //Evitar que entre espacio
@@ -1232,7 +1117,36 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         //Si se oprime ENTER o si el producto ya se encontro y se cambia el codigo de producto, volver a buscar
         if (evt.getKeyCode() == KeyEvent.VK_ENTER || txtIDProducto.getText().equals("") == false) {
             if (ConsultaProducto() == true) {
-                //Pedir cantidad y precio unitario con inputmensaje justo luego de escribir el codigo de producto
+                //Validar que sea numero valido
+                int cantidad = 0;
+                boolean esNumeroValido = false;
+
+                while (esNumeroValido == false && txtCantidad.getText().equals("")) {
+                    try {
+                        String cantidadString = JOptionPane.showInputDialog(this, "Ingrese la cantidad", "Cantidad vendida", JOptionPane.INFORMATION_MESSAGE);
+                        if (cantidadString == null) {
+                            System.out.println("Se canceló la operación");
+                            return;
+                        }
+
+                        cantidad = Integer.parseInt(cantidadString);
+                        if (cantidad <= 0) {
+                            JOptionPane.showMessageDialog(this, "La cantidad no puede ser menor o igual a 0");
+                            return;
+                        }
+
+                        int stock = Integer.parseInt(txtExistenciaActual.getText());
+                        if (cantidad < stock) {
+                            JOptionPane.showMessageDialog(this, "El stock actual del producto es de " + stock);
+                            return;
+                        }
+                        txtCantidad.setText(cantidadString);
+                        esNumeroValido = true;
+                    } catch (NumberFormatException e) {
+                        JOptionPane.showMessageDialog(this, "Ingrese un número entero válido");
+                        esNumeroValido = false;
+                    }
+                }
             } else {
                 LimpiarProducto();
             }
@@ -1243,36 +1157,26 @@ public final class RegistrarVenta extends javax.swing.JDialog {
 
     }//GEN-LAST:event_tbPrincipalKeyReleased
 
-    private void btnProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProveedorActionPerformed
-        String provnombre = "";
-        while (provnombre.equals("")) {
-            provnombre = JOptionPane.showInputDialog(this, "Ingrese el nombre del proveedor(*)", "Nuevo proveedor", JOptionPane.INFORMATION_MESSAGE);
-            if (provnombre == null) {
-                System.out.println("Se cancelo");
-            }
-        }
-        String provdireccion = "";
-        while (provdireccion.equals("")) {
-            provdireccion = JOptionPane.showInputDialog(this, "Ingrese la dirección del proveedor(*)", "Nuevo proveedor", JOptionPane.INFORMATION_MESSAGE);
-            if (provdireccion == null) {
-                System.out.println("Se cancelo");
-            }
-        }
-        String provcel = JOptionPane.showInputDialog(this, "Ingrese el celular del proveedor", "Nuevo proveedor", JOptionPane.INFORMATION_MESSAGE);
-        if (provcel == null) {
-            System.out.println("Se cancelo");
-        }
-        String provemail = JOptionPane.showInputDialog(this, "Ingrese el email del proveedor", "Nuevo proveedor", JOptionPane.INFORMATION_MESSAGE);
-        if (provemail == null) {
-            System.out.println("Se cancelo");
-        }
+    private void btnClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteActionPerformed
 
-        metodos.EjecutarAltaoModi("CALL SP_ProveedorAlta('" + provnombre.toUpperCase() + "','" + provdireccion + "','" + provcel + "','" + provemail + "')");
+    }//GEN-LAST:event_btnClienteActionPerformed
 
-        CargarComboBoxes();
-        Toolkit.getDefaultToolkit().beep();
-        JOptionPane.showMessageDialog(null, "Proveedor registrado con éxito!");
-    }//GEN-LAST:event_btnProveedorActionPerformed
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+
+    }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void btnGuardarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnGuardarKeyPressed
+
+
+    }//GEN-LAST:event_btnGuardarKeyPressed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        Limpiar();
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void txtNumVentaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumVentaKeyReleased
+        metodostxt.TxtColorLabelKeyReleased(txtNumVenta, lblNumCompra);
+    }//GEN-LAST:event_txtNumVentaKeyReleased
 
     private void ConvertirCotizacion() {
         //Convertir precio a las distintas monedas
@@ -1307,14 +1211,14 @@ public final class RegistrarVenta extends javax.swing.JDialog {
 
     private void OrdenTabulador() {
         ordenTabulador = new ArrayList<>();
-        ordenTabulador.add(txtNumCompra);
-        ordenTabulador.add(cbProveedor);
-        ordenTabulador.add(dcFechaCompra);
+        ordenTabulador.add(txtNumVenta);
+        ordenTabulador.add(cbCliente);
+        ordenTabulador.add(dcFechaVenta);
         ordenTabulador.add(txtCodigoProducto);
-        ordenTabulador.add(txtCantidadAdquirida);
-        ordenTabulador.add(txtPrecioUnitario);
+        ordenTabulador.add(txtCantidad);
         ordenTabulador.add(btnGuardar);
         setFocusTraversalPolicy(new PersonalizadoFocusTraversalPolicy());
+
     }
 
     private class PersonalizadoFocusTraversalPolicy extends FocusTraversalPolicy {
@@ -1347,29 +1251,27 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAnadir;
     private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnCliente;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
-    private javax.swing.JButton btnNuevo;
-    private javax.swing.JButton btnProveedor;
+    private javax.swing.JComboBox<MetodosCombo> cbCliente;
     private javax.swing.JComboBox<String> cbMoneda;
-    private javax.swing.JComboBox<MetodosCombo> cbProveedor;
     private javax.swing.JComboBox<String> cbTipoDocumento;
-    private com.toedter.calendar.JDateChooser dcFechaCompra;
-    private com.toedter.calendar.JDateChooser dcFechaRegistro;
+    private com.toedter.calendar.JDateChooser dcFechaVenta;
     private javax.swing.JPanel jpBotones;
     private javax.swing.JPanel jpDatosCompra;
     private javax.swing.JPanel jpDatosProducto;
     private javax.swing.JPanel jpPrincipal;
     private javax.swing.JPanel jpProductos;
     private org.edisoncor.gui.label.LabelMetric labelMetric2;
-    private javax.swing.JLabel lblCantidadAdquirida;
+    private javax.swing.JLabel lblCantidad;
+    private javax.swing.JLabel lblCantidad1;
     private javax.swing.JLabel lblCodigo10;
     private javax.swing.JLabel lblCodigo13;
     private javax.swing.JLabel lblCodigo6;
     private javax.swing.JLabel lblCodigo7;
     private javax.swing.JLabel lblCodigoProducto;
     private javax.swing.JLabel lblDolares;
-    private javax.swing.JLabel lblFechaCompra;
     private javax.swing.JLabel lblFechaRegistro;
     private javax.swing.JLabel lblFlagBrasil;
     private javax.swing.JLabel lblFlagEeuu;
@@ -1378,7 +1280,6 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     private javax.swing.JLabel lblGuaraniess;
     private javax.swing.JLabel lblIDProducto;
     private javax.swing.JLabel lblNumCompra;
-    private javax.swing.JLabel lblPrecioCompra;
     private javax.swing.JLabel lblReales;
     private javax.swing.JLabel lblRucCedula;
     private javax.swing.JLabel lblRucCedula1;
@@ -1390,16 +1291,15 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     private org.edisoncor.gui.panel.PanelImage piImagen;
     private javax.swing.JScrollPane scPrincipal;
     private javax.swing.JTable tbPrincipal;
-    private javax.swing.JTextField txtCantidadAdquirida;
+    private javax.swing.JTextField txtCantidad;
     private javax.swing.JTextField txtCodigoProducto;
     private javax.swing.JTextField txtDescripcionProducto;
     private javax.swing.JTextField txtExistenciaActual;
     private javax.swing.JTextField txtIDProducto;
-    private javax.swing.JTextField txtNumCompra;
+    private javax.swing.JTextField txtNumVenta;
     private javax.swing.JTextField txtPrecioDolares;
     private javax.swing.JTextField txtPrecioGs;
     private javax.swing.JTextField txtPrecioPesosArg;
     private javax.swing.JTextField txtPrecioReales;
-    private javax.swing.JTextField txtPrecioUnitario;
     // End of variables declaration//GEN-END:variables
 }
