@@ -52,8 +52,8 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
         setUndecorated(true);
         setResizable(false);
 
-        pnPrincipal.setColorPrimario(new java.awt.Color(0, 1, 25));
-        pnPrincipal.setColorSecundario(new java.awt.Color(0, 102, 102));
+        pnPrincipal.setColorPrimario(new java.awt.Color(1, 1, 11));
+        pnPrincipal.setColorSecundario(new java.awt.Color(1, 1, 11));
 
         panelCurves1.setForeground(new java.awt.Color(204, 51, 0));
 
@@ -62,7 +62,7 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
 
         lmCargando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lmCargando.setText("Cargando sistema...");
-        lmCargando.setFont(new java.awt.Font("Arial", 1, 22)); // NOI18N
+        lmCargando.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
 
         panelImage1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/LogoElegancia.png"))); // NOI18N
 
@@ -70,11 +70,11 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
         panelImage1.setLayout(panelImage1Layout);
         panelImage1Layout.setHorizontalGroup(
             panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 201, Short.MAX_VALUE)
+            .addGap(0, 208, Short.MAX_VALUE)
         );
         panelImage1Layout.setVerticalGroup(
             panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 191, Short.MAX_VALUE)
+            .addGap(0, 181, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout pnPrincipalLayout = new javax.swing.GroupLayout(pnPrincipal);
@@ -91,9 +91,9 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
                 .addComponent(lmCargando, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE))
             .addGroup(pnPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnPrincipalLayout.createSequentialGroup()
-                    .addContainerGap(150, Short.MAX_VALUE)
+                    .addContainerGap(145, Short.MAX_VALUE)
                     .addComponent(panelImage1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(151, Short.MAX_VALUE)))
+                    .addContainerGap(149, Short.MAX_VALUE)))
         );
         pnPrincipalLayout.setVerticalGroup(
             pnPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -110,9 +110,9 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
                     .addContainerGap(108, Short.MAX_VALUE)))
             .addGroup(pnPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(pnPrincipalLayout.createSequentialGroup()
-                    .addContainerGap()
+                    .addGap(26, 26, 26)
                     .addComponent(panelImage1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(156, Short.MAX_VALUE)))
+                    .addContainerGap(146, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

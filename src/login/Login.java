@@ -79,8 +79,9 @@ public class Login extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        panel2 = new org.edisoncor.gui.panel.Panel();
+        jLabel1 = new javax.swing.JLabel();
         panel1 = new org.edisoncor.gui.panel.Panel();
-        jLabel3 = new javax.swing.JLabel();
         lblError = new javax.swing.JLabel();
         btncancelar = new javax.swing.JButton();
         btnCambiarPass = new javax.swing.JButton();
@@ -88,7 +89,7 @@ public class Login extends javax.swing.JFrame {
         txtAlias = new javax.swing.JTextField();
         txtContrasena = new javax.swing.JPasswordField();
         btnIniciarSesion = new org.edisoncor.gui.button.ButtonSeven();
-        labelHeader1 = new org.edisoncor.gui.label.LabelHeader();
+        panelImage1 = new org.edisoncor.gui.panel.PanelImage();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -103,11 +104,31 @@ public class Login extends javax.swing.JFrame {
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        panel1.setColorPrimario(new java.awt.Color(255, 255, 255));
-        panel1.setColorSecundario(new java.awt.Color(0, 153, 255));
-        panel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/iconos/FondoSplash.png"))); // NOI18N
+        panel2.setColorPrimario(new java.awt.Color(0, 102, 102));
+        panel2.setColorSecundario(new java.awt.Color(1, 1, 11));
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/login/iconos/IconoLogin.png"))); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Algerian", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("SISTEMA DE VENTA");
+
+        javax.swing.GroupLayout panel2Layout = new javax.swing.GroupLayout(panel2);
+        panel2.setLayout(panel2Layout);
+        panel2Layout.setHorizontalGroup(
+            panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 520, Short.MAX_VALUE)
+        );
+        panel2Layout.setVerticalGroup(
+            panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        getContentPane().add(panel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 520, 40));
+
+        panel1.setColorPrimario(new java.awt.Color(1, 1, 11));
 
         lblError.setFont(new java.awt.Font("Sitka Text", 1, 14)); // NOI18N
         lblError.setForeground(new java.awt.Color(255, 0, 0));
@@ -171,14 +192,23 @@ public class Login extends javax.swing.JFrame {
         });
         panelNice1.add(btnIniciarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 100, -1, -1));
 
+        panelImage1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/login/iconos/IconoLogin.png"))); // NOI18N
+
+        javax.swing.GroupLayout panelImage1Layout = new javax.swing.GroupLayout(panelImage1);
+        panelImage1.setLayout(panelImage1Layout);
+        panelImage1Layout.setHorizontalGroup(
+            panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        panelImage1Layout.setVerticalGroup(
+            panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
         panel1.setLayout(panel1Layout);
         panel1Layout.setHorizontalGroup(
             panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel3)
-                .addGap(197, 197, 197))
             .addGroup(panel1Layout.createSequentialGroup()
                 .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panel1Layout.createSequentialGroup()
@@ -192,13 +222,17 @@ public class Login extends javax.swing.JFrame {
                         .addGap(27, 27, 27)
                         .addComponent(lblError, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(7, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(panelImage1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(208, 208, 208))
         );
         panel1Layout.setVerticalGroup(
             panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel1Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
+                .addComponent(panelImage1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(panelNice1, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(13, 13, 13)
                 .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
@@ -209,11 +243,6 @@ public class Login extends javax.swing.JFrame {
         );
 
         getContentPane().add(panel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 520, 330));
-
-        labelHeader1.setText("SISTEMA DE VENTAS");
-        labelHeader1.setColor(new java.awt.Color(255, 51, 51));
-        labelHeader1.setFont(new java.awt.Font("Copperplate Gothic Bold", 1, 18)); // NOI18N
-        getContentPane().add(labelHeader1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 520, 40));
 
         jMenuBar1.setPreferredSize(new java.awt.Dimension(199, 30));
 
@@ -249,24 +278,6 @@ public class Login extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnCambiarPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarPassActionPerformed
-        CambiarPass cambiarpass = new CambiarPass(this, true);
-        cambiarpass.setVisible(true);
-    }//GEN-LAST:event_btnCambiarPassActionPerformed
-
-    private void txtAliasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAliasKeyPressed
-        lblError.setVisible(false);
-        SiguienteFoco(evt);
-    }//GEN-LAST:event_txtAliasKeyPressed
-
-    private void txtContrasenaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtContrasenaKeyPressed
-        lblError.setVisible(false);
-    }//GEN-LAST:event_txtContrasenaKeyPressed
-
-    private void btncancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncancelarActionPerformed
-        Limpiar();
-    }//GEN-LAST:event_btncancelarActionPerformed
-
     private void Limpiar() {
         lblError.setVisible(false);
         txtAlias.setText("");
@@ -290,6 +301,24 @@ public class Login extends javax.swing.JFrame {
             btnIniciarSesion.doClick();
         }
     }//GEN-LAST:event_txtContrasenaKeyReleased
+
+    private void txtContrasenaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtContrasenaKeyPressed
+        lblError.setVisible(false);
+    }//GEN-LAST:event_txtContrasenaKeyPressed
+
+    private void txtAliasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAliasKeyPressed
+        lblError.setVisible(false);
+        SiguienteFoco(evt);
+    }//GEN-LAST:event_txtAliasKeyPressed
+
+    private void btnCambiarPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarPassActionPerformed
+        CambiarPass cambiarpass = new CambiarPass(this, true);
+        cambiarpass.setVisible(true);
+    }//GEN-LAST:event_btnCambiarPassActionPerformed
+
+    private void btncancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncancelarActionPerformed
+        Limpiar();
+    }//GEN-LAST:event_btncancelarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -336,17 +365,18 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JButton btnCambiarPass;
     private org.edisoncor.gui.button.ButtonSeven btnIniciarSesion;
     private javax.swing.JButton btncancelar;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
-    private org.edisoncor.gui.label.LabelHeader labelHeader1;
     private javax.swing.JLabel lblError;
     private org.edisoncor.gui.panel.Panel panel1;
+    private org.edisoncor.gui.panel.Panel panel2;
+    private org.edisoncor.gui.panel.PanelImage panelImage1;
     private org.edisoncor.gui.panel.PanelNice panelNice1;
-    public static javax.swing.JTextField txtAlias;
-    public static javax.swing.JPasswordField txtContrasena;
+    private javax.swing.JTextField txtAlias;
+    private javax.swing.JPasswordField txtContrasena;
     // End of variables declaration//GEN-END:variables
 }
