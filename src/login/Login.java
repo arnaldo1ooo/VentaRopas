@@ -13,7 +13,6 @@ import java.sql.Statement;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
-import metodos.MetodosTXT;
 import metodos.PlaceHolder;
 import principal.SplashScreen;
 
@@ -31,13 +30,13 @@ public class Login extends javax.swing.JFrame {
         lblError.setVisible(false);
         PlaceHolder placeholder;
         placeholder = new PlaceHolder("Alias", txtAlias);
-        placeholder = new PlaceHolder("Contraseña", txtContrasena);
+        placeholder = new PlaceHolder("Contraseña", txtPass);
     }
 
     //-------------METODOS----------//
     public void IniciarSesion() {
         Alias = txtAlias.getText();
-        Pass = String.valueOf(txtContrasena.getPassword());
+        Pass = String.valueOf(txtPass.getPassword());
 
         String consulta = "CALL SP_UsuarioConsulta ('" + Alias + "','" + Pass + "') ";
         System.out.println("consulta: " + consulta);
@@ -61,7 +60,7 @@ public class Login extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Nombre de usuario o contraseña incorrecta!");
                 //txtUsuario.setText("");
                 txtAlias.requestFocus();
-                txtContrasena.setText("");
+                txtPass.setText("");
 
                 lblError.setVisible(true);
             }
@@ -87,7 +86,7 @@ public class Login extends javax.swing.JFrame {
         btnCambiarPass = new javax.swing.JButton();
         panelNice1 = new org.edisoncor.gui.panel.PanelNice();
         txtAlias = new javax.swing.JTextField();
-        txtContrasena = new javax.swing.JPasswordField();
+        txtPass = new javax.swing.JPasswordField();
         btnIniciarSesion = new org.edisoncor.gui.button.ButtonSeven();
         panelImage1 = new org.edisoncor.gui.panel.PanelImage();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -169,18 +168,18 @@ public class Login extends javax.swing.JFrame {
         });
         panelNice1.add(txtAlias, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, 240, 30));
 
-        txtContrasena.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        txtContrasena.setToolTipText("Teclea tu contraseña para ingresar");
-        txtContrasena.setPreferredSize(new java.awt.Dimension(9, 25));
-        txtContrasena.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtPass.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        txtPass.setToolTipText("Teclea tu contraseña para ingresar");
+        txtPass.setPreferredSize(new java.awt.Dimension(9, 25));
+        txtPass.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtContrasenaKeyPressed(evt);
+                txtPassKeyPressed(evt);
             }
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtContrasenaKeyReleased(evt);
+                txtPassKeyReleased(evt);
             }
         });
-        panelNice1.add(txtContrasena, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 60, 240, 30));
+        panelNice1.add(txtPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 60, 240, 30));
 
         btnIniciarSesion.setBackground(new java.awt.Color(14, 154, 153));
         btnIniciarSesion.setText("Iniciar sesión");
@@ -281,7 +280,7 @@ public class Login extends javax.swing.JFrame {
     private void Limpiar() {
         lblError.setVisible(false);
         txtAlias.setText("");
-        txtContrasena.setText("");
+        txtPass.setText("");
         txtAlias.requestFocus();
     }
 
@@ -296,15 +295,15 @@ public class Login extends javax.swing.JFrame {
         IniciarSesion();
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
-    private void txtContrasenaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtContrasenaKeyReleased
+    private void txtPassKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPassKeyReleased
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             btnIniciarSesion.doClick();
         }
-    }//GEN-LAST:event_txtContrasenaKeyReleased
+    }//GEN-LAST:event_txtPassKeyReleased
 
-    private void txtContrasenaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtContrasenaKeyPressed
+    private void txtPassKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPassKeyPressed
         lblError.setVisible(false);
-    }//GEN-LAST:event_txtContrasenaKeyPressed
+    }//GEN-LAST:event_txtPassKeyPressed
 
     private void txtAliasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAliasKeyPressed
         lblError.setVisible(false);
@@ -377,6 +376,6 @@ public class Login extends javax.swing.JFrame {
     private org.edisoncor.gui.panel.PanelImage panelImage1;
     private org.edisoncor.gui.panel.PanelNice panelNice1;
     private javax.swing.JTextField txtAlias;
-    private javax.swing.JPasswordField txtContrasena;
+    private javax.swing.JPasswordField txtPass;
     // End of variables declaration//GEN-END:variables
 }

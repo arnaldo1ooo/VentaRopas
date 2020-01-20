@@ -9,6 +9,7 @@ import conexion.Conexion;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
+import java.awt.Graphics;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
@@ -21,12 +22,14 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import metodos.Metodos;
 import metodos.MetodosCombo;
 import metodos.MetodosImagen;
 import metodos.MetodosTXT;
+import metodos.VistaCompletaImagen;
 //Variables globales
 import static principal.Principal.cotiUsdGsCompra;
 import static principal.Principal.cotiUsdRsCompra;
@@ -50,6 +53,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
 
     public RegistrarCompra(java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
+
         initComponents();
 
         tablemodelo = (DefaultTableModel) tbPrincipal.getModel();
@@ -57,8 +61,10 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         //Obtener fecha actual
         Calendar c2 = new GregorianCalendar();
         dcFechaRegistro.setCalendar(c2);
+        metodosimagen.LeerImagen(lblImagen, rutaFotoPorDefecto);
 
         OrdenTabulador();
+
     }
 
 //--------------------------METODOS----------------------------//
@@ -182,7 +188,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         txtExistenciaActual.setText("");
         txtDescripcionProducto.setText("");
 
-        metodosimagen.LeerImagen(piImagen, rutaFotoPorDefecto);
+        metodosimagen.LeerImagen(lblImagen, rutaFotoPorDefecto);
 
         txtCantidadAdquirida.setText("");
         txtPrecioUnitario.setText("");
@@ -262,7 +268,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                 txtIDProducto.setText(con.rs.getString(1));
                 txtExistenciaActual.setText(con.rs.getString(2));
                 txtDescripcionProducto.setText(con.rs.getString(3));
-                metodosimagen.LeerImagen(piImagen, rutaFotoProducto + con.rs.getString(4));
+                metodosimagen.LeerImagen(lblImagen, rutaFotoProducto + con.rs.getString(4));
                 return true;
             }
             con.DesconectarBasedeDatos();
@@ -299,8 +305,9 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         txtExistenciaActual = new javax.swing.JTextField();
         txtIDProducto = new javax.swing.JTextField();
         lblIDProducto = new javax.swing.JLabel();
-        piImagen = new org.edisoncor.gui.panel.PanelImage();
         btnABMProducto = new javax.swing.JButton();
+        btnPantallaCompleta = new javax.swing.JButton();
+        lblImagen = new javax.swing.JLabel();
         jpProductos = new javax.swing.JPanel();
         btnEliminar = new javax.swing.JButton();
         btnAnadir = new javax.swing.JButton();
@@ -396,7 +403,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                 .addGroup(jpDatosCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(cbProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblRucCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(2, 2, 2)
+                .addGap(0, 0, 0)
                 .addComponent(btnProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jpDatosCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -476,21 +483,6 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         lblIDProducto.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblIDProducto.setText("ID");
 
-        piImagen.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        piImagen.setFocusable(false);
-        piImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/ImagenProductoSinFoto.png"))); // NOI18N
-
-        javax.swing.GroupLayout piImagenLayout = new javax.swing.GroupLayout(piImagen);
-        piImagen.setLayout(piImagenLayout);
-        piImagenLayout.setHorizontalGroup(
-            piImagenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 122, Short.MAX_VALUE)
-        );
-        piImagenLayout.setVerticalGroup(
-            piImagenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
         btnABMProducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos20x20/IconoBuscar.png"))); // NOI18N
         btnABMProducto.setEnabled(false);
         btnABMProducto.addActionListener(new java.awt.event.ActionListener() {
@@ -498,6 +490,19 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                 btnABMProductoActionPerformed(evt);
             }
         });
+
+        btnPantallaCompleta.setBackground(new java.awt.Color(0, 255, 255));
+        btnPantallaCompleta.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
+        btnPantallaCompleta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos20x20/IconoPantallacompleta.png"))); // NOI18N
+        btnPantallaCompleta.setToolTipText("Ampliar vista de Imagen del producto");
+        btnPantallaCompleta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPantallaCompletaActionPerformed(evt);
+            }
+        });
+
+        lblImagen.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblImagen.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         javax.swing.GroupLayout jpDatosProductoLayout = new javax.swing.GroupLayout(jpDatosProducto);
         jpDatosProducto.setLayout(jpDatosProductoLayout);
@@ -507,9 +512,6 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpDatosProductoLayout.createSequentialGroup()
-                        .addComponent(lblTituloDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpDatosProductoLayout.createSequentialGroup()
                         .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(txtDescripcionProducto, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jpDatosProductoLayout.createSequentialGroup()
@@ -520,27 +522,38 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                                 .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jpDatosProductoLayout.createSequentialGroup()
                                         .addComponent(txtCodigoProducto)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(btnABMProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, 0)
+                                        .addComponent(btnABMProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(33, 33, 33))
                                     .addGroup(jpDatosProductoLayout.createSequentialGroup()
                                         .addComponent(lblCodigoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 220, Short.MAX_VALUE)))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                 .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtExistenciaActual, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jpDatosProductoLayout.createSequentialGroup()
                                         .addGap(2, 2, 2)
                                         .addComponent(lblCodigo6, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addGap(154, 154, 154)))
-                .addComponent(piImagen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34))
+                        .addGap(76, 76, 76))
+                    .addGroup(jpDatosProductoLayout.createSequentialGroup()
+                        .addComponent(lblTituloDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(lblImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2)
+                .addComponent(btnPantallaCompleta, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(51, 51, 51))
         );
         jpDatosProductoLayout.setVerticalGroup(
             jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpDatosProductoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpDatosProductoLayout.createSequentialGroup()
+                .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jpDatosProductoLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(lblImagen, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE))
+                    .addGroup(jpDatosProductoLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnPantallaCompleta, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpDatosProductoLayout.createSequentialGroup()
+                        .addGap(6, 6, 6)
                         .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                             .addComponent(lblIDProducto)
                             .addComponent(lblCodigoProducto)
@@ -549,14 +562,13 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                         .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                             .addComponent(txtIDProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtCodigoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnABMProducto)
+                            .addComponent(btnABMProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtExistenciaActual, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lblTituloDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(3, 3, 3)
-                        .addComponent(txtDescripcionProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 16, Short.MAX_VALUE))
-                    .addComponent(piImagen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(txtDescripcionProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -787,7 +799,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         btnGuardar.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
         btnGuardar.setForeground(new java.awt.Color(255, 255, 255));
         btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos20x20/IconoGuardar.png"))); // NOI18N
-        btnGuardar.setText("Guardar");
+        btnGuardar.setText("Registrar compra");
         btnGuardar.setToolTipText("Inserta el nuevo registro");
         btnGuardar.setPreferredSize(new java.awt.Dimension(128, 36));
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
@@ -819,7 +831,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
             jpBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpBotones1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnCancelar)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -839,16 +851,18 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         jpPrincipalLayout.setHorizontalGroup(
             jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jpPrincipalLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jpProductos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jpDatosCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 863, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jpDatosProducto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpPrincipalLayout.createSequentialGroup()
+                .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jpProductos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpPrincipalLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jpDatosCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 863, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jpDatosProducto, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(135, 135, 135))
             .addGroup(jpPrincipalLayout.createSequentialGroup()
-                .addGap(301, 301, 301)
-                .addComponent(jpBotones1, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(234, 234, 234)
+                .addComponent(jpBotones1, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jpPrincipalLayout.setVerticalGroup(
@@ -858,12 +872,12 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jpDatosCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jpDatosProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
+                .addComponent(jpDatosProducto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jpProductos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jpBotones1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(8, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -874,7 +888,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 649, Short.MAX_VALUE)
+            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 651, Short.MAX_VALUE)
         );
 
         getAccessibleContext().setAccessibleName("RegistrarCompra");
@@ -887,17 +901,16 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         txtIDProducto.setText("");
         txtExistenciaActual.setText("");
         txtDescripcionProducto.setText("");
-        metodosimagen.LeerImagen(piImagen, rutaFotoPorDefecto);
+        metodosimagen.LeerImagen(lblImagen, rutaFotoPorDefecto);
     }
 
-    private void tbPrincipalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbPrincipalMouseClicked
+    private void tbPrincipalMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbPrincipalMousePressed
         if (tbPrincipal.isEnabled() == true) {
-            btnEliminar.setEnabled(true);
             Integer filaSelect = tbPrincipal.rowAtPoint(evt.getPoint()); //num de fila seleccionada
             Integer columnSelect = tbPrincipal.columnAtPoint(evt.getPoint()); //Columna seleccionada
             if (evt.getClickCount() == 2 && columnSelect == 3) { //Si se hace doble click
                 double preciounitario = metodostxt.DoubleAFormatoAmericano(tbPrincipal.getValueAt(filaSelect, 4).toString());
-
+                System.out.println("precio " + preciounitario);
                 //Validar que sea numero valido
                 int cantidad = 0;
                 boolean esNumeroValido = false;
@@ -927,12 +940,8 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                 tbPrincipal.setValueAt(subtotal, filaSelect, 6);
                 SumarSubtotal();
                 JOptionPane.showMessageDialog(this, "Cantidad modificada con éxito!");
-            }
-        }
-    }//GEN-LAST:event_tbPrincipalMouseClicked
 
-    private void tbPrincipalMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbPrincipalMousePressed
-        if (tbPrincipal.isEnabled() == true) {
+            }
             btnEliminar.setEnabled(true);
         }
     }//GEN-LAST:event_tbPrincipalMousePressed
@@ -1014,6 +1023,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
             cbMoneda.setEnabled(false);
         } else {
             cbMoneda.setEnabled(true);
+            btnEliminar.setEnabled(false);
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
@@ -1056,6 +1066,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
             provnombre = JOptionPane.showInputDialog(this, "Ingrese el nombre del proveedor(*)", "Nuevo proveedor", JOptionPane.INFORMATION_MESSAGE);
             if (provnombre == null) {
                 System.out.println("Se cancelo");
+                return;
             }
         }
         String provdireccion = "";
@@ -1063,15 +1074,18 @@ public final class RegistrarCompra extends javax.swing.JDialog {
             provdireccion = JOptionPane.showInputDialog(this, "Ingrese la dirección del proveedor(*)", "Nuevo proveedor", JOptionPane.INFORMATION_MESSAGE);
             if (provdireccion == null) {
                 System.out.println("Se cancelo");
+                return;
             }
         }
         String provcel = JOptionPane.showInputDialog(this, "Ingrese el celular del proveedor", "Nuevo proveedor", JOptionPane.INFORMATION_MESSAGE);
         if (provcel == null) {
             System.out.println("Se cancelo");
+            return;
         }
         String provemail = JOptionPane.showInputDialog(this, "Ingrese el email del proveedor", "Nuevo proveedor", JOptionPane.INFORMATION_MESSAGE);
         if (provemail == null) {
             System.out.println("Se cancelo");
+            return;
         }
 
         metodos.EjecutarAltaoModi("CALL SP_ProveedorAlta('" + provnombre.toUpperCase() + "','" + provdireccion + "','" + provcel + "','" + provemail + "')");
@@ -1098,6 +1112,16 @@ public final class RegistrarCompra extends javax.swing.JDialog {
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         Limpiar();
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnPantallaCompletaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPantallaCompletaActionPerformed
+        VistaCompletaImagen vistacompleta = new VistaCompletaImagen(rutaFotoProducto + txtIDProducto.getText());
+        metodos.CentrarVentanaJDialog(vistacompleta);
+        vistacompleta.setVisible(true);
+    }//GEN-LAST:event_btnPantallaCompletaActionPerformed
+
+    private void tbPrincipalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbPrincipalMouseClicked
+
+    }//GEN-LAST:event_tbPrincipalMouseClicked
 
     List<Component> ordenTabulador;
 
@@ -1146,6 +1170,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnPantallaCompleta;
     private javax.swing.JButton btnProveedor;
     private javax.swing.JComboBox<String> cbMoneda;
     private javax.swing.JComboBox<MetodosCombo> cbProveedor;
@@ -1165,6 +1190,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
     private javax.swing.JLabel lblFechaCompra;
     private javax.swing.JLabel lblFechaRegistro;
     private javax.swing.JLabel lblIDProducto;
+    private javax.swing.JLabel lblImagen;
     private javax.swing.JLabel lblNumCompra;
     private javax.swing.JLabel lblPrecioCompra;
     private javax.swing.JLabel lblRucCedula;
@@ -1174,7 +1200,6 @@ public final class RegistrarCompra extends javax.swing.JDialog {
     private javax.swing.JLabel lblTotalCompra;
     private javax.swing.JLabel lblTotalMoneda;
     private org.edisoncor.gui.panel.Panel panel2;
-    private org.edisoncor.gui.panel.PanelImage piImagen;
     private javax.swing.JScrollPane scPrincipal;
     private javax.swing.JTable tbPrincipal;
     private javax.swing.JTextField txtCantidadAdquirida;

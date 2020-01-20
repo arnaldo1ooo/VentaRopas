@@ -15,6 +15,7 @@ import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
@@ -22,7 +23,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import metodos.Metodos;
 import metodos.MetodosTXT;
 
@@ -185,13 +189,38 @@ public final class ABMFuncionario extends javax.swing.JDialog {
     }
 
     public void TablaConsultaBD(String filtro) {//Realiza la consulta de los productos que tenemos en la base de datos
-        String nombresp = "SP_" + nombretablasp + "Consulta";
+        /*String nombresp = "SP_" + nombretablasp + "Consulta";
         String titlesJtabla[] = {"Código", "Nombre", "Apellido", "Fecha de ingreso", "Sexo", "Teléfono", "Email", "Observación", "Estado"}; //Debe tener la misma cantidad que titlesconsulta
         String titlesconsulta[] = {"fun_codigo", "fun_nombre", "fun_apellido", "fun_fechaingreso", "fun_sexo", "fun_telefono", "fun_email", "fun_obs", "fun_estado"};
 
-        metodos.ConsultaFiltroTablaBD(tbPrincipal, titlesJtabla, titlesconsulta, nombresp, filtro, cbCampoBuscar);
-        metodos.AnchuraColumna(tbPrincipal);
-        lbCantRegistros.setText(metodos.CantRegistros + " Registros encontrados");
+        metodos.ConsultaFiltroTablaBD(tbPrincipal, titlesJtabla, titlesconsulta, nombresp, filtro, cbCampoBuscar);*/
+
+        String titlesJtabla[] = {"Código", "Nombre", "Apellido", "Fecha de ingreso", "Sexo",
+            "Telefono", "Email", "Observación", "Estado", "Cargo"}; //Debe tener la misma cantidad que los campos a consultar
+        DefaultTableModel modelotabla = new DefaultTableModel(null, titlesJtabla);
+
+        Conexion con = metodos.ObtenerRSSentencia("CALL SP_FuncionarioConsulta");
+        try {
+            ResultSetMetaData mdrs = con.rs.getMetaData();
+            int numColumns = mdrs.getColumnCount();
+            Object[] registro = new Object[numColumns]; //el numero es la cantidad de columnas del rs
+            int CantRegistros = 0;
+            while (con.rs.next()) {
+                for (int j = 0; j < numColumns; j++) {
+                    registro[j] = (con.rs.getString(j + 1));
+                }
+                modelotabla.addRow(registro);//agrega el registro a la tabla
+                CantRegistros = CantRegistros + 1;
+            }
+
+            tbPrincipal.setModel(modelotabla);//asigna a la tabla el modelo creado
+            metodos.AnchuraColumna(tbPrincipal);
+            lbCantRegistros.setText(CantRegistros + " Registros encontrados");
+
+            con.DesconectarBasedeDatos();
+        } catch (SQLException ex) {
+            Logger.getLogger(ABMFuncionario.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void ModoVistaPrevia() {
@@ -203,7 +232,9 @@ public final class ABMFuncionario extends javax.swing.JDialog {
         txtTelefono.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 5).toString());
         txtEmail.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 6).toString());
         taObs.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 7).toString());
-        cbEstado.setSelectedItem(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 8).toString());
+        
+        String estado = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 8).toString();
+        cbEstado.setSelectedItem(estado);
     }
 
     private void ModoEdicion(boolean valor) {
@@ -353,9 +384,6 @@ public final class ABMFuncionario extends javax.swing.JDialog {
         tbPrincipal.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tbPrincipal.getTableHeader().setReorderingAllowed(false);
         tbPrincipal.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tbPrincipalMouseClicked(evt);
-            }
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 tbPrincipalMousePressed(evt);
             }
@@ -868,15 +896,6 @@ public final class ABMFuncionario extends javax.swing.JDialog {
             Limpiar();
         }
     }//GEN-LAST:event_txtBuscarKeyReleased
-
-    private void tbPrincipalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbPrincipalMouseClicked
-        if (tbPrincipal.isEnabled() == true) {
-            btnModificar.setEnabled(true);
-            btnEliminar.setEnabled(true);
-
-            ModoVistaPrevia();
-        }
-    }//GEN-LAST:event_tbPrincipalMouseClicked
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         if (txtCodigo.getText().equals("")) {//Si es nuevo

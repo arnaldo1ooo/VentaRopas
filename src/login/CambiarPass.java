@@ -14,12 +14,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
-import static login.Login.Alias;
-import static login.Login.CodUsuario;
-import static login.Login.NomApeUsuario;
-import static login.Login.txtAlias;
-import static login.Login.txtContrasena;
-import principal.Principal;
 
 /**
  *
@@ -259,7 +253,7 @@ public class CambiarPass extends javax.swing.JDialog {
                 if (rs.next() == false) {
                     JOptionPane.showMessageDialog(this, "Nombre de usuario actual o contraseña actual incorrecta!");
                     txtAlias.requestFocus();
-                    txtContrasena.setText("");
+                    txtPass.setText("");
                     lblError.setVisible(true);
                 } else {
                     ModificarPass();

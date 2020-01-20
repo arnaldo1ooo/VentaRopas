@@ -365,9 +365,6 @@ public final class ABMCliente extends javax.swing.JDialog {
         tbPrincipal.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tbPrincipal.getTableHeader().setReorderingAllowed(false);
         tbPrincipal.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tbPrincipalMouseClicked(evt);
-            }
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 tbPrincipalMousePressed(evt);
             }
@@ -894,15 +891,6 @@ public final class ABMCliente extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_txtBuscarKeyReleased
 
-    private void tbPrincipalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbPrincipalMouseClicked
-        if (tbPrincipal.isEnabled() == true) {
-            btnModificar.setEnabled(true);
-            btnEliminar.setEnabled(true);
-
-            ModoVistaPrevia();
-        }
-    }//GEN-LAST:event_tbPrincipalMouseClicked
-
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         if (txtCodigo.getText().equals("")) {//Si es nuevo
             RegistroNuevo();
@@ -1095,7 +1083,6 @@ public final class ABMCliente extends javax.swing.JDialog {
     private javax.swing.JPanel jpPrincipal;
     private javax.swing.JPanel jpTabla;
     private javax.swing.JTabbedPane jtpEdicion;
-    private org.edisoncor.gui.label.LabelMetric labelMetric1;
     private org.edisoncor.gui.label.LabelMetric labelMetric2;
     private javax.swing.JLabel lbCantRegistros;
     private javax.swing.JLabel lblApellido;
@@ -1107,7 +1094,6 @@ public final class ABMCliente extends javax.swing.JDialog {
     private javax.swing.JLabel lblObs;
     private javax.swing.JLabel lblRucCedula;
     private javax.swing.JLabel lblTelefono;
-    private org.edisoncor.gui.panel.Panel panel1;
     private org.edisoncor.gui.panel.Panel panel2;
     private javax.swing.JScrollPane scPrincipal;
     private javax.swing.JScrollPane scpObs;

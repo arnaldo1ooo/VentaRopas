@@ -43,9 +43,9 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
 
         pnPrincipal = new org.edisoncor.gui.panel.Panel();
         panelCurves1 = new org.edisoncor.gui.panel.PanelCurves();
-        rSProgressMaterial1 = new rojerusan.componentes.RSProgressMaterial();
-        lmCargando = new org.edisoncor.gui.label.LabelMetric();
         panelImage1 = new org.edisoncor.gui.panel.PanelImage();
+        lmCargando = new org.edisoncor.gui.label.LabelMetric();
+        rSProgressMaterial1 = new rojerusan.componentes.RSProgressMaterial();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cargando sistema...");
@@ -55,75 +55,76 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
         pnPrincipal.setColorPrimario(new java.awt.Color(1, 1, 11));
         pnPrincipal.setColorSecundario(new java.awt.Color(1, 1, 11));
 
-        panelCurves1.setForeground(new java.awt.Color(204, 51, 0));
-
-        rSProgressMaterial1.setForeground(new java.awt.Color(0, 153, 153));
-        rSProgressMaterial1.setAnchoProgress(7);
-
-        lmCargando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lmCargando.setText("Cargando sistema...");
-        lmCargando.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
-
         panelImage1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/LogoElegancia.png"))); // NOI18N
 
         javax.swing.GroupLayout panelImage1Layout = new javax.swing.GroupLayout(panelImage1);
         panelImage1.setLayout(panelImage1Layout);
         panelImage1Layout.setHorizontalGroup(
             panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 208, Short.MAX_VALUE)
+            .addGap(0, 254, Short.MAX_VALUE)
         );
         panelImage1Layout.setVerticalGroup(
             panelImage1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 181, Short.MAX_VALUE)
+            .addGap(0, 212, Short.MAX_VALUE)
+        );
+
+        lmCargando.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lmCargando.setText("Cargando sistema...");
+        lmCargando.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
+
+        rSProgressMaterial1.setForeground(new java.awt.Color(0, 153, 153));
+        rSProgressMaterial1.setAnchoProgress(7);
+
+        javax.swing.GroupLayout panelCurves1Layout = new javax.swing.GroupLayout(panelCurves1);
+        panelCurves1.setLayout(panelCurves1Layout);
+        panelCurves1Layout.setHorizontalGroup(
+            panelCurves1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelCurves1Layout.createSequentialGroup()
+                .addGroup(panelCurves1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lmCargando, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(panelCurves1Layout.createSequentialGroup()
+                        .addGroup(panelCurves1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelCurves1Layout.createSequentialGroup()
+                                .addGap(118, 118, 118)
+                                .addComponent(panelImage1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(panelCurves1Layout.createSequentialGroup()
+                                .addGap(221, 221, 221)
+                                .addComponent(rSProgressMaterial1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 124, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        panelCurves1Layout.setVerticalGroup(
+            panelCurves1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCurves1Layout.createSequentialGroup()
+                .addContainerGap(26, Short.MAX_VALUE)
+                .addComponent(panelImage1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4)
+                .addComponent(lmCargando, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(rSProgressMaterial1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(45, 45, 45))
         );
 
         javax.swing.GroupLayout pnPrincipalLayout = new javax.swing.GroupLayout(pnPrincipal);
         pnPrincipal.setLayout(pnPrincipalLayout);
         pnPrincipalLayout.setHorizontalGroup(
             pnPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelCurves1, javax.swing.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE)
-            .addGroup(pnPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnPrincipalLayout.createSequentialGroup()
-                    .addContainerGap(222, Short.MAX_VALUE)
-                    .addComponent(rSProgressMaterial1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(229, Short.MAX_VALUE)))
-            .addGroup(pnPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(lmCargando, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE))
-            .addGroup(pnPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnPrincipalLayout.createSequentialGroup()
-                    .addContainerGap(145, Short.MAX_VALUE)
-                    .addComponent(panelImage1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(149, Short.MAX_VALUE)))
+            .addComponent(panelCurves1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         pnPrincipalLayout.setVerticalGroup(
             pnPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelCurves1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE)
-            .addGroup(pnPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnPrincipalLayout.createSequentialGroup()
-                    .addContainerGap(247, Short.MAX_VALUE)
-                    .addComponent(rSProgressMaterial1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(55, Short.MAX_VALUE)))
-            .addGroup(pnPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnPrincipalLayout.createSequentialGroup()
-                    .addContainerGap(209, Short.MAX_VALUE)
-                    .addComponent(lmCargando, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(108, Short.MAX_VALUE)))
-            .addGroup(pnPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(pnPrincipalLayout.createSequentialGroup()
-                    .addGap(26, 26, 26)
-                    .addComponent(panelImage1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(146, Short.MAX_VALUE)))
+            .addComponent(panelCurves1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();

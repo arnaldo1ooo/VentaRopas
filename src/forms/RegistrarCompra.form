@@ -35,7 +35,7 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jpPrincipal" alignment="0" pref="649" max="32767" attributes="0"/>
+          <Component id="jpPrincipal" alignment="0" pref="651" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -54,18 +54,22 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Component id="panel2" alignment="1" max="32767" attributes="0"/>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace max="32767" attributes="0"/>
-                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                      <Component id="jpProductos" max="32767" attributes="0"/>
-                      <Component id="jpDatosCompra" min="-2" pref="863" max="-2" attributes="0"/>
-                      <Component id="jpDatosProducto" max="32767" attributes="0"/>
+              <Group type="102" alignment="1" attributes="0">
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Component id="jpProductos" alignment="0" max="32767" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                              <Component id="jpDatosCompra" min="-2" pref="863" max="-2" attributes="0"/>
+                              <Component id="jpDatosProducto" alignment="0" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
                   </Group>
                   <EmptySpace min="-2" pref="135" max="-2" attributes="0"/>
               </Group>
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="301" max="-2" attributes="0"/>
-                  <Component id="jpBotones1" min="-2" pref="304" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="234" max="-2" attributes="0"/>
+                  <Component id="jpBotones1" min="-2" pref="371" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -76,13 +80,13 @@
                   <Component id="panel2" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jpDatosCompra" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                  <Component id="jpDatosProducto" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="jpDatosProducto" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="jpProductos" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jpBotones1" min="-2" pref="55" max="-2" attributes="0"/>
-                  <EmptySpace pref="8" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -118,7 +122,7 @@
                           <Component id="cbProveedor" min="-2" pref="205" max="-2" attributes="0"/>
                           <Component id="lblRucCedula" min="-2" pref="201" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       <Component id="btnProveedor" min="-2" pref="36" max="-2" attributes="0"/>
                       <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -307,10 +311,6 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <Component id="lblTituloDescripcion" min="-2" pref="140" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="1" attributes="0">
                               <Group type="103" groupAlignment="1" attributes="0">
                                   <Component id="txtDescripcionProducto" alignment="0" max="32767" attributes="0"/>
                                   <Group type="102" alignment="1" attributes="0">
@@ -322,13 +322,13 @@
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="txtCodigoProducto" max="32767" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="btnABMProducto" min="-2" pref="39" max="-2" attributes="0"/>
+                                              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                                              <Component id="btnABMProducto" min="-2" pref="36" max="-2" attributes="0"/>
                                               <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
                                           </Group>
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="lblCodigoProducto" min="-2" pref="120" max="-2" attributes="0"/>
-                                              <EmptySpace pref="220" max="32767" attributes="0"/>
+                                              <EmptySpace max="32767" attributes="0"/>
                                           </Group>
                                       </Group>
                                       <Group type="103" groupAlignment="0" attributes="0">
@@ -340,20 +340,34 @@
                                       </Group>
                                   </Group>
                               </Group>
-                              <EmptySpace min="-2" pref="154" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="76" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="lblTituloDescripcion" min="-2" pref="140" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
                           </Group>
                       </Group>
-                      <Component id="piImagen" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
+                      <Component id="lblImagen" min="-2" pref="136" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
+                      <Component id="btnPantallaCompleta" min="-2" pref="39" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="51" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <Group type="103" groupAlignment="1" attributes="0">
                           <Group type="102" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="lblImagen" pref="136" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <Component id="btnPantallaCompleta" min="-2" pref="31" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="2" attributes="0">
                                   <Component id="lblIDProducto" alignment="2" min="-2" max="-2" attributes="0"/>
                                   <Component id="lblCodigoProducto" alignment="2" min="-2" max="-2" attributes="0"/>
@@ -363,16 +377,15 @@
                               <Group type="103" groupAlignment="2" attributes="0">
                                   <Component id="txtIDProducto" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
                                   <Component id="txtCodigoProducto" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
-                                  <Component id="btnABMProducto" alignment="2" min="-2" max="-2" attributes="0"/>
+                                  <Component id="btnABMProducto" alignment="2" min="-2" pref="36" max="-2" attributes="0"/>
                                   <Component id="txtExistenciaActual" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="lblTituloDescripcion" min="-2" pref="16" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                              <Component id="txtDescripcionProducto" min="-2" pref="28" max="-2" attributes="0"/>
-                              <EmptySpace min="0" pref="16" max="32767" attributes="0"/>
+                              <Component id="txtDescripcionProducto" min="-2" pref="32" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
-                          <Component id="piImagen" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -465,32 +478,6 @@
                 <Property name="text" type="java.lang.String" value="ID"/>
               </Properties>
             </Component>
-            <Container class="org.edisoncor.gui.panel.PanelImage" name="piImagen">
-              <Properties>
-                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                  <Border info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
-                    <EtchetBorder/>
-                  </Border>
-                </Property>
-                <Property name="focusable" type="boolean" value="false"/>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/images/ImagenProductoSinFoto.png"/>
-                </Property>
-              </Properties>
-
-              <Layout>
-                <DimensionLayout dim="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="122" max="32767" attributes="0"/>
-                  </Group>
-                </DimensionLayout>
-                <DimensionLayout dim="1">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                  </Group>
-                </DimensionLayout>
-              </Layout>
-            </Container>
             <Component class="javax.swing.JButton" name="btnABMProducto">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
@@ -501,6 +488,33 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnABMProductoActionPerformed"/>
               </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="btnPantallaCompleta">
+              <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ff" green="ff" red="0" type="rgb"/>
+                </Property>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="sansserif" size="12" style="1"/>
+                </Property>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/iconos/Iconos20x20/IconoPantallacompleta.png"/>
+                </Property>
+                <Property name="toolTipText" type="java.lang.String" value="Ampliar vista de Imagen del producto"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPantallaCompletaActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JLabel" name="lblImagen">
+              <Properties>
+                <Property name="horizontalAlignment" type="int" value="0"/>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
+                    <EtchetBorder/>
+                  </Border>
+                </Property>
+              </Properties>
             </Component>
           </SubComponents>
         </Container>
@@ -864,7 +878,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="btnGuardar" min="-2" pref="140" max="-2" attributes="0"/>
+                      <Component id="btnGuardar" min="-2" pref="207" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="btnCancelar" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
@@ -899,7 +913,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/iconos/Iconos20x20/IconoGuardar.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Guardar"/>
+                <Property name="text" type="java.lang.String" value="Registrar compra"/>
                 <Property name="toolTipText" type="java.lang.String" value="Inserta el nuevo registro"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[128, 36]"/>

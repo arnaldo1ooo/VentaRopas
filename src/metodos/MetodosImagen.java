@@ -17,7 +17,6 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -25,8 +24,6 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.filechooser.FileSystemView;
-import org.edisoncor.gui.panel.PanelImage;
 
 /**
  *
@@ -37,7 +34,7 @@ public class MetodosImagen {
     JFileChooser fc;
     Boolean fcEstaCargado = false;
 
-    public void CargarImagenDesdeFC(PanelImage ElLabelImagen) throws HeadlessException {
+    public void CargarImagenDesdeFC(JLabel ElLabel) {
         CambiarLookSwing("windows"); //Cambiamos el look a Windows
 
         //Traducir
@@ -63,8 +60,13 @@ public class MetodosImagen {
         fc.setFileFilter(new FileNameExtensionFilter("JPG & PNG", "jpg", "png"));
 
         if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-            //EscalarImagen(ElLabelImagen, fc, null);
-            //ElLabelImagen.setText("");
+            File imagenseleccionada = fc.getSelectedFile();
+            String ruta = imagenseleccionada.getPath();
+            ImageIcon imagenImageIcon = new ImageIcon(ruta);
+            Image imagenImage = imagenImageIcon.getImage();
+            imagenImage = EscalarImage(imagenImage, ElLabel);
+            ElLabel.setIcon(imagenImageIcon);
+            System.out.println("Se cargó la imagen desde el filechooser: " + ruta);
             fcEstaCargado = true;
         } else {
             System.out.println("Cargar Imagen Cancelado");
@@ -102,7 +104,7 @@ public class MetodosImagen {
         }
     }
 
-    public void LeerImagen(PanelImage elPanelImage, String rutaimagen) {
+    public void LeerImagen(JLabel elLabel, String rutaimagen) {
         Image imagenInterna;
         String ruta = "/fotoproductos/imageproducto_0.png";
 
@@ -122,9 +124,23 @@ public class MetodosImagen {
             }
         }
 
-        elPanelImage.setIcon(new javax.swing.ImageIcon(imagenInterna));
-        elPanelImage.repaint();
+        imagenInterna = EscalarImage(imagenInterna, elLabel);
+        elLabel.setIcon(new javax.swing.ImageIcon(imagenInterna));
+        elLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER); //Centra la imagen
         System.out.println("Se cargó la imagen: " + ruta);
+    }
+
+    private Image EscalarImage(Image imagenInterna, JLabel elLabel) {
+        //Mantener relacion
+        ImageIcon tmpImagen = new ImageIcon(imagenInterna);
+        float delta = ((elLabel.getWidth() * 100) / tmpImagen.getIconWidth()) / 100f;
+        if (tmpImagen.getIconHeight() > elLabel.getHeight()) {
+            delta = ((elLabel.getHeight() * 100) / tmpImagen.getIconHeight()) / 100f;
+        }
+        int ancho = (int) (tmpImagen.getIconWidth() * delta);
+        int alto = (int) (tmpImagen.getIconHeight() * delta);
+        imagenInterna = imagenInterna.getScaledInstance(ancho, alto, Image.SCALE_AREA_AVERAGING);
+        return imagenInterna;
     }
 
     public void EliminarImagen(String rutaimagen) {
@@ -145,44 +161,6 @@ public class MetodosImagen {
                 System.out.println("Error al querer eliminar imagen " + e);
             }
         }
-    }
-
-    public void EscalarImagenAFC(JLabel ElLabel, JFileChooser fc, String UrlImagen) {
-        if (fc != null) { //Si la imagen viene desde un File Chooser
-            //Si se presiona boton aceptar
-
-            //Escala la imagen al Jlabel sin perder la proporcion
-            ImageIcon tmpImagen = new ImageIcon(fc.getSelectedFile().toString());
-            float delta = ((ElLabel.getWidth() * 100) / tmpImagen.getIconWidth()) / 100f;
-            if (tmpImagen.getIconHeight() > ElLabel.getHeight()) {
-                delta = ((ElLabel.getHeight() * 100) / tmpImagen.getIconHeight()) / 100f;
-            }
-            int ancho = (int) (tmpImagen.getIconWidth() * delta);
-            int alto = (int) (tmpImagen.getIconHeight() * delta);
-            ElLabel.setIcon(new ImageIcon(tmpImagen.getImage().getScaledInstance(ancho, alto, Image.SCALE_AREA_AVERAGING)));
-        } else { //Si la imagen viene desde una URL
-            //Escala la imagen al Jlabel sin perder la proporcion
-            ImageIcon imicImagen = new ImageIcon(UrlImagen);
-            float delta = ((ElLabel.getWidth() * 100) / imicImagen.getIconWidth()) / 100f;
-            if (imicImagen.getIconHeight() > ElLabel.getHeight()) {
-                delta = ((ElLabel.getHeight() * 100) / imicImagen.getIconHeight()) / 100f;
-            }
-            int ancho = (int) (imicImagen.getIconWidth() * delta);
-            int alto = (int) (imicImagen.getIconHeight() * delta);
-            ElLabel.setIcon(new ImageIcon(imicImagen.getImage().getScaledInstance(ancho, alto, Image.SCALE_AREA_AVERAGING)));
-        }
-    }
-
-    public void EscalarImagenALabel(JLabel ElLabel, String UrlImagen) {
-        //Escala la imagen al Jlabel sin perder la proporcion
-        ImageIcon imicImagen = new ImageIcon(UrlImagen);
-        float delta = ((ElLabel.getWidth() * 100) / imicImagen.getIconWidth()) / 100f;
-        if (imicImagen.getIconHeight() > ElLabel.getHeight()) {
-            delta = ((ElLabel.getHeight() * 100) / imicImagen.getIconHeight()) / 100f;
-        }
-        int ancho = (int) (imicImagen.getIconWidth() * delta);
-        int alto = (int) (imicImagen.getIconHeight() * delta);
-        ElLabel.setIcon(new ImageIcon(imicImagen.getImage().getScaledInstance(ancho, alto, Image.SCALE_AREA_AVERAGING)));
     }
 
     public void CambiarLookSwing(String look) {

@@ -236,7 +236,6 @@
                     </Property>
                   </Properties>
                   <Events>
-                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tbPrincipalMouseClicked"/>
                     <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tbPrincipalMousePressed"/>
                   </Events>
                   <AuxValues>
@@ -495,8 +494,8 @@
                               <Component id="cbSubcategoria" alignment="0" min="-2" pref="243" max="-2" attributes="0"/>
                               <Component id="scpObs" alignment="0" min="-2" pref="245" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="26" max="32767" attributes="0"/>
-                          <Component id="piImagen" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace pref="33" max="32767" attributes="0"/>
+                          <Component id="lblImagen" min="-2" pref="175" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="btnEliminarImagen" alignment="0" min="-2" pref="39" max="-2" attributes="0"/>
@@ -520,7 +519,7 @@
                                       <Component id="lblCategoria" alignment="2" min="-2" pref="28" max="-2" attributes="0"/>
                                       <Component id="cbCategoria" alignment="2" min="-2" pref="28" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="2" attributes="0">
                                       <Component id="lblCodigoProducto" alignment="2" min="-2" pref="28" max="-2" attributes="0"/>
                                       <Component id="txtCodigoProducto" alignment="2" min="-2" max="-2" attributes="0"/>
@@ -557,19 +556,18 @@
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="piImagen" min="-2" max="-2" attributes="0"/>
-                                      <Group type="102" attributes="0">
-                                          <Component id="btnCargarImagen" min="-2" pref="31" max="-2" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="btnEliminarImagen" min="-2" pref="31" max="-2" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="btnPantallaCompleta" min="-2" pref="31" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
+                                  <Component id="btnCargarImagen" min="-2" pref="31" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="btnEliminarImagen" min="-2" pref="31" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="btnPantallaCompleta" min="-2" pref="31" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="lblImagen" min="-2" pref="175" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <EmptySpace pref="9" max="32767" attributes="0"/>
+                          <EmptySpace pref="14" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -921,34 +919,19 @@
                     <Property name="text" type="java.lang.String" value="Marca:"/>
                   </Properties>
                 </Component>
-                <Container class="org.edisoncor.gui.panel.PanelImage" name="piImagen">
+                <Component class="javax.swing.JLabel" name="lblImagen">
                   <Properties>
+                    <Property name="horizontalAlignment" type="int" value="0"/>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/fotoproductos/imageproducto_0.png"/>
+                    </Property>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
                         <EtchetBorder/>
                       </Border>
                     </Property>
-                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/fotoproductos/imageproducto_0.png"/>
-                    </Property>
                   </Properties>
-                  <Events>
-                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="piImagenMouseClicked"/>
-                  </Events>
-
-                  <Layout>
-                    <DimensionLayout dim="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="179" max="32767" attributes="0"/>
-                      </Group>
-                    </DimensionLayout>
-                    <DimensionLayout dim="1">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="179" max="32767" attributes="0"/>
-                      </Group>
-                    </DimensionLayout>
-                  </Layout>
-                </Container>
+                </Component>
               </SubComponents>
             </Container>
           </SubComponents>

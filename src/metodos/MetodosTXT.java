@@ -272,6 +272,10 @@ public class MetodosTXT {
     public Double DoubleAFormatoAmericano(String ElNumero) {
         double ElNumeroDouble = 0.0;
         try {
+            if (ElNumero.endsWith(".0")) { //Si termina en .0 se borra esa parte
+                ElNumero = ElNumero.substring(0, ElNumero.length() - 2); //Borra los dos ultimos caracteres de la cadena
+            }
+
             ElNumero = ElNumero.replace(".", ""); //Saca los puntos de miles
             ElNumero = ElNumero.replace(",", "."); //Cambia la coma en punto
             ElNumeroDouble = Double.parseDouble(ElNumero);

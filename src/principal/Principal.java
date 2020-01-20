@@ -9,6 +9,7 @@ import conexion.Conexion;
 import forms.ABMCliente;
 import forms.ABMFuncionario;
 import forms.ABMProducto;
+import forms.RegistrarCompra;
 import forms.RegistrarVenta;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -933,7 +934,8 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_btnVentaActionPerformed
 
     private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
-        // TODO add your handling code here:
+        RegistrarCompra registrarcompra = new RegistrarCompra(this, false);
+        registrarcompra.setVisible(true);
     }//GEN-LAST:event_jMenuItem12ActionPerformed
 
     private void meCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_meCompraActionPerformed

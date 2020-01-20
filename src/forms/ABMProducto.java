@@ -21,7 +21,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import metodos.Metodos;
 import metodos.MetodosCombo;
@@ -41,14 +40,12 @@ public final class ABMProducto extends javax.swing.JDialog {
     MetodosImagen metodosimagen = new MetodosImagen();
     private final String rutaFotoProducto = "/fotoproductos/imageproducto_";
     private final String rutaFotoPorDefecto = "/fotoproductos/imageproducto_0.png";
-    private Icon fotoProductoDefault;
 
     public ABMProducto(java.awt.Frame parent, Boolean modal) {
 
         super(parent, modal);
         initComponents();
 
-        fotoProductoDefault = piImagen.getIcon();
         TablaConsultaBD(txtBuscar.getText()); //Trae todos los registros
         txtBuscar.requestFocus();
 
@@ -247,7 +244,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         taObs.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 8).toString());
         cbEstado.setSelectedIndex(Integer.parseInt(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 9).toString()));
 
-        metodosimagen.LeerImagen(piImagen, rutaFotoProducto + txtCodigo.getText());
+        metodosimagen.LeerImagen(lblImagen, rutaFotoProducto + txtCodigo.getText());
     }
 
     private void ModoEdicion(boolean valor) {
@@ -267,7 +264,6 @@ public final class ABMProducto extends javax.swing.JDialog {
         btnGuardar.setEnabled(valor);
         btnCancelar.setEnabled(valor);
         btnCargarImagen.setEnabled(valor);
-        btnEliminarImagen.setEnabled(valor);
         btnPantallaCompleta.setEnabled(!valor);
         btnGenerarCodigo.setEnabled(!valor);
 
@@ -290,7 +286,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         lblDescripcion.setForeground(new Color(102, 102, 102));
         lblTamano.setForeground(new Color(102, 102, 102));
 
-        metodosimagen.LeerImagen(piImagen, rutaFotoPorDefecto);
+        metodosimagen.LeerImagen(lblImagen, rutaFotoPorDefecto);
 
         txtBuscar.requestFocus();
         tbPrincipal.clearSelection();
@@ -379,7 +375,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         cbTamano = new javax.swing.JComboBox<>();
         cbMarca = new javax.swing.JComboBox<>();
         lblMarca = new javax.swing.JLabel();
-        piImagen = new org.edisoncor.gui.panel.PanelImage();
+        lblImagen = new javax.swing.JLabel();
         jpBotones2 = new javax.swing.JPanel();
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
@@ -431,9 +427,6 @@ public final class ABMProducto extends javax.swing.JDialog {
         tbPrincipal.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tbPrincipal.getTableHeader().setReorderingAllowed(false);
         tbPrincipal.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tbPrincipalMouseClicked(evt);
-            }
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 tbPrincipalMousePressed(evt);
             }
@@ -756,24 +749,9 @@ public final class ABMProducto extends javax.swing.JDialog {
         lblMarca.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblMarca.setText("Marca:");
 
-        piImagen.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        piImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fotoproductos/imageproducto_0.png"))); // NOI18N
-        piImagen.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                piImagenMouseClicked(evt);
-            }
-        });
-
-        javax.swing.GroupLayout piImagenLayout = new javax.swing.GroupLayout(piImagen);
-        piImagen.setLayout(piImagenLayout);
-        piImagenLayout.setHorizontalGroup(
-            piImagenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 179, Short.MAX_VALUE)
-        );
-        piImagenLayout.setVerticalGroup(
-            piImagenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 179, Short.MAX_VALUE)
-        );
+        lblImagen.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fotoproductos/imageproducto_0.png"))); // NOI18N
+        lblImagen.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         javax.swing.GroupLayout jpEdicionLayout = new javax.swing.GroupLayout(jpEdicion);
         jpEdicion.setLayout(jpEdicionLayout);
@@ -811,8 +789,8 @@ public final class ABMProducto extends javax.swing.JDialog {
                     .addComponent(cbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cbSubcategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(scpObs, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                .addComponent(piImagen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addComponent(lblImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnEliminarImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -832,7 +810,7 @@ public final class ABMProducto extends javax.swing.JDialog {
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(2, 2, 2)
+                        .addGap(4, 4, 4)
                         .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                             .addComponent(lblCodigoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtCodigoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -862,15 +840,15 @@ public final class ABMProducto extends javax.swing.JDialog {
                             .addComponent(txtExistencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jpEdicionLayout.createSequentialGroup()
                         .addGap(6, 6, 6)
-                        .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(piImagen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jpEdicionLayout.createSequentialGroup()
-                                .addComponent(btnCargarImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnEliminarImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnPantallaCompleta, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(9, Short.MAX_VALUE))
+                        .addComponent(btnCargarImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnEliminarImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnPantallaCompleta, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jpEdicionLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(lblImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         jtpEdicion.addTab("Edición", jpEdicion);
@@ -1033,15 +1011,6 @@ public final class ABMProducto extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_txtBuscarKeyReleased
 
-    private void tbPrincipalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbPrincipalMouseClicked
-        if (tbPrincipal.isEnabled() == true) {
-            btnModificar.setEnabled(true);
-            btnEliminar.setEnabled(true);
-
-            ModoVistaPrevia();
-        }
-    }//GEN-LAST:event_tbPrincipalMouseClicked
-
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         if (txtCodigo.getText().equals("")) {//Si es nuevo
             RegistroNuevo();
@@ -1134,14 +1103,13 @@ public final class ABMProducto extends javax.swing.JDialog {
     }//GEN-LAST:event_btnActualizarTablaActionPerformed
 
     private void btnCargarImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargarImagenActionPerformed
-        metodosimagen.CargarImagenDesdeFC(piImagen);
-
-        btnEliminarImagen.setEnabled(!(piImagen.getIcon().toString().equals(fotoProductoDefault.toString()))); //Revisa si el icono es default
+        metodosimagen.CargarImagenDesdeFC(lblImagen);
+        btnEliminarImagen.setEnabled(!(lblImagen.getIcon().toString().equals("javax.swing.ImageIcon@4356c900"))); //Revisa si el icono es default 
     }//GEN-LAST:event_btnCargarImagenActionPerformed
 
     private void btnEliminarImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarImagenActionPerformed
-        metodosimagen.LeerImagen(piImagen, rutaFotoPorDefecto);
-        btnEliminarImagen.setEnabled(!(piImagen.getIcon().toString().equals(fotoProductoDefault.toString()))); //Revisa si el icono es default
+        metodosimagen.LeerImagen(lblImagen, rutaFotoPorDefecto);
+        btnEliminarImagen.setEnabled(false);
     }//GEN-LAST:event_btnEliminarImagenActionPerformed
 
     private void btnPantallaCompletaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPantallaCompletaActionPerformed
@@ -1175,10 +1143,6 @@ public final class ABMProducto extends javax.swing.JDialog {
     private void txtExistenciaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtExistenciaKeyTyped
         // TODO add your handling code here:
     }//GEN-LAST:event_txtExistenciaKeyTyped
-
-    private void piImagenMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_piImagenMouseClicked
-
-    }//GEN-LAST:event_piImagenMouseClicked
 
     private void btnGenerarCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarCodigoActionPerformed
         if (txtCodigoProducto.getText().equals("") == false) {
@@ -1263,13 +1227,13 @@ public final class ABMProducto extends javax.swing.JDialog {
     private javax.swing.JLabel lblCodigoProducto;
     private javax.swing.JLabel lblDescripcion;
     private javax.swing.JLabel lblExistencia;
+    private javax.swing.JLabel lblImagen;
     private javax.swing.JLabel lblMarca;
     private javax.swing.JLabel lblObs;
     private javax.swing.JLabel lblSubcategoria;
     private javax.swing.JLabel lblSubcategoria1;
     private javax.swing.JLabel lblTamano;
     private org.edisoncor.gui.panel.Panel panel2;
-    private org.edisoncor.gui.panel.PanelImage piImagen;
     private javax.swing.JScrollPane scPrincipal;
     private javax.swing.JScrollPane scpObs;
     private javax.swing.JTextArea taObs;

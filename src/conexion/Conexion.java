@@ -63,7 +63,7 @@ public class Conexion {
                     usuarioDB = "invitado";
                     passDB = "toor5127"; //Contrasena de la BD
                     nombreBD = "ventaropas";
-                    host = "bdarnaldo.ddns.net";
+                    host = "143.255.143.230";
                     puerto = "3306";
                     servidor = "jdbc:mysql://" + host + ":" + puerto + "/" + nombreBD
                             + "?useUnicode=true"
