@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import metodos.Metodos;
+import metodos.MetodosCombo;
 import metodos.MetodosTXT;
 
 /**
@@ -37,26 +38,32 @@ import metodos.MetodosTXT;
 public final class ABMFuncionario extends javax.swing.JDialog {
 
     MetodosTXT metodostxt = new MetodosTXT();
+    MetodosCombo metodoscombo = new MetodosCombo();
     Metodos metodos = new Metodos();
-    String nombretablasp = "Funcionario";
+    String nombreTablaBD = "Funcionario";
 
     public ABMFuncionario(java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
         initComponents();
 
-        /*ImagenBanner p = new ImagenBanner(); //Produce error, al ejecutar en el jar la ventana se ve blanco
-        jpBanner.add(p);*/
-        TablaConsultaBD(txtBuscar.getText()); //Trae todos los registros
+        TablaConsultaBD(); //Trae todos los registros
         txtBuscar.requestFocus();
-
-        OrdenTabulador();
 
         //Poner fecha actual
         Calendar c2 = new GregorianCalendar();
         dcFechaIngreso.setCalendar(c2);
+        CargarComboBoxes();
+
+        OrdenTabulador();
     }
 
-//--------------------------METODOS----------------------------//
+    //--------------------------METODOS----------------------------//
+    public void CargarComboBoxes() {
+        //Carga los combobox con las consultas
+        metodoscombo.CargarComboBox(cbCargo, "SELECT car_codigo, car_descripcion FROM cargo ORDER BY car_descripcion");
+        metodoscombo.setSelectedCodigoItem(cbCargo, 0);
+    }
+
     public void RegistroNuevo() {
         try {
             if (ComprobarCampos() == true) {
@@ -68,7 +75,8 @@ public final class ABMFuncionario extends javax.swing.JDialog {
                 String telefono = txtTelefono.getText();
                 String email = txtEmail.getText();
                 String obs = taObs.getText();
-                String estado = cbEstado.getSelectedItem().toString();
+                int estado = cbEstado.getSelectedIndex();
+                int cargo = metodoscombo.ObtenerIdComboBox(cbCargo);
 
                 int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro crear este nuevo registro?", "Confirmación", JOptionPane.YES_OPTION);
 
@@ -77,8 +85,8 @@ public final class ABMFuncionario extends javax.swing.JDialog {
                     try {
                         Connection con;
                         con = (Connection) Conexion.ConectarBasedeDatos();
-                        String sentencia = "CALL SP_" + nombretablasp + "Alta ('" + nombre + "','" + apellido + "','" + fechaingreso + "','" + sexo
-                                + "','" + telefono + "','" + email + "','" + obs + "','" + estado + "')";
+                        String sentencia = "CALL SP_" + nombreTablaBD + "Alta ('" + nombre + "','" + apellido + "','" + fechaingreso + "','" + sexo
+                                + "','" + telefono + "','" + email + "','" + obs + "','" + estado + "','" + cargo + "')";
                         System.out.println("Insertar registro: " + sentencia);
                         Statement st;
                         st = (Statement) con.createStatement();
@@ -118,12 +126,13 @@ public final class ABMFuncionario extends javax.swing.JDialog {
             String telefono = txtTelefono.getText();
             String email = txtEmail.getText();
             String obs = taObs.getText();
-            String estado = cbEstado.getSelectedItem().toString();
+            int estado = cbEstado.getSelectedIndex();
+            int cargo = metodoscombo.ObtenerIdComboBox(cbCargo);
 
             int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro de modificar este registro?", "Confirmación", JOptionPane.YES_OPTION);
             if (JOptionPane.YES_OPTION == confirmado) {
-                String sentencia = "CALL SP_" + nombretablasp + "Modificar(" + codigo + ",'" + nombre + "','" + apellido + "','" + fechaingreso + "','" + sexo
-                        + "','" + telefono + "','" + email + "','" + obs + "','" + estado + "')";
+                String sentencia = "CALL SP_" + nombreTablaBD + "Modificar(" + codigo + ",'" + nombre + "','" + apellido + "','" + fechaingreso + "','" + sexo
+                        + "','" + telefono + "','" + email + "','" + obs + "','" + estado + "','" + cargo + "')";
                 System.out.println("Actualizar registro: " + sentencia);
 
                 try {
@@ -165,7 +174,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
                         Connection con;
                         con = Conexion.ConectarBasedeDatos();
                         String sentence;
-                        sentence = "CALL SP_" + nombretablasp + "Eliminar(" + codigo + ")";
+                        sentence = "CALL SP_" + nombreTablaBD + "Eliminar(" + codigo + ")";
                         PreparedStatement pst;
                         pst = con.prepareStatement(sentence);
                         pst.executeUpdate();
@@ -188,39 +197,14 @@ public final class ABMFuncionario extends javax.swing.JDialog {
         }
     }
 
-    public void TablaConsultaBD(String filtro) {//Realiza la consulta de los productos que tenemos en la base de datos
-        /*String nombresp = "SP_" + nombretablasp + "Consulta";
-        String titlesJtabla[] = {"Código", "Nombre", "Apellido", "Fecha de ingreso", "Sexo", "Teléfono", "Email", "Observación", "Estado"}; //Debe tener la misma cantidad que titlesconsulta
-        String titlesconsulta[] = {"fun_codigo", "fun_nombre", "fun_apellido", "fun_fechaingreso", "fun_sexo", "fun_telefono", "fun_email", "fun_obs", "fun_estado"};
-
-        metodos.ConsultaFiltroTablaBD(tbPrincipal, titlesJtabla, titlesconsulta, nombresp, filtro, cbCampoBuscar);*/
-
+    public void TablaConsultaBD() {//Realiza la consulta de los productos que tenemos en la base de datos
+        String elSP = "SP_" + nombreTablaBD + "Consulta";
         String titlesJtabla[] = {"Código", "Nombre", "Apellido", "Fecha de ingreso", "Sexo",
             "Telefono", "Email", "Observación", "Estado", "Cargo"}; //Debe tener la misma cantidad que los campos a consultar
-        DefaultTableModel modelotabla = new DefaultTableModel(null, titlesJtabla);
 
-        Conexion con = metodos.ObtenerRSSentencia("CALL SP_FuncionarioConsulta");
-        try {
-            ResultSetMetaData mdrs = con.rs.getMetaData();
-            int numColumns = mdrs.getColumnCount();
-            Object[] registro = new Object[numColumns]; //el numero es la cantidad de columnas del rs
-            int CantRegistros = 0;
-            while (con.rs.next()) {
-                for (int j = 0; j < numColumns; j++) {
-                    registro[j] = (con.rs.getString(j + 1));
-                }
-                modelotabla.addRow(registro);//agrega el registro a la tabla
-                CantRegistros = CantRegistros + 1;
-            }
-
-            tbPrincipal.setModel(modelotabla);//asigna a la tabla el modelo creado
-            metodos.AnchuraColumna(tbPrincipal);
-            lbCantRegistros.setText(CantRegistros + " Registros encontrados");
-
-            con.DesconectarBasedeDatos();
-        } catch (SQLException ex) {
-            Logger.getLogger(ABMFuncionario.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        //DefaultTableModel modelotabla = metodos.ConsultAllBD(elSP, titlesJtabla);
+        tbPrincipal.setModel(metodos.ConsultAllBD(elSP, titlesJtabla));
+        metodos.AnchuraColumna(tbPrincipal);
     }
 
     private void ModoVistaPrevia() {
@@ -232,9 +216,12 @@ public final class ABMFuncionario extends javax.swing.JDialog {
         txtTelefono.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 5).toString());
         txtEmail.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 6).toString());
         taObs.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 7).toString());
-        
+
         String estado = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 8).toString();
         cbEstado.setSelectedItem(estado);
+
+        String cargo = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 9).toString();
+        cbCargo.setSelectedItem(cargo);
     }
 
     private void ModoEdicion(boolean valor) {
@@ -334,6 +321,8 @@ public final class ABMFuncionario extends javax.swing.JDialog {
         cbSexo = new javax.swing.JComboBox<>();
         lblEstado = new javax.swing.JLabel();
         cbEstado = new javax.swing.JComboBox<>();
+        lblEstado1 = new javax.swing.JLabel();
+        cbCargo = new javax.swing.JComboBox<>();
         jpBotones2 = new javax.swing.JPanel();
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
@@ -414,20 +403,21 @@ public final class ABMFuncionario extends javax.swing.JDialog {
             .addGroup(jpTablaLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpTablaLayout.createSequentialGroup()
+                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(lblBuscarCampo)
+                            .addGap(4, 4, 4)
+                            .addComponent(cbCampoBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(scPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 673, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jpTablaLayout.createSequentialGroup()
                         .addComponent(btnActualizarTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(36, 36, 36)
-                        .addComponent(lbCantRegistros, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(scPrincipal)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpTablaLayout.createSequentialGroup()
-                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(lblBuscarCampo)
-                        .addGap(4, 4, 4)
-                        .addComponent(cbCampoBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(67, 67, 67))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lbCantRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, 429, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(44, 44, 44))
         );
         jpTablaLayout.setVerticalGroup(
             jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -440,7 +430,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
                     .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(2, 2, 2)
                 .addComponent(scPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(2, 2, 2)
                 .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnActualizarTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbCantRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -653,11 +643,20 @@ public final class ABMFuncionario extends javax.swing.JDialog {
         lblEstado.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         lblEstado.setForeground(new java.awt.Color(102, 102, 102));
         lblEstado.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblEstado.setText("Estado*:");
+        lblEstado.setText("Estado:");
         lblEstado.setToolTipText("");
 
-        cbEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ACTIVO", "INACTIVO" }));
+        cbEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "INACTIVO", "ACTIVO", " " }));
+        cbEstado.setSelectedIndex(1);
         cbEstado.setEnabled(false);
+
+        lblEstado1.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lblEstado1.setForeground(new java.awt.Color(102, 102, 102));
+        lblEstado1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblEstado1.setText("Cargo:");
+        lblEstado1.setToolTipText("");
+
+        cbCargo.setEnabled(false);
 
         javax.swing.GroupLayout jpEdicionLayout = new javax.swing.GroupLayout(jpEdicion);
         jpEdicion.setLayout(jpEdicionLayout);
@@ -666,15 +665,11 @@ public final class ABMFuncionario extends javax.swing.JDialog {
             .addGroup(jpEdicionLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpEdicionLayout.createSequentialGroup()
-                        .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(lblNombre, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
-                                .addComponent(lblCodigo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(lblApellido, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(lblFechaIngreso, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
-                    .addComponent(lblSexo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lblSexo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblNombre, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblCodigo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblApellido, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblFechaIngreso, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(4, 4, 4)
                 .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpEdicionLayout.createSequentialGroup()
@@ -694,11 +689,16 @@ public final class ABMFuncionario extends javax.swing.JDialog {
                     .addComponent(lblEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(4, 4, 4)
                 .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(scpObs, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cbEstado, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(93, 93, 93))
+                    .addComponent(txtEmail)
+                    .addComponent(scpObs)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpEdicionLayout.createSequentialGroup()
+                        .addComponent(cbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblEstado1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(2, 2, 2)
+                        .addComponent(cbCargo, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtTelefono))
+                .addGap(18, 18, 18))
         );
         jpEdicionLayout.setVerticalGroup(
             jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -733,8 +733,11 @@ public final class ABMFuncionario extends javax.swing.JDialog {
                     .addComponent(lblSexo, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cbSexo, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(cbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lblEstado1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cbCargo, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         jtpEdicion.addTab("Edición", jpEdicion);
@@ -825,19 +828,22 @@ public final class ABMFuncionario extends javax.swing.JDialog {
         jpPrincipalLayout.setHorizontalGroup(
             jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpPrincipalLayout.createSequentialGroup()
-                .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpPrincipalLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jpTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 666, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jpTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jpBotones, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jpPrincipalLayout.createSequentialGroup()
-                        .addGap(299, 299, 299)
-                        .addComponent(jpBotones2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jpPrincipalLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jtpEdicion, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jpPrincipalLayout.createSequentialGroup()
+                                .addGap(299, 299, 299)
+                                .addComponent(jpBotones2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jpPrincipalLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jtpEdicion, javax.swing.GroupLayout.PREFERRED_SIZE, 853, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
             .addComponent(panel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jpPrincipalLayout.setVerticalGroup(
@@ -846,13 +852,13 @@ public final class ABMFuncionario extends javax.swing.JDialog {
                 .addComponent(panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jpTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jpTabla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jpBotones, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jtpEdicion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jpBotones2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(19, 19, 19))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         jtpEdicion.getAccessibleContext().setAccessibleName("");
@@ -861,11 +867,11 @@ public final class ABMFuncionario extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 847, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jpPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 865, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 616, Short.MAX_VALUE)
+            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
         );
 
         getAccessibleContext().setAccessibleName("Inventario");
@@ -876,25 +882,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
 
 //--------------------------Eventos de componentes----------------------------//
     private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
-        //actualiza la tabla conforme a la letra que teclea
-        if (txtBuscar.getText().trim().length() >= 1) {
-            TablaConsultaBD(txtBuscar.getText());
-            tbPrincipal.setVisible(true);
-        } else {
-            TablaConsultaBD("");
-        }
 
-        //Convertir a mayuscula
-        Character s = evt.getKeyChar();
-        if (Character.isLetter(s)) {
-            txtBuscar.setText(txtBuscar.getText().toUpperCase());
-        }
-
-        if (tbPrincipal.getSelectedRowCount() != 0) {
-            ModoVistaPrevia();
-        } else {
-            Limpiar();
-        }
     }//GEN-LAST:event_txtBuscarKeyReleased
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
@@ -923,7 +911,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
         RegistroEliminar();
         ModoEdicion(false);
         Limpiar();
-        TablaConsultaBD("");
+        TablaConsultaBD();
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnGuardarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnGuardarKeyPressed
@@ -993,7 +981,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
     }//GEN-LAST:event_txtEmailKeyPressed
 
     private void btnActualizarTablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarTablaActionPerformed
-        TablaConsultaBD(txtBuscar.getText()); //Trae todos los registros
+        TablaConsultaBD(); //Trae todos los registros
         btnModificar.setEnabled(false);
         btnEliminar.setEnabled(false);
     }//GEN-LAST:event_btnActualizarTablaActionPerformed
@@ -1050,6 +1038,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
     private javax.swing.JButton btnNuevo;
     private javax.swing.JButton btnReporte;
     private javax.swing.JComboBox cbCampoBuscar;
+    private javax.swing.JComboBox<MetodosCombo> cbCargo;
     private javax.swing.JComboBox<String> cbEstado;
     private javax.swing.JComboBox<String> cbSexo;
     private com.toedter.calendar.JDateChooser dcFechaIngreso;
@@ -1068,6 +1057,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
     private javax.swing.JLabel lblCodigo;
     private javax.swing.JLabel lblEmail;
     private javax.swing.JLabel lblEstado;
+    private javax.swing.JLabel lblEstado1;
     private javax.swing.JLabel lblFechaIngreso;
     private javax.swing.JLabel lblNombre;
     private javax.swing.JLabel lblObs;

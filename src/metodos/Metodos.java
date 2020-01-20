@@ -25,6 +25,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import conexion.Conexion;
+import forms.ABMFuncionario;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.text.DecimalFormat;
@@ -44,6 +45,26 @@ public class Metodos {
 
     MetodosTXT metodostxt = new MetodosTXT();
     public int CantRegistros = 0;
+
+    public DefaultTableModel ConsultAllBD(String elSP, String titlesJtabla[]) {
+        DefaultTableModel modelotabla = new DefaultTableModel(null, titlesJtabla);
+        Conexion con = ObtenerRSSentencia("CALL " + elSP);
+        try {
+            ResultSetMetaData mdrs = con.rs.getMetaData();
+            int numColumns = mdrs.getColumnCount();
+            Object[] registro = new Object[numColumns]; //el numero es la cantidad de columnas del rs
+            while (con.rs.next()) {
+                for (int j = 0; j < numColumns; j++) {
+                    registro[j] = (con.rs.getString(j + 1));
+                }
+                modelotabla.addRow(registro);//agrega el registro a la tabla
+            }
+            con.DesconectarBasedeDatos();
+        } catch (SQLException ex) {
+            Logger.getLogger(ABMFuncionario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return modelotabla;
+    }
 
     public Conexion ObtenerRSSentencia(String sentencia) { //con.Desconectar luego de usar el metodo
         Conexion conexion = new Conexion();
