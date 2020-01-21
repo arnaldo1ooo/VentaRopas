@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import principal.SplashScreen;
 
 public class Conexion {
 
@@ -23,7 +24,7 @@ public class Conexion {
     private static String servidor;
 
     public static Connection ConectarBasedeDatos() {
-        String tipoHost = "remoto";
+        String tipoHost = "local";
 
         if (tipoHost.equals("local")) {
             //Modo host local
@@ -83,16 +84,19 @@ public class Conexion {
                 System.out.println("CONEXIÓN A " + nombreBD + ", EXITOSA..");
             }
         } catch (ClassNotFoundException ex) {
-            System.out.println("Error1 al intentar conectar con la bd: " + ex);
-            JOptionPane.showMessageDialog(null, "Verifique que el nombre de la bd, el usuario y la contraseña esten correctas: " + ex, "Error1 en la Conexión con la BD " + ex.getMessage(), JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Error1, Verifique los datos de la conexion a la BD: "
+                    + ex, "Error1 en la Conexión con la BD" + ex.getMessage(), JOptionPane.ERROR_MESSAGE);
             conexion = null;
         } catch (SQLException ex) {
-            System.out.println("Error2 al intentar conectar con la bd, verifique que el nombre de la bd, el usuario y la contraseña esten correctas: " + ex);
-            JOptionPane.showMessageDialog(null, "Verifique que el nombre de la bd, el usuario y la contraseña esten correctas: " + ex, "Error2 en la Conexión con la BD" + ex.getMessage(), JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Verifique que el nombre de la bd, el usuario y la contraseña esten correctas: "
+                    + ex, "Error2 en la Conexión con la BD" + ex.getMessage(), JOptionPane.ERROR_MESSAGE);
             conexion = null;
         } catch (Exception ex) {
-            System.out.println("Error3 al intentar conectar con la bd: " + ex);
-            JOptionPane.showMessageDialog(null, "Verifique que el nombre de la bd, el usuario y la contraseña esten correctas: " + ex, "Error3 en la Conexión con la BD " + ex.getMessage(), JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Error3, Verifique los datos de la conexion a la BD: "
+                    + ex, "Error3 en la Conexión con la BD" + ex.getMessage(), JOptionPane.ERROR_MESSAGE);
             conexion = null;
         }
         return conexion;

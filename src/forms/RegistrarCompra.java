@@ -9,7 +9,6 @@ import conexion.Conexion;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
-import java.awt.Graphics;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
@@ -22,7 +21,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import metodos.Metodos;
@@ -34,7 +32,6 @@ import metodos.VistaCompletaImagen;
 import static principal.Principal.cotiUsdGsCompra;
 import static principal.Principal.cotiUsdRsCompra;
 import static principal.Principal.cotiUsdPaCompra;
-import principal.SplashScreen;
 //
 
 /**
@@ -143,10 +140,10 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                         Limpiar();
                     } catch (HeadlessException ex) {
                         JOptionPane.showMessageDialog(this, "Ocurrió un Error " + ex.getMessage());
-                        Logger.getLogger(SplashScreen.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(RegistrarCompra.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (SQLException ex) {
                         JOptionPane.showMessageDialog(this, "Ocurrió un Error " + ex.getMessage());
-                        Logger.getLogger(SplashScreen.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(RegistrarCompra.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 } else {
                     System.out.println("No se guardó el registro");

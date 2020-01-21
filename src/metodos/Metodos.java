@@ -35,6 +35,8 @@ import javax.swing.JDialog;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.RowFilter;
+import javax.swing.table.TableRowSorter;
 import principal.Principal;
 
 /**
@@ -46,7 +48,7 @@ public class Metodos {
     MetodosTXT metodostxt = new MetodosTXT();
     public int CantRegistros = 0;
 
-    public DefaultTableModel ConsultAllBD(String elSP, String titlesJtabla[]) {
+    public DefaultTableModel ConsultAllBD(String elSP, String titlesJtabla[], JComboBox ElComboCampos) {
         DefaultTableModel modelotabla = new DefaultTableModel(null, titlesJtabla);
         Conexion con = ObtenerRSSentencia("CALL " + elSP);
         try {
@@ -58,6 +60,10 @@ public class Metodos {
                     registro[j] = (con.rs.getString(j + 1));
                 }
                 modelotabla.addRow(registro);//agrega el registro a la tabla
+            }
+            if (ElComboCampos.getItemCount() != 0) {
+                javax.swing.DefaultComboBoxModel modelCombo = new javax.swing.DefaultComboBoxModel(titlesJtabla);
+                ElComboCampos.setModel(modelCombo);
             }
             con.DesconectarBasedeDatos();
         } catch (SQLException ex) {
@@ -119,7 +125,7 @@ public class Metodos {
             con.close();
             st.close();
         } catch (SQLException ex) {
-            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Metodos.class.getName() + " Sentencia: " + sentencia).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -186,6 +192,14 @@ public class Metodos {
             }
         }
         );
+    }
+
+    public void FiltroJTable(String cadenaABuscar, int columnaABuscar, JTable ElJTable) {
+        TableRowSorter modelFiltrado = new TableRowSorter<>(ElJTable.getModel());
+        modelFiltrado.setRowFilter(RowFilter.regexFilter("(?i)" + cadenaABuscar, columnaABuscar));
+        ElJTable.setRowSorter(modelFiltrado);
+        ElJTable.repaint();
+        System.out.println("FiltroJTable:  cadena: " + cadenaABuscar + ", columna: " + columnaABuscar);
     }
 
     public void ConsultaFiltroTablaBD(JTable LaTabla, String titlesJtabla[], String campoconsulta[], String nombresp, String filtro, JComboBox cbCampoBuscar) {

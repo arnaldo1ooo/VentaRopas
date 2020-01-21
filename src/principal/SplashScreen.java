@@ -20,14 +20,14 @@ import org.jsoup.select.Elements;
  * @author Arnaldo_Cantero
  */
 public class SplashScreen extends javax.swing.JFrame implements Runnable {
-    
+
     private Thread tiempo = null;
     Metodos metodos = new Metodos();
-    
+
     public SplashScreen(java.awt.Frame parent, boolean modal) {
         initComponents();
         this.setLocationRelativeTo(null);
-        
+
         tiempo = new Thread(this);
         tiempo.start();
     }
@@ -161,7 +161,7 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 SplashScreen dialog = new SplashScreen(new javax.swing.JFrame(), true);
-                
+
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -195,33 +195,35 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
             Logger.getLogger(SplashScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private void ObtenerCotizacionScrapingWeb() {
         try {
-            org.jsoup.nodes.Document doc = org.jsoup.Jsoup.connect("http://www.cambioschaco.com.py/").validateTLSCertificates(false).get();
+            org.jsoup.nodes.Document doc = org.jsoup.Jsoup
+                    .connect("http://www.cambioschaco.com.py/")
+                    .validateTLSCertificates(false).get();
 
             //Obtiene el titulo de la pagina
             String title = doc.title();
             System.out.println("\nScraping Web (CAMBIOS CHACO)");
             System.out.println("Titulo de la pagina:  " + title + "\n");
-            
+
             Elements losDiv;
             Elements losTr;
             Element fila1;
             Element fila2;
-            
+
             losDiv = doc.select("div." + "col-sm-7"); //Las tablas, div.
             losTr = losDiv.select("tr"); //Las filas, tr.
             fila1 = losTr.get(1); //el get(0) seria los titulos
-            
+
             String usdGsCompraString = fila1.getElementsByClass("purchase").text();
             double usdGsCompraDouble = Double.parseDouble(((usdGsCompraString).replace(".", "")).replace(",", "."));
-            
+
             String usdGsVentaString = fila1.getElementsByClass("sale").text();
             double usdGsVentaDouble = Double.parseDouble(((usdGsVentaString).replace(".", "")).replace(",", "."));
-            metodos.EjecutarAltaoModi("CALL SP_CotizacionModificar('Dolares','Guaranies','" + usdGsCompraDouble + "','"
+            metodos.EjecutarAltaoModi("CALL SP_CotizacionModificar('1','Dolares','Guaranies','" + usdGsCompraDouble + "','"
                     + usdGsVentaDouble + "','" + FechaActual() + "')");
-            
+
             losDiv = doc.select("div." + "col-sm-5"); //Las tablas, div.
             losTr = losDiv.select("tr"); //Las filas, tr.
             fila1 = losTr.get(1); //el get(0) seria los titulos
@@ -229,29 +231,29 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
 
             String usdRsCompraString = fila1.getElementsByClass("purchase").text();
             double usdRsCompraDouble = Double.parseDouble(((usdRsCompraString).replace(".", "")).replace(",", "."));
-            
+
             String usdRsVentaString = fila1.getElementsByClass("sale").text();
             double usdRsVentaDouble = Double.parseDouble(((usdRsVentaString).replace(".", "")).replace(",", "."));
-            metodos.EjecutarAltaoModi("CALL SP_CotizacionModificar('Dolares','Reales','" + usdRsCompraDouble + "','"
+            metodos.EjecutarAltaoModi("CALL SP_CotizacionModificar('2','Dolares','Reales','" + usdRsCompraDouble + "','"
                     + usdRsVentaDouble + "','" + FechaActual() + "')");
-            
+
             String usdPaCompraString = fila2.getElementsByClass("purchase").text();
             double usdPaCompraDouble = Double.parseDouble(((usdPaCompraString).replace(".", "")).replace(",", "."));
-            
+
             String usdPaVentaString = fila2.getElementsByClass("sale").text();
             double usdPaVentaDouble = Double.parseDouble(((usdPaVentaString).replace(".", "")).replace(",", "."));
-            metodos.EjecutarAltaoModi("CALL SP_CotizacionModificar('Dolares','Pesos argentinos','" + usdPaCompraDouble + "','"
+            metodos.EjecutarAltaoModi("CALL SP_CotizacionModificar('3','Dolares','Pesos argentinos','" + usdPaCompraDouble + "','"
                     + usdPaVentaDouble + "','" + FechaActual() + "')");
         } catch (IOException e) {
             System.out.println("Error al realizar el scraping web " + e);
             Logger.getLogger(SplashScreen.class.getName()).log(Level.SEVERE, null, e);
         }
     }
-    
+
     private String FechaActual() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date fechaactual = new Date();
-        DateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
-        String fechaactualString = formatoFecha.format(fechaactual);
-        return fechaactualString;
+        
+        return dateFormat.format(fechaactual); no ingresa hora a la bd
     }
 }

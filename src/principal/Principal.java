@@ -99,7 +99,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
                     + "FROM cotizacion WHERE coti_de='Dolares' AND coti_a='Guaranies'");
             con.rs.next();
             SimpleDateFormat formatoFechaAmericano = new SimpleDateFormat("yyyy/MM/dd");
-            SimpleDateFormat formatoFechaSudamerica = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat formatoFechaSudamerica = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             Date fechaFormatoAmericano = formatoFechaAmericano.parse(con.rs.getString("coti_fecha").replace("-", "/"));
             lblFechaCotizacion.setText("Fecha de cotización: " + formatoFechaSudamerica.format(fechaFormatoAmericano));
 

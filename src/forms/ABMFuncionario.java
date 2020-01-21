@@ -15,7 +15,6 @@ import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
@@ -23,10 +22,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.RowFilter;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import metodos.Metodos;
 import metodos.MetodosCombo;
 import metodos.MetodosTXT;
@@ -202,9 +202,14 @@ public final class ABMFuncionario extends javax.swing.JDialog {
         String titlesJtabla[] = {"Código", "Nombre", "Apellido", "Fecha de ingreso", "Sexo",
             "Telefono", "Email", "Observación", "Estado", "Cargo"}; //Debe tener la misma cantidad que los campos a consultar
 
-        //DefaultTableModel modelotabla = metodos.ConsultAllBD(elSP, titlesJtabla);
-        tbPrincipal.setModel(metodos.ConsultAllBD(elSP, titlesJtabla));
+        tbPrincipal.setModel(metodos.ConsultAllBD(elSP, titlesJtabla, cbCampoBuscar));
         metodos.AnchuraColumna(tbPrincipal);
+
+        if (tbPrincipal.getModel().getRowCount() == 1) {
+            lbCantRegistros.setText(tbPrincipal.getModel().getRowCount() + " Registro encontrado");
+        } else {
+            lbCantRegistros.setText(tbPrincipal.getModel().getRowCount() + " Registros encontrados");
+        }
     }
 
     private void ModoVistaPrevia() {
@@ -882,7 +887,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
 
 //--------------------------Eventos de componentes----------------------------//
     private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
-
+        metodos.FiltroJTable(txtBuscar.getText(), cbCampoBuscar.getSelectedIndex(), tbPrincipal);
     }//GEN-LAST:event_txtBuscarKeyReleased
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed

@@ -31,7 +31,6 @@ import metodos.VistaCompletaImagen;
 import static principal.Principal.cotiUsdGsCompra;
 import static principal.Principal.cotiUsdRsCompra;
 import static principal.Principal.cotiUsdPaCompra;
-import principal.SplashScreen;
 //
 
 /**
@@ -138,10 +137,10 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                         Limpiar();
                     } catch (HeadlessException ex) {
                         JOptionPane.showMessageDialog(this, "Ocurrió un Error " + ex.getMessage());
-                        Logger.getLogger(SplashScreen.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(RegistrarVenta.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (SQLException ex) {
                         JOptionPane.showMessageDialog(this, "Ocurrió un Error " + ex.getMessage());
-                        Logger.getLogger(SplashScreen.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(RegistrarVenta.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 } else {
                     System.out.println("No se guardó el registro");
@@ -260,7 +259,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al intentar obtener cambio " + ex);
             System.out.println("Error al consultar producto: ");
-            Logger.getLogger(SplashScreen.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RegistrarVenta.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }
@@ -1010,7 +1009,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
 
             con.DesconectarBasedeDatos();
         } catch (SQLException e) {
-            Logger.getLogger(SplashScreen.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(RegistrarVenta.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 
@@ -1204,7 +1203,10 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     }//GEN-LAST:event_tbPrincipalKeyReleased
 
     private void btnClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteActionPerformed
-
+        String nombresp = "SP_ClienteConsulta";
+        String titlesJtabla[] = {"Código", "RUC/CI", "Nombre", "Apellido", "Dirección", "Teléfono", "Email", "Observación"};
+        Buscador buscador = new Buscador(this, true, nombresp, titlesJtabla);
+        buscador.setVisible(true);
     }//GEN-LAST:event_btnClienteActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
