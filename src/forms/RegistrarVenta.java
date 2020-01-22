@@ -180,7 +180,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         txtExistenciaActual.setText("");
         txtDescripcionProducto.setText("");
 
-        metodosimagen.LeerImagen(lblImagen, rutaFotoPorDefecto);
+        metodosimagen.LeerImagenExterna(lblImagen, rutaFotoPorDefecto);
 
         txtPrecioDolares.setText("");
         txtPrecioGs.setText("");
@@ -243,7 +243,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                 txtExistenciaActual.setText(con.rs.getString(2));
                 txtDescripcionProducto.setText(con.rs.getString(3));
 
-                metodosimagen.LeerImagen(lblImagen, rutaFotoProducto + con.rs.getString(4));
+                metodosimagen.LeerImagenExterna(lblImagen, rutaFotoProducto + con.rs.getString(4));
 
                 double precio = 0.0;//con.rs.getDouble(5);
                 String precioString = metodostxt.DoubleAFormatoSudamerica(precio); //Formato sudamerica: 10.100,25
@@ -1018,7 +1018,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         txtIDProducto.setText("");
         txtExistenciaActual.setText("");
         txtDescripcionProducto.setText("");
-        metodosimagen.LeerImagen(lblImagen, rutaFotoPorDefecto);
+        metodosimagen.LeerImagenExterna(lblImagen, rutaFotoPorDefecto);
         txtPrecioDolares.setText("");
         txtPrecioGs.setText("");
         txtPrecioReales.setText("");

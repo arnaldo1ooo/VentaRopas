@@ -58,7 +58,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         //Obtener fecha actual
         Calendar c2 = new GregorianCalendar();
         dcFechaRegistro.setCalendar(c2);
-        metodosimagen.LeerImagen(lblImagen, rutaFotoPorDefecto);
+        metodosimagen.LeerImagenExterna(lblImagen, rutaFotoPorDefecto);
 
         OrdenTabulador();
 
@@ -161,7 +161,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         txtExistenciaActual.setText("");
         txtDescripcionProducto.setText("");
 
-        metodosimagen.LeerImagen(lblImagen, rutaFotoPorDefecto);
+        metodosimagen.LeerImagenExterna(lblImagen, rutaFotoPorDefecto);
 
         txtCantidadAdquirida.setText("");
         txtPrecioUnitario.setText("");
@@ -238,7 +238,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                 txtIDProducto.setText(con.rs.getString(1));
                 txtExistenciaActual.setText(con.rs.getString(2));
                 txtDescripcionProducto.setText(con.rs.getString(3));
-                metodosimagen.LeerImagen(lblImagen, rutaFotoProducto + con.rs.getString(4));
+                metodosimagen.LeerImagenExterna(lblImagen, rutaFotoProducto + con.rs.getString(4));
                 return true;
             }
             con.DesconectarBasedeDatos();
@@ -888,7 +888,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         txtIDProducto.setText("");
         txtExistenciaActual.setText("");
         txtDescripcionProducto.setText("");
-        metodosimagen.LeerImagen(lblImagen, rutaFotoPorDefecto);
+        metodosimagen.LeerImagenExterna(lblImagen, rutaFotoPorDefecto);
     }
 
     private void tbPrincipalMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbPrincipalMousePressed

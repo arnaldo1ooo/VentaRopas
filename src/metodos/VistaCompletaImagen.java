@@ -17,7 +17,7 @@ public class VistaCompletaImagen extends javax.swing.JDialog {
         this.setLocationRelativeTo(null); //Centrar ventana
 
         MetodosImagen metodosimagen = new MetodosImagen();
-        metodosimagen.LeerImagen(lblImagen, rutaimagen);
+        metodosimagen.LeerImagenExterna(lblImagen, rutaimagen);
         System.out.println("Se cargo la imagen a la VistaCompleta " + rutaimagen);
 
         //this.setSize(this.getToolkit().getScreenSize());

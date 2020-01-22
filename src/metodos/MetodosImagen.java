@@ -90,9 +90,10 @@ public class MetodosImagen {
                 g2.dispose();
                 // Escribe la imagen
                 try {
-                    EliminarImagen(rutadestinoimagen + "." + fileextension); //Elimina la imagen por si ya existe, sucede en el caso de modificar imagen
-                    System.out.println("Guardando imagen... " + rutadestinoimagen + "." + fileextension);
-                    ImageIO.write(biImagen, fileextension, new File(rutadestinoimagen + "." + fileextension));
+                    rutadestinoimagen = rutadestinoimagen + "." + fileextension;
+                    EliminarImagen(rutadestinoimagen); //Elimina la imagen por si ya existe, sucede en el caso de modificar imagen
+                    System.out.println("Guardando imagen... " + rutadestinoimagen);
+                    ImageIO.write(biImagen, fileextension, new File(rutadestinoimagen));
                 } catch (IOException ex) {
                     JOptionPane.showMessageDialog(null, "Error al guardar imagen... " + ex, "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -102,9 +103,32 @@ public class MetodosImagen {
         }
     }
 
-    public void LeerImagen(JLabel elLabel, String rutaimagen) {
+    public void LeerImagenExterna(JLabel elLabel, String rutaimagen) {
+        Image imagenExterna;
+        File imagefile;
+        String ruta;
+
+        imagefile = new File(rutaimagen + ".png");
+        ruta = rutaimagen + ".png";
+        if (imagefile.exists() == false) {
+            imagefile = new File(rutaimagen + ".jpg");
+            ruta = rutaimagen + ".jpg";
+            if (imagefile.exists() == false) {
+                imagefile = new File("C:\\VentaRopas\\fotoproductos\\imageproducto_0.png");
+                ruta = "C:\\VentaRopas\\fotoproductos\\imageproducto_0.png";
+            }
+        }
+
+        imagenExterna = new ImageIcon(ruta).getImage();
+        imagenExterna = EscalarImage(imagenExterna, elLabel);
+        elLabel.setIcon(new javax.swing.ImageIcon(imagenExterna));
+        elLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER); //Centra la imagen
+        System.out.println("Se cargó la imagen: " + ruta);
+    }
+
+    public void LeerImagenInterna(JLabel elLabel, String rutaimagen) {
         Image imagenInterna;
-        String ruta = "/fotoproductos/imageproducto_0.png";
+        String ruta = "C:\\VentaRopas\\fotoproductos\\imageproducto_0.png";
 
         try {
             imagenInterna = new ImageIcon(getClass().getResource(rutaimagen + ".png")).getImage();
@@ -118,7 +142,7 @@ public class MetodosImagen {
                     ruta = rutaimagen + ".jpg";
                 }
             } catch (Exception e2) {
-                imagenInterna = new ImageIcon(getClass().getResource(ruta)).getImage(); //Si no existe ninguno se pone la imagen por defecto
+                imagenInterna = new ImageIcon(ruta).getImage(); //Si no existe ninguno se pone la imagen por defecto
             }
         }
 
@@ -142,22 +166,19 @@ public class MetodosImagen {
     }
 
     public void EliminarImagen(String rutaimagen) {
-        rutaimagen = System.getProperty("user.dir") + rutaimagen;
-        String ruta;
-        ruta = rutaimagen + ".png";
-        File fichero = new File(ruta);
+        File fichero;
+
+        fichero = new File(rutaimagen + ".png");
         if (fichero.exists() == false) {
-            ruta = rutaimagen + ".jpg";
-            fichero = new File(ruta);
+            fichero = new File(rutaimagen + ".jpg");
         }
-        if (fichero.exists()) { //Si fichero existe
-            try {
-                if (fichero.delete()) { //Eliminar imagen
-                    System.out.println("La imagen ha sido borrado satisfactoriamente");
-                }
-            } catch (Exception e) {
-                System.out.println("Error al querer eliminar imagen " + e);
+
+        try {
+            if (fichero.delete()) { //Eliminar imagen
+                System.out.println("La imagen ha sido borrado satisfactoriamente");
             }
+        } catch (Exception e) {
+            System.out.println("Error al querer eliminar imagen " + e);
         }
     }
 
@@ -194,9 +215,12 @@ public class MetodosImagen {
                 idultimoproducto = con.rs.getString("idultimoproducto");
             }
             con.DesconectarBasedeDatos();
+
         } catch (SQLException ex) {
-            Logger.getLogger(ABMProducto.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("No se pudo obtener el idultimoproducto: " + idultimoproducto);
+            Logger.getLogger(ABMProducto.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            System.out.println(
+                    "No se pudo obtener el idultimoproducto: " + idultimoproducto);
         }
         return idultimoproducto;
     }

@@ -38,8 +38,8 @@ public final class ABMProducto extends javax.swing.JDialog {
     Metodos metodos = new Metodos();
     MetodosCombo metodoscombo = new MetodosCombo();
     MetodosImagen metodosimagen = new MetodosImagen();
-    private final String rutaFotoProducto = "/fotoproductos/imageproducto_";
-    private final String rutaFotoPorDefecto = "/fotoproductos/imageproducto_0.png";
+    private final String rutaFotoProducto = "C:\\VentaRopas\\fotoproductos\\imageproducto_";
+    private final String rutaFotoPorDefecto = "C:\\VentaRopas\\fotoproductos\\imageproducto_0.png";
     String nombreTablaBD = "Producto";
 
     public ABMProducto(java.awt.Frame parent, Boolean modal) {
@@ -245,7 +245,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         taObs.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 8).toString());
         cbEstado.setSelectedItem(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 9).toString());
 
-        metodosimagen.LeerImagen(lblImagen, rutaFotoProducto + txtCodigo.getText());
+        metodosimagen.LeerImagenExterna(lblImagen, rutaFotoProducto + txtCodigo.getText());
     }
 
     private void ModoEdicion(boolean valor) {
@@ -287,7 +287,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         lblDescripcion.setForeground(new Color(102, 102, 102));
         lblTamano.setForeground(new Color(102, 102, 102));
 
-        metodosimagen.LeerImagen(lblImagen, rutaFotoPorDefecto);
+        metodosimagen.LeerImagenExterna(lblImagen, rutaFotoPorDefecto);
 
         txtBuscar.requestFocus();
         tbPrincipal.clearSelection();
@@ -1089,7 +1089,7 @@ public final class ABMProducto extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCargarImagenActionPerformed
 
     private void btnEliminarImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarImagenActionPerformed
-        metodosimagen.LeerImagen(lblImagen, rutaFotoPorDefecto);
+        metodosimagen.LeerImagenExterna(lblImagen, rutaFotoPorDefecto);
         btnEliminarImagen.setEnabled(false);
     }//GEN-LAST:event_btnEliminarImagenActionPerformed
 
