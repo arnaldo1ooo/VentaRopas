@@ -40,13 +40,15 @@ public final class ABMProducto extends javax.swing.JDialog {
     MetodosImagen metodosimagen = new MetodosImagen();
     private final String rutaFotoProducto = "/fotoproductos/imageproducto_";
     private final String rutaFotoPorDefecto = "/fotoproductos/imageproducto_0.png";
+    String nombreTablaBD = "Producto";
 
     public ABMProducto(java.awt.Frame parent, Boolean modal) {
 
         super(parent, modal);
         initComponents();
 
-        TablaConsultaBD(txtBuscar.getText()); //Trae todos los registros
+        TablaConsultaBDAll(); //Trae todos los registros
+        cbCampoBuscar.setSelectedIndex(1);
         txtBuscar.requestFocus();
 
         CargarComboBoxes();
@@ -221,12 +223,11 @@ public final class ABMProducto extends javax.swing.JDialog {
         }
     }
 
-    public void TablaConsultaBD(String filtro) {//Realiza la consulta de los productos que tenemos en la base de datos
-        String nombresp = "SP_ProductoConsulta";
+    public void TablaConsultaBDAll() {//Realiza la consulta de los productos que tenemos en la base de datos
+        String elSP = "SP_" + nombreTablaBD + "Consulta";
         String titlesJtabla[] = {"Código", "Código del producto", "Descripción", "Marca", "Tamaño", "Existencia", "Categoria", "Subcategoria", "Observación", "Estado"}; //Debe tener la misma cantidad que titlesconsulta
-        String titlesconsulta[] = {"pro_codigo", "pro_identificador", "pro_descripcion", "pro_marca", "pro_tamano", "pro_existencia", "pro_categoria", "pro_subcategoria", "pro_obs", "pro_estado"};
 
-        metodos.ConsultaFiltroTablaBD(tbPrincipal, titlesJtabla, titlesconsulta, nombresp, filtro, cbCampoBuscar);
+        tbPrincipal.setModel(metodos.ConsultAllBD(elSP, titlesJtabla, cbCampoBuscar));
         metodos.AnchuraColumna(tbPrincipal);
         lbCantRegistros.setText(metodos.CantRegistros + " Registros encontrados");
     }
@@ -242,7 +243,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         metodoscombo.setSelectedNombreItem(cbCategoria, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 6).toString());
         metodoscombo.setSelectedNombreItem(cbSubcategoria, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 7).toString());
         taObs.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 8).toString());
-        cbEstado.setSelectedIndex(Integer.parseInt(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 9).toString()));
+        cbEstado.setSelectedItem(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 9).toString());
 
         metodosimagen.LeerImagen(lblImagen, rutaFotoProducto + txtCodigo.getText());
     }
@@ -497,7 +498,7 @@ public final class ABMProducto extends javax.swing.JDialog {
                     .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(2, 2, 2)
-                .addComponent(scPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(scPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(btnActualizarTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -961,12 +962,12 @@ public final class ABMProducto extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jpTabla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jpBotones, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE))
+                    .addComponent(jpBotones, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jtpEdicion, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jpBotones2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(11, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         jtpEdicion.getAccessibleContext().setAccessibleName("");
@@ -979,7 +980,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 588, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 614, Short.MAX_VALUE)
         );
 
         getAccessibleContext().setAccessibleName("ABMProducto");
@@ -990,25 +991,7 @@ public final class ABMProducto extends javax.swing.JDialog {
 
 //--------------------------Eventos de componentes----------------------------//
     private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
-        //actualiza la tabla conforme a la letra que teclea
-        if (txtBuscar.getText().trim().length() >= 1) {
-            TablaConsultaBD(txtBuscar.getText());
-            tbPrincipal.setVisible(true);
-        } else {
-            TablaConsultaBD("");
-        }
-
-        //Convertir a mayuscula
-        Character s = evt.getKeyChar();
-        if (Character.isLetter(s)) {
-            txtBuscar.setText(txtBuscar.getText().toUpperCase());
-        }
-
-        if (tbPrincipal.getSelectedRowCount() != 0) {
-            ModoVistaPrevia();
-        } else {
-            Limpiar();
-        }
+        metodos.FiltroJTable(txtBuscar.getText(), cbCampoBuscar.getSelectedIndex(), tbPrincipal);
     }//GEN-LAST:event_txtBuscarKeyReleased
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
@@ -1038,7 +1021,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         RegistroEliminar();
         ModoEdicion(false);
         Limpiar();
-        TablaConsultaBD("");
+        TablaConsultaBDAll();
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnGuardarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnGuardarKeyPressed
@@ -1097,9 +1080,7 @@ public final class ABMProducto extends javax.swing.JDialog {
     }//GEN-LAST:event_taObsKeyPressed
 
     private void btnActualizarTablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarTablaActionPerformed
-        TablaConsultaBD(txtBuscar.getText()); //Trae todos los registros
-        Limpiar();
-        ModoEdicion(false);
+
     }//GEN-LAST:event_btnActualizarTablaActionPerformed
 
     private void btnCargarImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargarImagenActionPerformed

@@ -37,7 +37,6 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.table.TableRowSorter;
-import principal.Principal;
 
 /**
  *
@@ -61,10 +60,13 @@ public class Metodos {
                 }
                 modelotabla.addRow(registro);//agrega el registro a la tabla
             }
-            if (ElComboCampos.getItemCount() != 0) {
+
+            //Carga el combobox con los titulos de la tabla, solo si esta vacio
+            if (ElComboCampos.getItemCount() == 0) {
                 javax.swing.DefaultComboBoxModel modelCombo = new javax.swing.DefaultComboBoxModel(titlesJtabla);
                 ElComboCampos.setModel(modelCombo);
             }
+
             con.DesconectarBasedeDatos();
         } catch (SQLException ex) {
             Logger.getLogger(ABMFuncionario.class.getName()).log(Level.SEVERE, null, ex);
@@ -199,7 +201,7 @@ public class Metodos {
         modelFiltrado.setRowFilter(RowFilter.regexFilter("(?i)" + cadenaABuscar, columnaABuscar));
         ElJTable.setRowSorter(modelFiltrado);
         ElJTable.repaint();
-        System.out.println("FiltroJTable:  cadena: " + cadenaABuscar + ", columna: " + columnaABuscar);
+        //System.out.println("FiltroJTable:  cadena: " + cadenaABuscar + ", columna: " + columnaABuscar);
     }
 
     public void ConsultaFiltroTablaBD(JTable LaTabla, String titlesJtabla[], String campoconsulta[], String nombresp, String filtro, JComboBox cbCampoBuscar) {

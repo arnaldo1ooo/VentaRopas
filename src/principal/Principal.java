@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package principal;
 
 import conexion.Conexion;
@@ -873,12 +868,12 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void btnClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteActionPerformed
-        ABMCliente abmcliente = new ABMCliente(this, false);
+        ABMCliente abmcliente = new ABMCliente(this, true);
         abmcliente.setVisible(true);
     }//GEN-LAST:event_btnClienteActionPerformed
 
     private void btnFuncionarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFuncionarioActionPerformed
-        ABMFuncionario abmempleado = new ABMFuncionario(this, false);
+        ABMFuncionario abmempleado = new ABMFuncionario(this, true);
         abmempleado.setVisible(true);
     }//GEN-LAST:event_btnFuncionarioActionPerformed
 
@@ -887,7 +882,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_meVentaActionPerformed
 
     private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
-        RegistrarVenta registrarventa = new RegistrarVenta(this, false);
+        RegistrarVenta registrarventa = new RegistrarVenta(this, true);
         registrarventa.setVisible(true);
     }//GEN-LAST:event_jMenuItem11ActionPerformed
 
@@ -934,7 +929,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_btnVentaActionPerformed
 
     private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
-        RegistrarCompra registrarcompra = new RegistrarCompra(this, false);
+        RegistrarCompra registrarcompra = new RegistrarCompra(this, true);
         registrarcompra.setVisible(true);
     }//GEN-LAST:event_jMenuItem12ActionPerformed
 
@@ -943,7 +938,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_meCompraActionPerformed
 
     private void btnProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductoActionPerformed
-        ABMProducto abmproducto = new ABMProducto(this, false);
+        ABMProducto abmproducto = new ABMProducto(this, true);
         abmproducto.setVisible(true);
     }//GEN-LAST:event_btnProductoActionPerformed
 

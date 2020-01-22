@@ -254,6 +254,6 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date fechaactual = new Date();
         
-        return dateFormat.format(fechaactual); no ingresa hora a la bd
+        return dateFormat.format(fechaactual); // ingresa hora a la bd
     }
 }

@@ -63,8 +63,7 @@ public class MetodosImagen {
             File imagenseleccionada = fc.getSelectedFile();
             String ruta = imagenseleccionada.getPath();
             ImageIcon imagenImageIcon = new ImageIcon(ruta);
-            Image imagenImage = imagenImageIcon.getImage();
-            imagenImage = EscalarImage(imagenImage, ElLabel);
+            imagenImageIcon = new ImageIcon(EscalarImage(imagenImageIcon.getImage(), ElLabel));
             ElLabel.setIcon(imagenImageIcon);
             System.out.println("Se cargó la imagen desde el filechooser: " + ruta);
             fcEstaCargado = true;

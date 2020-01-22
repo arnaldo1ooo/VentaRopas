@@ -14,6 +14,7 @@ public class VistaCompletaImagen extends javax.swing.JDialog {
     public VistaCompletaImagen(String rutaimagen) {
         System.out.println("Form Padre " + this.getParent().getName());
         initComponents();
+        this.setLocationRelativeTo(null); //Centrar ventana
 
         MetodosImagen metodosimagen = new MetodosImagen();
         metodosimagen.LeerImagen(lblImagen, rutaimagen);

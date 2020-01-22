@@ -22,11 +22,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
-import javax.swing.RowFilter;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
 import metodos.Metodos;
 import metodos.MetodosCombo;
 import metodos.MetodosTXT;
@@ -46,7 +42,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
 
-        TablaConsultaBD(); //Trae todos los registros
+        TablaConsultaBDAll(); //Trae todos los registros
         txtBuscar.requestFocus();
 
         //Poner fecha actual
@@ -197,7 +193,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
         }
     }
 
-    public void TablaConsultaBD() {//Realiza la consulta de los productos que tenemos en la base de datos
+    public void TablaConsultaBDAll() {//Realiza la consulta de los productos que tenemos en la base de datos
         String elSP = "SP_" + nombreTablaBD + "Consulta";
         String titlesJtabla[] = {"Código", "Nombre", "Apellido", "Fecha de ingreso", "Sexo",
             "Telefono", "Email", "Observación", "Estado", "Cargo"}; //Debe tener la misma cantidad que los campos a consultar
@@ -916,7 +912,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
         RegistroEliminar();
         ModoEdicion(false);
         Limpiar();
-        TablaConsultaBD();
+        TablaConsultaBDAll();
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnGuardarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnGuardarKeyPressed
@@ -986,7 +982,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
     }//GEN-LAST:event_txtEmailKeyPressed
 
     private void btnActualizarTablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarTablaActionPerformed
-        TablaConsultaBD(); //Trae todos los registros
+        TablaConsultaBDAll(); //Trae todos los registros
         btnModificar.setEnabled(false);
         btnEliminar.setEnabled(false);
     }//GEN-LAST:event_btnActualizarTablaActionPerformed
