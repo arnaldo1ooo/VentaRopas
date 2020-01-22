@@ -77,7 +77,6 @@ public class MetodosImagen {
 
     public void GuardarImagen(String rutadestinoimagen) {
         //Guardar nuevo imagen
-        //rutadestinoimagen = System.getProperty("user.dir") + rutadestinoimagen;
         try {
             if (fcEstaCargado == true) { //Si la FileChooser tiene cargado un file
                 BufferedImage biImagen = ImageIO.read(fc.getSelectedFile());
