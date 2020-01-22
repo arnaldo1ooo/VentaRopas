@@ -123,7 +123,7 @@ public class Metodos {
             Statement st;
             st = (Statement) con.createStatement();
             st.executeUpdate(sentencia);
-
+            Toolkit.getDefaultToolkit().beep(); //BEEP
             con.close();
             st.close();
         } catch (SQLException ex) {

@@ -8,7 +8,6 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import principal.SplashScreen;
 
 public class Conexion {
 
@@ -24,7 +23,7 @@ public class Conexion {
     private static String servidor;
 
     public static Connection ConectarBasedeDatos() {
-        String tipoHost = "local";
+        String tipoHost = "remoto";
 
         if (tipoHost.equals("local")) {
             //Modo host local

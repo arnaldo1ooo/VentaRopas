@@ -65,6 +65,7 @@ public class MetodosImagen {
             ImageIcon imagenImageIcon = new ImageIcon(ruta);
             imagenImageIcon = new ImageIcon(EscalarImage(imagenImageIcon.getImage(), ElLabel));
             ElLabel.setIcon(imagenImageIcon);
+            ElLabel.setText("");
             System.out.println("Se cargó la imagen desde el filechooser: " + ruta);
             fcEstaCargado = true;
         } else {
@@ -75,25 +76,31 @@ public class MetodosImagen {
         CambiarLookSwing("nimbus"); //Cambiamos el look a Nimbus otra vez
     }
 
-    public void GuardarImagen(String rutadestinoimagen) {
+    public void GuardarImagen(String rutadestino) {
         //Guardar nuevo imagen
         try {
             if (fcEstaCargado == true) { //Si la FileChooser tiene cargado un file
+                String filenombre = fc.getSelectedFile().getName(); //Nombre del archivo
+                String fileextension = filenombre.substring(filenombre.lastIndexOf(".") + 1,
+                        fc.getSelectedFile().getName().length()); //Extension del archivo
                 BufferedImage biImagen = ImageIO.read(fc.getSelectedFile());
-                //Obtener extension
-                String filenombre = fc.getSelectedFile().getName();
-                String fileextension = filenombre.substring(filenombre.lastIndexOf(".") + 1, fc.getSelectedFile().getName().length());
 
-                ImageIcon icon = new ImageIcon(biImagen); //Convierte un BufferedImage a ImageIcon
+                ImageIcon icon = new ImageIcon(biImagen); //BufferedImage a ImageIcon
                 Graphics2D g2 = biImagen.createGraphics();
                 g2.drawImage(icon.getImage(), 0, 0, icon.getImageObserver());
                 g2.dispose();
                 // Escribe la imagen
                 try {
-                    rutadestinoimagen = rutadestinoimagen + "." + fileextension;
-                    EliminarImagen(rutadestinoimagen); //Elimina la imagen por si ya existe, sucede en el caso de modificar imagen
-                    System.out.println("Guardando imagen... " + rutadestinoimagen);
-                    ImageIO.write(biImagen, fileextension, new File(rutadestinoimagen));
+                    rutadestino = rutadestino + "." + fileextension;
+
+                    File fileimagen = new File(rutadestino);
+                    if (fileimagen.exists() == true) {
+                        System.out.println("Ya existe, eliminando antes de guardar la nueva imagen");
+                        EliminarImagen(rutadestino); //Elimina la imagen por si ya existe, sucede en el caso de modificar imagen 
+                    }
+
+                    System.out.println("Guardando imagen... " + rutadestino);
+                    ImageIO.write(biImagen, fileextension, new File(rutadestino));
                 } catch (IOException ex) {
                     JOptionPane.showMessageDialog(null, "Error al guardar imagen... " + ex, "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -103,27 +110,33 @@ public class MetodosImagen {
         }
     }
 
-    public void LeerImagenExterna(JLabel elLabel, String rutaimagen) {
+    public void LeerImagenExterna(JLabel elLabel, String rutaimagen, String PorDefault) {
         Image imagenExterna;
         File imagefile;
         String ruta;
 
         imagefile = new File(rutaimagen + ".png");
         ruta = rutaimagen + ".png";
+        System.out.println("\nBuscar imagen png: " + ruta + " exist: " + imagefile.exists());
         if (imagefile.exists() == false) {
             imagefile = new File(rutaimagen + ".jpg");
             ruta = rutaimagen + ".jpg";
+            System.out.println("Buscar imagen jpg: " + ruta + " exist: " + imagefile.exists());
             if (imagefile.exists() == false) {
-                imagefile = new File("C:\\VentaRopas\\fotoproductos\\imageproducto_0.png");
-                ruta = "C:\\VentaRopas\\fotoproductos\\imageproducto_0.png";
+                ruta = null;
             }
         }
-
-        imagenExterna = new ImageIcon(ruta).getImage();
-        imagenExterna = EscalarImage(imagenExterna, elLabel);
-        elLabel.setIcon(new javax.swing.ImageIcon(imagenExterna));
-        elLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER); //Centra la imagen
-        System.out.println("Se cargó la imagen: " + ruta);
+        if (ruta == null) { //Si no existe la foto
+            elLabel.setIcon(null);
+            elLabel.setText(PorDefault);
+        } else {
+            imagenExterna = new ImageIcon(ruta).getImage();
+            imagenExterna = EscalarImage(imagenExterna, elLabel);
+            elLabel.setIcon(new javax.swing.ImageIcon(imagenExterna));
+            elLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER); //Centra la imagen
+            elLabel.setText(""); //Borra el texto del label
+            System.out.println("Se cargó la imagen: " + ruta + "\n");
+        }
     }
 
     public void LeerImagenInterna(JLabel elLabel, String rutaimagen) {

@@ -14,10 +14,8 @@ import java.awt.FocusTraversalPolicy;
 
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+import java.awt.event.KeyEvent;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -38,8 +36,8 @@ public final class ABMProducto extends javax.swing.JDialog {
     Metodos metodos = new Metodos();
     MetodosCombo metodoscombo = new MetodosCombo();
     MetodosImagen metodosimagen = new MetodosImagen();
-    private final String rutaFotoProducto = "C:\\VentaRopas\\fotoproductos\\imageproducto_";
-    private final String rutaFotoPorDefecto = "C:\\VentaRopas\\fotoproductos\\imageproducto_0.png";
+    String rutaFotoProducto = "C:\\VentaRopas\\fotoproductos\\imageproducto_";
+    String TitlePorDefault = "PRODUCTO SIN FOTO";
     String nombreTablaBD = "Producto";
 
     public ABMProducto(java.awt.Frame parent, Boolean modal) {
@@ -95,43 +93,27 @@ public final class ABMProducto extends javax.swing.JDialog {
                 String obs = taObs.getText();
                 int estado = cbEstado.getSelectedIndex();
 
-                int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro crear este nuevo registro?", "Confirmación", JOptionPane.YES_OPTION);
-
+                int confirmado = JOptionPane.showConfirmDialog(this, "¿Esta seguro crear este nuevo registro?", "Confirmación", JOptionPane.YES_OPTION);
                 if (JOptionPane.YES_OPTION == confirmado) {
                     //REGISTRAR NUEVO
-                    try {
-                        Connection con;
-                        con = (Connection) Conexion.ConectarBasedeDatos();
-                        String sentencia = "CALL SP_ProductoAlta ('" + codigoproducto + "','" + descripcion + "','"
-                                + marca + "','" + tamano + "','" + existencia + "','" + idsubcategoria + "','"
-                                + obs + "','" + estado + "')";
-                        System.out.println("Insertar registro: " + sentencia);
-                        Statement st;
-                        st = (Statement) con.createStatement();
-                        st.executeUpdate(sentencia);
+                    String sentencia = "CALL SP_ProductoAlta ('" + codigoproducto + "','" + descripcion + "','"
+                            + marca + "','" + tamano + "','" + existencia + "','" + idsubcategoria + "','"
+                            + obs + "','" + estado + "')";
 
-                        con.close();
-                        st.close();
+                    metodos.EjecutarAltaoModi(sentencia);
+                    TablaConsultaBDAll(); //Actualiza la tabla
 
-                        //Guardarimagen
-                        String ultimoid = metodosimagen.ObtenerUltimoID();
-                        metodosimagen.GuardarImagen(rutaFotoProducto + ultimoid);
+                    //Guardarimagen
+                    String ultimoid = metodosimagen.ObtenerUltimoID();
+                    metodosimagen.GuardarImagen(rutaFotoProducto + ultimoid);
+                    JOptionPane.showMessageDialog(this, "El registro se agregó correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
 
-                        JOptionPane.showMessageDialog(this, "Se agrego correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
-
-                        ModoEdicion(false);
-                        Limpiar();
-                    } catch (HeadlessException ex) {
-                        JOptionPane.showMessageDialog(this, "Ocurrió un Error al intentar guardar el registro:  " + ex.getMessage());
-                    } catch (SQLException ex) {
-                        JOptionPane.showMessageDialog(this, "Ocurrió un Error al intentar guardar el registro:  " + ex.getMessage());
-                    }
-                } else {
-                    System.out.println("No se guardo el registro");
+                    Limpiar();
+                    ModoEdicion(false);
                 }
             }
         } catch (HeadlessException ex) {
-            JOptionPane.showMessageDialog(null, "Completar los campos obligarios marcados con * ", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Completar los campos obligarios marcados con * ", "Advertencia", JOptionPane.WARNING_MESSAGE);
             System.out.println("Completar los campos obligarios marcados con * " + ex);
             txtDescripcion.requestFocus();
         }
@@ -139,87 +121,56 @@ public final class ABMProducto extends javax.swing.JDialog {
 
     public void RegistroModificar() {
         if (ComprobarCampos() == true) {
-            int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro de modificar este registro?", "Confirmación", JOptionPane.YES_OPTION);
+            int confirmado = JOptionPane.showConfirmDialog(this, "¿Estás seguro de modificar este registro?", "Confirmación", JOptionPane.YES_OPTION);
             if (JOptionPane.YES_OPTION == confirmado) {
-                try {
-                    //guarda los datos que se han modificado en los campos
-                    String codigo = txtCodigo.getText();
-                    String codigoproducto = txtCodigoProducto.getText();
-                    String descripcion = txtDescripcion.getText();
-                    int marca = metodoscombo.ObtenerIdComboBox(cbMarca);
-                    String tamano = cbTamano.getSelectedItem().toString();
+                //guarda los datos que se han modificado en los campos
+                String codigo = txtCodigo.getText();
+                String codigoproducto = txtCodigoProducto.getText();
+                String descripcion = txtDescripcion.getText();
+                int marca = metodoscombo.ObtenerIdComboBox(cbMarca);
+                String tamano = cbTamano.getSelectedItem().toString();
+                String existencia = txtExistencia.getText();
+                int subcategoria = metodoscombo.ObtenerIdComboBox(cbSubcategoria);
+                String obs = taObs.getText();
+                int estado = cbEstado.getSelectedIndex();
 
-                    String existencia = txtExistencia.getText();
-                    int subcategoria = metodoscombo.ObtenerIdComboBox(cbSubcategoria);
-                    String obs = taObs.getText();
-                    int estado = cbEstado.getSelectedIndex();
+                String sentencia = "CALL SP_ProductoModificar(" + codigo + ",'" + codigoproducto + "','" + descripcion + "','"
+                        + marca + "','" + tamano + "','" + existencia + "','" + subcategoria + "','"
+                        + obs + "','" + estado + "')";
 
-                    String sentencia = "CALL SP_ProductoModificar(" + codigo + ",'" + codigoproducto + "','" + descripcion + "','"
-                            + marca + "','" + tamano + "','" + existencia + "','" + subcategoria + "','"
-                            + obs + "','" + estado + "')";
-                    System.out.println("Actualizar registro: " + sentencia);
+                metodos.EjecutarAltaoModi(sentencia);
+                TablaConsultaBDAll(); //Actualiza la tabla
 
-                    Connection con;
-                    con = conexion.Conexion.ConectarBasedeDatos();
-                    PreparedStatement pst;
-                    pst = con.prepareStatement(sentencia);
-                    pst.executeUpdate();
-                    getToolkit().beep();
-                    JOptionPane.showMessageDialog(null, "Registro modificado correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
-
-                    con.close();
-                    pst.close();
-
-                    //Guardarimagen
+                //Guardarimagen
+                if (lblImagen.getIcon() == null) {
+                    metodosimagen.EliminarImagen(rutaFotoProducto + codigo);
+                } else {
                     metodosimagen.GuardarImagen(rutaFotoProducto + codigo);
-                } catch (SQLException ex) {
-                    System.out.println("Error al modificar registro " + ex);
-                    JOptionPane.showMessageDialog(null, "Error al intentar modificar el registro:  " + ex.getMessage(), "Error", JOptionPane.INFORMATION_MESSAGE);
                 }
-                ModoEdicion(false);
+                JOptionPane.showMessageDialog(this, "Registro modificado correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
+
                 Limpiar();
-            } else {
-                System.out.println("No se modificó el registro");
+                ModoEdicion(false);
             }
         }
     }
 
     private void RegistroEliminar() {
-        int filasel;
-        String codigo;
-        try {
-            filasel = tbPrincipal.getSelectedRow();
-            if (filasel == -1) {
-                JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila", "Advertencia", JOptionPane.WARNING_MESSAGE);
-                txtBuscar.requestFocus();
-            } else {
-                int confirmado = javax.swing.JOptionPane.showConfirmDialog(null, "¿Realmente desea eliminar este registro?", "Confirmación", JOptionPane.YES_OPTION);
-                if (confirmado == JOptionPane.YES_OPTION) {
-                    codigo = (String) tbPrincipal.getModel().getValueAt(filasel, 0);
-                    try {
-                        Connection con;
-                        con = Conexion.ConectarBasedeDatos();
-                        String sentence;
-                        sentence = "CALL SP_ProductoEliminar(" + codigo + ")";
-                        PreparedStatement pst;
-                        pst = con.prepareStatement(sentence);
-                        pst.executeUpdate();
-                        JOptionPane.showMessageDialog(null, "Registro eliminado correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
 
-                        con.close();
-                        pst.close();
-                    } catch (SQLException ex) {
-                        JOptionPane.showMessageDialog(null, "Error al intentar eliminar el registro", "Error", JOptionPane.INFORMATION_MESSAGE);
-                        ex.printStackTrace();
-                    }
-                } else {
-                    ModoEdicion(false);
-                    Limpiar();
-                    JOptionPane.showMessageDialog(null, "Cancelado correctamente", "Información", JOptionPane.ERROR_MESSAGE);
-                }
+        int filasel = tbPrincipal.getSelectedRow();
+        if (filasel == -1) {
+            JOptionPane.showMessageDialog(this, "No se ha seleccionado ninguna fila", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            txtBuscar.requestFocus();
+        } else {
+            int confirmado = javax.swing.JOptionPane.showConfirmDialog(this, "¿Realmente desea eliminar este registro?", "Confirmación", JOptionPane.YES_OPTION);
+            if (confirmado == JOptionPane.YES_OPTION) {
+                String codigo = (String) tbPrincipal.getModel().getValueAt(filasel, 0);
+                String sentencia = "CALL SP_ProductoEliminar(" + codigo + ")";
+                metodos.EjecutarAltaoModi(sentencia);
+                Limpiar();
+                ModoEdicion(false);
+                JOptionPane.showMessageDialog(this, "Registro eliminado correctamente", "Información", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (HeadlessException e) {
-            System.out.println("Error al intentar eliminar registro" + e);
         }
     }
 
@@ -245,13 +196,14 @@ public final class ABMProducto extends javax.swing.JDialog {
         taObs.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 8).toString());
         cbEstado.setSelectedItem(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 9).toString());
 
-        metodosimagen.LeerImagenExterna(lblImagen, rutaFotoProducto + txtCodigo.getText());
+        metodosimagen.LeerImagenExterna(lblImagen, rutaFotoProducto + txtCodigo.getText(), TitlePorDefault);
     }
 
     private void ModoEdicion(boolean valor) {
         txtBuscar.setEnabled(!valor);
         tbPrincipal.setEnabled(!valor);
         txtCodigoProducto.setEnabled(valor);
+        btnGenerarNumAzar.setEnabled(valor);
         txtDescripcion.setEnabled(valor);
         cbMarca.setEnabled(valor);
         cbTamano.setEnabled(valor);
@@ -265,6 +217,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         btnGuardar.setEnabled(valor);
         btnCancelar.setEnabled(valor);
         btnCargarImagen.setEnabled(valor);
+        btnEliminarImagen.setEnabled(lblImagen.getIcon() != null);
         btnPantallaCompleta.setEnabled(!valor);
         btnGenerarCodigo.setEnabled(!valor);
 
@@ -287,7 +240,8 @@ public final class ABMProducto extends javax.swing.JDialog {
         lblDescripcion.setForeground(new Color(102, 102, 102));
         lblTamano.setForeground(new Color(102, 102, 102));
 
-        metodosimagen.LeerImagenExterna(lblImagen, rutaFotoPorDefecto);
+        lblImagen.setIcon(null);
+        lblImagen.setText(TitlePorDefault);
 
         txtBuscar.requestFocus();
         tbPrincipal.clearSelection();
@@ -311,7 +265,7 @@ public final class ABMProducto extends javax.swing.JDialog {
                 Conexion con = metodos.ObtenerRSSentencia("SELECT pro_identificador FROM producto "
                         + "WHERE pro_identificador = '" + txtCodigoProducto.getText() + "'");
                 if (con.rs.next() == true) { //Si ya existe el numero de cedula en la bd de clientes
-                    JOptionPane.showMessageDialog(null, "Este código de producto ya se encuentra registrado", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Este código de producto ya se encuentra registrado", "Error", JOptionPane.ERROR_MESSAGE);
                     txtCodigoProducto.setForeground(Color.RED);
                     txtCodigoProducto.requestFocus();
                     Toolkit.getDefaultToolkit().beep();
@@ -343,7 +297,6 @@ public final class ABMProducto extends javax.swing.JDialog {
         lblBuscarCampo = new javax.swing.JLabel();
         cbCampoBuscar = new javax.swing.JComboBox();
         lbCantRegistros = new javax.swing.JLabel();
-        btnActualizarTabla = new javax.swing.JButton();
         btnGenerarCodigo = new org.edisoncor.gui.button.ButtonSeven();
         jpBotones = new javax.swing.JPanel();
         btnNuevo = new javax.swing.JButton();
@@ -377,6 +330,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         cbMarca = new javax.swing.JComboBox<>();
         lblMarca = new javax.swing.JLabel();
         lblImagen = new javax.swing.JLabel();
+        btnGenerarNumAzar = new org.edisoncor.gui.button.ButtonSeven();
         jpBotones2 = new javax.swing.JPanel();
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
@@ -432,6 +386,11 @@ public final class ABMProducto extends javax.swing.JDialog {
                 tbPrincipalMousePressed(evt);
             }
         });
+        tbPrincipal.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tbPrincipalKeyReleased(evt);
+            }
+        });
         scPrincipal.setViewportView(tbPrincipal);
 
         lblBuscarCampo.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
@@ -443,13 +402,6 @@ public final class ABMProducto extends javax.swing.JDialog {
         lbCantRegistros.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lbCantRegistros.setText("0 Registros encontrados");
         lbCantRegistros.setPreferredSize(new java.awt.Dimension(57, 25));
-
-        btnActualizarTabla.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos20x20/IconoActualizar.png"))); // NOI18N
-        btnActualizarTabla.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnActualizarTablaActionPerformed(evt);
-            }
-        });
 
         btnGenerarCodigo.setBackground(new java.awt.Color(14, 154, 153));
         btnGenerarCodigo.setText("Generar codigo de barras");
@@ -472,8 +424,7 @@ public final class ABMProducto extends javax.swing.JDialog {
                         .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(scPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 819, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jpTablaLayout.createSequentialGroup()
-                                .addComponent(btnActualizarTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGap(6, 6, 6)
                                 .addComponent(btnGenerarCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(lbCantRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -500,11 +451,10 @@ public final class ABMProducto extends javax.swing.JDialog {
                 .addGap(2, 2, 2)
                 .addComponent(scPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(btnActualizarTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbCantRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnGenerarCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(6, 6, 6))
         );
 
         jpBotones.setBackground(new java.awt.Color(255, 255, 255));
@@ -565,7 +515,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         jpBotonesLayout.setVerticalGroup(
             jpBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpBotonesLayout.createSequentialGroup()
-                .addGap(14, 14, 14)
+                .addGap(26, 26, 26)
                 .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -650,11 +600,6 @@ public final class ABMProducto extends javax.swing.JDialog {
         taObs.setRows(5);
         taObs.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         taObs.setEnabled(false);
-        taObs.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                taObsKeyPressed(evt);
-            }
-        });
         scpObs.setViewportView(taObs);
 
         jLabel2.setForeground(new java.awt.Color(0, 0, 153));
@@ -750,9 +695,20 @@ public final class ABMProducto extends javax.swing.JDialog {
         lblMarca.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblMarca.setText("Marca:");
 
+        lblImagen.setFont(new java.awt.Font("Segoe UI Black", 1, 12)); // NOI18N
         lblImagen.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fotoproductos/imageproducto_0.png"))); // NOI18N
+        lblImagen.setText("PRODUCTO SIN FOTO");
         lblImagen.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        btnGenerarNumAzar.setBackground(new java.awt.Color(14, 154, 153));
+        btnGenerarNumAzar.setText("Generar");
+        btnGenerarNumAzar.setColorBrillo(new java.awt.Color(255, 255, 255));
+        btnGenerarNumAzar.setEnabled(false);
+        btnGenerarNumAzar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerarNumAzarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jpEdicionLayout = new javax.swing.GroupLayout(jpEdicion);
         jpEdicion.setLayout(jpEdicionLayout);
@@ -777,7 +733,10 @@ public final class ABMProducto extends javax.swing.JDialog {
                     .addComponent(txtExistencia, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cbTamano, javax.swing.GroupLayout.Alignment.LEADING, 0, 260, Short.MAX_VALUE)
                     .addComponent(cbMarca, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtCodigoProducto, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpEdicionLayout.createSequentialGroup()
+                        .addComponent(txtCodigoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnGenerarNumAzar, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblCategoria, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -816,7 +775,8 @@ public final class ABMProducto extends javax.swing.JDialog {
                             .addComponent(lblCodigoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtCodigoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblSubcategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cbSubcategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cbSubcategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnGenerarNumAzar, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(3, 3, 3)
                         .addComponent(scpObs, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jpEdicionLayout.createSequentialGroup()
@@ -961,13 +921,13 @@ public final class ABMProducto extends javax.swing.JDialog {
                 .addComponent(panel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jpTabla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jpBotones, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE))
+                    .addComponent(jpTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jpBotones, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jtpEdicion, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jpBotones2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         jtpEdicion.getAccessibleContext().setAccessibleName("");
@@ -992,6 +952,9 @@ public final class ABMProducto extends javax.swing.JDialog {
 //--------------------------Eventos de componentes----------------------------//
     private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
         metodos.FiltroJTable(txtBuscar.getText(), cbCampoBuscar.getSelectedIndex(), tbPrincipal);
+
+        btnModificar.setEnabled(false);
+        btnEliminar.setEnabled(false);
     }//GEN-LAST:event_txtBuscarKeyReleased
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
@@ -1003,13 +966,12 @@ public final class ABMProducto extends javax.swing.JDialog {
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        ModoEdicion(false);
         Limpiar();
+        ModoEdicion(false);
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         Limpiar();
-        txtCodigoProducto.setText(GenerarNumAlAzar() + "");
         ModoEdicion(true);
     }//GEN-LAST:event_btnNuevoActionPerformed
 
@@ -1019,8 +981,8 @@ public final class ABMProducto extends javax.swing.JDialog {
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         RegistroEliminar();
-        ModoEdicion(false);
         Limpiar();
+        ModoEdicion(false);
         TablaConsultaBDAll();
     }//GEN-LAST:event_btnEliminarActionPerformed
 
@@ -1072,24 +1034,14 @@ public final class ABMProducto extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_cbCategoriaItemStateChanged
 
-    private void taObsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_taObsKeyPressed
-        char car = (char) evt.getKeyCode();
-        if (evt.VK_TAB == car) {//Al apretar ENTER QUE HAGA ALGO
-            btnGuardar.requestFocus();
-        }
-    }//GEN-LAST:event_taObsKeyPressed
-
-    private void btnActualizarTablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarTablaActionPerformed
-
-    }//GEN-LAST:event_btnActualizarTablaActionPerformed
-
     private void btnCargarImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargarImagenActionPerformed
         metodosimagen.CargarImagenDesdeFC(lblImagen);
         btnEliminarImagen.setEnabled(!(lblImagen.getIcon().toString().equals("javax.swing.ImageIcon@4356c900"))); //Revisa si el icono es default 
     }//GEN-LAST:event_btnCargarImagenActionPerformed
 
     private void btnEliminarImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarImagenActionPerformed
-        metodosimagen.LeerImagenExterna(lblImagen, rutaFotoPorDefecto);
+        lblImagen.setIcon(null);
+        lblImagen.setText(TitlePorDefault);
         btnEliminarImagen.setEnabled(false);
     }//GEN-LAST:event_btnEliminarImagenActionPerformed
 
@@ -1130,9 +1082,19 @@ public final class ABMProducto extends javax.swing.JDialog {
             GenerarCodigoBarras generarCodigoBarras = new GenerarCodigoBarras(null, true, txtCodigoProducto.getText(), txtDescripcion.getText());
             generarCodigoBarras.setVisible(true);
         } else {
-            JOptionPane.showMessageDialog(null, "Seleccione un producto", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Seleccione un producto", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnGenerarCodigoActionPerformed
+
+    private void tbPrincipalKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbPrincipalKeyReleased
+        if (evt.getKeyCode() == KeyEvent.VK_UP || evt.getKeyCode() == KeyEvent.VK_DOWN) {
+            ModoVistaPrevia();
+        }
+    }//GEN-LAST:event_tbPrincipalKeyReleased
+
+    private void btnGenerarNumAzarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarNumAzarActionPerformed
+        txtCodigoProducto.setText(GenerarNumAlAzar() + "");
+    }//GEN-LAST:event_btnGenerarNumAzarActionPerformed
 
     List<Component> ordenTabulador;
 
@@ -1176,12 +1138,12 @@ public final class ABMProducto extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnActualizarTabla;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnCargarImagen;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnEliminarImagen;
     private org.edisoncor.gui.button.ButtonSeven btnGenerarCodigo;
+    private org.edisoncor.gui.button.ButtonSeven btnGenerarNumAzar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnNuevo;

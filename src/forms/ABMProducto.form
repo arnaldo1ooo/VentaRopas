@@ -82,14 +82,14 @@
                   <Component id="panel2" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="jpTabla" max="32767" attributes="0"/>
-                      <Component id="jpBotones" pref="251" max="32767" attributes="0"/>
+                      <Component id="jpTabla" min="-2" pref="250" max="-2" attributes="0"/>
+                      <Component id="jpBotones" pref="250" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Component id="jtpEdicion" min="-2" pref="232" max="-2" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Component id="jpBotones2" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="12" max="32767" attributes="0"/>
+                  <EmptySpace pref="13" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -117,8 +117,7 @@
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="scPrincipal" min="-2" pref="819" max="-2" attributes="0"/>
                                   <Group type="102" attributes="0">
-                                      <Component id="btnActualizarTabla" min="-2" pref="43" max="-2" attributes="0"/>
-                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
                                       <Component id="btnGenerarCodigo" min="-2" pref="152" max="-2" attributes="0"/>
                                       <EmptySpace max="32767" attributes="0"/>
                                       <Component id="lbCantRegistros" min="-2" pref="345" max="-2" attributes="0"/>
@@ -153,12 +152,11 @@
                       <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                       <Component id="scPrincipal" min="-2" pref="154" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="2" attributes="0">
-                          <Component id="btnActualizarTabla" alignment="2" min="-2" pref="35" max="-2" attributes="0"/>
-                          <Component id="lbCantRegistros" alignment="2" min="-2" max="-2" attributes="0"/>
-                          <Component id="btnGenerarCodigo" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="lbCantRegistros" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnGenerarCodigo" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -237,6 +235,7 @@
                   </Properties>
                   <Events>
                     <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tbPrincipalMousePressed"/>
+                    <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tbPrincipalKeyReleased"/>
                   </Events>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTable(){&#xa;    public boolean isCellEditable(int rowIndex, int colIndex) {&#xa;        return false; //Disallow the editing of any cell&#xa;    }&#xa;}"/>
@@ -277,16 +276,6 @@
                   <Dimension value="[57, 25]"/>
                 </Property>
               </Properties>
-            </Component>
-            <Component class="javax.swing.JButton" name="btnActualizarTabla">
-              <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/iconos/Iconos20x20/IconoActualizar.png"/>
-                </Property>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnActualizarTablaActionPerformed"/>
-              </Events>
             </Component>
             <Component class="org.edisoncor.gui.button.ButtonSeven" name="btnGenerarCodigo">
               <Properties>
@@ -339,7 +328,7 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                       <Component id="btnNuevo" min="-2" pref="57" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="btnModificar" min="-2" pref="57" max="-2" attributes="0"/>
@@ -478,7 +467,11 @@
                               <Component id="txtExistencia" alignment="0" min="-2" pref="209" max="-2" attributes="0"/>
                               <Component id="cbTamano" alignment="0" pref="260" max="32767" attributes="0"/>
                               <Component id="cbMarca" alignment="0" max="32767" attributes="0"/>
-                              <Component id="txtCodigoProducto" alignment="0" min="-2" pref="184" max="-2" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="txtCodigoProducto" min="-2" pref="187" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="btnGenerarNumAzar" min="-2" pref="66" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -525,6 +518,7 @@
                                       <Component id="txtCodigoProducto" alignment="2" min="-2" max="-2" attributes="0"/>
                                       <Component id="lblSubcategoria" alignment="2" min="-2" pref="28" max="-2" attributes="0"/>
                                       <Component id="cbSubcategoria" alignment="2" min="-2" pref="28" max="-2" attributes="0"/>
+                                      <Component id="btnGenerarNumAzar" alignment="2" min="-2" pref="27" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                                   <Component id="scpObs" min="-2" pref="84" max="-2" attributes="0"/>
@@ -716,9 +710,6 @@
                         </Property>
                         <Property name="enabled" type="boolean" value="false"/>
                       </Properties>
-                      <Events>
-                        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="taObsKeyPressed"/>
-                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>
@@ -921,16 +912,32 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="lblImagen">
                   <Properties>
-                    <Property name="horizontalAlignment" type="int" value="0"/>
-                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/fotoproductos/imageproducto_0.png"/>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Segoe UI Black" size="12" style="1"/>
                     </Property>
+                    <Property name="horizontalAlignment" type="int" value="0"/>
+                    <Property name="text" type="java.lang.String" value="PRODUCTO SIN FOTO"/>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
                         <EtchetBorder/>
                       </Border>
                     </Property>
                   </Properties>
+                </Component>
+                <Component class="org.edisoncor.gui.button.ButtonSeven" name="btnGenerarNumAzar">
+                  <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="99" green="9a" red="e" type="rgb"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="Generar"/>
+                    <Property name="colorBrillo" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                    </Property>
+                    <Property name="enabled" type="boolean" value="false"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGenerarNumAzarActionPerformed"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>

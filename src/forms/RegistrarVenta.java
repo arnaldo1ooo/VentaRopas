@@ -38,15 +38,15 @@ import static principal.Principal.cotiUsdPaCompra;
  * @author Lic. Arnaldo Cantero
  */
 public final class RegistrarVenta extends javax.swing.JDialog {
-
+    
     MetodosTXT metodostxt = new MetodosTXT();
     Metodos metodos = new Metodos();
     MetodosCombo metodoscombo = new MetodosCombo();
     MetodosImagen metodosimagen = new MetodosImagen();
-    private final String rutaFotoProducto = "/fotoproductos/imageproducto_";
-    private final String rutaFotoPorDefecto = "/fotoproductos/imageproducto_0.png";
+    String rutaFotoProducto = "C:\\VentaRopas\\fotoproductos\\imageproducto_";
+    String TitlePorDefault = "PRODUCTO SIN FOTO";
     DefaultTableModel tablemodelo;
-
+    
     public RegistrarVenta(java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
         initComponents();
@@ -55,7 +55,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         CargarComboBoxes();
         tablemodelo = (DefaultTableModel) tbPrincipal.getModel();
         GenerarNumVenta();
-
+        
         OrdenTabulador();
     }
 
@@ -64,11 +64,11 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         //Carga los combobox con las consultas
         metodoscombo.CargarComboBox(cbCliente, "SELECT cli_codigo, CONCAT(cli_nombre,' ', cli_apellido) AS nomape FROM cliente ORDER BY cli_nombre");
         metodoscombo.setSelectedCodigoItem(cbCliente, 1);
-
+        
         metodoscombo.CargarComboBox(cbVendedor, "SELECT fun_codigo, CONCAT(fun_nombre,' ', fun_apellido) AS nomape FROM funcionario WHERE fun_cargo = 1 ORDER BY fun_nombre");
         metodoscombo.setSelectedCodigoItem(cbVendedor, 1);
     }
-
+    
     public void RegistroNuevo() {
         //Registra la compra
         try {
@@ -83,10 +83,10 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                 int tipodocumento = cbTipoDocumento.getSelectedIndex();
                 DateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
                 String fecharegistro = formatoFecha.format(dcFechaVenta.getDate());
-
+                
                 int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro crear este nuevo registro?", "Confirmación", JOptionPane.YES_OPTION);
                 if (JOptionPane.YES_OPTION == confirmado) {
-
+                    
                     try {
                         //Registrar nueva compra
                         String sentencia = "CALL SP_CompraAlta('" + numventa + "','" + cliente + "','"
@@ -103,7 +103,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                         String idproducto;
                         int cantidadadquirida;
                         double preciocompra;
-
+                        
                         int cantfila = tbPrincipal.getRowCount();
                         for (int fila = 0; fila < cantfila; fila++) {
                             idproducto = tbPrincipal.getValueAt(fila, 0).toString();
@@ -131,7 +131,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                             sentencia = "CALL SP_StockSumar('" + idproducto + "','" + cantidadadquirida + "')";
                             metodos.EjecutarAltaoModi(sentencia);
                         }
-
+                        
                         JOptionPane.showMessageDialog(this, "Se agregó correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
                         //ModoEdicion(false);
                         Limpiar();
@@ -179,31 +179,32 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         txtCodigoProducto.setText("");
         txtExistenciaActual.setText("");
         txtDescripcionProducto.setText("");
-
-        metodosimagen.LeerImagenExterna(lblImagen, rutaFotoPorDefecto);
-
+        
+        lblImagen.setIcon(null);
+        lblImagen.setText(TitlePorDefault);
+        
         txtPrecioDolares.setText("");
         txtPrecioGs.setText("");
         txtPrecioReales.setText("");
         txtPrecioPesosArg.setText("");
-
+        
         txtCantidad.setText("");
         cbMoneda.setSelectedIndex(0);
-
+        
         tablemodelo.setRowCount(0);
         btnEliminar.setEnabled(false);
     }
-
+    
     public boolean ComprobarCamposVenta() {
         if (dcFechaVenta.getDate() == null) {
             JOptionPane.showMessageDialog(null, "Complete la fecha de registro", "Error", JOptionPane.ERROR_MESSAGE);
             dcFechaVenta.requestFocus();
             return false;
         }
-
+        
         return true;
     }
-
+    
     public boolean ComprobarCamposProducto() {
         if (metodos.ValidarCampoVacio(txtCodigoProducto, lblCodigoProducto) == false) {
             System.out.println("Validar CodigoProducto false");
@@ -214,7 +215,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                 return false;
             }
         }
-
+        
         String codigoproducto = txtCodigoProducto.getText();
         String filaactual;
         for (int i = 0; i < tbPrincipal.getRowCount(); i++) {
@@ -224,15 +225,15 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                 return false;
             }
         }
-
+        
         if (metodos.ValidarCampoVacio(txtCantidad, lblCantidad) == false) {
             System.out.println("Validar Cantidad adquirida false");
             return false;
         }
-
+        
         return true;
     }
-
+    
     public boolean ConsultaProducto() {
         String codProducto = txtCodigoProducto.getText();
         try {
@@ -242,9 +243,9 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                 txtIDProducto.setText(con.rs.getString(1));
                 txtExistenciaActual.setText(con.rs.getString(2));
                 txtDescripcionProducto.setText(con.rs.getString(3));
-
-                metodosimagen.LeerImagenExterna(lblImagen, rutaFotoProducto + con.rs.getString(4));
-
+                
+                metodosimagen.LeerImagenExterna(lblImagen, rutaFotoProducto + con.rs.getString(4), TitlePorDefault);
+                
                 double precio = 0.0;//con.rs.getDouble(5);
                 String precioString = metodostxt.DoubleAFormatoSudamerica(precio); //Formato sudamerica: 10.100,25
                 txtPrecioDolares.setText(precioString);
@@ -585,6 +586,9 @@ public final class RegistrarVenta extends javax.swing.JDialog {
             }
         });
 
+        lblImagen.setFont(new java.awt.Font("Segoe UI Black", 1, 10)); // NOI18N
+        lblImagen.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblImagen.setText("PRODUCTO SIN FOTO");
         lblImagen.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         javax.swing.GroupLayout jpDatosProductoLayout = new javax.swing.GroupLayout(jpDatosProducto);
@@ -645,51 +649,49 @@ public final class RegistrarVenta extends javax.swing.JDialog {
             .addGroup(jpDatosProductoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpDatosProductoLayout.createSequentialGroup()
-                        .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnPantallaCompleta, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jpDatosProductoLayout.createSequentialGroup()
-                                .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jpDatosProductoLayout.createSequentialGroup()
-                                        .addComponent(lblCodigo7)
-                                        .addGap(2, 2, 2)
-                                        .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                                            .addComponent(lblFlagEeuu, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtPrecioDolares, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(lblDolares, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(1, 1, 1)
-                                        .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                                            .addComponent(lblFlagGuaranies, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtPrecioGs, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(lblGuaraniess, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(1, 1, 1)
-                                        .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                                            .addComponent(lblFlagBrasil, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtPrecioReales, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(lblReales, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(1, 1, 1)
-                                        .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                                            .addComponent(lblFlagPesosArg, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtPrecioPesosArg, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(lblCodigo13, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(jpDatosProductoLayout.createSequentialGroup()
-                                        .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                                            .addComponent(lblIDProducto)
-                                            .addComponent(lblCodigoProducto)
-                                            .addComponent(lblCodigo6))
-                                        .addGap(4, 4, 4)
-                                        .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                                            .addComponent(txtIDProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtCodigoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtExistenciaActual, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(18, 18, 18)
-                                        .addComponent(lblTituloDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(3, 3, 3)
-                                        .addComponent(txtDescripcionProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(1, 1, 1)))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(btnPantallaCompleta, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jpDatosProductoLayout.createSequentialGroup()
+                            .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jpDatosProductoLayout.createSequentialGroup()
+                                    .addComponent(lblCodigo7)
+                                    .addGap(2, 2, 2)
+                                    .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                                        .addComponent(lblFlagEeuu, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtPrecioDolares, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(lblDolares, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGap(1, 1, 1)
+                                    .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                                        .addComponent(lblFlagGuaranies, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtPrecioGs, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(lblGuaraniess, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGap(1, 1, 1)
+                                    .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                                        .addComponent(lblFlagBrasil, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtPrecioReales, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(lblReales, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGap(1, 1, 1)
+                                    .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                                        .addComponent(lblFlagPesosArg, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtPrecioPesosArg, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(lblCodigo13, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(jpDatosProductoLayout.createSequentialGroup()
+                                    .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                                        .addComponent(lblIDProducto)
+                                        .addComponent(lblCodigoProducto)
+                                        .addComponent(lblCodigo6))
+                                    .addGap(4, 4, 4)
+                                    .addGroup(jpDatosProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                                        .addComponent(txtIDProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtCodigoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtExistenciaActual, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGap(18, 18, 18)
+                                    .addComponent(lblTituloDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(3, 3, 3)
+                                    .addComponent(txtDescripcionProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGap(1, 1, 1)))
                     .addComponent(lblImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jpProductos.setBackground(new java.awt.Color(233, 255, 255));
@@ -793,7 +795,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
 
         lblTituloTotalCompra.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         lblTituloTotalCompra.setForeground(new java.awt.Color(0, 102, 51));
-        lblTituloTotalCompra.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblTituloTotalCompra.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblTituloTotalCompra.setText("Total de la venta");
 
         lblTotalMoneda.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
@@ -804,7 +806,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
 
         lblTotalCompra.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
         lblTotalCompra.setForeground(new java.awt.Color(0, 102, 51));
-        lblTotalCompra.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblTotalCompra.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblTotalCompra.setText("0");
 
         lblCantidad1.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
@@ -835,7 +837,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                         .addGroup(jpProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblCantidad))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 129, Short.MAX_VALUE)
                         .addGroup(jpProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtCantidad1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblCantidad1))
@@ -845,19 +847,18 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                             .addGroup(jpProductosLayout.createSequentialGroup()
                                 .addGap(4, 4, 4)
                                 .addComponent(lblCodigo10, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 130, Short.MAX_VALUE)
                         .addComponent(btnAnadir)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnEliminar))
                     .addComponent(scPrincipal)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpProductosLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jpProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(jpProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(lblTituloTotalCompra, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jpProductosLayout.createSequentialGroup()
-                                .addComponent(lblTotalCompra)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblTotalMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addComponent(lblTotalCompra, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblTotalMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jpProductosLayout.setVerticalGroup(
@@ -988,14 +989,14 @@ public final class RegistrarVenta extends javax.swing.JDialog {
             while (con.rs.next()) {
                 numultimaventa = con.rs.getString("numultimaventa");
             }
-
+            
             if (numultimaventa == null) {
                 numultimaventa = String.format("%8s", String.valueOf(1)).replace(' ', '0');
             } else {
                 numultimaventa = String.format("%8s", String.valueOf((Integer.parseInt(numultimaventa) + 1))).replace(' ', '0');
             }
             lblNumVenta.setText(numultimaventa);
-
+            
             con.DesconectarBasedeDatos();
         } catch (SQLException e) {
             Logger.getLogger(RegistrarVenta.class.getName()).log(Level.SEVERE, null, e);
@@ -1013,12 +1014,13 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     private void txtPrecioPesosArgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPrecioPesosArgActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPrecioPesosArgActionPerformed
-
+    
     private void LimpiarProducto() {
         txtIDProducto.setText("");
         txtExistenciaActual.setText("");
         txtDescripcionProducto.setText("");
-        metodosimagen.LeerImagenExterna(lblImagen, rutaFotoPorDefecto);
+        lblImagen.setIcon(null);
+        lblImagen.setText(TitlePorDefault);
         txtPrecioDolares.setText("");
         txtPrecioGs.setText("");
         txtPrecioReales.setText("");
@@ -1040,7 +1042,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                 //Validar que sea numero valido
                 int cantidad = 0;
                 boolean esNumeroValido = false;
-
+                
                 while (esNumeroValido == false) {
                     try {
                         String cantidadString = JOptionPane.showInputDialog(this, "Ingrese la nueva cantidad: ", "Modificar cantidad", JOptionPane.INFORMATION_MESSAGE);
@@ -1048,7 +1050,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                             System.out.println("Se canceló la operación");
                             return;
                         }
-
+                        
                         cantidad = Integer.parseInt(cantidadString);
                         if (cantidad <= 0) {
                             JOptionPane.showMessageDialog(this, "La cantidad no puede ser menor o igual a 0");
@@ -1060,7 +1062,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                         esNumeroValido = false;
                     }
                 }
-
+                
                 double subtotal = cantidad * preciounitario;
                 tbPrincipal.setValueAt(cantidad, filaSelect, columnSelect);
                 tbPrincipal.setValueAt(subtotal, filaSelect, 6);
@@ -1084,9 +1086,9 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                 double subtotal = cantidad * preciounitario;
                 tablemodelo.addRow(new Object[]{idproducto, codigoproducto, descripcion, cantidad, preciounitario,
                     moneda, subtotal});
-
+                
                 SumarSubtotal();
-
+                
                 if (tbPrincipal.getRowCount() > 0) {
                     cbMoneda.setEnabled(false);
                 } else {
@@ -1098,14 +1100,14 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                 LimpiarProducto();
                 txtCodigoProducto.setText("");
                 txtCantidad.setText("");
-
+                
                 txtCodigoProducto.requestFocus();
             } catch (NumberFormatException e) {
                 System.out.println("Error al añadir producto a la tabla " + e);
             }
         }
     }//GEN-LAST:event_btnAnadirActionPerformed
-
+    
     private void SumarSubtotal() {
         //Suma la colmna subtotal
         double totalcompra = metodos.SumarColumnaDouble(tbPrincipal, 6);
@@ -1129,7 +1131,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         tablemodelo.removeRow(tbPrincipal.getSelectedRow());
         SumarSubtotal();
-
+        
         if (tbPrincipal.getRowCount() > 0) {
             cbMoneda.setEnabled(false);
         } else {
@@ -1153,7 +1155,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                 //Validar que sea numero valido
                 int cantidad = 0;
                 boolean esNumeroValido = false;
-
+                
                 while (esNumeroValido == false && txtCantidad.getText().equals("")) {
                     try {
                         Object cantidadString = JOptionPane.showInputDialog(this, "Ingrese la cantidad",
@@ -1162,13 +1164,13 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                             System.out.println("Se canceló la operación");
                             return;
                         }
-
+                        
                         cantidad = Integer.parseInt(cantidadString.toString());
                         if (cantidad <= 0) {
                             JOptionPane.showMessageDialog(this, "La cantidad no puede ser menor o igual a 0");
                             return;
                         }
-
+                        
                         int stock = Integer.parseInt(txtExistenciaActual.getText());
                         if (cantidad > stock) {
                             JOptionPane.showMessageDialog(this, "No hay suficiente stock, el stock actual del producto es de " + stock);
@@ -1192,7 +1194,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     }//GEN-LAST:event_tbPrincipalKeyReleased
 
     private void btnClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteActionPerformed
-
+        
         String nombresp = "SP_ClienteConsulta";
         String titlesJtabla[] = {"Código", "RUC/CI", "Nombre", "Apellido", "Dirección", "Teléfono", "Email", "Observación"};
         Buscador buscador = new Buscador(this, nombresp, titlesJtabla, 1);
@@ -1204,7 +1206,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnGuardarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnGuardarKeyPressed
-
+        
 
     }//GEN-LAST:event_btnGuardarKeyPressed
 
@@ -1224,7 +1226,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         VistaCompletaImagen vistacompleta = new VistaCompletaImagen(rutaFotoProducto + txtIDProducto.getText());
         vistacompleta.setVisible(true);
     }//GEN-LAST:event_btnPantallaCompletaActionPerformed
-
+    
     private void ConvertirCotizacion() {
         //Convertir precio a las distintas monedas
         if (txtPrecioDolares.getText().equals("") == false) {
@@ -1253,9 +1255,9 @@ public final class RegistrarVenta extends javax.swing.JDialog {
             txtPrecioPesosArg.setText(precioPesosArgString);
         }
     }
-
+    
     List<Component> ordenTabulador;
-
+    
     private void OrdenTabulador() {
         ordenTabulador = new ArrayList<>();
         ordenTabulador.add(cbCliente);
@@ -1264,36 +1266,36 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         ordenTabulador.add(txtCantidad);
         ordenTabulador.add(btnGuardar);
         setFocusTraversalPolicy(new PersonalizadoFocusTraversalPolicy());
-
+        
     }
-
+    
     static void PonerClienteSeleccionado(int codigoSelect) {
         MetodosCombo metodoscombo = new MetodosCombo();
         metodoscombo.setSelectedCodigoItem(cbCliente, codigoSelect);
     }
-
+    
     private class PersonalizadoFocusTraversalPolicy extends FocusTraversalPolicy {
-
+        
         public Component getComponentAfter(Container focusCycleRoot, Component aComponent) {
             int currentPosition = ordenTabulador.indexOf(aComponent);
             currentPosition = (currentPosition + 1) % ordenTabulador.size();
             return (Component) ordenTabulador.get(currentPosition);
         }
-
+        
         public Component getComponentBefore(Container focusCycleRoot, Component aComponent) {
             int currentPosition = ordenTabulador.indexOf(aComponent);
             currentPosition = (ordenTabulador.size() + currentPosition - 1) % ordenTabulador.size();
             return (Component) ordenTabulador.get(currentPosition);
         }
-
+        
         public Component getFirstComponent(Container cntnr) {
             return (Component) ordenTabulador.get(0);
         }
-
+        
         public Component getLastComponent(Container cntnr) {
             return (Component) ordenTabulador.get(ordenTabulador.size() - 1);
         }
-
+        
         public Component getDefaultComponent(Container cntnr) {
             return (Component) ordenTabulador.get(0);
         }
