@@ -187,6 +187,7 @@ public class MetodosImagen {
         }
 
         try {
+            System.out.println("Eliminar imagen: " + rutaimagen);
             if (fichero.delete()) { //Eliminar imagen
                 System.out.println("La imagen ha sido borrado satisfactoriamente");
             }

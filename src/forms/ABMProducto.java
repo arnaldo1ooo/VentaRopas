@@ -167,6 +167,7 @@ public final class ABMProducto extends javax.swing.JDialog {
                 String codigo = (String) tbPrincipal.getModel().getValueAt(filasel, 0);
                 String sentencia = "CALL SP_ProductoEliminar(" + codigo + ")";
                 metodos.EjecutarAltaoModi(sentencia);
+                metodosimagen.EliminarImagen(rutaFotoProducto + txtCodigo.getText()); //Eliminar la foto
                 Limpiar();
                 ModoEdicion(false);
                 JOptionPane.showMessageDialog(this, "Registro eliminado correctamente", "Información", JOptionPane.ERROR_MESSAGE);
@@ -1094,6 +1095,7 @@ public final class ABMProducto extends javax.swing.JDialog {
 
     private void btnGenerarNumAzarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarNumAzarActionPerformed
         txtCodigoProducto.setText(GenerarNumAlAzar() + "");
+        metodostxt.TxtColorLabelKeyReleased(txtCodigoProducto, lblCodigoProducto);
     }//GEN-LAST:event_btnGenerarNumAzarActionPerformed
 
     List<Component> ordenTabulador;

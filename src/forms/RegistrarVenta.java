@@ -38,7 +38,7 @@ import static principal.Principal.cotiUsdPaCompra;
  * @author Lic. Arnaldo Cantero
  */
 public final class RegistrarVenta extends javax.swing.JDialog {
-    
+
     MetodosTXT metodostxt = new MetodosTXT();
     Metodos metodos = new Metodos();
     MetodosCombo metodoscombo = new MetodosCombo();
@@ -46,16 +46,20 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     String rutaFotoProducto = "C:\\VentaRopas\\fotoproductos\\imageproducto_";
     String TitlePorDefault = "PRODUCTO SIN FOTO";
     DefaultTableModel tablemodelo;
-    
+
     public RegistrarVenta(java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(null); //Centrar ventana
 
+        //Obtener fecha actual
+        Calendar c2 = new GregorianCalendar();
+        dcFechaVenta.setCalendar(c2);
+        
         CargarComboBoxes();
         tablemodelo = (DefaultTableModel) tbPrincipal.getModel();
         GenerarNumVenta();
-        
+
         OrdenTabulador();
     }
 
@@ -64,11 +68,11 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         //Carga los combobox con las consultas
         metodoscombo.CargarComboBox(cbCliente, "SELECT cli_codigo, CONCAT(cli_nombre,' ', cli_apellido) AS nomape FROM cliente ORDER BY cli_nombre");
         metodoscombo.setSelectedCodigoItem(cbCliente, 1);
-        
+
         metodoscombo.CargarComboBox(cbVendedor, "SELECT fun_codigo, CONCAT(fun_nombre,' ', fun_apellido) AS nomape FROM funcionario WHERE fun_cargo = 1 ORDER BY fun_nombre");
         metodoscombo.setSelectedCodigoItem(cbVendedor, 1);
     }
-    
+
     public void RegistroNuevo() {
         //Registra la compra
         try {
@@ -83,10 +87,10 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                 int tipodocumento = cbTipoDocumento.getSelectedIndex();
                 DateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
                 String fecharegistro = formatoFecha.format(dcFechaVenta.getDate());
-                
+
                 int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro crear este nuevo registro?", "Confirmación", JOptionPane.YES_OPTION);
                 if (JOptionPane.YES_OPTION == confirmado) {
-                    
+
                     try {
                         //Registrar nueva compra
                         String sentencia = "CALL SP_CompraAlta('" + numventa + "','" + cliente + "','"
@@ -103,7 +107,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                         String idproducto;
                         int cantidadadquirida;
                         double preciocompra;
-                        
+
                         int cantfila = tbPrincipal.getRowCount();
                         for (int fila = 0; fila < cantfila; fila++) {
                             idproducto = tbPrincipal.getValueAt(fila, 0).toString();
@@ -131,7 +135,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                             sentencia = "CALL SP_StockSumar('" + idproducto + "','" + cantidadadquirida + "')";
                             metodos.EjecutarAltaoModi(sentencia);
                         }
-                        
+
                         JOptionPane.showMessageDialog(this, "Se agregó correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
                         //ModoEdicion(false);
                         Limpiar();
@@ -179,32 +183,32 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         txtCodigoProducto.setText("");
         txtExistenciaActual.setText("");
         txtDescripcionProducto.setText("");
-        
+
         lblImagen.setIcon(null);
         lblImagen.setText(TitlePorDefault);
-        
+
         txtPrecioDolares.setText("");
         txtPrecioGs.setText("");
         txtPrecioReales.setText("");
         txtPrecioPesosArg.setText("");
-        
+
         txtCantidad.setText("");
         cbMoneda.setSelectedIndex(0);
-        
+
         tablemodelo.setRowCount(0);
         btnEliminar.setEnabled(false);
     }
-    
+
     public boolean ComprobarCamposVenta() {
         if (dcFechaVenta.getDate() == null) {
             JOptionPane.showMessageDialog(null, "Complete la fecha de registro", "Error", JOptionPane.ERROR_MESSAGE);
             dcFechaVenta.requestFocus();
             return false;
         }
-        
+
         return true;
     }
-    
+
     public boolean ComprobarCamposProducto() {
         if (metodos.ValidarCampoVacio(txtCodigoProducto, lblCodigoProducto) == false) {
             System.out.println("Validar CodigoProducto false");
@@ -215,7 +219,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                 return false;
             }
         }
-        
+
         String codigoproducto = txtCodigoProducto.getText();
         String filaactual;
         for (int i = 0; i < tbPrincipal.getRowCount(); i++) {
@@ -225,15 +229,15 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                 return false;
             }
         }
-        
+
         if (metodos.ValidarCampoVacio(txtCantidad, lblCantidad) == false) {
             System.out.println("Validar Cantidad adquirida false");
             return false;
         }
-        
+
         return true;
     }
-    
+
     public boolean ConsultaProducto() {
         String codProducto = txtCodigoProducto.getText();
         try {
@@ -243,9 +247,9 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                 txtIDProducto.setText(con.rs.getString(1));
                 txtExistenciaActual.setText(con.rs.getString(2));
                 txtDescripcionProducto.setText(con.rs.getString(3));
-                
+
                 metodosimagen.LeerImagenExterna(lblImagen, rutaFotoProducto + con.rs.getString(4), TitlePorDefault);
-                
+
                 double precio = 0.0;//con.rs.getDouble(5);
                 String precioString = metodostxt.DoubleAFormatoSudamerica(precio); //Formato sudamerica: 10.100,25
                 txtPrecioDolares.setText(precioString);
@@ -436,11 +440,14 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                     .addComponent(cbVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jpDatosCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblRucCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cbCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addGroup(jpDatosCompraLayout.createSequentialGroup()
+                        .addComponent(lblRucCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(60, 60, 60))
+                    .addGroup(jpDatosCompraLayout.createSequentialGroup()
+                        .addComponent(cbCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(1, 1, 1)
+                        .addComponent(btnCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                 .addGroup(jpDatosCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblRucCedula1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cbTipoDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -448,7 +455,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                 .addGroup(jpDatosCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(lblFechaRegistro, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(dcFechaVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(63, Short.MAX_VALUE))
         );
         jpDatosCompraLayout.setVerticalGroup(
             jpDatosCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -989,14 +996,14 @@ public final class RegistrarVenta extends javax.swing.JDialog {
             while (con.rs.next()) {
                 numultimaventa = con.rs.getString("numultimaventa");
             }
-            
+
             if (numultimaventa == null) {
                 numultimaventa = String.format("%8s", String.valueOf(1)).replace(' ', '0');
             } else {
                 numultimaventa = String.format("%8s", String.valueOf((Integer.parseInt(numultimaventa) + 1))).replace(' ', '0');
             }
             lblNumVenta.setText(numultimaventa);
-            
+
             con.DesconectarBasedeDatos();
         } catch (SQLException e) {
             Logger.getLogger(RegistrarVenta.class.getName()).log(Level.SEVERE, null, e);
@@ -1014,7 +1021,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     private void txtPrecioPesosArgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPrecioPesosArgActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPrecioPesosArgActionPerformed
-    
+
     private void LimpiarProducto() {
         txtIDProducto.setText("");
         txtExistenciaActual.setText("");
@@ -1042,7 +1049,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                 //Validar que sea numero valido
                 int cantidad = 0;
                 boolean esNumeroValido = false;
-                
+
                 while (esNumeroValido == false) {
                     try {
                         String cantidadString = JOptionPane.showInputDialog(this, "Ingrese la nueva cantidad: ", "Modificar cantidad", JOptionPane.INFORMATION_MESSAGE);
@@ -1050,7 +1057,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                             System.out.println("Se canceló la operación");
                             return;
                         }
-                        
+
                         cantidad = Integer.parseInt(cantidadString);
                         if (cantidad <= 0) {
                             JOptionPane.showMessageDialog(this, "La cantidad no puede ser menor o igual a 0");
@@ -1062,7 +1069,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                         esNumeroValido = false;
                     }
                 }
-                
+
                 double subtotal = cantidad * preciounitario;
                 tbPrincipal.setValueAt(cantidad, filaSelect, columnSelect);
                 tbPrincipal.setValueAt(subtotal, filaSelect, 6);
@@ -1086,9 +1093,9 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                 double subtotal = cantidad * preciounitario;
                 tablemodelo.addRow(new Object[]{idproducto, codigoproducto, descripcion, cantidad, preciounitario,
                     moneda, subtotal});
-                
+
                 SumarSubtotal();
-                
+
                 if (tbPrincipal.getRowCount() > 0) {
                     cbMoneda.setEnabled(false);
                 } else {
@@ -1100,14 +1107,14 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                 LimpiarProducto();
                 txtCodigoProducto.setText("");
                 txtCantidad.setText("");
-                
+
                 txtCodigoProducto.requestFocus();
             } catch (NumberFormatException e) {
                 System.out.println("Error al añadir producto a la tabla " + e);
             }
         }
     }//GEN-LAST:event_btnAnadirActionPerformed
-    
+
     private void SumarSubtotal() {
         //Suma la colmna subtotal
         double totalcompra = metodos.SumarColumnaDouble(tbPrincipal, 6);
@@ -1131,7 +1138,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         tablemodelo.removeRow(tbPrincipal.getSelectedRow());
         SumarSubtotal();
-        
+
         if (tbPrincipal.getRowCount() > 0) {
             cbMoneda.setEnabled(false);
         } else {
@@ -1155,7 +1162,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                 //Validar que sea numero valido
                 int cantidad = 0;
                 boolean esNumeroValido = false;
-                
+
                 while (esNumeroValido == false && txtCantidad.getText().equals("")) {
                     try {
                         Object cantidadString = JOptionPane.showInputDialog(this, "Ingrese la cantidad",
@@ -1164,13 +1171,13 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                             System.out.println("Se canceló la operación");
                             return;
                         }
-                        
+
                         cantidad = Integer.parseInt(cantidadString.toString());
                         if (cantidad <= 0) {
                             JOptionPane.showMessageDialog(this, "La cantidad no puede ser menor o igual a 0");
                             return;
                         }
-                        
+
                         int stock = Integer.parseInt(txtExistenciaActual.getText());
                         if (cantidad > stock) {
                             JOptionPane.showMessageDialog(this, "No hay suficiente stock, el stock actual del producto es de " + stock);
@@ -1194,7 +1201,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     }//GEN-LAST:event_tbPrincipalKeyReleased
 
     private void btnClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteActionPerformed
-        
+
         String nombresp = "SP_ClienteConsulta";
         String titlesJtabla[] = {"Código", "RUC/CI", "Nombre", "Apellido", "Dirección", "Teléfono", "Email", "Observación"};
         Buscador buscador = new Buscador(this, nombresp, titlesJtabla, 1);
@@ -1206,7 +1213,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnGuardarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnGuardarKeyPressed
-        
+
 
     }//GEN-LAST:event_btnGuardarKeyPressed
 
@@ -1226,7 +1233,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         VistaCompletaImagen vistacompleta = new VistaCompletaImagen(rutaFotoProducto + txtIDProducto.getText());
         vistacompleta.setVisible(true);
     }//GEN-LAST:event_btnPantallaCompletaActionPerformed
-    
+
     private void ConvertirCotizacion() {
         //Convertir precio a las distintas monedas
         if (txtPrecioDolares.getText().equals("") == false) {
@@ -1255,9 +1262,9 @@ public final class RegistrarVenta extends javax.swing.JDialog {
             txtPrecioPesosArg.setText(precioPesosArgString);
         }
     }
-    
+
     List<Component> ordenTabulador;
-    
+
     private void OrdenTabulador() {
         ordenTabulador = new ArrayList<>();
         ordenTabulador.add(cbCliente);
@@ -1266,36 +1273,36 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         ordenTabulador.add(txtCantidad);
         ordenTabulador.add(btnGuardar);
         setFocusTraversalPolicy(new PersonalizadoFocusTraversalPolicy());
-        
+
     }
-    
+
     static void PonerClienteSeleccionado(int codigoSelect) {
         MetodosCombo metodoscombo = new MetodosCombo();
         metodoscombo.setSelectedCodigoItem(cbCliente, codigoSelect);
     }
-    
+
     private class PersonalizadoFocusTraversalPolicy extends FocusTraversalPolicy {
-        
+
         public Component getComponentAfter(Container focusCycleRoot, Component aComponent) {
             int currentPosition = ordenTabulador.indexOf(aComponent);
             currentPosition = (currentPosition + 1) % ordenTabulador.size();
             return (Component) ordenTabulador.get(currentPosition);
         }
-        
+
         public Component getComponentBefore(Container focusCycleRoot, Component aComponent) {
             int currentPosition = ordenTabulador.indexOf(aComponent);
             currentPosition = (ordenTabulador.size() + currentPosition - 1) % ordenTabulador.size();
             return (Component) ordenTabulador.get(currentPosition);
         }
-        
+
         public Component getFirstComponent(Container cntnr) {
             return (Component) ordenTabulador.get(0);
         }
-        
+
         public Component getLastComponent(Container cntnr) {
             return (Component) ordenTabulador.get(ordenTabulador.size() - 1);
         }
-        
+
         public Component getDefaultComponent(Container cntnr) {
             return (Component) ordenTabulador.get(0);
         }
