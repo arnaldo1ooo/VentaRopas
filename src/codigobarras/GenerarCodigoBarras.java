@@ -172,7 +172,7 @@ public class GenerarCodigoBarras extends javax.swing.JDialog {
     }
 
     public boolean ComprobarCampos() {
-        if (metodos.ValidarCampoVacio(txtCantidad, lblCantidad) == false) {
+        if (metodostxt.ValidarCampoVacioTXT(txtCantidad, lblCantidad) == false) {
             return false;
         }
         return true;

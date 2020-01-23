@@ -199,7 +199,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     }
 
     public boolean ComprobarCamposProducto() {
-        if (metodos.ValidarCampoVacio(txtCodigoProducto, lblCodigoProducto) == false) {
+        if (metodostxt.ValidarCampoVacioTXT(txtCodigoProducto, lblCodigoProducto) == false) {
             System.out.println("Validar CodigoProducto false");
             return false;
         } else {
@@ -219,7 +219,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
             }
         }
 
-        if (metodos.ValidarCampoVacio(txtCantidad, lblCantidad) == false) {
+        if (metodostxt.ValidarCampoVacioTXT(txtCantidad, lblCantidad) == false) {
             System.out.println("Validar Cantidad adquirida false");
             return false;
         }
@@ -312,8 +312,8 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         lblTituloTotalCompra = new javax.swing.JLabel();
         lblTotalMoneda = new javax.swing.JLabel();
         lblTotalCompra = new javax.swing.JLabel();
-        lblCantidad1 = new javax.swing.JLabel();
-        txtCantidad1 = new javax.swing.JTextField();
+        lblDescuento = new javax.swing.JLabel();
+        txtDescuento = new javax.swing.JTextField();
         panel2 = new org.edisoncor.gui.panel.Panel();
         labelMetric2 = new org.edisoncor.gui.label.LabelMetric();
         lblNumVenta = new javax.swing.JLabel();
@@ -352,7 +352,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         btnCancelar.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
         btnCancelar.setForeground(new java.awt.Color(255, 255, 255));
         btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos20x20/IconoCancelar.png"))); // NOI18N
-        btnCancelar.setText("Cancelar");
+        btnCancelar.setText("Limpiar");
         btnCancelar.setToolTipText("Cancela la acción");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -803,20 +803,20 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         lblTotalCompra.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblTotalCompra.setText("0");
 
-        lblCantidad1.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        lblCantidad1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblCantidad1.setText("Descuento");
+        lblDescuento.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lblDescuento.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblDescuento.setText("Descuento");
 
-        txtCantidad1.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        txtCantidad1.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtCantidad1.setText("0.00");
-        txtCantidad1.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        txtCantidad1.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtDescuento.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        txtDescuento.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtDescuento.setText("0.00");
+        txtDescuento.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        txtDescuento.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtCantidad1KeyReleased(evt);
+                txtDescuentoKeyReleased(evt);
             }
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtCantidad1KeyTyped(evt);
+                txtDescuentoKeyTyped(evt);
             }
         });
 
@@ -833,8 +833,8 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                             .addComponent(lblCantidad))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 129, Short.MAX_VALUE)
                         .addGroup(jpProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtCantidad1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblCantidad1))
+                            .addComponent(txtDescuento, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblDescuento))
                         .addGap(18, 18, 18)
                         .addGroup(jpProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cbMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -862,14 +862,14 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                 .addGroup(jpProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(lblCantidad)
                     .addComponent(lblCodigo10)
-                    .addComponent(lblCantidad1))
+                    .addComponent(lblDescuento))
                 .addGap(2, 2, 2)
                 .addGroup(jpProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAnadir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cbMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtCantidad1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtDescuento, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(4, 4, 4)
                 .addComponent(scPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
@@ -940,7 +940,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                                 .addComponent(jpDatosCompra, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(jpPrincipalLayout.createSequentialGroup()
                         .addGap(245, 245, 245)
-                        .addComponent(jpBotones, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jpBotones, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jpPrincipalLayout.setVerticalGroup(
@@ -1207,13 +1207,13 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         Limpiar();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    private void txtCantidad1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidad1KeyReleased
+    private void txtDescuentoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescuentoKeyReleased
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtCantidad1KeyReleased
+    }//GEN-LAST:event_txtDescuentoKeyReleased
 
-    private void txtCantidad1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidad1KeyTyped
+    private void txtDescuentoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescuentoKeyTyped
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtCantidad1KeyTyped
+    }//GEN-LAST:event_txtDescuentoKeyTyped
 
     private void btnPantallaCompletaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPantallaCompletaActionPerformed
         VistaCompletaImagen vistacompleta = new VistaCompletaImagen(rutaFotoProducto + txtIDProducto.getText());
@@ -1313,12 +1313,12 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     private javax.swing.JPanel jpProductos;
     private org.edisoncor.gui.label.LabelMetric labelMetric2;
     private javax.swing.JLabel lblCantidad;
-    private javax.swing.JLabel lblCantidad1;
     private javax.swing.JLabel lblCodigo10;
     private javax.swing.JLabel lblCodigo13;
     private javax.swing.JLabel lblCodigo6;
     private javax.swing.JLabel lblCodigo7;
     private javax.swing.JLabel lblCodigoProducto;
+    private javax.swing.JLabel lblDescuento;
     private javax.swing.JLabel lblDolares;
     private javax.swing.JLabel lblFechaRegistro;
     private javax.swing.JLabel lblFlagBrasil;
@@ -1342,9 +1342,9 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     private javax.swing.JScrollPane scPrincipal;
     private javax.swing.JTable tbPrincipal;
     private javax.swing.JTextField txtCantidad;
-    private javax.swing.JTextField txtCantidad1;
     private javax.swing.JTextField txtCodigoProducto;
     private javax.swing.JTextField txtDescripcionProducto;
+    private javax.swing.JTextField txtDescuento;
     private javax.swing.JTextField txtExistenciaActual;
     private javax.swing.JTextField txtIDProducto;
     private javax.swing.JTextField txtPrecioDolares;

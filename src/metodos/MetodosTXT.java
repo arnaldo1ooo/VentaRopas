@@ -7,17 +7,10 @@ package metodos;
 
 import java.awt.Color;
 import java.awt.event.KeyEvent;
-import java.text.DecimalFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import principal.SplashScreen;
 
-/**
- *
- * @author Owicron-CodesBlue
- */
 public class MetodosTXT {
 
     public void FiltroCaracteresProhibidos(java.awt.event.KeyEvent evt) {
@@ -197,7 +190,7 @@ public class MetodosTXT {
             }
         } catch (NumberFormatException e) {
             elNumeroModi = elNumero;
-            System.out.println("Numero " + elNumero + " no valido error al poner puntos decimales " + e);
+            System.out.println("El Numero (" + elNumero + ") no es valido, error en el metodo DoubleFormatoSudamericaKeyReleased " + e);
             //e.printStackTrace();
         }
         return elNumeroModi;
@@ -315,9 +308,41 @@ public class MetodosTXT {
             double a = Double.parseDouble(elDouble);
             return true;
         } catch (NumberFormatException e) {
-            System.out.println("Error double no valido: " + elDouble);
-            Logger.getLogger(SplashScreen.class.getName()).log(Level.SEVERE, null, e);
+            System.out.println("Error al validar double, no valido: " + elDouble);
             return false;
         }
+    }
+
+    public boolean ValidarDoubleTXT(JTextField ElTXT, JLabel ElTitulo) {
+        if (ElTXT.getText().equals("")) {
+            ElTitulo.setForeground(Color.RED);
+            JOptionPane.showMessageDialog(null, "Complete el campo con titulo en rojo", "Error", JOptionPane.ERROR_MESSAGE);
+            ElTXT.requestFocus();
+            return false;
+        } else {
+            String ElTXTString = ElTXT.getText().replace(".", "");
+            ElTXTString = ElTXT.getText().replace(",", ".");
+            try {
+                double ElTXTDouble = Double.parseDouble(ElTXTString);
+                return true;
+            } catch (NumberFormatException e) {
+                System.out.println("Error al validar double, no valido: " + ElTXTString);
+                ElTitulo.setForeground(Color.RED);
+                JOptionPane.showMessageDialog(null, "Valor no válido, complete el campo con titulo en rojo", "Error", JOptionPane.ERROR_MESSAGE);
+                ElTXT.requestFocus();
+                return false;
+            }
+        }
+    }
+
+    //Comprueba si el campo está vacio, pone el titulo en rojo si es vacio
+    public boolean ValidarCampoVacioTXT(JTextField ElTXT, JLabel ElTitulo) {
+        if (ElTXT.getText().equals("")) { //Si es vacio pone el titulo en rojo
+            ElTitulo.setForeground(Color.RED);
+            JOptionPane.showMessageDialog(null, "Complete el campo con titulo en rojo", "Error", JOptionPane.ERROR_MESSAGE);
+            ElTXT.requestFocus();
+            return false;
+        }
+        return true;
     }
 };

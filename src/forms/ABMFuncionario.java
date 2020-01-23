@@ -274,11 +274,11 @@ public final class ABMFuncionario extends javax.swing.JDialog {
     }
 
     public boolean ComprobarCampos() {
-        if (metodos.ValidarCampoVacio(txtNombre, lblNombre) == false) {
+        if (metodostxt.ValidarCampoVacioTXT(txtNombre, lblNombre) == false) {
             return false;
         }
 
-        if (metodos.ValidarCampoVacio(txtApellido, lblApellido) == false) {
+        if (metodostxt.ValidarCampoVacioTXT(txtApellido, lblApellido) == false) {
             return false;
         }
         return true;

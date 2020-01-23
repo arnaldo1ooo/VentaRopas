@@ -250,15 +250,15 @@ public final class ABMProducto extends javax.swing.JDialog {
     }
 
     public boolean ComprobarCampos() {
-        if (metodos.ValidarCampoVacio(txtCodigoProducto, lblCodigoProducto) == false) {
+        if (metodostxt.ValidarCampoVacioTXT(txtCodigoProducto, lblCodigoProducto) == false) {
             return false;
         }
 
-        if (metodos.ValidarCampoVacio(txtDescripcion, lblDescripcion) == false) {
+        if (metodostxt.ValidarCampoVacioTXT(txtDescripcion, lblDescripcion) == false) {
             return false;
         }
 
-        if (metodos.ValidarCampoVacio(txtExistencia, lblExistencia) == false) {
+        if (metodostxt.ValidarCampoVacioTXT(txtExistencia, lblExistencia) == false) {
             return false;
         }
 

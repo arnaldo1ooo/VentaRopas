@@ -71,7 +71,7 @@
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="245" max="-2" attributes="0"/>
-                          <Component id="jpBotones" min="-2" pref="351" max="-2" attributes="0"/>
+                          <Component id="jpBotones" min="-2" pref="339" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
@@ -180,7 +180,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/iconos/Iconos20x20/IconoCancelar.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Cancelar"/>
+                <Property name="text" type="java.lang.String" value="Limpiar"/>
                 <Property name="toolTipText" type="java.lang.String" value="Cancela la acci&#xf3;n"/>
               </Properties>
               <Events>
@@ -783,8 +783,8 @@
                               </Group>
                               <EmptySpace pref="129" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="txtCantidad1" min="-2" pref="136" max="-2" attributes="0"/>
-                                  <Component id="lblCantidad1" min="-2" max="-2" attributes="0"/>
+                                  <Component id="txtDescuento" min="-2" pref="136" max="-2" attributes="0"/>
+                                  <Component id="lblDescuento" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -821,7 +821,7 @@
                       <Group type="103" groupAlignment="2" attributes="0">
                           <Component id="lblCantidad" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="lblCodigo10" alignment="2" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblCantidad1" alignment="2" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblDescuento" alignment="2" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="2" attributes="0">
@@ -829,7 +829,7 @@
                           <Component id="btnAnadir" alignment="2" min="-2" pref="36" max="-2" attributes="0"/>
                           <Component id="btnEliminar" alignment="2" min="-2" pref="36" max="-2" attributes="0"/>
                           <Component id="cbMoneda" alignment="2" min="-2" pref="36" max="-2" attributes="0"/>
-                          <Component id="txtCantidad1" alignment="2" min="-2" pref="36" max="-2" attributes="0"/>
+                          <Component id="txtDescuento" alignment="2" min="-2" pref="36" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                       <Component id="scPrincipal" min="-2" pref="119" max="-2" attributes="0"/>
@@ -1022,7 +1022,7 @@
                 <Property name="text" type="java.lang.String" value="0"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="lblCantidad1">
+            <Component class="javax.swing.JLabel" name="lblDescuento">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="SansSerif" size="12" style="0"/>
@@ -1031,7 +1031,7 @@
                 <Property name="text" type="java.lang.String" value="Descuento"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtCantidad1">
+            <Component class="javax.swing.JTextField" name="txtDescuento">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="SansSerif" size="14" style="0"/>
@@ -1043,8 +1043,8 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtCantidad1KeyReleased"/>
-                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtCantidad1KeyTyped"/>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtDescuentoKeyReleased"/>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtDescuentoKeyTyped"/>
               </Events>
             </Component>
           </SubComponents>

@@ -306,14 +306,5 @@ public class Metodos {
         return totalDouble;
     }
 
-    //Comprueba si el campo está vacio, pone el titulo en rojo si es vacio
-    public boolean ValidarCampoVacio(JTextField ElTXT, JLabel ElTitulo) {
-        if (ElTXT.getText().equals("")) { //Si es vacio pone el titulo en rojo
-            ElTitulo.setForeground(Color.RED);
-            ElTXT.requestFocus();
-            JOptionPane.showMessageDialog(null, "Complete el campo con titulo en rojo", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-        return true;
-    }
+
 }

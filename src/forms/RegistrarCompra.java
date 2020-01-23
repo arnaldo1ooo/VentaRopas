@@ -6,6 +6,7 @@
 package forms;
 
 import conexion.Conexion;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
@@ -200,7 +201,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
     }
 
     public boolean ComprobarCamposProducto() {
-        if (metodos.ValidarCampoVacio(txtCodigoProducto, lblCodigoProducto) == false) {
+        if (metodostxt.ValidarCampoVacioTXT(txtCodigoProducto, lblCodigoProducto) == false) {
             System.out.println("Validar CodigoProducto false");
             return false;
         } else {
@@ -220,17 +221,12 @@ public final class RegistrarCompra extends javax.swing.JDialog {
             }
         }
 
-        if (metodos.ValidarCampoVacio(txtCantidadAdquirida, lblCantidadAdquirida) == false) {
+        if (metodostxt.ValidarCampoVacioTXT(txtCantidadAdquirida, lblCantidadAdquirida) == false) {
             System.out.println("Validar Cantidad adquirida false");
             return false;
         }
 
-        if (metodos.ValidarCampoVacio(txtPrecioUnitario, lblPrecioCompra) == false) {
-            System.out.println("Validar Precio unitario false");
-            return false;
-        }
-
-        if (metodostxt.ValidarDouble(txtPrecioUnitario.getText()) == false) {
+        if (metodostxt.ValidarDoubleTXT(txtPrecioUnitario, lblPrecioUnitario) == false) {
             System.out.println("Validar Double Precio unitario false");
             return false;
         }
@@ -291,7 +287,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         btnEliminar = new javax.swing.JButton();
         btnAnadir = new javax.swing.JButton();
         txtPrecioUnitario = new javax.swing.JTextField();
-        lblPrecioCompra = new javax.swing.JLabel();
+        lblPrecioUnitario = new javax.swing.JLabel();
         txtCantidadAdquirida = new javax.swing.JTextField();
         lblCantidadAdquirida = new javax.swing.JLabel();
         scPrincipal = new javax.swing.JScrollPane();
@@ -603,9 +599,9 @@ public final class RegistrarCompra extends javax.swing.JDialog {
             }
         });
 
-        lblPrecioCompra.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        lblPrecioCompra.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblPrecioCompra.setText("Precio unitario");
+        lblPrecioUnitario.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lblPrecioUnitario.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblPrecioUnitario.setText("Precio unitario");
 
         txtCantidadAdquirida.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
         txtCantidadAdquirida.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
@@ -713,7 +709,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                         .addGap(18, 18, 18)
                         .addGroup(jpProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtPrecioUnitario, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblPrecioCompra))
+                            .addComponent(lblPrecioUnitario))
                         .addGap(1, 1, 1)
                         .addGroup(jpProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jpProductosLayout.createSequentialGroup()
@@ -741,7 +737,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jpProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(lblCantidadAdquirida)
-                    .addComponent(lblPrecioCompra)
+                    .addComponent(lblPrecioUnitario)
                     .addComponent(lblCodigo10))
                 .addGap(2, 2, 2)
                 .addGroup(jpProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
@@ -829,7 +825,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         btnCancelar.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
         btnCancelar.setForeground(new java.awt.Color(255, 255, 255));
         btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos20x20/IconoCancelar.png"))); // NOI18N
-        btnCancelar.setText("Cancelar");
+        btnCancelar.setText("Limpiar");
         btnCancelar.setToolTipText("Cancela la acción");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -869,11 +865,11 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                         .addContainerGap()
                         .addComponent(jpDatosProducto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpPrincipalLayout.createSequentialGroup()
-                        .addGap(234, 234, 234)
-                        .addComponent(jpBotones1, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpPrincipalLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jpDatosCompra, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jpDatosCompra, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpPrincipalLayout.createSequentialGroup()
+                        .addGap(234, 234, 234)
+                        .addComponent(jpBotones1, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jpPrincipalLayout.createSequentialGroup()
                 .addGap(9, 9, 9)
@@ -1042,7 +1038,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
 
     private void txtPrecioUnitarioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioUnitarioKeyReleased
         txtPrecioUnitario.setText(metodostxt.DoubleFormatoSudamericaKeyReleased(txtPrecioUnitario.getText()));
-        metodostxt.TxtColorLabelKeyReleased(txtPrecioUnitario, lblPrecioCompra);
+        metodostxt.TxtColorLabelKeyReleased(txtPrecioUnitario, lblPrecioUnitario);
     }//GEN-LAST:event_txtPrecioUnitarioKeyReleased
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
@@ -1079,7 +1075,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
 //Si se oprime ENTER o si el producto ya se encontro y se cambia el codigo de producto, volver a buscar
         if (evt.getKeyCode() == KeyEvent.VK_ENTER || txtIDProducto.getText().equals("") == false) {
             if (ConsultaProducto() == true) {
-                //Pedir cantidad y precio unitario con inputmensaje justo luego de escribir el codigo de producto
+                txtCantidadAdquirida.requestFocus();
             } else {
                 LimpiarProducto();
             }
@@ -1244,7 +1240,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
     private javax.swing.JLabel lblIDProducto1;
     private javax.swing.JLabel lblImagen;
     private javax.swing.JLabel lblNumCompra;
-    private javax.swing.JLabel lblPrecioCompra;
+    private javax.swing.JLabel lblPrecioUnitario;
     private javax.swing.JLabel lblRucCedula;
     private javax.swing.JLabel lblRucCedula1;
     private javax.swing.JLabel lblTitleNumCompra;
