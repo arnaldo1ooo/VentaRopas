@@ -9,28 +9,28 @@ import java.awt.event.KeyEvent;
 import metodos.Metodos;
 
 public class Buscador extends javax.swing.JDialog {
-
+    
     Metodos metodos = new Metodos();
     String Elsp;
-
+    
     public Buscador(javax.swing.JDialog parent, String nombresp, String titlesJtabla[], int campoBuscarDefault) {
         super(parent);
         initComponents();
         this.setLocationRelativeTo(null); //Centrar
 
         Elsp = nombresp;
-
+        
         tbPrincipal.setModel(metodos.ConsultAllBD(nombresp, titlesJtabla, cbCampoBuscar));
         metodos.AnchuraColumna(tbPrincipal);
         cbCampoBuscar.setSelectedIndex(campoBuscarDefault);
-
+        
         if (tbPrincipal.getModel().getRowCount() == 1) {
             lbCantRegistros.setText(tbPrincipal.getModel().getRowCount() + " Registro encontrado");
         } else {
             lbCantRegistros.setText(tbPrincipal.getModel().getRowCount() + " Registros encontrados");
         }
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -52,6 +52,7 @@ public class Buscador extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Buscador");
         setModal(true);
+        setResizable(false);
 
         panel1.setColorPrimario(new java.awt.Color(233, 255, 255));
         panel1.setColorSecundario(new java.awt.Color(255, 255, 255));
@@ -122,11 +123,11 @@ public class Buscador extends javax.swing.JDialog {
         panel1.setLayout(panel1Layout);
         panel1Layout.setHorizontalGroup(
             panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(scPrincipal, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(panel1Layout.createSequentialGroup()
+                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(scPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 717, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panel1Layout.createSequentialGroup()
                         .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -135,7 +136,7 @@ public class Buscador extends javax.swing.JDialog {
                         .addGap(4, 4, 4)
                         .addComponent(cbCampoBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
+                    .addGroup(panel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnActualizarTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(301, 301, 301)
@@ -179,15 +180,20 @@ public class Buscador extends javax.swing.JDialog {
             PonerSeleccionado();
         }
     }//GEN-LAST:event_tbPrincipalMousePressed
-
+    
     private void PonerSeleccionado() throws NumberFormatException {
-        int codigoSelect = Integer.parseInt(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0).toString());
-
+        
         if (Elsp.equals("SP_ClienteConsulta")) {
+            int codigoSelect = Integer.parseInt(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0).toString());
             RegistrarVenta.PonerClienteSeleccionado(codigoSelect);
+            dispose();
         }
-
-        dispose();
+        
+        if (Elsp.equals("SP_ProductoConsulta")) {
+            String codigoProductoSelect = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 1).toString();
+            RegistrarCompra.PonerProductoSeleccionado(codigoProductoSelect);
+            dispose();
+        }
     }
 
     private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
@@ -203,7 +209,7 @@ public class Buscador extends javax.swing.JDialog {
             PonerSeleccionado();
         }
     }//GEN-LAST:event_tbPrincipalKeyReleased
-
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

@@ -4,6 +4,7 @@ import conexion.Conexion;
 import forms.ABMCliente;
 import forms.ABMFuncionario;
 import forms.ABMProducto;
+import forms.AnularCompra;
 import forms.RegistrarCompra;
 import forms.RegistrarVenta;
 import java.sql.SQLException;
@@ -25,7 +26,7 @@ import static login.Login.Alias;
  * @author Lic. Arnaldo Cantero
  */
 public class Principal extends javax.swing.JFrame implements Runnable {
-
+    
     Metodos metodos = new Metodos();
     MetodosTXT metodostxt = new MetodosTXT();
     Thread hilo;
@@ -40,19 +41,19 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         lbAlias.setText(Alias);
         PerfilUsuario();
         AsignarCotizaciones();
-
+        
         PrivilegiosUsuarioModulos(Alias);
-
+        
         setVisible(true);
     }
-
+    
     private void PrivilegiosUsuarioModulos(String ElAlias) {
         Conexion con = metodos.ObtenerRSSentencia("CALL SP_PrivilegioUsuarioModulos('" + ElAlias + "')");
         String modulo;
         try {
             while (con.rs.next()) {
                 modulo = con.rs.getString("mo_denominacion");
-
+                
                 if (modulo.equals("PRODUCTO")) {
                     btnProducto.setEnabled(true);
                     meProducto.setEnabled(true);
@@ -87,7 +88,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     private void AsignarCotizaciones() {
         try {
             Conexion con = metodos.ObtenerRSSentencia("SELECT coti_valorcompra, coti_valorventa, coti_fecha "
@@ -97,25 +98,25 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             SimpleDateFormat formatoFechaSudamerica = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             Date fechaFormatoAmericano = formatoFechaAmericano.parse(con.rs.getString("coti_fecha").replace("-", "/"));
             lblFechaCotizacion.setText("Fecha de cotización: " + formatoFechaSudamerica.format(fechaFormatoAmericano));
-
+            
             cotiUsdGsCompra = con.rs.getDouble("coti_valorcompra"); //Variable global
             lblCotiUsdGsCompra.setText(metodostxt.DoubleAFormatoSudamerica(cotiUsdGsCompra));
             lblCotiUsdGsVenta.setText(metodostxt.DoubleAFormatoSudamerica(con.rs.getDouble("coti_valorventa")));
-
+            
             con = metodos.ObtenerRSSentencia("SELECT coti_valorcompra, coti_valorventa, coti_fecha "
                     + "FROM cotizacion WHERE coti_de='Dolares' AND coti_a='Reales'");
             con.rs.next();
             cotiUsdRsCompra = Double.parseDouble(con.rs.getString("coti_valorcompra"));
             lblCotiUsdRsCompra.setText(metodostxt.DoubleAFormatoSudamerica(cotiUsdRsCompra));
             lblCotiUsdRsVenta.setText(metodostxt.DoubleAFormatoSudamerica(con.rs.getDouble("coti_valorventa")));
-
+            
             con = metodos.ObtenerRSSentencia("SELECT coti_valorcompra, coti_valorventa, coti_fecha "
                     + "FROM cotizacion WHERE coti_de='Dolares' AND coti_a='Pesos argentinos'");
             con.rs.next();
             cotiUsdPaCompra = Double.parseDouble(con.rs.getString("coti_valorcompra"));
             lblCotiUsdPaCompra.setText(metodostxt.DoubleAFormatoSudamerica(cotiUsdPaCompra));
             lblCotiUsdPaVenta.setText(metodostxt.DoubleAFormatoSudamerica(con.rs.getDouble("coti_valorventa")));
-
+            
             con.DesconectarBasedeDatos();
         } catch (SQLException e) {
             System.out.println("Error al asignar cotizaciones desde bd" + e);
@@ -123,7 +124,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     private void PerfilUsuario() {
         String consulta = "CALL SP_UsuarioPerfilConsulta('" + Alias + "')";
         Conexion con = metodos.ObtenerRSSentencia(consulta);
@@ -137,7 +138,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         }
         con.DesconectarBasedeDatos();
     }
-
+    
     private void ObtenerHorayFecha() {
         //Obtener fecha y hora
         hilo = new Thread(this);
@@ -835,12 +836,12 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
 
     }//GEN-LAST:event_jMenuItem9ActionPerformed
-
+    
 
     private void jMenuItem17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem17ActionPerformed
 
     }//GEN-LAST:event_jMenuItem17ActionPerformed
-
+    
     private void ObtenerFechayHora() {
         Date fecha = new Date();
         //Formateando la fecha:
@@ -849,7 +850,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         DateFormat formatoHora = new SimpleDateFormat("HH:mm:ss");
         lbHora.setText(formatoHora.format(fecha));
     }
-
+    
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
 
@@ -963,7 +964,8 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_jMenuItem22ActionPerformed
 
     private void jMenuItem14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem14ActionPerformed
-        // TODO add your handling code here:
+        AnularCompra anularcompra = new AnularCompra(this);
+        anularcompra.setVisible(true);
     }//GEN-LAST:event_jMenuItem14ActionPerformed
 
     /**
@@ -1086,10 +1088,10 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 
         Thread current = Thread.currentThread();
-
+        
         while (current == hilo) {
             ObtenerFechayHora();
-
+            
         }
     }
 }

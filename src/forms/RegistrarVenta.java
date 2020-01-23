@@ -55,7 +55,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         //Obtener fecha actual
         Calendar c2 = new GregorianCalendar();
         dcFechaVenta.setCalendar(c2);
-        
+
         CargarComboBoxes();
         tablemodelo = (DefaultTableModel) tbPrincipal.getModel();
         GenerarNumVenta();
@@ -106,29 +106,36 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                         //Registra los productos de la compra                      
                         String idproducto;
                         int cantidadadquirida;
-                        double preciocompra;
+                        double precioventa;
 
                         int cantfila = tbPrincipal.getRowCount();
                         for (int fila = 0; fila < cantfila; fila++) {
                             idproducto = tbPrincipal.getValueAt(fila, 0).toString();
                             cantidadadquirida = Integer.parseInt(tbPrincipal.getValueAt(fila, 3).toString());
-                            preciocompra = Double.parseDouble(tbPrincipal.getValueAt(fila, 4).toString());
+                            precioventa = Double.parseDouble(tbPrincipal.getValueAt(fila, 4).toString());
 
                             //Comprobar en que moneda se guarda, en caso de ser distinto a dolares, se convierte a dolares
+                            String precioventaString = precioventa + "";
                             if (cbMoneda.getSelectedItem() != "Dolares") {
                                 if (cbMoneda.getSelectedItem() == "Guaranies") {
-                                    preciocompra = preciocompra * cotiUsdGsCompra;
+                                    precioventa = precioventa / cotiUsdGsCompra;
+                                    precioventaString = String.format("%.2f", precioventa);
+                                    precioventaString = precioventaString.replace(",", ".");
                                 }
                                 if (cbMoneda.getSelectedItem() == "Reales") {
-                                    preciocompra = preciocompra * cotiUsdRsCompra;
+                                    precioventa = precioventa / cotiUsdRsCompra;
+                                    precioventaString = String.format("%.2f", precioventa);
+                                    precioventaString = precioventaString.replace(",", ".");
                                 }
                                 if (cbMoneda.getSelectedItem() == "Peso") {
-                                    preciocompra = preciocompra * cotiUsdPaCompra;
+                                    precioventa = precioventa / cotiUsdPaCompra;
+                                    precioventaString = String.format("%.2f", precioventa);
+                                    precioventaString = precioventaString.replace(",", ".");
                                 }
                             }
                             //Se registran los productos de la compra
                             sentencia = "CALL SP_CompraProductosAlta('" + idultimacompra + "','" + idproducto + "','"
-                                    + cantidadadquirida + "','" + preciocompra + "')";
+                                    + cantidadadquirida + "','" + precioventaString + "')";
                             metodos.EjecutarAltaoModi(sentencia);
 
                             //Suma la cantidad al stock
@@ -137,7 +144,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                         }
 
                         JOptionPane.showMessageDialog(this, "Se agregó correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
-                        //ModoEdicion(false);
+                        GenerarNumVenta();
                         Limpiar();
                     } catch (HeadlessException ex) {
                         JOptionPane.showMessageDialog(this, "Ocurrió un Error " + ex.getMessage());
@@ -156,24 +163,6 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         }
     }
 
-    /*private void ModoEdicion(boolean valor) {
-        txtNumVenta.setEnabled(valor);
-        cbCliente.setEnabled(valor);
-        btnCliente.setEnabled(valor);
-        cbTipoDocumento.setEnabled(valor);
-        //dcFechaRegistro.setEnabled(valor);
-        dcFechaCompra.setEnabled(valor);
-        txtCodigoProducto.setEnabled(valor);
-        txtCantidadAdquirida.setEnabled(valor);
-        txtPrecioUnitario.setEnabled(valor);
-        btnGuardar.setEnabled(valor);
-        btnCancelar.setEnabled(valor);
-        cbMoneda.setEnabled(valor);
-        btnAnadir.setEnabled(valor);
-        tbPrincipal.setEnabled(valor);
-
-        txtNumVenta.requestFocus();
-    }*/
     private void Limpiar() {
         metodoscombo.setSelectedCodigoItem(cbCliente, 1);
         cbTipoDocumento.setSelectedIndex(1);
@@ -440,14 +429,12 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                     .addComponent(cbVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jpDatosCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpDatosCompraLayout.createSequentialGroup()
-                        .addComponent(lblRucCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(60, 60, 60))
+                    .addComponent(lblRucCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jpDatosCompraLayout.createSequentialGroup()
                         .addComponent(cbCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(1, 1, 1)
-                        .addComponent(btnCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                        .addComponent(btnCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jpDatosCompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblRucCedula1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cbTipoDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -920,7 +907,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                 .addComponent(labelMetric2, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(282, 282, 282)
                 .addComponent(lblTitleNumVenta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(4, 4, 4)
                 .addComponent(lblNumVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(52, 52, 52))
         );
@@ -1201,7 +1188,6 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     }//GEN-LAST:event_tbPrincipalKeyReleased
 
     private void btnClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteActionPerformed
-
         String nombresp = "SP_ClienteConsulta";
         String titlesJtabla[] = {"Código", "RUC/CI", "Nombre", "Apellido", "Dirección", "Teléfono", "Email", "Observación"};
         Buscador buscador = new Buscador(this, nombresp, titlesJtabla, 1);
@@ -1209,7 +1195,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     }//GEN-LAST:event_btnClienteActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-
+        RegistroNuevo();
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnGuardarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnGuardarKeyPressed

@@ -160,10 +160,10 @@ public final class ABMFuncionario extends javax.swing.JDialog {
         try {
             filasel = tbPrincipal.getSelectedRow();
             if (filasel == -1) {
-                JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "No se ha seleccionado ninguna fila", "Advertencia", JOptionPane.WARNING_MESSAGE);
                 txtBuscar.requestFocus();
             } else {
-                int confirmado = javax.swing.JOptionPane.showConfirmDialog(null, "¿Realmente desea eliminar este registro?", "Confirmación", JOptionPane.YES_OPTION);
+                int confirmado = javax.swing.JOptionPane.showConfirmDialog(this, "¿Realmente desea eliminar este registro?", "Confirmación", JOptionPane.YES_OPTION);
                 if (confirmado == JOptionPane.YES_OPTION) {
                     codigo = (String) tbPrincipal.getModel().getValueAt(filasel, 0);
                     try {
@@ -174,13 +174,13 @@ public final class ABMFuncionario extends javax.swing.JDialog {
                         PreparedStatement pst;
                         pst = con.prepareStatement(sentence);
                         pst.executeUpdate();
-                        JOptionPane.showMessageDialog(null, "Registro eliminado correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "Registro eliminado correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
 
                         con.close();
                         pst.close();
                     } catch (SQLException ex) {
-                        JOptionPane.showMessageDialog(null, ex);
-                        JOptionPane.showMessageDialog(null, "Error al intentar eliminar el registro", "Error", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(this, ex);
+                        JOptionPane.showMessageDialog(this, "Error al intentar eliminar el registro", "Error", JOptionPane.INFORMATION_MESSAGE);
                     }
                 } else {
                     ModoEdicion(false);
@@ -194,11 +194,11 @@ public final class ABMFuncionario extends javax.swing.JDialog {
     }
 
     public void TablaConsultaBDAll() {//Realiza la consulta de los productos que tenemos en la base de datos
-        String elSP = "SP_" + nombreTablaBD + "Consulta";
+        String sentencia = "SP_" + nombreTablaBD + "Consulta";
         String titlesJtabla[] = {"Código", "Nombre", "Apellido", "Fecha de ingreso", "Sexo",
             "Telefono", "Email", "Observación", "Estado", "Cargo"}; //Debe tener la misma cantidad que los campos a consultar
 
-        tbPrincipal.setModel(metodos.ConsultAllBD(elSP, titlesJtabla, cbCampoBuscar));
+        tbPrincipal.setModel(metodos.ConsultAllBD(sentencia, titlesJtabla, cbCampoBuscar));
         metodos.AnchuraColumna(tbPrincipal);
 
         if (tbPrincipal.getModel().getRowCount() == 1) {

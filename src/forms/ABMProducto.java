@@ -56,8 +56,8 @@ public final class ABMProducto extends javax.swing.JDialog {
 
     private long GenerarNumAlAzar() {
         Random r = new Random();
-        long numMin = 000000000001L;
-        long numMax = 999999999999L;
+        long numMin = 000001L;
+        long numMax = 999999L;
         long resultado = numMin + ((long) (r.nextDouble() * (numMax - numMin)));
         return resultado;
     }
@@ -177,7 +177,8 @@ public final class ABMProducto extends javax.swing.JDialog {
 
     public void TablaConsultaBDAll() {//Realiza la consulta de los productos que tenemos en la base de datos
         String elSP = "SP_" + nombreTablaBD + "Consulta";
-        String titlesJtabla[] = {"Código", "Código del producto", "Descripción", "Marca", "Tamaño", "Existencia", "Categoria", "Subcategoria", "Observación", "Estado"}; //Debe tener la misma cantidad que titlesconsulta
+        String titlesJtabla[] = {"Código", "Código del producto", "Descripción", 
+            "Marca", "Tamaño", "Existencia", "Categoria", "Subcategoria", "Observación", "Estado"};
 
         tbPrincipal.setModel(metodos.ConsultAllBD(elSP, titlesJtabla, cbCampoBuscar));
         metodos.AnchuraColumna(tbPrincipal);
@@ -565,7 +566,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         lblDescripcion.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblDescripcion.setText("Descripción*:");
 
-        txtDescripcion.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        txtDescripcion.setFont(new java.awt.Font("SansSerif", 0, 11)); // NOI18N
         txtDescripcion.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         txtDescripcion.setEnabled(false);
         txtDescripcion.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -731,13 +732,13 @@ public final class ABMProducto extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2))
                     .addComponent(txtDescripcion, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtExistencia, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cbTamano, javax.swing.GroupLayout.Alignment.LEADING, 0, 260, Short.MAX_VALUE)
                     .addComponent(cbMarca, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpEdicionLayout.createSequentialGroup()
                         .addComponent(txtCodigoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnGenerarNumAzar, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnGenerarNumAzar, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtExistencia, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblCategoria, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)

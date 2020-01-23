@@ -62,7 +62,7 @@ public class Metodos {
             }
 
             //Carga el combobox con los titulos de la tabla, solo si esta vacio
-            if (ElComboCampos.getItemCount() == 0) {
+            if (ElComboCampos != null && ElComboCampos.getItemCount() == 0) {
                 javax.swing.DefaultComboBoxModel modelCombo = new javax.swing.DefaultComboBoxModel(titlesJtabla);
                 ElComboCampos.setModel(modelCombo);
             }
@@ -123,11 +123,11 @@ public class Metodos {
             Statement st;
             st = (Statement) con.createStatement();
             st.executeUpdate(sentencia);
-            Toolkit.getDefaultToolkit().beep(); //BEEP
             con.close();
             st.close();
         } catch (SQLException ex) {
             Logger.getLogger(Metodos.class.getName() + " Sentencia: " + sentencia).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Error al intentar crear o modificar registro" + ex, "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
