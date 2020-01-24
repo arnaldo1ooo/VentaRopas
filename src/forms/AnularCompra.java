@@ -5,15 +5,15 @@
  */
 package forms;
 
+import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 import metodos.Metodos;
-import static principal.Principal.cotiUsdGsCompra;
-import static principal.Principal.cotiUsdPaCompra;
-import static principal.Principal.cotiUsdRsCompra;
+import metodos.MetodosTXT;
 
 public class AnularCompra extends javax.swing.JDialog {
 
     Metodos metodos = new Metodos();
+    MetodosTXT metodostxt = new MetodosTXT();
 
     public AnularCompra(javax.swing.JFrame parent) {
         super(parent);
@@ -25,7 +25,7 @@ public class AnularCompra extends javax.swing.JDialog {
 
     private void ConsultaAllCompraBD() {
         String sentencia = "SP_CompraConsulta";
-        String titlesJtabla[] = {"Código", "N° de compra", "Identificador", "Proveedor", "Tipo de documento",
+        String titlesJtabla[] = {"Código", "N° de compra", "N° del documento", "Proveedor", "Tipo de documento",
             "Fecha de registro", "Fecha de compra"};
 
         tbPrincipal.setModel(metodos.ConsultAllBD(sentencia, titlesJtabla, cbCampoBuscar));
@@ -46,6 +46,13 @@ public class AnularCompra extends javax.swing.JDialog {
 
         tbProductosComprados.setModel(metodos.ConsultAllBD(sentencia, titlesJtabla, null));
         metodos.AnchuraColumna(tbProductosComprados);
+
+        //Convertir precios
+        double precio;
+        for (int i = 0; i < tbProductosComprados.getRowCount(); i++) {
+            precio = Double.parseDouble(tbProductosComprados.getValueAt(i, 3).toString());
+            tbProductosComprados.setValueAt(metodostxt.DoubleAFormatoSudamerica(precio), i, 3);
+        }
 
         if (tbProductosComprados.getModel().getRowCount() == 1) {
             lbCantRegistrosProductos.setText(tbProductosComprados.getModel().getRowCount() + " Registro encontrado");
@@ -181,8 +188,16 @@ public class AnularCompra extends javax.swing.JDialog {
         tbPrincipal.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tbPrincipal.getTableHeader().setReorderingAllowed(false);
         tbPrincipal.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbPrincipalMouseClicked(evt);
+            }
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 tbPrincipalMousePressed(evt);
+            }
+        });
+        tbPrincipal.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tbPrincipalKeyReleased(evt);
             }
         });
         scPrincipal.setViewportView(tbPrincipal);
@@ -295,9 +310,14 @@ public class AnularCompra extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tbPrincipalMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbPrincipalMousePressed
-        ProductosDeLaCompra();
-        String numcompra = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 1).toString();
-        pnProductosComprados.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Produtos de la compra N° " + numcompra));
+        int filaselect = tbPrincipal.getSelectedRow();
+        if (tbPrincipal.getRowCount() > 0) {
+            System.out.println("sele");
+            ProductosDeLaCompra();
+            String numcompra = tbPrincipal.getValueAt(filaselect, 1).toString();
+            pnProductosComprados.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(),
+                    "Produtos de la compra N° " + numcompra));
+        }
     }//GEN-LAST:event_tbPrincipalMousePressed
 
     private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
@@ -330,6 +350,26 @@ public class AnularCompra extends javax.swing.JDialog {
             }
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void tbPrincipalKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbPrincipalKeyReleased
+        if (evt.getKeyCode() == KeyEvent.VK_UP || evt.getKeyCode() == KeyEvent.VK_DOWN) {
+            ProductosDeLaCompra();
+            String numcompra = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 1).toString();
+            pnProductosComprados.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(),
+                    "Produtos de la compra N° " + numcompra));
+        }
+    }//GEN-LAST:event_tbPrincipalKeyReleased
+
+    private void tbPrincipalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbPrincipalMouseClicked
+        int filaselect = tbPrincipal.getSelectedRow();
+        if (tbPrincipal.getRowCount() > 0) {
+            System.out.println("sele");
+            ProductosDeLaCompra();
+            String numcompra = tbPrincipal.getValueAt(filaselect, 1).toString();
+            pnProductosComprados.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(),
+                    "Produtos de la compra N° " + numcompra));
+        }
+    }//GEN-LAST:event_tbPrincipalMouseClicked
 
     public static void main(String args[]) {
 

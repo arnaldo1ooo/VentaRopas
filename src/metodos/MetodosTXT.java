@@ -6,6 +6,7 @@
 package metodos;
 
 import java.awt.Color;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -67,7 +68,7 @@ public class MetodosTXT {
         }
     }
 
-//Convierte a mayusculas
+    //Convierte a mayusculas
     public void TxtMayusKeyReleased(JTextField ElTXT, KeyEvent evt) {
         Character s = evt.getKeyChar();
         if (Character.isLetter(s)) {
@@ -88,110 +89,106 @@ public class MetodosTXT {
         String elNumeroModi = "";
         try {
             int siEsDecimal = elNumero.indexOf(",");
+            String sub1;
+            String sub2;
+            String sub3;
             if (siEsDecimal != -1) { //Si es decimal, si tiene coma
                 int parteEntera = (int) Double.parseDouble(elNumero.replace(",", "."));
                 String parteDecimal = elNumero.substring(elNumero.indexOf(','));
                 String parteEnteraString = parteEntera + "";
                 int longitud = parteEnteraString.length();
-                if (longitud == 1 || longitud == 2 || longitud == 3) {
-                    return elNumero;
-                }
-                if (longitud == 4) {
-                    String sub1 = parteEnteraString.substring(0, 1);
-                    String sub2 = parteEnteraString.substring(1, 4);
-                    elNumeroModi = sub1 + "." + sub2 + parteDecimal;
-                    return elNumeroModi;
-                }
-                if (longitud == 5) {
-                    String sub1 = parteEnteraString.substring(0, 2);
-                    String sub2 = parteEnteraString.substring(2, 5);
-                    elNumeroModi = sub1 + "." + sub2 + parteDecimal;
-                    return elNumeroModi;
-                }
 
-                if (longitud == 6) {
-                    String sub1 = parteEnteraString.substring(0, 3);
-                    String sub2 = parteEnteraString.substring(3, 6);
-                    elNumeroModi = sub1 + "." + sub2 + parteDecimal;
-                    return elNumeroModi;
-                }
-
-                if (longitud == 7) {
-                    String sub1 = parteEnteraString.substring(0, 1);
-                    String sub2 = parteEnteraString.substring(1, 4);
-                    String sub3 = parteEnteraString.substring(4, 7);
-                    elNumeroModi = sub1 + "." + sub2 + "." + sub3 + parteDecimal;
-                    return elNumeroModi;
-                }
-
-                if (longitud == 8) {
-                    String sub1 = parteEnteraString.substring(0, 2);
-                    String sub2 = parteEnteraString.substring(2, 5);
-                    String sub3 = parteEnteraString.substring(5, 8);
-                    elNumeroModi = sub1 + "." + sub2 + "." + sub3 + parteDecimal;
-                    return elNumeroModi;
-                }
-
-                if (longitud == 9) {
-                    String sub1 = parteEnteraString.substring(0, 3);
-                    String sub2 = parteEnteraString.substring(3, 6);
-                    String sub3 = parteEnteraString.substring(6, 9);
-                    elNumeroModi = sub1 + "." + sub2 + "." + sub3 + parteDecimal;
-                    return elNumeroModi;
+                switch (longitud) {
+                    case 1:
+                        return elNumero;
+                    case 2:
+                        return elNumero;
+                    case 3:
+                        return elNumero;
+                    case 4:
+                        sub1 = parteEnteraString.substring(0, 1);
+                        sub2 = parteEnteraString.substring(1, 4);
+                        elNumeroModi = sub1 + "." + sub2 + parteDecimal;
+                        return elNumeroModi;
+                    case 5:
+                        sub1 = parteEnteraString.substring(0, 2);
+                        sub2 = parteEnteraString.substring(2, 5);
+                        elNumeroModi = sub1 + "." + sub2 + parteDecimal;
+                        return elNumeroModi;
+                    case 6:
+                        sub1 = parteEnteraString.substring(0, 3);
+                        sub2 = parteEnteraString.substring(3, 6);
+                        elNumeroModi = sub1 + "." + sub2 + parteDecimal;
+                        return elNumeroModi;
+                    case 7:
+                        sub1 = parteEnteraString.substring(0, 1);
+                        sub2 = parteEnteraString.substring(1, 4);
+                        sub3 = parteEnteraString.substring(4, 7);
+                        elNumeroModi = sub1 + "." + sub2 + "." + sub3 + parteDecimal;
+                        return elNumeroModi;
+                    case 8:
+                        sub1 = parteEnteraString.substring(0, 2);
+                        sub2 = parteEnteraString.substring(2, 5);
+                        sub3 = parteEnteraString.substring(5, 8);
+                        elNumeroModi = sub1 + "." + sub2 + "." + sub3 + parteDecimal;
+                        return elNumeroModi;
+                    case 9:
+                        sub1 = parteEnteraString.substring(0, 3);
+                        sub2 = parteEnteraString.substring(3, 6);
+                        sub3 = parteEnteraString.substring(6, 9);
+                        elNumeroModi = sub1 + "." + sub2 + "." + sub3 + parteDecimal;
+                        return elNumeroModi;
+                    default:
+                        //JOptionPane.showMessageDialog(null, "Ninguno", "Error", JOptionPane.ERROR_MESSAGE);
+                        break;
                 }
             } else { //Si no es decimal
                 elNumero = elNumero.replace(".", "");
                 elNumeroModi = elNumero;
                 int longitud = elNumero.length();
 
-                if (longitud == 4) {
-                    String sub1 = elNumero.substring(0, 1);
-                    String sub2 = elNumero.substring(1, 4);
-                    elNumeroModi = sub1 + "." + sub2;
-                    return elNumeroModi;
-                }
-                if (longitud == 5) {
-                    String sub1 = elNumero.substring(0, 2);
-                    String sub2 = elNumero.substring(2, 5);
-                    elNumeroModi = sub1 + "." + sub2;
-                    return elNumeroModi;
-                }
-
-                if (longitud == 6) {
-                    String sub1 = elNumero.substring(0, 3);
-                    String sub2 = elNumero.substring(3, 6);
-                    elNumeroModi = sub1 + "." + sub2;
-                    return elNumeroModi;
-                }
-
-                if (longitud == 7) {
-                    String sub1 = elNumero.substring(0, 1);
-                    String sub2 = elNumero.substring(1, 4);
-                    String sub3 = elNumero.substring(4, 7);
-                    elNumeroModi = sub1 + "." + sub2 + "." + sub3;
-                    return elNumeroModi;
-                }
-
-                if (longitud == 8) {
-                    String sub1 = elNumero.substring(0, 2);
-                    String sub2 = elNumero.substring(2, 5);
-                    String sub3 = elNumero.substring(5, 8);
-                    elNumeroModi = sub1 + "." + sub2 + "." + sub3;
-                    return elNumeroModi;
-                }
-
-                if (longitud == 9) {
-                    String sub1 = elNumero.substring(0, 3);
-                    String sub2 = elNumero.substring(3, 6);
-                    String sub3 = elNumero.substring(6, 9);
-                    elNumeroModi = sub1 + "." + sub2 + "." + sub3;
-                    return elNumeroModi;
+                switch (longitud) {
+                    case 4:
+                        sub1 = elNumero.substring(0, 1);
+                        sub2 = elNumero.substring(1, 4);
+                        elNumeroModi = sub1 + "." + sub2;
+                        return elNumeroModi;
+                    case 5:
+                        sub1 = elNumero.substring(0, 2);
+                        sub2 = elNumero.substring(2, 5);
+                        elNumeroModi = sub1 + "." + sub2;
+                        return elNumeroModi;
+                    case 6:
+                        sub1 = elNumero.substring(0, 3);
+                        sub2 = elNumero.substring(3, 6);
+                        elNumeroModi = sub1 + "." + sub2;
+                        return elNumeroModi;
+                    case 7:
+                        sub1 = elNumero.substring(0, 1);
+                        sub2 = elNumero.substring(1, 4);
+                        sub3 = elNumero.substring(4, 7);
+                        elNumeroModi = sub1 + "." + sub2 + "." + sub3;
+                        return elNumeroModi;
+                    case 8:
+                        sub1 = elNumero.substring(0, 2);
+                        sub2 = elNumero.substring(2, 5);
+                        sub3 = elNumero.substring(5, 8);
+                        elNumeroModi = sub1 + "." + sub2 + "." + sub3;
+                        return elNumeroModi;
+                    case 9:
+                        sub1 = elNumero.substring(0, 3);
+                        sub2 = elNumero.substring(3, 6);
+                        sub3 = elNumero.substring(6, 9);
+                        elNumeroModi = sub1 + "." + sub2 + "." + sub3;
+                        return elNumeroModi;
+                    default:
+                        //JOptionPane.showMessageDialog(null, "Ninguno", "Error", JOptionPane.ERROR_MESSAGE);
+                        break;
                 }
             }
         } catch (NumberFormatException e) {
             elNumeroModi = elNumero;
-            System.out.println("El Numero (" + elNumero + ") no es valido, error en el metodo DoubleFormatoSudamericaKeyReleased " + e);
-            //e.printStackTrace();
+            System.out.println("El Numero (" + elNumero + ") no es valido, error en el metodo DoubleFormatoSudamericaKeyReleased  " + e);
         }
         return elNumeroModi;
     }
@@ -328,6 +325,7 @@ public class MetodosTXT {
             } catch (NumberFormatException e) {
                 System.out.println("Error al validar double, no valido: " + ElTXTString);
                 ElTitulo.setForeground(Color.RED);
+                Toolkit.getDefaultToolkit().beep();
                 JOptionPane.showMessageDialog(null, "Valor no válido, complete el campo con titulo en rojo", "Error", JOptionPane.ERROR_MESSAGE);
                 ElTXT.requestFocus();
                 return false;
@@ -339,6 +337,7 @@ public class MetodosTXT {
     public boolean ValidarCampoVacioTXT(JTextField ElTXT, JLabel ElTitulo) {
         if (ElTXT.getText().equals("")) { //Si es vacio pone el titulo en rojo
             ElTitulo.setForeground(Color.RED);
+            Toolkit.getDefaultToolkit().beep();
             JOptionPane.showMessageDialog(null, "Complete el campo con titulo en rojo", "Error", JOptionPane.ERROR_MESSAGE);
             ElTXT.requestFocus();
             return false;

@@ -187,6 +187,7 @@ public class Metodos {
 
     public void CambiarColorAlternadoTabla(JTable LaTabla, final Color colorback1, final Color colorback2) {
         LaTabla.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 c.setBackground(row % 2 == 0 ? colorback1 : colorback2);
@@ -294,17 +295,20 @@ public class Metodos {
     }
 
     public double SumarColumnaDouble(JTable LaTabla, int LaColumna) {
-        double valor = 0;
+        double valor;
         double totalDouble = 0;
 
-        if (LaTabla.getRowCount() > 0) {
-            for (int i = 0; i < LaTabla.getRowCount(); i++) {
-                valor = Double.parseDouble(LaTabla.getValueAt(i, LaColumna).toString());
-                totalDouble = totalDouble + valor;
+        try {
+            if (LaTabla.getRowCount() > 0) {
+                for (int i = 0; i < LaTabla.getRowCount(); i++) {
+                    valor = Double.parseDouble(LaTabla.getValueAt(i, LaColumna).toString());
+                    totalDouble = totalDouble + valor;
+                }
             }
+        } catch (NumberFormatException e) {
+            System.out.println("Error al sumar columna " + e);
         }
         return totalDouble;
     }
-
 
 }

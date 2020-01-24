@@ -25,7 +25,6 @@ public class Conexion {
     public static Connection ConectarBasedeDatos() {
         String tipoHost = "remoto";
 
-        
         if (tipoHost.equals("local")) {
             //Modo host local
             controlador = "com.mysql.cj.jdbc.Driver";
@@ -106,18 +105,17 @@ public class Conexion {
         try {
             if (connection != null) {
                 connection.close();
-                System.out.println("DESCONEXIÓN DE " + nombreBD + ", EXITOSO..");
                 if (st != null) {
                     st.close();
-                    System.out.println("DESCONEXIÓN DE STATEMENT, EXITOSO..");
                     if (rs != null) {
                         rs.close();
-                        System.out.println("DESCONEXIÓN DEL RESULTSET, EXITOSO..");
                     }
                 }
+                System.out.println("DESCONEXIÓN DEL CONNECTION(" + nombreBD + "), RESULTSET y del STATEMENT, EXITOSA..");
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error al intentar desconectar", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR AL INTENTAR DESCONECTAR "
+                    + "CONNECTION(" + nombreBD + "), RESULTSET y del STATEMENT", JOptionPane.ERROR_MESSAGE);
             System.exit(1);
         }
     }
