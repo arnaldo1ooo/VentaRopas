@@ -86,6 +86,11 @@ public class MetodosTXT {
     }
 
     public String DoubleFormatoSudamericaKeyReleased(String elNumero) {
+
+        //Si es vacio devuelve lo mismo
+        if (elNumero.equals("")) {
+            return elNumero;
+        }
         String elNumeroModi = "";
         try {
             int siEsDecimal = elNumero.indexOf(",");

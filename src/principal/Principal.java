@@ -26,7 +26,7 @@ import static login.Login.Alias;
  * @author Lic. Arnaldo Cantero
  */
 public class Principal extends javax.swing.JFrame implements Runnable {
-    
+
     Metodos metodos = new Metodos();
     MetodosTXT metodostxt = new MetodosTXT();
     Thread hilo;
@@ -41,19 +41,21 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         lbAlias.setText(Alias);
         PerfilUsuario();
         AsignarCotizaciones();
-        
+
         PrivilegiosUsuarioModulos(Alias);
-        
+
+        //meVenta.setIcon(metodos.AjustarIconoAButton(meVenta.getIcon(), meVenta.getHeight()));
+
         setVisible(true);
     }
-    
+
     private void PrivilegiosUsuarioModulos(String ElAlias) {
         Conexion con = metodos.ObtenerRSSentencia("CALL SP_PrivilegioUsuarioModulos('" + ElAlias + "')");
         String modulo;
         try {
             while (con.rs.next()) {
                 modulo = con.rs.getString("mo_denominacion");
-                
+
                 if (modulo.equals("PRODUCTO")) {
                     btnProducto.setEnabled(true);
                     meProducto.setEnabled(true);
@@ -88,7 +90,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private void AsignarCotizaciones() {
         try {
             Conexion con = metodos.ObtenerRSSentencia("SELECT coti_valorcompra, coti_valorventa, coti_fecha "
@@ -98,25 +100,25 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             SimpleDateFormat formatoFechaSudamerica = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             Date fechaFormatoAmericano = formatoFechaAmericano.parse(con.rs.getString("coti_fecha").replace("-", "/"));
             lblFechaCotizacion.setText("Fecha de cotización: " + formatoFechaSudamerica.format(fechaFormatoAmericano));
-            
+
             cotiUsdGsCompra = con.rs.getDouble("coti_valorcompra"); //Variable global
             lblCotiUsdGsCompra.setText(metodostxt.DoubleAFormatoSudamerica(cotiUsdGsCompra));
             lblCotiUsdGsVenta.setText(metodostxt.DoubleAFormatoSudamerica(con.rs.getDouble("coti_valorventa")));
-            
+
             con = metodos.ObtenerRSSentencia("SELECT coti_valorcompra, coti_valorventa, coti_fecha "
                     + "FROM cotizacion WHERE coti_de='Dolares' AND coti_a='Reales'");
             con.rs.next();
             cotiUsdRsCompra = Double.parseDouble(con.rs.getString("coti_valorcompra"));
             lblCotiUsdRsCompra.setText(metodostxt.DoubleAFormatoSudamerica(cotiUsdRsCompra));
             lblCotiUsdRsVenta.setText(metodostxt.DoubleAFormatoSudamerica(con.rs.getDouble("coti_valorventa")));
-            
+
             con = metodos.ObtenerRSSentencia("SELECT coti_valorcompra, coti_valorventa, coti_fecha "
                     + "FROM cotizacion WHERE coti_de='Dolares' AND coti_a='Pesos argentinos'");
             con.rs.next();
             cotiUsdPaCompra = Double.parseDouble(con.rs.getString("coti_valorcompra"));
             lblCotiUsdPaCompra.setText(metodostxt.DoubleAFormatoSudamerica(cotiUsdPaCompra));
             lblCotiUsdPaVenta.setText(metodostxt.DoubleAFormatoSudamerica(con.rs.getDouble("coti_valorventa")));
-            
+
             con.DesconectarBasedeDatos();
         } catch (SQLException e) {
             System.out.println("Error al asignar cotizaciones desde bd" + e);
@@ -124,7 +126,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private void PerfilUsuario() {
         String consulta = "CALL SP_UsuarioPerfilConsulta('" + Alias + "')";
         Conexion con = metodos.ObtenerRSSentencia(consulta);
@@ -138,7 +140,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         }
         con.DesconectarBasedeDatos();
     }
-    
+
     private void ObtenerHorayFecha() {
         //Obtener fecha y hora
         hilo = new Thread(this);
@@ -158,6 +160,13 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jLabel2 = new javax.swing.JLabel();
         lblPerfil = new javax.swing.JLabel();
         piPrincipal = new org.edisoncor.gui.panel.PanelImage();
+        btnCliente = new javax.swing.JButton();
+        btnFuncionario = new javax.swing.JButton();
+        btnCompra = new javax.swing.JButton();
+        btnVenta = new javax.swing.JButton();
+        btnProducto = new javax.swing.JButton();
+        btnUsuario = new javax.swing.JButton();
+        buttonTextDown1 = new org.edisoncor.gui.button.ButtonTextDown();
         jpCotizaciones = new javax.swing.JPanel();
         lblCotiUsdGsCompra = new javax.swing.JLabel();
         lbldolares3 = new javax.swing.JLabel();
@@ -178,12 +187,6 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         lblCotiUsdRsVenta = new javax.swing.JLabel();
         lblCotiUsdPaVenta = new javax.swing.JLabel();
         lblFechaCotizacion = new javax.swing.JLabel();
-        btnCliente = new javax.swing.JButton();
-        btnFuncionario = new javax.swing.JButton();
-        btnCompra = new javax.swing.JButton();
-        btnVenta = new javax.swing.JButton();
-        btnProducto = new javax.swing.JButton();
-        btnUsuario = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         meVenta = new javax.swing.JMenu();
         jMenuItem11 = new javax.swing.JMenuItem();
@@ -198,9 +201,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jSeparator8 = new javax.swing.JPopupMenu.Separator();
         jMenuItem16 = new javax.swing.JMenuItem();
         jSeparator9 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem3 = new javax.swing.JMenuItem();
         jSeparator10 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem21 = new javax.swing.JMenuItem();
         jSeparator12 = new javax.swing.JPopupMenu.Separator();
         jMenuItem20 = new javax.swing.JMenuItem();
         jSeparator13 = new javax.swing.JPopupMenu.Separator();
@@ -318,6 +319,76 @@ public class Principal extends javax.swing.JFrame implements Runnable {
 
         piPrincipal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/iconos/fondo1.png"))); // NOI18N
         piPrincipal.setPreferredSize(new java.awt.Dimension(2000, 655));
+
+        btnCliente.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        btnCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoClientes.png"))); // NOI18N
+        btnCliente.setText("CLIENTES");
+        btnCliente.setEnabled(false);
+        btnCliente.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClienteActionPerformed(evt);
+            }
+        });
+
+        btnFuncionario.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        btnFuncionario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoFuncionario.png"))); // NOI18N
+        btnFuncionario.setText("FUNCIONARIOS");
+        btnFuncionario.setEnabled(false);
+        btnFuncionario.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnFuncionario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFuncionarioActionPerformed(evt);
+            }
+        });
+
+        btnCompra.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        btnCompra.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoCompra.png"))); // NOI18N
+        btnCompra.setText("COMPRAS");
+        btnCompra.setEnabled(false);
+        btnCompra.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnCompra.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCompraActionPerformed(evt);
+            }
+        });
+
+        btnVenta.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        btnVenta.setText("VENTAS");
+        btnVenta.setEnabled(false);
+        btnVenta.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnVenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVentaActionPerformed(evt);
+            }
+        });
+
+        btnProducto.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        btnProducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoProducto.png"))); // NOI18N
+        btnProducto.setText("PRODUCTOS");
+        btnProducto.setEnabled(false);
+        btnProducto.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProductoActionPerformed(evt);
+            }
+        });
+
+        btnUsuario.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        btnUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoUsuario.png"))); // NOI18N
+        btnUsuario.setText("USUARIOS");
+        btnUsuario.setEnabled(false);
+        btnUsuario.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUsuarioActionPerformed(evt);
+            }
+        });
+
+        buttonTextDown1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/IconoVenta.png"))); // NOI18N
+        buttonTextDown1.setText("VENTAS");
+        buttonTextDown1.setDistanciaDeSombra(2);
+        buttonTextDown1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 
         jpCotizaciones.setBackground(new java.awt.Color(255, 255, 255));
         jpCotizaciones.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Cotización"));
@@ -472,66 +543,6 @@ public class Principal extends javax.swing.JFrame implements Runnable {
                 .addComponent(lblFechaCotizacion))
         );
 
-        btnCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoClientes.png"))); // NOI18N
-        btnCliente.setText("CLIENTES");
-        btnCliente.setEnabled(false);
-        btnCliente.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnCliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnClienteActionPerformed(evt);
-            }
-        });
-
-        btnFuncionario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoFuncionario.png"))); // NOI18N
-        btnFuncionario.setText("FUNCIONARIOS");
-        btnFuncionario.setEnabled(false);
-        btnFuncionario.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnFuncionario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFuncionarioActionPerformed(evt);
-            }
-        });
-
-        btnCompra.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoCompra.png"))); // NOI18N
-        btnCompra.setText("COMPRAS");
-        btnCompra.setEnabled(false);
-        btnCompra.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnCompra.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCompraActionPerformed(evt);
-            }
-        });
-
-        btnVenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoVenta.png"))); // NOI18N
-        btnVenta.setText("VENTAS");
-        btnVenta.setEnabled(false);
-        btnVenta.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnVenta.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnVentaActionPerformed(evt);
-            }
-        });
-
-        btnProducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoProducto.png"))); // NOI18N
-        btnProducto.setText("PRODUCTOS");
-        btnProducto.setEnabled(false);
-        btnProducto.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnProducto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnProductoActionPerformed(evt);
-            }
-        });
-
-        btnUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoUsuario.png"))); // NOI18N
-        btnUsuario.setText("USUARIOS");
-        btnUsuario.setEnabled(false);
-        btnUsuario.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnUsuario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUsuarioActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout piPrincipalLayout = new javax.swing.GroupLayout(piPrincipal);
         piPrincipal.setLayout(piPrincipalLayout);
         piPrincipalLayout.setHorizontalGroup(
@@ -541,20 +552,23 @@ public class Principal extends javax.swing.JFrame implements Runnable {
                 .addGroup(piPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnVenta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnCompra, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnFuncionario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnFuncionario, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE)
                     .addComponent(btnCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnProducto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 744, Short.MAX_VALUE)
-                .addComponent(jpCotizaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(piPrincipalLayout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addComponent(buttonTextDown1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jpCotizaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0))
         );
         piPrincipalLayout.setVerticalGroup(
             piPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(piPrincipalLayout.createSequentialGroup()
-                .addGap(18, 471, Short.MAX_VALUE)
-                .addComponent(jpCotizaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(piPrincipalLayout.createSequentialGroup()
-                .addGap(56, 56, 56)
+                .addGap(31, 31, 31)
+                .addComponent(buttonTextDown1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(btnProducto)
                 .addGap(18, 18, 18)
                 .addComponent(btnFuncionario)
@@ -566,24 +580,28 @@ public class Principal extends javax.swing.JFrame implements Runnable {
                 .addComponent(btnVenta)
                 .addGap(18, 18, 18)
                 .addComponent(btnUsuario)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap(80, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, piPrincipalLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jpCotizaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0))
         );
 
         jMenuBar1.setMinimumSize(new java.awt.Dimension(120, 70));
-        jMenuBar1.setPreferredSize(new java.awt.Dimension(120, 75));
+        jMenuBar1.setPreferredSize(new java.awt.Dimension(120, 55));
 
-        meVenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoVenta.png"))); // NOI18N
         meVenta.setText("VENTAS");
         meVenta.setEnabled(false);
-        meVenta.setFont(new java.awt.Font("Sitka Text", 1, 14)); // NOI18N
-        meVenta.setPreferredSize(new java.awt.Dimension(200, 70));
+        meVenta.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        meVenta.setPreferredSize(new java.awt.Dimension(160, 70));
         meVenta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 meVentaActionPerformed(evt);
             }
         });
 
-        jMenuItem11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoRegistrarCompra.png"))); // NOI18N
+        jMenuItem11.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
+        jMenuItem11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoRegistrarCompra25.png"))); // NOI18N
         jMenuItem11.setText("Registrar venta");
         jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -593,7 +611,8 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         meVenta.add(jMenuItem11);
         meVenta.add(jSeparator11);
 
-        jMenuItem13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoRegistrarCompra.png"))); // NOI18N
+        jMenuItem13.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
+        jMenuItem13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoEliminar25.png"))); // NOI18N
         jMenuItem13.setText("Anular venta");
         jMenuItem13.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -607,15 +626,15 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         meCompra.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoCompra.png"))); // NOI18N
         meCompra.setText("COMPRAS");
         meCompra.setEnabled(false);
-        meCompra.setFont(new java.awt.Font("Sitka Text", 1, 14)); // NOI18N
-        meCompra.setPreferredSize(new java.awt.Dimension(200, 70));
+        meCompra.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        meCompra.setPreferredSize(new java.awt.Dimension(160, 70));
         meCompra.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 meCompraActionPerformed(evt);
             }
         });
 
-        jMenuItem12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoRegistrarCompra.png"))); // NOI18N
+        jMenuItem12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoRegistrarCompra25.png"))); // NOI18N
         jMenuItem12.setText("Registrar compra");
         jMenuItem12.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -625,7 +644,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         meCompra.add(jMenuItem12);
         meCompra.add(jSeparator15);
 
-        jMenuItem14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoRegistrarCompra.png"))); // NOI18N
+        jMenuItem14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoEliminar25.png"))); // NOI18N
         jMenuItem14.setText("Anular compra");
         jMenuItem14.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -640,9 +659,9 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         meProducto.setText("PRODUCTOS");
         meProducto.setToolTipText("");
         meProducto.setEnabled(false);
-        meProducto.setFont(new java.awt.Font("Sitka Text", 1, 14)); // NOI18N
+        meProducto.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         meProducto.setMinimumSize(new java.awt.Dimension(200, 70));
-        meProducto.setPreferredSize(new java.awt.Dimension(270, 70));
+        meProducto.setPreferredSize(new java.awt.Dimension(170, 70));
         meProducto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 meProductoActionPerformed(evt);
@@ -667,23 +686,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         });
         meProducto.add(jMenuItem16);
         meProducto.add(jSeparator9);
-
-        jMenuItem3.setText("INGREDIENTES ACTIVOS");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
-            }
-        });
-        meProducto.add(jMenuItem3);
         meProducto.add(jSeparator10);
-
-        jMenuItem21.setText("CLASES DE PRODUCTO");
-        jMenuItem21.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem21ActionPerformed(evt);
-            }
-        });
-        meProducto.add(jMenuItem21);
         meProducto.add(jSeparator12);
 
         jMenuItem20.setText("TIPOS DE AGROQUIMICOS");
@@ -708,9 +711,9 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         meUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoUsuario.png"))); // NOI18N
         meUsuario.setText("USUARIOS");
         meUsuario.setEnabled(false);
-        meUsuario.setFont(new java.awt.Font("Sitka Text", 1, 14)); // NOI18N
+        meUsuario.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         meUsuario.setMinimumSize(new java.awt.Dimension(210, 70));
-        meUsuario.setPreferredSize(new java.awt.Dimension(270, 70));
+        meUsuario.setPreferredSize(new java.awt.Dimension(220, 70));
 
         jMenuItem4.setText("MODULOS");
         jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
@@ -750,10 +753,10 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jMenuBar1.add(meUsuario);
 
         meReporte.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoReporte.png"))); // NOI18N
-        meReporte.setText("REPORTES");
+        meReporte.setText("CONSULTAS");
         meReporte.setEnabled(false);
-        meReporte.setFont(new java.awt.Font("Sitka Text", 1, 14)); // NOI18N
-        meReporte.setPreferredSize(new java.awt.Dimension(270, 70));
+        meReporte.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        meReporte.setPreferredSize(new java.awt.Dimension(200, 70));
 
         jMenuItem7.setText("Reporte de compras");
         jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
@@ -777,8 +780,8 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         meConfiguracion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoConfiguracion.png"))); // NOI18N
         meConfiguracion.setText("CONFIGURACIÓN");
         meConfiguracion.setEnabled(false);
-        meConfiguracion.setFont(new java.awt.Font("Sitka Text", 1, 14)); // NOI18N
-        meConfiguracion.setPreferredSize(new java.awt.Dimension(270, 70));
+        meConfiguracion.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        meConfiguracion.setPreferredSize(new java.awt.Dimension(220, 70));
 
         jMenuItem6.setText("Cambio de moneda");
         jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
@@ -792,8 +795,8 @@ public class Principal extends javax.swing.JFrame implements Runnable {
 
         jMenu6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoSalir.png"))); // NOI18N
         jMenu6.setText("SALIR");
-        jMenu6.setFont(new java.awt.Font("Sitka Text", 1, 14)); // NOI18N
-        jMenu6.setPreferredSize(new java.awt.Dimension(270, 70));
+        jMenu6.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        jMenu6.setPreferredSize(new java.awt.Dimension(220, 70));
 
         jMenuItem19.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ESCAPE, 0));
         jMenuItem19.setText("OK");
@@ -813,13 +816,15 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jpBarra, javax.swing.GroupLayout.DEFAULT_SIZE, 1380, Short.MAX_VALUE)
-            .addComponent(piPrincipal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1380, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(piPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 1380, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(piPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 678, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(piPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 746, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jpBarra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -836,12 +841,12 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
 
     }//GEN-LAST:event_jMenuItem9ActionPerformed
-    
+
 
     private void jMenuItem17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem17ActionPerformed
 
     }//GEN-LAST:event_jMenuItem17ActionPerformed
-    
+
     private void ObtenerFechayHora() {
         Date fecha = new Date();
         //Formateando la fecha:
@@ -850,7 +855,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         DateFormat formatoHora = new SimpleDateFormat("HH:mm:ss");
         lbHora.setText(formatoHora.format(fecha));
     }
-    
+
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
 
@@ -890,40 +895,6 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     private void btnCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompraActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnCompraActionPerformed
-
-    private void meProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_meProductoActionPerformed
-
-    }//GEN-LAST:event_meProductoActionPerformed
-
-    private void jMenuItem23ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem23ActionPerformed
-        /*  ABMDosis abmdosis = new ABMDosis(this, false);
-        abmdosis.setVisible(true);*/
-    }//GEN-LAST:event_jMenuItem23ActionPerformed
-
-    private void jMenuItem20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem20ActionPerformed
-        /*ABMTipoAgroquimico abmtipoagroquimico = new ABMTipoAgroquimico(null, null, false);
-        abmtipoagroquimico.setVisible(true);*/
-    }//GEN-LAST:event_jMenuItem20ActionPerformed
-
-    private void jMenuItem21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem21ActionPerformed
-        /* ABMClaseProducto abmpaisorigen = new ABMClaseProducto(null, this, false);
-        abmpaisorigen.setVisible(true);*/
-    }//GEN-LAST:event_jMenuItem21ActionPerformed
-
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        /*ABMIngredienteActivo abmingredienteactivo = new ABMIngredienteActivo(null, this, false);
-        abmingredienteactivo.setVisible(true);*/
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
-
-    private void jMenuItem16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem16ActionPerformed
-        /*ABMFormulacion abmformulacion = new ABMFormulacion(null, this, false);
-        abmformulacion.setVisible(true);*/
-    }//GEN-LAST:event_jMenuItem16ActionPerformed
-
-    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
-        /*ABMEmpresaRegistrante abmempresaregistrante = new ABMEmpresaRegistrante(null, this, false);
-        abmempresaregistrante.setVisible(true);*/
-    }//GEN-LAST:event_jMenuItem8ActionPerformed
 
     private void btnVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVentaActionPerformed
 
@@ -967,6 +938,30 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         AnularCompra anularcompra = new AnularCompra(this);
         anularcompra.setVisible(true);
     }//GEN-LAST:event_jMenuItem14ActionPerformed
+
+    private void meProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_meProductoActionPerformed
+
+    }//GEN-LAST:event_meProductoActionPerformed
+
+    private void jMenuItem23ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem23ActionPerformed
+        /*  ABMDosis abmdosis = new ABMDosis(this, false);
+        abmdosis.setVisible(true);*/
+    }//GEN-LAST:event_jMenuItem23ActionPerformed
+
+    private void jMenuItem20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem20ActionPerformed
+        /*ABMTipoAgroquimico abmtipoagroquimico = new ABMTipoAgroquimico(null, null, false);
+        abmtipoagroquimico.setVisible(true);*/
+    }//GEN-LAST:event_jMenuItem20ActionPerformed
+
+    private void jMenuItem16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem16ActionPerformed
+        /*ABMFormulacion abmformulacion = new ABMFormulacion(null, this, false);
+        abmformulacion.setVisible(true);*/
+    }//GEN-LAST:event_jMenuItem16ActionPerformed
+
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+        /*ABMEmpresaRegistrante abmempresaregistrante = new ABMEmpresaRegistrante(null, this, false);
+        abmempresaregistrante.setVisible(true);*/
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1014,6 +1009,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     private javax.swing.JButton btnProducto;
     private javax.swing.JButton btnUsuario;
     private javax.swing.JButton btnVenta;
+    private org.edisoncor.gui.button.ButtonTextDown buttonTextDown1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -1030,10 +1026,8 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     private javax.swing.JMenuItem jMenuItem18;
     private javax.swing.JMenuItem jMenuItem19;
     private javax.swing.JMenuItem jMenuItem20;
-    private javax.swing.JMenuItem jMenuItem21;
     private javax.swing.JMenuItem jMenuItem22;
     private javax.swing.JMenuItem jMenuItem23;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
@@ -1088,10 +1082,10 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 
         Thread current = Thread.currentThread();
-        
+
         while (current == hilo) {
             ObtenerFechayHora();
-            
+
         }
     }
 }

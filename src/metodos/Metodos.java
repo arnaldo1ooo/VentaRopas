@@ -27,10 +27,13 @@ import javax.swing.table.TableColumnModel;
 import conexion.Conexion;
 import forms.ABMFuncionario;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.text.DecimalFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
@@ -309,6 +312,13 @@ public class Metodos {
             System.out.println("Error al sumar columna " + e);
         }
         return totalDouble;
+    }
+
+    public Icon AjustarIconoAButton(Icon icono, int largo) {
+        ImageIcon imageicono = (ImageIcon) icono;
+        Image img = imageicono.getImage();
+        Image resizedImage = img.getScaledInstance(largo, largo, java.awt.Image.SCALE_SMOOTH);
+        return new ImageIcon(resizedImage);
     }
 
 }
