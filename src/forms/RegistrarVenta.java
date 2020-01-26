@@ -1376,8 +1376,8 @@ public final class RegistrarVenta extends javax.swing.JDialog {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         ObtenerImporte();
-        System.out.println("ss");ñ
-        
+        System.out.println("ss");
+
         RegistroNuevo();
     }//GEN-LAST:event_btnGuardarActionPerformed
 
@@ -1501,7 +1501,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
 
                     //Calcular vuelto
                     txtImporte.setText(metodostxt.DoubleFormatoSudamericaKeyReleased(txtImporte.getText()));
-                    double vuelto = totalventa - importe;
+                    double vuelto = importe - totalventa;
                     txtVuelto.setText(metodostxt.DoubleAFormatoSudamerica(vuelto));
                     importeValido = true;
                 }
