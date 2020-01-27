@@ -23,7 +23,7 @@ public class Conexion {
     private static String servidor;
 
     public static Connection ConectarBasedeDatos() {
-        String tipoHost = "locala";
+        String tipoHost = "local";
 
         if (tipoHost.equals("local")) {
             //Modo host local
