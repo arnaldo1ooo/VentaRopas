@@ -224,7 +224,8 @@ public class MetodosImagen {
         Metodos metodos = new Metodos();
         String idultimoproducto = "";
         try {
-            Conexion con = metodos.ObtenerRSSentencia("SELECT MAX(pro_codigo) AS idultimoproducto FROM producto");
+            Conexion con = new Conexion();
+            con = con.ObtenerRSSentencia("SELECT MAX(pro_codigo) AS idultimoproducto FROM producto");
             while (con.rs.next()) {
                 idultimoproducto = con.rs.getString("idultimoproducto");
             }

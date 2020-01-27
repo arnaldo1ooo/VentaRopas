@@ -27,6 +27,7 @@ import static login.Login.Alias;
  */
 public class Principal extends javax.swing.JFrame implements Runnable {
 
+    Conexion con = new Conexion();
     Metodos metodos = new Metodos();
     MetodosTXT metodostxt = new MetodosTXT();
     Thread hilo;
@@ -44,13 +45,20 @@ public class Principal extends javax.swing.JFrame implements Runnable {
 
         PrivilegiosUsuarioModulos(Alias);
 
-        //meVenta.setIcon(metodos.AjustarIconoAButton(meVenta.getIcon(), meVenta.getHeight()));
+        //Redimensionar iconos menu
+        meVenta.setIcon(metodos.AjustarIconoAButton(meVenta.getIcon(), meVenta.getHeight()));
+        meCompra.setIcon(metodos.AjustarIconoAButton(meCompra.getIcon(), meCompra.getHeight()));
+        meProducto.setIcon(metodos.AjustarIconoAButton(meProducto.getIcon(), meProducto.getHeight()));
+        meUsuario.setIcon(metodos.AjustarIconoAButton(meUsuario.getIcon(), meUsuario.getHeight()));
+        meReporte.setIcon(metodos.AjustarIconoAButton(meReporte.getIcon(), meReporte.getHeight()));
+        meConfiguracion.setIcon(metodos.AjustarIconoAButton(meConfiguracion.getIcon(), meConfiguracion.getHeight()));
+        meSalir.setIcon(metodos.AjustarIconoAButton(meSalir.getIcon(), meSalir.getHeight()));
 
         setVisible(true);
     }
 
     private void PrivilegiosUsuarioModulos(String ElAlias) {
-        Conexion con = metodos.ObtenerRSSentencia("CALL SP_PrivilegioUsuarioModulos('" + ElAlias + "')");
+        con = con.ObtenerRSSentencia("CALL SP_PrivilegioUsuarioModulos('" + ElAlias + "')");
         String modulo;
         try {
             while (con.rs.next()) {
@@ -93,7 +101,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
 
     private void AsignarCotizaciones() {
         try {
-            Conexion con = metodos.ObtenerRSSentencia("SELECT coti_valorcompra, coti_valorventa, coti_fecha "
+            con = con.ObtenerRSSentencia("SELECT coti_valorcompra, coti_valorventa, coti_fecha "
                     + "FROM cotizacion WHERE coti_de='Dolares' AND coti_a='Guaranies'");
             con.rs.next();
             SimpleDateFormat formatoFechaAmericano = new SimpleDateFormat("yyyy/MM/dd");
@@ -105,14 +113,14 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             lblCotiUsdGsCompra.setText(metodostxt.DoubleAFormatoSudamerica(cotiUsdGsCompra));
             lblCotiUsdGsVenta.setText(metodostxt.DoubleAFormatoSudamerica(con.rs.getDouble("coti_valorventa")));
 
-            con = metodos.ObtenerRSSentencia("SELECT coti_valorcompra, coti_valorventa, coti_fecha "
+            con = con.ObtenerRSSentencia("SELECT coti_valorcompra, coti_valorventa, coti_fecha "
                     + "FROM cotizacion WHERE coti_de='Dolares' AND coti_a='Reales'");
             con.rs.next();
             cotiUsdRsCompra = Double.parseDouble(con.rs.getString("coti_valorcompra"));
             lblCotiUsdRsCompra.setText(metodostxt.DoubleAFormatoSudamerica(cotiUsdRsCompra));
             lblCotiUsdRsVenta.setText(metodostxt.DoubleAFormatoSudamerica(con.rs.getDouble("coti_valorventa")));
 
-            con = metodos.ObtenerRSSentencia("SELECT coti_valorcompra, coti_valorventa, coti_fecha "
+            con = con.ObtenerRSSentencia("SELECT coti_valorcompra, coti_valorventa, coti_fecha "
                     + "FROM cotizacion WHERE coti_de='Dolares' AND coti_a='Pesos argentinos'");
             con.rs.next();
             cotiUsdPaCompra = Double.parseDouble(con.rs.getString("coti_valorcompra"));
@@ -129,7 +137,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
 
     private void PerfilUsuario() {
         String consulta = "CALL SP_UsuarioPerfilConsulta('" + Alias + "')";
-        Conexion con = metodos.ObtenerRSSentencia(consulta);
+        con = con.ObtenerRSSentencia(consulta);
         try {
             while (con.rs.next()) {
                 String perfil = con.rs.getString("per_denominacion");
@@ -166,7 +174,6 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         btnVenta = new javax.swing.JButton();
         btnProducto = new javax.swing.JButton();
         btnUsuario = new javax.swing.JButton();
-        buttonTextDown1 = new org.edisoncor.gui.button.ButtonTextDown();
         jpCotizaciones = new javax.swing.JPanel();
         lblCotiUsdGsCompra = new javax.swing.JLabel();
         lbldolares3 = new javax.swing.JLabel();
@@ -200,8 +207,6 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jMenuItem8 = new javax.swing.JMenuItem();
         jSeparator8 = new javax.swing.JPopupMenu.Separator();
         jMenuItem16 = new javax.swing.JMenuItem();
-        jSeparator9 = new javax.swing.JPopupMenu.Separator();
-        jSeparator10 = new javax.swing.JPopupMenu.Separator();
         jSeparator12 = new javax.swing.JPopupMenu.Separator();
         jMenuItem20 = new javax.swing.JMenuItem();
         jSeparator13 = new javax.swing.JPopupMenu.Separator();
@@ -220,7 +225,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jMenuItem22 = new javax.swing.JMenuItem();
         meConfiguracion = new javax.swing.JMenu();
         jMenuItem6 = new javax.swing.JMenuItem();
-        jMenu6 = new javax.swing.JMenu();
+        meSalir = new javax.swing.JMenu();
         jMenuItem19 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -321,7 +326,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         piPrincipal.setPreferredSize(new java.awt.Dimension(2000, 655));
 
         btnCliente.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        btnCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoClientes.png"))); // NOI18N
+        btnCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoClientes70.png"))); // NOI18N
         btnCliente.setText("CLIENTES");
         btnCliente.setEnabled(false);
         btnCliente.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -332,7 +337,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         });
 
         btnFuncionario.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        btnFuncionario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoFuncionario.png"))); // NOI18N
+        btnFuncionario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoFuncionario70.png"))); // NOI18N
         btnFuncionario.setText("FUNCIONARIOS");
         btnFuncionario.setEnabled(false);
         btnFuncionario.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -343,7 +348,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         });
 
         btnCompra.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        btnCompra.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoCompra.png"))); // NOI18N
+        btnCompra.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoCompra70.png"))); // NOI18N
         btnCompra.setText("COMPRAS");
         btnCompra.setEnabled(false);
         btnCompra.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -354,6 +359,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         });
 
         btnVenta.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        btnVenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoVenta70.png"))); // NOI18N
         btnVenta.setText("VENTAS");
         btnVenta.setEnabled(false);
         btnVenta.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -364,7 +370,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         });
 
         btnProducto.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        btnProducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoProducto.png"))); // NOI18N
+        btnProducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoProducto70.png"))); // NOI18N
         btnProducto.setText("PRODUCTOS");
         btnProducto.setEnabled(false);
         btnProducto.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -375,7 +381,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         });
 
         btnUsuario.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        btnUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoUsuario.png"))); // NOI18N
+        btnUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoUsuario70.png"))); // NOI18N
         btnUsuario.setText("USUARIOS");
         btnUsuario.setEnabled(false);
         btnUsuario.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -384,11 +390,6 @@ public class Principal extends javax.swing.JFrame implements Runnable {
                 btnUsuarioActionPerformed(evt);
             }
         });
-
-        buttonTextDown1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/IconoVenta.png"))); // NOI18N
-        buttonTextDown1.setText("VENTAS");
-        buttonTextDown1.setDistanciaDeSombra(2);
-        buttonTextDown1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 
         jpCotizaciones.setBackground(new java.awt.Color(255, 255, 255));
         jpCotizaciones.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Cotización"));
@@ -550,25 +551,21 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             .addGroup(piPrincipalLayout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addGroup(piPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnVenta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnCompra, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnFuncionario, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE)
-                    .addComponent(btnCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnProducto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(piPrincipalLayout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addComponent(buttonTextDown1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(piPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(btnUsuario, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnVenta, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnCompra, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnCliente, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnFuncionario, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 731, Short.MAX_VALUE)
                 .addComponent(jpCotizaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
         );
         piPrincipalLayout.setVerticalGroup(
             piPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(piPrincipalLayout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addComponent(buttonTextDown1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(56, 56, 56)
                 .addComponent(btnProducto)
                 .addGap(18, 18, 18)
                 .addComponent(btnFuncionario)
@@ -580,16 +577,16 @@ public class Principal extends javax.swing.JFrame implements Runnable {
                 .addComponent(btnVenta)
                 .addGap(18, 18, 18)
                 .addComponent(btnUsuario)
-                .addContainerGap(80, Short.MAX_VALUE))
+                .addContainerGap(108, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, piPrincipalLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jpCotizaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0))
+                .addComponent(jpCotizaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jMenuBar1.setMinimumSize(new java.awt.Dimension(120, 70));
         jMenuBar1.setPreferredSize(new java.awt.Dimension(120, 55));
 
+        meVenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoVenta70.png"))); // NOI18N
         meVenta.setText("VENTAS");
         meVenta.setEnabled(false);
         meVenta.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
@@ -623,7 +620,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
 
         jMenuBar1.add(meVenta);
 
-        meCompra.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoCompra.png"))); // NOI18N
+        meCompra.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoCompra70.png"))); // NOI18N
         meCompra.setText("COMPRAS");
         meCompra.setEnabled(false);
         meCompra.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
@@ -655,7 +652,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
 
         jMenuBar1.add(meCompra);
 
-        meProducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoProducto.png"))); // NOI18N
+        meProducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoProducto70.png"))); // NOI18N
         meProducto.setText("PRODUCTOS");
         meProducto.setToolTipText("");
         meProducto.setEnabled(false);
@@ -685,8 +682,6 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             }
         });
         meProducto.add(jMenuItem16);
-        meProducto.add(jSeparator9);
-        meProducto.add(jSeparator10);
         meProducto.add(jSeparator12);
 
         jMenuItem20.setText("TIPOS DE AGROQUIMICOS");
@@ -708,7 +703,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
 
         jMenuBar1.add(meProducto);
 
-        meUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoUsuario.png"))); // NOI18N
+        meUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoUsuario70.png"))); // NOI18N
         meUsuario.setText("USUARIOS");
         meUsuario.setEnabled(false);
         meUsuario.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
@@ -752,7 +747,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
 
         jMenuBar1.add(meUsuario);
 
-        meReporte.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoReporte.png"))); // NOI18N
+        meReporte.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoReporte70.png"))); // NOI18N
         meReporte.setText("CONSULTAS");
         meReporte.setEnabled(false);
         meReporte.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
@@ -777,7 +772,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
 
         jMenuBar1.add(meReporte);
 
-        meConfiguracion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoConfiguracion.png"))); // NOI18N
+        meConfiguracion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoConfiguracion70.png"))); // NOI18N
         meConfiguracion.setText("CONFIGURACIÓN");
         meConfiguracion.setEnabled(false);
         meConfiguracion.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
@@ -793,10 +788,10 @@ public class Principal extends javax.swing.JFrame implements Runnable {
 
         jMenuBar1.add(meConfiguracion);
 
-        jMenu6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoSalir.png"))); // NOI18N
-        jMenu6.setText("SALIR");
-        jMenu6.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        jMenu6.setPreferredSize(new java.awt.Dimension(220, 70));
+        meSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos70x70/IconoSalir70.png"))); // NOI18N
+        meSalir.setText("SALIR");
+        meSalir.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        meSalir.setPreferredSize(new java.awt.Dimension(220, 70));
 
         jMenuItem19.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ESCAPE, 0));
         jMenuItem19.setText("OK");
@@ -805,9 +800,9 @@ public class Principal extends javax.swing.JFrame implements Runnable {
                 jMenuItem19ActionPerformed(evt);
             }
         });
-        jMenu6.add(jMenuItem19);
+        meSalir.add(jMenuItem19);
 
-        jMenuBar1.add(jMenu6);
+        jMenuBar1.add(meSalir);
 
         setJMenuBar(jMenuBar1);
 
@@ -816,9 +811,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jpBarra, javax.swing.GroupLayout.DEFAULT_SIZE, 1380, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(piPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 1380, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
+            .addComponent(piPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 1380, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1009,13 +1002,11 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     private javax.swing.JButton btnProducto;
     private javax.swing.JButton btnUsuario;
     private javax.swing.JButton btnVenta;
-    private org.edisoncor.gui.button.ButtonTextDown buttonTextDown1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JMenu jMenu6;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem11;
     private javax.swing.JMenuItem jMenuItem12;
@@ -1033,7 +1024,6 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenuItem jMenuItem9;
-    private javax.swing.JPopupMenu.Separator jSeparator10;
     private javax.swing.JPopupMenu.Separator jSeparator11;
     private javax.swing.JPopupMenu.Separator jSeparator12;
     private javax.swing.JPopupMenu.Separator jSeparator13;
@@ -1043,7 +1033,6 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     private javax.swing.JPopupMenu.Separator jSeparator6;
     private javax.swing.JPopupMenu.Separator jSeparator7;
     private javax.swing.JPopupMenu.Separator jSeparator8;
-    private javax.swing.JPopupMenu.Separator jSeparator9;
     private javax.swing.JPanel jpBarra;
     private javax.swing.JPanel jpCotizaciones;
     private javax.swing.JLabel lbAlias;
@@ -1072,6 +1061,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     private javax.swing.JMenu meConfiguracion;
     private javax.swing.JMenu meProducto;
     private javax.swing.JMenu meReporte;
+    private javax.swing.JMenu meSalir;
     private javax.swing.JMenu meUsuario;
     private javax.swing.JMenu meVenta;
     private org.edisoncor.gui.panel.PanelImage piPrincipal;

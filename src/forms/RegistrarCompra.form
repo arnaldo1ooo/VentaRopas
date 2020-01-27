@@ -35,7 +35,7 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jpPrincipal" alignment="0" pref="645" max="32767" attributes="0"/>
+          <Component id="jpPrincipal" alignment="0" pref="668" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -54,31 +54,26 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jpDatosProducto" max="32767" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jpDatosCompra" max="32767" attributes="0"/>
-                      </Group>
+                      <Component id="jpDatosProducto" alignment="0" max="32767" attributes="0"/>
+                      <Component id="jpDatosCompra" alignment="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
               </Group>
               <Component id="panel2" alignment="1" max="32767" attributes="0"/>
               <Group type="102" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <EmptySpace min="-2" pref="187" max="-2" attributes="0"/>
+                          <Component id="jpBotones1" min="-2" pref="433" max="-2" attributes="0"/>
+                      </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
                           <Component id="jpProductos" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="187" max="-2" attributes="0"/>
-                          <Component id="jpBotones1" min="-2" pref="433" max="-2" attributes="0"/>
-                      </Group>
                   </Group>
-                  <EmptySpace pref="9" max="32767" attributes="0"/>
+                  <EmptySpace pref="8" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -91,7 +86,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jpDatosProducto" min="-2" pref="172" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
-                  <Component id="jpProductos" min="-2" pref="245" max="-2" attributes="0"/>
+                  <Component id="jpProductos" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jpBotones1" min="-2" pref="55" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -339,9 +334,9 @@
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="txtCodigoProducto" max="32767" attributes="0"/>
                                               <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                                              <Component id="btnABMProducto" min="-2" pref="36" max="-2" attributes="0"/>
+                                              <Component id="btnBuscarProducto" min="-2" pref="36" max="-2" attributes="0"/>
                                               <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
-                                              <Component id="btnABMProducto1" min="-2" pref="36" max="-2" attributes="0"/>
+                                              <Component id="btnABMProducto" min="-2" pref="36" max="-2" attributes="0"/>
                                               <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
@@ -378,8 +373,8 @@
                               <EmptySpace min="3" pref="3" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="2" attributes="0">
                                   <Component id="txtExistenciaActual" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
-                                  <Component id="btnABMProducto1" alignment="2" min="-2" pref="36" max="-2" attributes="0"/>
                                   <Component id="btnABMProducto" alignment="2" min="-2" pref="36" max="-2" attributes="0"/>
+                                  <Component id="btnBuscarProducto" alignment="2" min="-2" pref="36" max="-2" attributes="0"/>
                                   <Component id="txtCodigoProducto" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
                                   <Component id="txtIDProducto" alignment="2" min="-2" pref="31" max="-2" attributes="0"/>
                               </Group>
@@ -490,7 +485,7 @@
                 <Property name="text" type="java.lang.String" value="ID"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="btnABMProducto">
+            <Component class="javax.swing.JButton" name="btnBuscarProducto">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/iconos/Iconos20x20/IconoBuscar.png"/>
@@ -498,7 +493,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Buscador de productos"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnABMProductoActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBuscarProductoActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btnPantallaCompleta">
@@ -532,7 +527,7 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="btnABMProducto1">
+            <Component class="javax.swing.JButton" name="btnABMProducto">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/iconos/Iconos20x20/IconoNuevo.png"/>
@@ -540,7 +535,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Abre la ventana de productos"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnABMProducto1ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnABMProductoActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>
@@ -581,7 +576,7 @@
                                   </Group>
                                   <Component id="cbMoneda" alignment="0" min="-2" pref="143" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="220" max="32767" attributes="0"/>
+                              <EmptySpace pref="216" max="32767" attributes="0"/>
                               <Component id="btnAnadir" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="btnEliminar" min="-2" max="-2" attributes="0"/>
@@ -590,8 +585,8 @@
                           <Group type="102" alignment="1" attributes="0">
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="lblTituloTotalCompra" max="32767" attributes="0"/>
-                                  <Component id="lblTotalCompra" max="32767" attributes="0"/>
+                                  <Component id="lblTituloTotalCompra1" pref="156" max="32767" attributes="0"/>
+                                  <Component id="txtTotalCompra" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="lblTotalMoneda" min="-2" pref="123" max="-2" attributes="0"/>
@@ -620,14 +615,14 @@
                       </Group>
                       <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                       <Component id="scPrincipal" min="-2" pref="123" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="lblTituloTotalCompra" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="lblTotalCompra" min="-2" pref="28" max="-2" attributes="0"/>
-                          <Component id="lblTotalMoneda" min="-2" pref="26" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="lblTituloTotalCompra1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="lblTotalMoneda" alignment="0" min="-2" pref="31" max="-2" attributes="0"/>
+                          <Component id="txtTotalCompra" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace pref="10" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -641,7 +636,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/iconos/Iconos20x20/IconoEliminar.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Retirar"/>
+                <Property name="text" type="java.lang.String" value="Quitar"/>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
@@ -656,7 +651,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/iconos/Iconos20x20/IconoNuevo.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="A&#xf1;adir"/>
+                <Property name="text" type="java.lang.String" value="Agregar"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAnadirActionPerformed"/>
@@ -796,37 +791,36 @@
                 <Property name="text" type="java.lang.String" value="Moneda"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="lblTituloTotalCompra">
+            <Component class="javax.swing.JLabel" name="lblTituloTotalCompra1">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="SansSerif" size="12" style="0"/>
+                  <Font name="SansSerif" size="12" style="1"/>
                 </Property>
-                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="33" green="66" red="0" type="rgb"/>
-                </Property>
-                <Property name="horizontalAlignment" type="int" value="4"/>
+                <Property name="horizontalAlignment" type="int" value="2"/>
                 <Property name="text" type="java.lang.String" value="TOTAL DE LA COMPRA"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="lblTotalCompra">
+            <Component class="javax.swing.JTextField" name="txtTotalCompra">
               <Properties>
+                <Property name="editable" type="boolean" value="false"/>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="0" type="rgb"/>
+                </Property>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="SansSerif" size="24" style="1"/>
+                  <Font name="sansserif" size="22" style="1"/>
                 </Property>
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="33" green="66" red="0" type="rgb"/>
+                  <Color blue="0" green="9a" red="0" type="rgb"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="4"/>
                 <Property name="text" type="java.lang.String" value="0"/>
+                <Property name="focusable" type="boolean" value="false"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="lblTotalMoneda">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="SansSerif" size="16" style="0"/>
-                </Property>
-                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="33" green="66" red="0" type="rgb"/>
+                  <Font name="SansSerif" size="14" style="1"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="2"/>
                 <Property name="text" type="java.lang.String" value="Moneda"/>
@@ -863,12 +857,12 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="labelMetric2" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
-                          <Group type="103" alignment="3" groupAlignment="3" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                               <Component id="lblNumCompra" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="labelMetric1" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
+                          <Component id="labelMetric2" min="-2" pref="33" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="7" max="32767" attributes="0"/>
                   </Group>

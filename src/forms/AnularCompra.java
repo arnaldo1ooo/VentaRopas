@@ -5,6 +5,7 @@
  */
 package forms;
 
+import conexion.Conexion;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 import metodos.Metodos;
@@ -12,13 +13,13 @@ import metodos.MetodosTXT;
 
 public class AnularCompra extends javax.swing.JDialog {
 
+    Conexion con = new Conexion();
     Metodos metodos = new Metodos();
     MetodosTXT metodostxt = new MetodosTXT();
 
     public AnularCompra(javax.swing.JFrame parent) {
         super(parent);
         initComponents();
-        this.setLocationRelativeTo(null); //Centrar ventana
 
         ConsultaAllCompraBD();
     }
@@ -28,7 +29,7 @@ public class AnularCompra extends javax.swing.JDialog {
         String titlesJtabla[] = {"Código", "N° de compra", "N° del documento", "Proveedor", "Tipo de documento",
             "Fecha de registro", "Fecha de compra"};
 
-        tbPrincipal.setModel(metodos.ConsultAllBD(sentencia, titlesJtabla, cbCampoBuscar));
+        tbPrincipal.setModel(con.ConsultAllBD(sentencia, titlesJtabla, cbCampoBuscar));
         metodos.AnchuraColumna(tbPrincipal);
         cbCampoBuscar.setSelectedIndex(1);
 
@@ -44,7 +45,7 @@ public class AnularCompra extends javax.swing.JDialog {
         String sentencia = "SP_CompraProductosConsulta(" + codigoCompraSelect + ")";
         String titlesJtabla[] = {"Id del producto", "Descripción", "Cantidad", "Precio de compra (En dólares americanos)"};
 
-        tbProductosComprados.setModel(metodos.ConsultAllBD(sentencia, titlesJtabla, null));
+        tbProductosComprados.setModel(con.ConsultAllBD(sentencia, titlesJtabla, null));
         metodos.AnchuraColumna(tbProductosComprados);
 
         //Convertir precios
@@ -307,6 +308,7 @@ public class AnularCompra extends javax.swing.JDialog {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void tbPrincipalMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbPrincipalMousePressed
@@ -333,7 +335,7 @@ public class AnularCompra extends javax.swing.JDialog {
             if (confirmado == JOptionPane.YES_OPTION) {
                 String codigocompra = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0).toString();
                 //Elimina la compra
-                metodos.EjecutarAltaoModi("CALL SP_CompraEliminar(" + codigocompra + ")");
+                con.EjecutarABM("CALL SP_CompraEliminar(" + codigocompra + ")");
 
                 //Elimina los productos de la compra                      
                 String idproducto;
@@ -343,7 +345,7 @@ public class AnularCompra extends javax.swing.JDialog {
                     idproducto = tbProductosComprados.getValueAt(fila, 0).toString();
                     cantidadadquirida = Integer.parseInt(tbProductosComprados.getValueAt(fila, 2).toString());
 
-                    metodos.EjecutarAltaoModi("CALL SP_CompraProductosEliminar('" + codigocompra + "','"
+                    con.EjecutarABM("CALL SP_CompraProductosEliminar('" + codigocompra + "','"
                             + idproducto + "','" + cantidadadquirida + "')");
                 }
                 JOptionPane.showMessageDialog(this, "Compra anulado correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);

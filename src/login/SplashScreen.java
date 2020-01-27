@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package principal;
+package login;
 
+import conexion.Conexion;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -14,6 +15,7 @@ import java.util.logging.Logger;
 import metodos.Metodos;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import principal.Principal;
 
 /**
  *
@@ -22,11 +24,10 @@ import org.jsoup.select.Elements;
 public class SplashScreen extends javax.swing.JFrame implements Runnable {
 
     private Thread tiempo = null;
-    Metodos metodos = new Metodos();
+    Conexion con = new Conexion();
 
     public SplashScreen(java.awt.Frame parent, boolean modal) {
         initComponents();
-        this.setLocationRelativeTo(null);
 
         tiempo = new Thread(this);
         tiempo.start();
@@ -128,6 +129,7 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     /**
@@ -221,7 +223,7 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
 
             String usdGsVentaString = fila1.getElementsByClass("sale").text();
             double usdGsVentaDouble = Double.parseDouble(((usdGsVentaString).replace(".", "")).replace(",", "."));
-            metodos.EjecutarAltaoModi("CALL SP_CotizacionModificar('1','Dolares','Guaranies','" + usdGsCompraDouble + "','"
+            con.EjecutarABM("CALL SP_CotizacionModificar('1','Dolares','Guaranies','" + usdGsCompraDouble + "','"
                     + usdGsVentaDouble + "','" + FechaActual() + "')");
 
             losDiv = doc.select("div." + "col-sm-5"); //Las tablas, div.
@@ -234,7 +236,7 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
 
             String usdRsVentaString = fila1.getElementsByClass("sale").text();
             double usdRsVentaDouble = Double.parseDouble(((usdRsVentaString).replace(".", "")).replace(",", "."));
-            metodos.EjecutarAltaoModi("CALL SP_CotizacionModificar('2','Dolares','Reales','" + usdRsCompraDouble + "','"
+            con.EjecutarABM("CALL SP_CotizacionModificar('2','Dolares','Reales','" + usdRsCompraDouble + "','"
                     + usdRsVentaDouble + "','" + FechaActual() + "')");
 
             String usdPaCompraString = fila2.getElementsByClass("purchase").text();
@@ -242,7 +244,7 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
 
             String usdPaVentaString = fila2.getElementsByClass("sale").text();
             double usdPaVentaDouble = Double.parseDouble(((usdPaVentaString).replace(".", "")).replace(",", "."));
-            metodos.EjecutarAltaoModi("CALL SP_CotizacionModificar('3','Dolares','Pesos argentinos','" + usdPaCompraDouble + "','"
+            con.EjecutarABM("CALL SP_CotizacionModificar('3','Dolares','Pesos argentinos','" + usdPaCompraDouble + "','"
                     + usdPaVentaDouble + "','" + FechaActual() + "')");
         } catch (IOException e) {
             System.out.println("Error al realizar el scraping web " + e);
@@ -253,7 +255,7 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
     private String FechaActual() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date fechaactual = new Date();
-        
+
         return dateFormat.format(fechaactual); // ingresa hora a la bd
     }
 }

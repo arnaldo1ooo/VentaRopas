@@ -6,13 +6,10 @@
 package metodos;
 
 import conexion.Conexion;
-import java.awt.Color;
-import java.awt.Graphics;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollBar;
@@ -79,8 +76,7 @@ public class MetodosCombo {
         }
     }
 
-    public void CargarComboBox(JComboBox ElCombo, String sentencia) {
-        ElCombo.removeAllItems(); //Vaciamos el combo
+    public void CargarComboBox(JComboBox ElCombo, String sentencia, int porDefecto) {
 
         /*ElCombo.setRenderer(new DefaultListCellRenderer() {//Cambiar color de texto del combo cuando esta disabled
             @Override
@@ -90,8 +86,9 @@ public class MetodosCombo {
             }
         });*/
         try {
-            AutoCompleteDecorator.decorate(ElCombo);
+            ElCombo.removeAllItems(); //Vaciamos el combo
             System.out.println("Cargar combo (" + ElCombo.getName() + "): " + sentencia);
+            AutoCompleteDecorator.decorate(ElCombo);
             Connection con;
             con = (Connection) Conexion.ConectarBasedeDatos();
             Statement st;
@@ -99,12 +96,23 @@ public class MetodosCombo {
             ResultSet rs;
             rs = st.executeQuery(sentencia);
             while (rs.next()) {
-                ElCombo.addItem(new MetodosCombo(
-                        rs.getInt(1),
-                        rs.getString(2)));
+                ElCombo.addItem(new MetodosCombo(rs.getInt(1), rs.getString(2)));
             }
-            if (ElCombo.getItemCount() > 0) {
-                ElCombo.setSelectedIndex(-1);
+
+            //Por defecto
+            if (ElCombo.getItemCount() > 0 && porDefecto > 0) {
+                MetodosCombo item;
+                for (int i = 0; i < ElCombo.getItemCount(); i++) {
+                    item = (MetodosCombo) ElCombo.getItemAt(i);
+                    if (item.getCodigo() == porDefecto) {
+                        ElCombo.setSelectedIndex(i);
+                        break;
+                    }
+                }
+            } else {
+                if (ElCombo.getItemCount() > 0) {
+                    ElCombo.setSelectedIndex(-1);
+                }
             }
 
             ElCombo.setMaximumRowCount(ElCombo.getModel().getSize()); //Hace que se despliegue en toda la pantalla vertical el combo
@@ -119,7 +127,7 @@ public class MetodosCombo {
         }
     }
 
-    public int ObtenerIdComboBox(JComboBox<MetodosCombo> ElCombo) {
+    public int ObtenerIDSelectComboBox(JComboBox<MetodosCombo> ElCombo) {
         int codigoitemselect = -1;
         try {
             codigoitemselect = ElCombo.getItemAt(ElCombo.getSelectedIndex()).getCodigo();

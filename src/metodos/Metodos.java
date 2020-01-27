@@ -25,19 +25,14 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import conexion.Conexion;
-import forms.ABMFuncionario;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.text.DecimalFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.table.TableRowSorter;
 
@@ -46,93 +41,7 @@ import javax.swing.table.TableRowSorter;
  * @author Lic. Arnaldo Cantero
  */
 public class Metodos {
-
-    MetodosTXT metodostxt = new MetodosTXT();
     public int CantRegistros = 0;
-
-    public DefaultTableModel ConsultAllBD(String elSP, String titlesJtabla[], JComboBox ElComboCampos) {
-        DefaultTableModel modelotabla = new DefaultTableModel(null, titlesJtabla);
-        Conexion con = ObtenerRSSentencia("CALL " + elSP);
-        try {
-            ResultSetMetaData mdrs = con.rs.getMetaData();
-            int numColumns = mdrs.getColumnCount();
-            Object[] registro = new Object[numColumns]; //el numero es la cantidad de columnas del rs
-            while (con.rs.next()) {
-                for (int j = 0; j < numColumns; j++) {
-                    registro[j] = (con.rs.getString(j + 1));
-                }
-                modelotabla.addRow(registro);//agrega el registro a la tabla
-            }
-
-            //Carga el combobox con los titulos de la tabla, solo si esta vacio
-            if (ElComboCampos != null && ElComboCampos.getItemCount() == 0) {
-                javax.swing.DefaultComboBoxModel modelCombo = new javax.swing.DefaultComboBoxModel(titlesJtabla);
-                ElComboCampos.setModel(modelCombo);
-            }
-
-            con.DesconectarBasedeDatos();
-        } catch (SQLException ex) {
-            Logger.getLogger(ABMFuncionario.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return modelotabla;
-    }
-
-    public Conexion ObtenerRSSentencia(String sentencia) { //con.Desconectar luego de usar el metodo
-        Conexion conexion = new Conexion();
-        try {
-            System.out.println("Ejecutar sentencia ObtenerRSSentencia " + sentencia);
-            conexion.connection = (Connection) Conexion.ConectarBasedeDatos();
-            conexion.st = conexion.connection.createStatement();
-            conexion.rs = conexion.st.executeQuery(sentencia);
-            int cantreg = 0;
-            while (conexion.rs.next() && cantreg < 2) { //Revisamos cuantos registro trajo la consulta
-                cantreg++;
-            }
-
-            switch (cantreg) {
-                case 0:
-                    System.out.println("ObtenerRSSentencia no trajo ningun resultado");
-                    //con.rs.beforeFirst(); //Ponemos antes del primer registro en el puntero
-                    break;
-                case 1:
-                    System.out.println("ObtenerRSSentencia trajo un resultado");
-                    conexion.rs.beforeFirst(); //Ponemos antes del primer registro en el puntero
-                    break;
-                case 2:
-                    System.out.println("ObtenerRSSentencia trajo mas de un resultado");
-                    conexion.rs.beforeFirst(); //Ponemos antes del primer registro en el puntero
-                    break;
-                default:
-                //aca se escribe lo que si o si se ejecuta
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Error al EjecutarSentencia ObtenerRSSentencia,  sentencia: " + sentencia + ",  ERROR " + e);
-            e.printStackTrace();
-        } catch (NullPointerException e) {
-            System.out.println("ObtenerRSSentencia no trajo ningun resultado (null),  sentencia: " + sentencia + ",  ERROR " + e);
-            e.printStackTrace();
-        }
-        return conexion;
-    }
-
-    public void EjecutarAltaoModi(String sentencia) {
-        try {
-            Connection con;
-            con = (Connection) Conexion.ConectarBasedeDatos();
-
-            System.out.println("Insertar o Modificar registro: " + sentencia);
-
-            Statement st;
-            st = (Statement) con.createStatement();
-            st.executeUpdate(sentencia);
-            con.close();
-            st.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(Metodos.class.getName() + " Sentencia: " + sentencia).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Error al intentar crear o modificar registro" + ex, "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
 
     public void AnchuraColumna(JTable LaTabla) {
         LaTabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); //Desactiva el autoresize
@@ -264,7 +173,7 @@ public class Metodos {
         }
     }
 
-    public void centrarventanaJInternalFrame(JInternalFrame LaVentana) {
+    public void CentrarventanaJInternalFrame(JInternalFrame LaVentana) {
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((dimension.getWidth() - LaVentana.getWidth()) / 2);
         int y = 0; //(int) ((dimension.getHeight() - LaVentana.getHeight()) / 2);
@@ -279,11 +188,11 @@ public class Metodos {
     }
 
     public String ObtenerCotizacion(String de, String a) {
-        Metodos metodos = new Metodos();
         String valor = "";
         try {
             DecimalFormat df = new DecimalFormat("#.###");
-            Conexion con = metodos.ObtenerRSSentencia("SELECT coti_valor FROM cambio WHERE cam_de = '" + de + "' AND cam_a = '" + a + "'");
+            Conexion con = new Conexion();
+            con = con.ObtenerRSSentencia("SELECT coti_valor FROM cambio WHERE cam_de = '" + de + "' AND cam_a = '" + a + "'");
             if (con.rs.next() == true) {
                 valor = df.format(Double.parseDouble(con.rs.getString(1)));
                 valor = valor.replace(".", ",");

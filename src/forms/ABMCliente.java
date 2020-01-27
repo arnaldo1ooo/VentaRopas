@@ -30,8 +30,9 @@ import metodos.MetodosTXT;
  */
 public final class ABMCliente extends javax.swing.JDialog {
 
-    MetodosTXT metodostxt = new MetodosTXT();
+    Conexion con = new Conexion();
     Metodos metodos = new Metodos();
+    MetodosTXT metodostxt = new MetodosTXT();
 
     public ABMCliente(java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
@@ -59,28 +60,14 @@ public final class ABMCliente extends javax.swing.JDialog {
 
                 if (JOptionPane.YES_OPTION == confirmado) {
                     //REGISTRAR NUEVO
-                    try {
-                        Connection con;
-                        con = (Connection) Conexion.ConectarBasedeDatos();
-                        String sentencia = "CALL SP_ClienteAlta ('" + rucci + "','" + nombre + "','"
-                                + apellido + "','" + direccion + "','" + email + "','" + telefono + "','" + obs + "')";
-                        System.out.println("Insertar registro: " + sentencia);
-                        Statement st;
-                        st = (Statement) con.createStatement();
-                        st.executeUpdate(sentencia);
+                    String sentencia = "CALL SP_ClienteAlta ('" + rucci + "','" + nombre + "','"
+                            + apellido + "','" + direccion + "','" + email + "','" + telefono + "','" + obs + "')";
+                    con.EjecutarABM(sentencia);
 
-                        con.close();
-                        st.close();
-                        JOptionPane.showMessageDialog(this, "Se agrego correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
-                        ModoEdicion(false);
-                        Limpiar();
-                    } catch (HeadlessException ex) {
-                        JOptionPane.showMessageDialog(this, "Ocurrió un Error " + ex.getMessage());
-                    } catch (SQLException ex) {
-                        JOptionPane.showMessageDialog(this, "Ocurrió un Error " + ex.getMessage());
-                    }
-                } else {
-                    System.out.println("No se guardó el registro");
+                    TablaConsultaBDAll(); //Actualizar tabla
+                    JOptionPane.showMessageDialog(this, "Se agregó correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
+                    ModoEdicion(false);
+                    Limpiar();
                 }
             }
         } catch (HeadlessException ex) {
@@ -174,7 +161,7 @@ public final class ABMCliente extends javax.swing.JDialog {
     public void TablaConsultaBDAll() {//Realiza la consulta de los productos que tenemos en la base de datos
         String elSP = "SP_ClienteConsulta";
         String titlesJtabla[] = {"Código", "RUC/CI", "Nombre", "Apellido", "Dirección", "Teléfono", "Email", "Observación"}; //Debe tener la misma cantidad que titlesconsulta
-        tbPrincipal.setModel(metodos.ConsultAllBD(elSP, titlesJtabla, cbCampoBuscar));
+        tbPrincipal.setModel(con.ConsultAllBD(elSP, titlesJtabla, cbCampoBuscar));
         metodos.AnchuraColumna(tbPrincipal);
 
         if (tbPrincipal.getModel().getRowCount() == 1) {
@@ -252,7 +239,7 @@ public final class ABMCliente extends javax.swing.JDialog {
 
         if (txtCodigo.getText().equals("")) {
             try {
-                Conexion con = metodos.ObtenerRSSentencia("SELECT cli_ruccedula FROM cliente "
+                con = con.ObtenerRSSentencia("SELECT cli_ruccedula FROM cliente "
                         + "WHERE cli_ruccedula='" + txtRucCedula.getText() + "'");
                 if (con.rs.next() == true) { //Si ya existe el numero de cedula en la bd de clientes
                     System.out.println("El CI ingresado ya existe en la bd");

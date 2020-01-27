@@ -33,6 +33,7 @@ import metodos.VistaCompletaImagen;
 public final class ABMProducto extends javax.swing.JDialog {
 
     MetodosTXT metodostxt = new MetodosTXT();
+    Conexion con = new Conexion();
     Metodos metodos = new Metodos();
     MetodosCombo metodoscombo = new MetodosCombo();
     MetodosImagen metodosimagen = new MetodosImagen();
@@ -65,16 +66,15 @@ public final class ABMProducto extends javax.swing.JDialog {
 //--------------------------METODOS----------------------------//
     public void CargarComboBoxes() {
         //Carga los combobox con las consultas
-        metodoscombo.CargarComboBox(cbMarca, "SELECT mar_codigo, mar_descripcion FROM marca ORDER BY mar_descripcion");
+        metodoscombo.CargarComboBox(cbMarca, "SELECT mar_codigo, mar_descripcion FROM marca ORDER BY mar_descripcion", 1);
         metodoscombo.setSelectedNombreItem(cbMarca, "SIN ESPECIFICAR");
 
-        metodoscombo.CargarComboBox(cbCategoria, "SELECT cat_codigo, cat_descripcion FROM categoria ORDER BY cat_descripcion");
+        metodoscombo.CargarComboBox(cbCategoria, "SELECT cat_codigo, cat_descripcion FROM categoria ORDER BY cat_descripcion", 1);
         metodoscombo.setSelectedNombreItem(cbCategoria, "SIN ESPECIFICAR");
 
-        if (metodoscombo.ObtenerIdComboBox(cbCategoria) > -1) {
+        if (metodoscombo.ObtenerIDSelectComboBox(cbCategoria) > 0) {
             metodoscombo.CargarComboBox(cbSubcategoria, "SELECT subcat_codigo, subcat_descripcion FROM subcategoria "
-                    + "WHERE subcat_categoria = " + metodoscombo.ObtenerIdComboBox(cbCategoria) + " ORDER BY subcat_descripcion");
-            metodoscombo.setSelectedNombreItem(cbSubcategoria, "SIN ESPECIFICAR");
+                    + "WHERE subcat_categoria = " + metodoscombo.ObtenerIDSelectComboBox(cbCategoria) + " ORDER BY subcat_descripcion", 1);
         }
 
         ModoEdicion(false);
@@ -85,11 +85,10 @@ public final class ABMProducto extends javax.swing.JDialog {
             if (ComprobarCampos() == true) {
                 String codigoproducto = txtCodigoProducto.getText();
                 String descripcion = txtDescripcion.getText();
-                int marca = metodoscombo.ObtenerIdComboBox(cbMarca);
+                int marca = metodoscombo.ObtenerIDSelectComboBox(cbMarca);
                 String tamano = cbTamano.getSelectedItem().toString();
-
                 String existencia = txtExistencia.getText();
-                int idsubcategoria = metodoscombo.ObtenerIdComboBox(cbSubcategoria);
+                int idsubcategoria = metodoscombo.ObtenerIDSelectComboBox(cbSubcategoria);
                 String obs = taObs.getText();
                 int estado = cbEstado.getSelectedIndex();
 
@@ -97,17 +96,14 @@ public final class ABMProducto extends javax.swing.JDialog {
                 if (JOptionPane.YES_OPTION == confirmado) {
                     //REGISTRAR NUEVO
                     String sentencia = "CALL SP_ProductoAlta ('" + codigoproducto + "','" + descripcion + "','"
-                            + marca + "','" + tamano + "','" + existencia + "','" + idsubcategoria + "','"
+                            + marca + "','" + existencia + "','" + tamano + "','" + idsubcategoria + "','"
                             + obs + "','" + estado + "')";
-
-                    metodos.EjecutarAltaoModi(sentencia);
+                    con.EjecutarABM(sentencia);
                     TablaConsultaBDAll(); //Actualiza la tabla
-
                     //Guardarimagen
                     String ultimoid = metodosimagen.ObtenerUltimoID();
                     metodosimagen.GuardarImagen(rutaFotoProducto + ultimoid);
                     JOptionPane.showMessageDialog(this, "El registro se agregó correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
-
                     Limpiar();
                     ModoEdicion(false);
                 }
@@ -127,18 +123,18 @@ public final class ABMProducto extends javax.swing.JDialog {
                 String codigo = txtCodigo.getText();
                 String codigoproducto = txtCodigoProducto.getText();
                 String descripcion = txtDescripcion.getText();
-                int marca = metodoscombo.ObtenerIdComboBox(cbMarca);
-                String tamano = cbTamano.getSelectedItem().toString();
+                int marca = metodoscombo.ObtenerIDSelectComboBox(cbMarca);
                 String existencia = txtExistencia.getText();
-                int subcategoria = metodoscombo.ObtenerIdComboBox(cbSubcategoria);
+                String tamano = cbTamano.getSelectedItem().toString();
+                int subcategoria = metodoscombo.ObtenerIDSelectComboBox(cbSubcategoria);
                 String obs = taObs.getText();
                 int estado = cbEstado.getSelectedIndex();
 
                 String sentencia = "CALL SP_ProductoModificar(" + codigo + ",'" + codigoproducto + "','" + descripcion + "','"
-                        + marca + "','" + tamano + "','" + existencia + "','" + subcategoria + "','"
+                        + marca + "','" + existencia + "','" + tamano + "','" + subcategoria + "','"
                         + obs + "','" + estado + "')";
 
-                metodos.EjecutarAltaoModi(sentencia);
+                con.EjecutarABM(sentencia);
                 TablaConsultaBDAll(); //Actualiza la tabla
 
                 //Guardarimagen
@@ -156,7 +152,6 @@ public final class ABMProducto extends javax.swing.JDialog {
     }
 
     private void RegistroEliminar() {
-
         int filasel = tbPrincipal.getSelectedRow();
         if (filasel == -1) {
             JOptionPane.showMessageDialog(this, "No se ha seleccionado ninguna fila", "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -166,7 +161,7 @@ public final class ABMProducto extends javax.swing.JDialog {
             if (confirmado == JOptionPane.YES_OPTION) {
                 String codigo = (String) tbPrincipal.getModel().getValueAt(filasel, 0);
                 String sentencia = "CALL SP_ProductoEliminar(" + codigo + ")";
-                metodos.EjecutarAltaoModi(sentencia);
+                con.EjecutarABM(sentencia);
                 metodosimagen.EliminarImagen(rutaFotoProducto + txtCodigo.getText()); //Eliminar la foto
                 Limpiar();
                 ModoEdicion(false);
@@ -177,10 +172,10 @@ public final class ABMProducto extends javax.swing.JDialog {
 
     public void TablaConsultaBDAll() {//Realiza la consulta de los productos que tenemos en la base de datos
         String elSP = "SP_" + nombreTablaBD + "Consulta";
-        String titlesJtabla[] = {"Código", "Código del producto", "Descripción", 
-            "Marca", "Tamaño", "Existencia", "Categoria", "Subcategoria", "Observación", "Estado"};
+        String titlesJtabla[] = {"Código", "Código del producto", "Descripción",
+            "Marca", "Existencia", "Tamaño", "Categoria", "Subcategoria", "Observación", "Estado"};
 
-        tbPrincipal.setModel(metodos.ConsultAllBD(elSP, titlesJtabla, cbCampoBuscar));
+        tbPrincipal.setModel(con.ConsultAllBD(elSP, titlesJtabla, cbCampoBuscar));
         metodos.AnchuraColumna(tbPrincipal);
         lbCantRegistros.setText(metodos.CantRegistros + " Registros encontrados");
     }
@@ -190,9 +185,8 @@ public final class ABMProducto extends javax.swing.JDialog {
         txtCodigoProducto.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 1).toString());
         txtDescripcion.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 2).toString());
         metodoscombo.setSelectedNombreItem(cbMarca, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 3).toString());
-        cbTamano.setSelectedItem(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 4).toString());
-
-        txtExistencia.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 5).toString());
+        txtExistencia.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 4).toString());
+        cbTamano.setSelectedItem(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 5).toString());
         metodoscombo.setSelectedNombreItem(cbCategoria, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 6).toString());
         metodoscombo.setSelectedNombreItem(cbSubcategoria, tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 7).toString());
         taObs.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 8).toString());
@@ -264,7 +258,8 @@ public final class ABMProducto extends javax.swing.JDialog {
 
         if (txtCodigo.getText().equals("")) {
             try {
-                Conexion con = metodos.ObtenerRSSentencia("SELECT pro_identificador FROM producto "
+                Conexion con = new Conexion();
+                con = con.ObtenerRSSentencia("SELECT pro_identificador FROM producto "
                         + "WHERE pro_identificador = '" + txtCodigoProducto.getText() + "'");
                 if (con.rs.next() == true) { //Si ya existe el numero de cedula en la bd de clientes
                     JOptionPane.showMessageDialog(this, "Este código de producto ya se encuentra registrado", "Error", JOptionPane.ERROR_MESSAGE);
@@ -1026,9 +1021,9 @@ public final class ABMProducto extends javax.swing.JDialog {
     }//GEN-LAST:event_txtDescripcionKeyReleased
 
     private void cbCategoriaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbCategoriaItemStateChanged
-        if (metodoscombo.ObtenerIdComboBox(cbCategoria) > -1) {
+        if (metodoscombo.ObtenerIDSelectComboBox(cbCategoria) > 0) {
             metodoscombo.CargarComboBox(cbSubcategoria, "SELECT subcat_codigo, subcat_descripcion FROM subcategoria "
-                    + "WHERE subcat_categoria = " + metodoscombo.ObtenerIdComboBox(cbCategoria) + " ORDER BY subcat_descripcion");
+                    + "WHERE subcat_categoria = " + metodoscombo.ObtenerIDSelectComboBox(cbCategoria) + " ORDER BY subcat_descripcion", 1);
 
             if (cbSubcategoria.getItemCount() > 0 && cbSubcategoria.isEnabled()) {
                 cbSubcategoria.setSelectedIndex(0);
@@ -1049,7 +1044,7 @@ public final class ABMProducto extends javax.swing.JDialog {
 
     private void btnPantallaCompletaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPantallaCompletaActionPerformed
         VistaCompletaImagen vistacompleta = new VistaCompletaImagen(rutaFotoProducto + txtCodigo.getText());
-        metodos.CentrarVentanaJDialog(vistacompleta);
+        //metodos.CentrarVentanaJDialog(vistacompleta);
         vistacompleta.setVisible(true);
     }//GEN-LAST:event_btnPantallaCompletaActionPerformed
 

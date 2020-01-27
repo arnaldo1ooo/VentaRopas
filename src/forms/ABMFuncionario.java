@@ -33,9 +33,10 @@ import metodos.MetodosTXT;
  */
 public final class ABMFuncionario extends javax.swing.JDialog {
 
+    Conexion con = new Conexion();
+    Metodos metodos = new Metodos();
     MetodosTXT metodostxt = new MetodosTXT();
     MetodosCombo metodoscombo = new MetodosCombo();
-    Metodos metodos = new Metodos();
     String nombreTablaBD = "Funcionario";
 
     public ABMFuncionario(java.awt.Frame parent, Boolean modal) {
@@ -56,8 +57,8 @@ public final class ABMFuncionario extends javax.swing.JDialog {
     //--------------------------METODOS----------------------------//
     public void CargarComboBoxes() {
         //Carga los combobox con las consultas
-        metodoscombo.CargarComboBox(cbCargo, "SELECT car_codigo, car_descripcion FROM cargo ORDER BY car_descripcion");
-        metodoscombo.setSelectedCodigoItem(cbCargo, 0);
+        metodoscombo.CargarComboBox(cbCargo, "SELECT car_codigo, car_descripcion FROM cargo ORDER BY car_codigo", 1);
+        metodoscombo.setSelectedCodigoItem(cbCargo, 1);
     }
 
     public void RegistroNuevo() {
@@ -72,34 +73,20 @@ public final class ABMFuncionario extends javax.swing.JDialog {
                 String email = txtEmail.getText();
                 String obs = taObs.getText();
                 int estado = cbEstado.getSelectedIndex();
-                int cargo = metodoscombo.ObtenerIdComboBox(cbCargo);
+                int cargo = metodoscombo.ObtenerIDSelectComboBox(cbCargo);
 
                 int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro crear este nuevo registro?", "Confirmación", JOptionPane.YES_OPTION);
 
                 if (JOptionPane.YES_OPTION == confirmado) {
                     //REGISTRAR NUEVO
-                    try {
-                        Connection con;
-                        con = (Connection) Conexion.ConectarBasedeDatos();
-                        String sentencia = "CALL SP_" + nombreTablaBD + "Alta ('" + nombre + "','" + apellido + "','" + fechaingreso + "','" + sexo
-                                + "','" + telefono + "','" + email + "','" + obs + "','" + estado + "','" + cargo + "')";
-                        System.out.println("Insertar registro: " + sentencia);
-                        Statement st;
-                        st = (Statement) con.createStatement();
-                        st.executeUpdate(sentencia);
+                    String sentencia = "CALL SP_" + nombreTablaBD + "Alta ('" + nombre + "','" + apellido + "','" + fechaingreso + "','" + sexo
+                            + "','" + telefono + "','" + email + "','" + obs + "','" + estado + "','" + cargo + "')";
+                    con.EjecutarABM(sentencia);
 
-                        con.close();
-                        st.close();
-                        JOptionPane.showMessageDialog(this, "Se agrego correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
-                        ModoEdicion(false);
-                        Limpiar();
-                    } catch (HeadlessException ex) {
-                        JOptionPane.showMessageDialog(this, "Ocurrió un Error " + ex.getMessage());
-                    } catch (SQLException ex) {
-                        JOptionPane.showMessageDialog(this, "Ocurrió un Error " + ex.getMessage());
-                    }
-                } else {
-                    System.out.println("No se guardó el registro");
+                    TablaConsultaBDAll(); //Actualizar tabla
+                    JOptionPane.showMessageDialog(this, "Se agregó correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
+                    ModoEdicion(false);
+                    Limpiar();
                 }
             }
         } catch (HeadlessException ex) {
@@ -123,7 +110,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
             String email = txtEmail.getText();
             String obs = taObs.getText();
             int estado = cbEstado.getSelectedIndex();
-            int cargo = metodoscombo.ObtenerIdComboBox(cbCargo);
+            int cargo = metodoscombo.ObtenerIDSelectComboBox(cbCargo);
 
             int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro de modificar este registro?", "Confirmación", JOptionPane.YES_OPTION);
             if (JOptionPane.YES_OPTION == confirmado) {
@@ -198,7 +185,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
         String titlesJtabla[] = {"Código", "Nombre", "Apellido", "Fecha de ingreso", "Sexo",
             "Telefono", "Email", "Observación", "Estado", "Cargo"}; //Debe tener la misma cantidad que los campos a consultar
 
-        tbPrincipal.setModel(metodos.ConsultAllBD(sentencia, titlesJtabla, cbCampoBuscar));
+        tbPrincipal.setModel(con.ConsultAllBD(sentencia, titlesJtabla, cbCampoBuscar));
         metodos.AnchuraColumna(tbPrincipal);
 
         if (tbPrincipal.getModel().getRowCount() == 1) {
@@ -244,6 +231,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
         txtEmail.setEnabled(valor);
         taObs.setEnabled(valor);
         cbEstado.setEnabled(valor);
+        cbCargo.setEnabled(valor);
         btnNuevo.setEnabled(!valor);
         btnModificar.setEnabled(false);
         btnEliminar.setEnabled(false);
@@ -264,7 +252,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
         txtTelefono.setText("");
         taObs.setText("");
         cbEstado.setSelectedItem(0);
-
+        metodoscombo.setSelectedCodigoItem(cbCargo, 1);
         lblFechaIngreso.setForeground(new Color(102, 102, 102));
         lblNombre.setForeground(new Color(102, 102, 102));
         lblApellido.setForeground(new Color(102, 102, 102));
@@ -630,8 +618,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
         lblEstado.setText("Estado:");
         lblEstado.setToolTipText("");
 
-        cbEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "INACTIVO", "ACTIVO", " " }));
-        cbEstado.setSelectedIndex(1);
+        cbEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "INACTIVO", "ACTIVO" }));
         cbEstado.setEnabled(false);
 
         lblEstado1.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
@@ -650,7 +637,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblSexo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblNombre, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblNombre, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
                     .addComponent(lblCodigo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblApellido, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblFechaIngreso, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -674,13 +661,13 @@ public final class ABMFuncionario extends javax.swing.JDialog {
                 .addGap(4, 4, 4)
                 .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(txtEmail)
-                    .addComponent(scpObs)
+                    .addComponent(scpObs, javax.swing.GroupLayout.DEFAULT_SIZE, 327, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpEdicionLayout.createSequentialGroup()
-                        .addComponent(cbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(cbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lblEstado1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(2, 2, 2)
-                        .addComponent(cbCargo, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(4, 4, 4)
+                        .addComponent(cbCargo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(txtTelefono))
                 .addGap(18, 18, 18))
         );
@@ -842,7 +829,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
                 .addComponent(jtpEdicion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jpBotones2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         jtpEdicion.getAccessibleContext().setAccessibleName("");
@@ -855,7 +842,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
+            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 594, Short.MAX_VALUE)
         );
 
         getAccessibleContext().setAccessibleName("Inventario");
@@ -878,11 +865,12 @@ public final class ABMFuncionario extends javax.swing.JDialog {
         } else { //Si es modificar
             RegistroModificar();
         }
+        TablaConsultaBDAll();
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        ModoEdicion(false);
         Limpiar();
+        ModoEdicion(false);
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
@@ -896,8 +884,9 @@ public final class ABMFuncionario extends javax.swing.JDialog {
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         RegistroEliminar();
-        ModoEdicion(false);
         Limpiar();
+        ModoEdicion(false);
+
         TablaConsultaBDAll();
     }//GEN-LAST:event_btnEliminarActionPerformed
 

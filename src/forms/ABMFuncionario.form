@@ -35,7 +35,7 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jpPrincipal" alignment="0" pref="619" max="32767" attributes="0"/>
+          <Component id="jpPrincipal" alignment="0" pref="594" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -93,7 +93,7 @@
                   <Component id="jtpEdicion" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jpBotones2" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="42" max="32767" attributes="0"/>
+                  <EmptySpace pref="17" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -422,7 +422,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="lblSexo" alignment="1" max="32767" attributes="0"/>
-                              <Component id="lblNombre" alignment="1" max="32767" attributes="0"/>
+                              <Component id="lblNombre" alignment="1" pref="118" max="32767" attributes="0"/>
                               <Component id="lblCodigo" alignment="1" max="32767" attributes="0"/>
                               <Component id="lblApellido" max="32767" attributes="0"/>
                               <Component id="lblFechaIngreso" min="-2" pref="107" max="-2" attributes="0"/>
@@ -451,13 +451,13 @@
                           <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" max="-2" attributes="0">
                               <Component id="txtEmail" max="32767" attributes="0"/>
-                              <Component id="scpObs" alignment="1" max="32767" attributes="0"/>
+                              <Component id="scpObs" alignment="1" pref="327" max="32767" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
-                                  <Component id="cbEstado" min="-2" pref="131" max="-2" attributes="0"/>
-                                  <EmptySpace max="32767" attributes="0"/>
+                                  <Component id="cbEstado" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Component id="lblEstado1" min="-2" pref="57" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
-                                  <Component id="cbCargo" min="-2" pref="131" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                                  <Component id="cbCargo" max="32767" attributes="0"/>
                               </Group>
                               <Component id="txtTelefono" max="32767" attributes="0"/>
                           </Group>
@@ -755,13 +755,11 @@
                 <Component class="javax.swing.JComboBox" name="cbEstado">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                      <StringArray count="3">
+                      <StringArray count="2">
                         <StringItem index="0" value="INACTIVO"/>
                         <StringItem index="1" value="ACTIVO"/>
-                        <StringItem index="2" value=" "/>
                       </StringArray>
                     </Property>
-                    <Property name="selectedIndex" type="int" value="1"/>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <AuxValues>

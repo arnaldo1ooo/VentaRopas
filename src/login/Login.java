@@ -5,16 +5,21 @@
 package login;
 
 import conexion.Conexion;
+import forms.ABMFuncionario;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.FocusTraversalPolicy;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import metodos.PlaceHolder;
-import principal.SplashScreen;
 
 public class Login extends javax.swing.JFrame {
 
@@ -25,8 +30,7 @@ public class Login extends javax.swing.JFrame {
 
     public Login() {
         initComponents();
-        setLocationRelativeTo(null);
-        setResizable(false);
+
         lblError.setVisible(false);
         PlaceHolder placeholder;
         placeholder = new PlaceHolder("Alias", txtAlias);
@@ -275,6 +279,7 @@ public class Login extends javax.swing.JFrame {
         getAccessibleContext().setAccessibleName("Login");
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void Limpiar() {
@@ -307,7 +312,6 @@ public class Login extends javax.swing.JFrame {
 
     private void txtAliasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAliasKeyPressed
         lblError.setVisible(false);
-        SiguienteFoco(evt);
     }//GEN-LAST:event_txtAliasKeyPressed
 
     private void btnCambiarPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarPassActionPerformed
@@ -355,11 +359,36 @@ public class Login extends javax.swing.JFrame {
         });
     }
 
-    public void SiguienteFoco(KeyEvent evt) {
-        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
-            ((JComponent) evt.getSource()).transferFocus();//Con esta parte transfieres el foco al siguiente campo sea un Jtextfield, Jpasswordfield, boton, etc..
+    List<Component> ordenTabulador;
+    private void OrdenTabulador() {
+        ordenTabulador = new ArrayList<>();
+        ordenTabulador.add(txtAlias);
+        ordenTabulador.add(txtPass);
+        ordenTabulador.add(btnIniciarSesion);
+        setFocusTraversalPolicy(new Login.PersonalizadoFocusTraversalPolicy());
+    }
+    private class PersonalizadoFocusTraversalPolicy extends FocusTraversalPolicy {
+        public Component getComponentAfter(Container focusCycleRoot, Component aComponent) {
+            int currentPosition = ordenTabulador.indexOf(aComponent);
+            currentPosition = (currentPosition + 1) % ordenTabulador.size();
+            return (Component) ordenTabulador.get(currentPosition);
+        }
+        public Component getComponentBefore(Container focusCycleRoot, Component aComponent) {
+            int currentPosition = ordenTabulador.indexOf(aComponent);
+            currentPosition = (ordenTabulador.size() + currentPosition - 1) % ordenTabulador.size();
+            return (Component) ordenTabulador.get(currentPosition);
+        }
+        public Component getFirstComponent(Container cntnr) {
+            return (Component) ordenTabulador.get(0);
+        }
+        public Component getLastComponent(Container cntnr) {
+            return (Component) ordenTabulador.get(ordenTabulador.size() - 1);
+        }
+        public Component getDefaultComponent(Container cntnr) {
+            return (Component) ordenTabulador.get(0);
         }
     }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCambiarPass;
     private org.edisoncor.gui.button.ButtonSeven btnIniciarSesion;
@@ -375,7 +404,7 @@ public class Login extends javax.swing.JFrame {
     private org.edisoncor.gui.panel.Panel panel2;
     private org.edisoncor.gui.panel.PanelImage panelImage1;
     private org.edisoncor.gui.panel.PanelNice panelNice1;
-    private javax.swing.JTextField txtAlias;
-    private javax.swing.JPasswordField txtPass;
+    public static javax.swing.JTextField txtAlias;
+    public static javax.swing.JPasswordField txtPass;
     // End of variables declaration//GEN-END:variables
 }

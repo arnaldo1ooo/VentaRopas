@@ -40,10 +40,12 @@ public class VistaCompletaImagen extends javax.swing.JDialog {
         setType(java.awt.Window.Type.POPUP);
 
         jScrollPane1.setBorder(null);
+        jScrollPane1.setFocusable(false);
 
         lblImagen.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblImagen.setToolTipText("");
         lblImagen.setBorder(null);
+        lblImagen.setFocusable(false);
         jScrollPane1.setViewportView(lblImagen);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
