@@ -11,27 +11,36 @@ import javax.swing.JOptionPane;
 import metodos.Metodos;
 import metodos.MetodosTXT;
 
-public class AnularCompra extends javax.swing.JDialog {
+public class AnularVenta extends javax.swing.JDialog {
 
     Conexion con = new Conexion();
     Metodos metodos = new Metodos();
     MetodosTXT metodostxt = new MetodosTXT();
 
-    public AnularCompra(javax.swing.JFrame parent) {
-        super(parent);
+    public AnularVenta(javax.swing.JFrame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
 
         ConsultaAllCompraBD();
     }
 
     private void ConsultaAllCompraBD() {
-        String sentencia = "SP_CompraConsulta";
-        String titlesJtabla[] = {"Código", "N° de compra", "N° del documento", "Proveedor", "Tipo de documento",
-            "Fecha de registro", "Fecha de compra"};
+        String sentencia = "SP_VentaConsulta";
+        String titlesJtabla[] = {"Código", "N° de venta", "Vendedor/a", "Cliente", "Tipo de documento",
+            "Fecha de venta", "Importe", "Moneda", "Cotización"};
 
         tbPrincipal.setModel(con.ConsultAllBD(sentencia, titlesJtabla, cbCampoBuscar));
         metodos.AnchuraColumna(tbPrincipal);
         cbCampoBuscar.setSelectedIndex(1);
+
+        double importe;
+        double cotizacion;
+        for (int i = 0; i < tbPrincipal.getRowCount(); i++) {
+            importe = Double.parseDouble(tbPrincipal.getValueAt(i, 6).toString());
+            tbPrincipal.setValueAt(metodostxt.DoubleAFormatoSudamerica(importe), i, 6);
+            cotizacion = Double.parseDouble(tbPrincipal.getValueAt(i, 8).toString());
+            tbPrincipal.setValueAt(metodostxt.DoubleAFormatoSudamerica(cotizacion), i, 8);
+        }
 
         if (tbPrincipal.getModel().getRowCount() == 1) {
             lbCantRegistros.setText(tbPrincipal.getModel().getRowCount() + " Registro encontrado");
@@ -40,19 +49,26 @@ public class AnularCompra extends javax.swing.JDialog {
         }
     }
 
-    private void ProductosDeLaCompra() {
-        int codigoCompraSelect = Integer.parseInt(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0).toString());
-        String sentencia = "SP_CompraProductosConsulta(" + codigoCompraSelect + ")";
-        String titlesJtabla[] = {"Id del producto", "Descripción", "Cantidad", "Precio de compra ($)"};
+    private void ProductosDeLaVenta() {
+        int codigoVentaSelect = Integer.parseInt(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0).toString());
+        String sentencia = "SP_VentaProductosConsulta(" + codigoVentaSelect + ")";
+        String titlesJtabla[] = {"Id del producto", "Descripción", "Cantidad",
+            "Precio de compra ($)", "Precio de venta ($)", "Descuento"};
 
         tbProductosComprados.setModel(con.ConsultAllBD(sentencia, titlesJtabla, null));
         metodos.AnchuraColumna(tbProductosComprados);
 
-        //Convertir precios
-        double precio;
+        //Convertir formato precios
+        double preciocompra;
+        double precioventa;
+        double descuento;
         for (int i = 0; i < tbProductosComprados.getRowCount(); i++) {
-            precio = Double.parseDouble(tbProductosComprados.getValueAt(i, 3).toString());
-            tbProductosComprados.setValueAt(metodostxt.DoubleAFormatoSudamerica(precio), i, 3);
+            preciocompra = Double.parseDouble(tbProductosComprados.getValueAt(i, 3).toString());
+            tbProductosComprados.setValueAt(metodostxt.DoubleAFormatoSudamerica(preciocompra), i, 3);
+            precioventa = Double.parseDouble(tbProductosComprados.getValueAt(i, 4).toString());
+            tbProductosComprados.setValueAt(metodostxt.DoubleAFormatoSudamerica(precioventa), i, 4);
+            descuento = Double.parseDouble(tbProductosComprados.getValueAt(i, 5).toString());
+            tbProductosComprados.setValueAt(metodostxt.DoubleAFormatoSudamerica(descuento), i, 5);
         }
 
         if (tbProductosComprados.getModel().getRowCount() == 1) {
@@ -118,7 +134,7 @@ public class AnularCompra extends javax.swing.JDialog {
         lblBuscarCampo.setText("Buscar por:");
 
         pnProductosComprados.setBackground(new java.awt.Color(255, 255, 255));
-        pnProductosComprados.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Productos de la compra N° 000000"));
+        pnProductosComprados.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Productos de la venta N° 000000"));
 
         tbProductosComprados.setAutoCreateRowSorter(true);
         tbProductosComprados.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -213,7 +229,7 @@ public class AnularCompra extends javax.swing.JDialog {
         panel3.setColorSecundario(new java.awt.Color(233, 255, 255));
 
         labelMetric2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        labelMetric2.setText("ANULAR COMPRA");
+        labelMetric2.setText("ANULAR VENTA");
         labelMetric2.setDireccionDeSombra(110);
         labelMetric2.setFont(new java.awt.Font("Cooper Black", 0, 28)); // NOI18N
 
@@ -315,7 +331,7 @@ public class AnularCompra extends javax.swing.JDialog {
         int filaselect = tbPrincipal.getSelectedRow();
         if (tbPrincipal.getRowCount() > 0) {
             System.out.println("sele");
-            ProductosDeLaCompra();
+            ProductosDeLaVenta();
             String numcompra = tbPrincipal.getValueAt(filaselect, 1).toString();
             pnProductosComprados.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(),
                     "Produtos de la compra N° " + numcompra));
@@ -355,7 +371,7 @@ public class AnularCompra extends javax.swing.JDialog {
 
     private void tbPrincipalKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbPrincipalKeyReleased
         if (evt.getKeyCode() == KeyEvent.VK_UP || evt.getKeyCode() == KeyEvent.VK_DOWN) {
-            ProductosDeLaCompra();
+            ProductosDeLaVenta();
             String numcompra = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 1).toString();
             pnProductosComprados.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(),
                     "Produtos de la compra N° " + numcompra));
@@ -365,8 +381,7 @@ public class AnularCompra extends javax.swing.JDialog {
     private void tbPrincipalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbPrincipalMouseClicked
         int filaselect = tbPrincipal.getSelectedRow();
         if (tbPrincipal.getRowCount() > 0) {
-            System.out.println("sele");
-            ProductosDeLaCompra();
+            ProductosDeLaVenta();
             String numcompra = tbPrincipal.getValueAt(filaselect, 1).toString();
             pnProductosComprados.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(),
                     "Produtos de la compra N° " + numcompra));
@@ -378,7 +393,7 @@ public class AnularCompra extends javax.swing.JDialog {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                AnularCompra dialog = new AnularCompra(new javax.swing.JFrame());
+                AnularVenta dialog = new AnularVenta(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

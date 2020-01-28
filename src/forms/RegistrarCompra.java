@@ -125,7 +125,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                                     preciocompra = preciocompra / cotiUsdRsCompra;
                                     preciocompra = metodostxt.FormatearADosDecimales(preciocompra);
                                 }
-                                if (cbMoneda.getSelectedItem() == "Peso") {
+                                if (cbMoneda.getSelectedItem() == "Pesos argentinos") {
                                     preciocompra = preciocompra / cotiUsdPaCompra;
                                     preciocompra = metodostxt.FormatearADosDecimales(preciocompra);
                                 }
@@ -747,7 +747,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblTituloTotalCompra1)
                 .addGap(3, 3, 3)
-                .addGroup(jpProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jpProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblTotalMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtTotalCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(10, Short.MAX_VALUE))

@@ -618,9 +618,9 @@
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="lblTituloTotalCompra1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="lblTotalMoneda" alignment="0" min="-2" pref="31" max="-2" attributes="0"/>
-                          <Component id="txtTotalCompra" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtTotalCompra" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="10" max="32767" attributes="0"/>
                   </Group>

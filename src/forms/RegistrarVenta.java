@@ -40,7 +40,7 @@ import static principal.Principal.cotiUsdPaCompra;
  * @author Lic. Arnaldo Cantero
  */
 public final class RegistrarVenta extends javax.swing.JDialog {
-
+    
     Conexion con = new Conexion();
     Metodos metodos = new Metodos();
     MetodosTXT metodostxt = new MetodosTXT();
@@ -49,7 +49,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     String rutaFotoProducto = "C:\\VentaRopas\\fotoproductos\\imageproducto_";
     String TitlePorDefault = "PRODUCTO SIN FOTO";
     DefaultTableModel tablemodelo;
-
+    
     public RegistrarVenta(java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
         initComponents();
@@ -58,11 +58,11 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         //Obtener fecha actual
         Calendar c2 = new GregorianCalendar();
         dcFechaVenta.setCalendar(c2);
-
+        
         CargarComboBoxes();
         tablemodelo = (DefaultTableModel) tbProductosVendidos.getModel();
         GenerarNumVenta();
-
+        
         OrdenTabulador();
     }
 
@@ -71,11 +71,11 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         //Carga los combobox con las consultas
         metodoscombo.CargarComboBox(cbCliente, "SELECT cli_codigo, CONCAT(cli_nombre,' ', cli_apellido) AS nomape "
                 + "FROM cliente ORDER BY cli_nombre", 1);
-
+        
         metodoscombo.CargarComboBox(cbVendedor, "SELECT fun_codigo, CONCAT(fun_nombre,' ', fun_apellido) AS nomape "
                 + "FROM funcionario WHERE fun_cargo = 2 ORDER BY fun_nombre", -1);
     }
-
+    
     public void RegistroNuevo() {
         //Registra la venta
         try {
@@ -87,13 +87,39 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                 DateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
                 String fecharegistro = formatoFecha.format(dcFechaVenta.getDate());
                 double importe = metodostxt.DoubleAFormatoAmericano(txtImporte.getText());
-
+                String moneda = cbMoneda.getSelectedItem().toString();
+                double cotizacion = 1;
+                
+                switch (moneda) {
+                    case "Dolares":
+                        break;
+                    case "Guaranies":
+                        importe = importe / cotiUsdGsCompra;
+                        importe = metodostxt.FormatearADosDecimales(importe);
+                        cotizacion = cotiUsdGsCompra;
+                        break;
+                    case "Reales":
+                        importe = importe / cotiUsdRsCompra;
+                        importe = metodostxt.FormatearADosDecimales(importe);
+                        cotizacion = cotiUsdRsCompra;
+                        break;
+                    case "Pesos argentinos":
+                        importe = importe / cotiUsdPaCompra;
+                        importe = metodostxt.FormatearADosDecimales(importe);
+                        cotizacion = cotiUsdPaCompra;
+                        break;
+                    
+                    default:
+                        JOptionPane.showMessageDialog(this, "No se encontró la moneda seleccionada", "Error", JOptionPane.ERROR_MESSAGE);
+                        break;
+                }
+                
                 int confirmado = JOptionPane.showConfirmDialog(this, "¿Esta seguro de crear esta nueva venta?", "Confirmación", JOptionPane.YES_OPTION);
                 if (JOptionPane.YES_OPTION == confirmado) {
                     try {
                         //Registrar nueva venta
                         String sentencia = "CALL SP_VentaAlta('" + numventa + "','" + vendedor + "','" + cliente + "','"
-                                + tipodocumento + "','" + fecharegistro + "','" + importe + "')";
+                                + tipodocumento + "','" + fecharegistro + "','" + importe + "','" + moneda + "','" + cotizacion + "')";
                         con.EjecutarABM(sentencia);
 
                         //Obtener el id de la venta
@@ -108,7 +134,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                         double preciocompra;
                         double precioventabruto;
                         double descuento;
-
+                        
                         int cantfila = tbProductosVendidos.getRowCount();
                         for (int fila = 0; fila < cantfila; fila++) {
                             idproducto = tbProductosVendidos.getValueAt(fila, 0).toString();
@@ -118,20 +144,33 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                             descuento = Double.parseDouble(tbProductosVendidos.getValueAt(fila, 5).toString());
 
                             //Comprobar en que moneda se guarda, en caso de ser distinto a dolares, se convierte a dolares
-                            if (cbMoneda.getSelectedItem() != "Dolares") {
-                                if (cbMoneda.getSelectedItem() == "Guaranies") {
+                            switch (moneda) {
+                                case "Dolares":
+                                    break;
+                                case "Guaranies":
                                     precioventabruto = precioventabruto / cotiUsdGsCompra;
                                     precioventabruto = metodostxt.FormatearADosDecimales(precioventabruto);
-                                }
-                                if (cbMoneda.getSelectedItem() == "Reales") {
+                                    descuento = descuento / cotiUsdGsCompra;
+                                    descuento = metodostxt.FormatearADosDecimales(descuento);
+                                    break;
+                                case "Reales":
                                     precioventabruto = precioventabruto / cotiUsdRsCompra;
                                     precioventabruto = metodostxt.FormatearADosDecimales(precioventabruto);
-                                }
-                                if (cbMoneda.getSelectedItem() == "Peso") {
+                                    descuento = descuento / cotiUsdRsCompra;
+                                    descuento = metodostxt.FormatearADosDecimales(descuento);
+                                    break;
+                                case "Pesos argentinos":
                                     precioventabruto = precioventabruto / cotiUsdPaCompra;
                                     precioventabruto = metodostxt.FormatearADosDecimales(precioventabruto);
-                                }
+                                    descuento = descuento / cotiUsdPaCompra;
+                                    descuento = metodostxt.FormatearADosDecimales(descuento);
+                                    break;
+                                
+                                default:
+                                    JOptionPane.showMessageDialog(this, "No se encontró la moneda seleccionada", "Error", JOptionPane.ERROR_MESSAGE);
+                                    break;
                             }
+
                             //Se registran los productos de la venta
                             sentencia = "CALL SP_VentaProductosAlta('" + idultimaventa + "','" + idproducto + "','"
                                     + cantidadadquirida + "','" + preciocompra + "','" + precioventabruto + "','" + descuento + "')";
@@ -154,49 +193,53 @@ public final class RegistrarVenta extends javax.swing.JDialog {
             System.out.println("Completar los campos obligarios marcados con * " + ex);
         }
     }
-
+    
     private void Limpiar() {
         cbCliente.setSelectedIndex(-1);
         cbTipoDocumento.setSelectedIndex(1);
         Calendar c2 = new GregorianCalendar();
         dcFechaVenta.setCalendar(c2);
-
+        
         cbMoneda.setSelectedIndex(1);
         cbMoneda.setEnabled(true);
-
+        
         tablemodelo.setRowCount(0);
         btnEliminar.setEnabled(false);
         txtImporte.setEnabled(false);
         txtImporte.setText("0");
+        txtImporte.setForeground(Color.BLACK);
         txtVuelto.setText("0");
         txtTotalVenta.setText("0");
+        txtCodigoProducto.setForeground(Color.BLACK);
+        txtCantidad.setForeground(Color.BLACK);
+        txtDescuento.setForeground(Color.BLACK);
     }
-
+    
     private boolean ComprobarCamposVenta() {
         if (cbVendedor.getSelectedIndex() == -1) {
             JOptionPane.showMessageDialog(this, "Seleccione el vendedor/a", "Advertencia", JOptionPane.WARNING_MESSAGE);
             cbVendedor.requestFocus();
             return false;
         }
-
+        
         if (dcFechaVenta.getDate() == null) {
             JOptionPane.showMessageDialog(this, "Complete la fecha de venta", "Advertencia", JOptionPane.WARNING_MESSAGE);
             dcFechaVenta.requestFocus();
             return false;
         }
-
+        
         int cantidadProductos = tbProductosVendidos.getModel().getRowCount();
         if (cantidadProductos <= 0) {
             JOptionPane.showMessageDialog(this, "No se cargó ningún producto", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return false;
         }
-
+        
         if (txtImporte.getText().equals("")) {
             JOptionPane.showMessageDialog(this, "Ingrese el importe", "Advertencia", JOptionPane.WARNING_MESSAGE);
             txtImporte.requestFocus();
             return false;
         }
-
+        
         double importe = metodostxt.DoubleAFormatoAmericano(txtImporte.getText());
         double totalventa = metodostxt.DoubleAFormatoAmericano(txtTotalVenta.getText());
         if (totalventa > importe || txtImporte.getText().equals("")) {
@@ -204,21 +247,22 @@ public final class RegistrarVenta extends javax.swing.JDialog {
             txtImporte.requestFocus();
             return false;
         }
-
+        
         return true;
     }
-
+    
     private boolean ComprobarCamposProducto() {
         if (metodostxt.ValidarCampoVacioTXT(txtCodigoProducto, lblCodigoProducto) == false) {
             System.out.println("Validar CodigoProducto false");
             return false;
         } else {
-            if (txtIDProducto.getText().equals("")) { //Si no aparece su id es por que el producto no existe en la bd
-                JOptionPane.showMessageDialog(this, "El Codigo de producto ingresado no existe", "Error", JOptionPane.ERROR_MESSAGE);
+            if (ConsultaProducto(txtCodigoProducto.getText()) == false) {
+                JOptionPane.showMessageDialog(this, "El Codigo de producto ingresado no existe", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                txtCodigoProducto.requestFocus();
                 return false;
             }
         }
-
+        
         String codigoproducto = txtCodigoProducto.getText();
         String filaactual;
         for (int i = 0; i < tbProductosVendidos.getRowCount(); i++) {
@@ -228,16 +272,16 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                 return false;
             }
         }
-
+        
         if (metodostxt.ValidarCampoVacioTXT(txtCantidad, lblCantidad) == false) {
             System.out.println("Validar Cantidad adquirida false");
             return false;
         }
-
+        
         if (txtDescuento.getText().equals("")) {
             txtDescuento.setText("0");
         }
-
+        
         int cantidad = Integer.parseInt(txtCantidad.getText());
         if (cantidad <= 0) {
             JOptionPane.showMessageDialog(this, "La cantidad no puede ser menor o igual a 0");
@@ -245,7 +289,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
             lblCantidad.setForeground(Color.RED);
             return false;
         }
-
+        
         int stock = Integer.parseInt(txtStock.getText());
         if (cantidad > stock) {
             JOptionPane.showMessageDialog(this, "No hay suficiente stock, el stock actual del producto es de " + stock);
@@ -253,7 +297,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
             txtCantidad.setForeground(Color.RED);
             return false;
         }
-
+        
         return true;
     }
 
@@ -813,7 +857,6 @@ public final class RegistrarVenta extends javax.swing.JDialog {
 
         cbMoneda.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dolares", "Guaranies", "Reales", "Pesos argentinos" }));
         cbMoneda.setSelectedIndex(1);
-        cbMoneda.setEnabled(false);
         cbMoneda.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cbMonedaItemStateChanged(evt);
@@ -832,6 +875,11 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         txtDescuento.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtDescuento.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         txtDescuento.setEnabled(false);
+        txtDescuento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtDescuentoActionPerformed(evt);
+            }
+        });
         txtDescuento.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtDescuentoKeyReleased(evt);
@@ -1128,14 +1176,14 @@ public final class RegistrarVenta extends javax.swing.JDialog {
             while (con.rs.next()) {
                 numultimaventa = con.rs.getString("numultimaventa");
             }
-
+            
             if (numultimaventa == null) {
                 numultimaventa = String.format("%8s", String.valueOf(1)).replace(' ', '0');
             } else {
                 numultimaventa = String.format("%8s", String.valueOf((Integer.parseInt(numultimaventa) + 1))).replace(' ', '0');
             }
             lblNumVenta.setText(numultimaventa);
-
+            
             con.DesconectarBasedeDatos();
         } catch (SQLException e) {
             Logger.getLogger(RegistrarVenta.class.getName()).log(Level.SEVERE, null, e);
@@ -1153,7 +1201,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     private void txtPrecioPesosArgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPrecioPesosArgActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPrecioPesosArgActionPerformed
-
+    
     private void LimpiarProducto() {
         txtIDProducto.setText("");
         txtStock.setText("");
@@ -1211,7 +1259,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                         JOptionPane.showMessageDialog(this, "No se encontró la moneda seleccionada", "Error", JOptionPane.ERROR_MESSAGE);
                         break;
                 }
-
+                
                 if (descuento >= preciobruto) {
                     JOptionPane.showMessageDialog(null, "El descuento no puede ser mayor o igual al precio del producto", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
@@ -1219,14 +1267,14 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                 preciobruto = metodostxt.FormatearADosDecimales(preciobruto);
                 precioneto = preciobruto - descuento; //Se aplica el descuento
                 precioneto = metodostxt.FormatearADosDecimales(precioneto);
-
+                
                 double subtotal = cantidad * precioneto;
                 subtotal = metodostxt.FormatearADosDecimales(subtotal);
                 tablemodelo.addRow(new Object[]{idproducto, codigoproducto, descripcion, cantidad, preciobruto, descuento, precioneto,
                     moneda, subtotal});
-
+                
                 SumarSubtotal();
-
+                
                 if (tbProductosVendidos.getRowCount() > 0) {
                     txtImporte.setEnabled(true);
                     cbMoneda.setEnabled(false);
@@ -1237,19 +1285,18 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                 lblTotalMoneda.setText(cbMoneda.getSelectedItem().toString());
                 lblTotalMoneda1.setText(cbMoneda.getSelectedItem().toString());
                 lblTotalMoneda2.setText(cbMoneda.getSelectedItem().toString());
-
-                //Limpiar
+                
                 LimpiarProducto();
                 txtCodigoProducto.setText("");
                 txtCantidad.setText("");
-
+                
                 txtCodigoProducto.requestFocus();
             } catch (NumberFormatException e) {
                 System.out.println("Error al añadir producto a la tabla " + e);
             }
         }
     }//GEN-LAST:event_btnAnadirActionPerformed
-
+    
     private void SumarSubtotal() {
         //Suma la colmna subtotal
         double totalventa = metodos.SumarColumnaDouble(tbProductosVendidos, 8);
@@ -1270,7 +1317,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
 
     private void txtCantidadKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyReleased
         metodostxt.TxtColorLabelKeyReleased(txtCantidad, lblCantidad);
-
+        
         int cantidad = Integer.parseInt(txtCantidad.getText());
         int stock = Integer.parseInt(txtStock.getText());
         if (cantidad > stock) {
@@ -1284,13 +1331,14 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         tablemodelo.removeRow(tbProductosVendidos.getSelectedRow());
         SumarSubtotal();
-
+        
         if (tbProductosVendidos.getRowCount() <= 0) {
             txtImporte.setEnabled(false);
             txtImporte.setText("");
             txtVuelto.setText("");
             cbMoneda.setEnabled(true);
             btnEliminar.setEnabled(false);
+            txtCodigoProducto.requestFocus();
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
@@ -1303,12 +1351,13 @@ public final class RegistrarVenta extends javax.swing.JDialog {
 
     private void txtCodigoProductoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoProductoKeyReleased
         metodostxt.TxtColorLabelKeyReleased(txtCodigoProducto, lblCodigoProducto);
+        txtCodigoProducto.setForeground(Color.RED);
     }//GEN-LAST:event_txtCodigoProductoKeyReleased
-
-    private void ConsultaProducto() {
+    
+    private boolean ConsultaProducto(String codigoproducto) {
         try {
             con = con.ObtenerRSSentencia("SELECT pro_codigo, pro_existencia, pro_descripcion, pro_codigo "
-                    + "FROM producto WHERE pro_identificador = '" + txtCodigoProducto.getText() + "'");
+                    + "FROM producto WHERE pro_identificador = '" + codigoproducto + "'");
             if (con.rs.next()) {
                 txtCodigoProducto.setForeground(new Color(0, 153, 51)); //Verde
 
@@ -1316,56 +1365,24 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                 txtStock.setText(con.rs.getString(2));
                 txtDescripcionProducto.setText(con.rs.getString(3));
                 metodosimagen.LeerImagenExterna(lblImagen, rutaFotoProducto + con.rs.getString(4), TitlePorDefault);
-
+                
                 double ultimopreciocompra = UltimoPrecioCompra(txtIDProducto.getText());
                 double porcganancia = PorcGanancia();
                 String precioventaString = metodostxt.DoubleAFormatoSudamerica(ultimopreciocompra + (ultimopreciocompra * (porcganancia / 100)));
                 txtPrecioDolares.setText(precioventaString);
-                ConvertirCotizacion();
-
-                //Solicita la cantidad, y revisa que sea valido
-                boolean esNumeroValido = false;
-                while (esNumeroValido == false && txtCantidad.getText().equals("")) {
-                    try {
-                        Object cantidadString = JOptionPane.showInputDialog(this, "Ingrese la cantidad",
-                                "Cantidad vendida", JOptionPane.INFORMATION_MESSAGE, null, null, "1");
-                        if (cantidadString == null) {
-                            System.out.println("Se canceló la operación");
-                            return;
-                        }
-
-                        int cantidad = Integer.parseInt(cantidadString.toString());
-                        if (cantidad <= 0) {
-                            JOptionPane.showMessageDialog(this, "La cantidad no puede ser menor o igual a 0");
-                            return;
-                        }
-
-                        int stock = Integer.parseInt(txtStock.getText());
-                        if (cantidad > stock) {
-                            JOptionPane.showMessageDialog(this, "No hay suficiente stock, el stock actual del producto es de " + stock);
-                            return;
-                        }
-                        txtCantidad.setText(cantidadString.toString());
-                        lblCantidad.setForeground(new Color(0, 153, 51));
-
-                        txtCantidad.setEnabled(true);
-                        txtDescuento.setEnabled(true);
-                        txtDescuento.requestFocus();
-                        esNumeroValido = true;
-                    } catch (NumberFormatException e) {
-                        JOptionPane.showMessageDialog(this, "Ingrese un número entero válido");
-                        esNumeroValido = false;
-                    }
-                }
+                return true;
             } else {
                 txtCodigoProducto.setForeground(Color.RED); //Rojo
                 LimpiarProducto();
+                return false;
             }
-            con.DesconectarBasedeDatos();
+            
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Error al intentar obtener cambio " + e);
             System.out.println("Error al consultar producto: ");
         }
+        con.DesconectarBasedeDatos();
+        return false;
     }
 
     private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
@@ -1380,7 +1397,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnGuardarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnGuardarKeyPressed
-
+        
 
     }//GEN-LAST:event_btnGuardarKeyPressed
 
@@ -1388,6 +1405,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         int confirmado = JOptionPane.showConfirmDialog(this, "¿Seguro que desea borrar todos los datos de la venta actual?", "Confirmación", JOptionPane.YES_OPTION);
         if (JOptionPane.YES_OPTION == confirmado) {
             Limpiar();
+            txtCodigoProducto.setText("");
             LimpiarProducto();
         }
     }//GEN-LAST:event_btnCancelarActionPerformed
@@ -1426,10 +1444,10 @@ public final class RegistrarVenta extends javax.swing.JDialog {
 
     private void txtImporteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtImporteKeyTyped
         metodostxt.TxtCantidadCaracteresKeyTyped(txtImporte, 11);
-
+        
         metodostxt.SoloNumeroDecimalKeyTyped(evt, txtImporte);
     }//GEN-LAST:event_txtImporteKeyTyped
-
+    
     private void CalcularVuelto() {
         double importe = metodostxt.DoubleAFormatoAmericano(txtImporte.getText());
         double totalventa = metodostxt.DoubleAFormatoAmericano(txtTotalVenta.getText());
@@ -1448,7 +1466,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     private void txtImporteKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtImporteKeyReleased
         if (txtImporte.getText().equals("") == false) {
             txtImporte.setText(metodostxt.DoubleFormatoSudamericaKeyReleased(txtImporte.getText()));
-
+            
             CalcularVuelto();
         }
 
@@ -1463,12 +1481,54 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     }//GEN-LAST:event_txtImporteActionPerformed
 
     private void txtCodigoProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoProductoActionPerformed
-        //Si se oprime ENTER o si el producto ya se encontro y se cambia el codigo de producto, volver a buscar
+        //Si se oprime ENTER o si el producto ya se encontro y se cambia el codigo de producto, volver a buscar        
+        if (ConsultaProducto(txtCodigoProducto.getText()) == true) {
+            ConvertirCotizacion();
 
-        ConsultaProducto();
-
+            //Solicita la cantidad, y revisa que sea valido
+            boolean esNumeroValido = false;
+            while (esNumeroValido == false) {
+                try {
+                    Object cantidadString = JOptionPane.showInputDialog(this, "Ingrese la cantidad",
+                            "Cantidad vendida", JOptionPane.INFORMATION_MESSAGE, null, null, "1");
+                    
+                    int cantidad = Integer.parseInt(cantidadString.toString());
+                    int stock = Integer.parseInt(txtStock.getText());
+                    if (cantidadString == null || cantidad <= 0 || cantidad > stock) {
+                        if (null == cantidadString) {
+                            System.out.println("Se canceló la operación");
+                            return;
+                        }
+                        
+                        if (cantidad <= 0) {
+                            JOptionPane.showMessageDialog(this, "La cantidad no puede ser menor o igual a 0");
+                        }
+                        
+                        if (cantidad > stock) {
+                            JOptionPane.showMessageDialog(this, "No hay suficiente stock, el stock actual del producto es de " + stock);
+                        }
+                    } else {
+                        txtCantidad.setText(cantidadString.toString());
+                        lblCantidad.setForeground(new Color(0, 153, 51)); //Verde
+                        txtDescuento.setEnabled(true);
+                        txtDescuento.requestFocus();
+                        esNumeroValido = true;
+                    }
+                } catch (NumberFormatException e) {
+                    if (cantidadString == null) {
+                        
+                    }
+                    JOptionPane.showMessageDialog(this, "Ingrese un número entero válido");
+                    esNumeroValido = false;
+                }
+            }
+        }
     }//GEN-LAST:event_txtCodigoProductoActionPerformed
 
+    private void txtDescuentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDescuentoActionPerformed
+        btnAnadir.doClick();
+    }//GEN-LAST:event_txtDescuentoActionPerformed
+    
     private double UltimoPrecioCompra(String codigoproducto) {
         con = con.ObtenerRSSentencia("SELECT MAX(compro_preciocompra) AS preciocompramax "
                 + "FROM compra_producto WHERE compro_producto = '" + codigoproducto + "'");;
@@ -1484,7 +1544,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         con.DesconectarBasedeDatos();
         return precioventa;
     }
-
+    
     private double PorcGanancia() {
         con = con.ObtenerRSSentencia("SELECT conf_porcganancia FROM configuracion WHERE conf_codigo = '1'");;
         double porcganancia = 0.0;
@@ -1498,7 +1558,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         con.DesconectarBasedeDatos();
         return porcganancia;
     }
-
+    
     private void ConvertirCotizacion() {
         //Convertir precio a las distintas monedas
         if (txtPrecioDolares.getText().equals("") == false) {
@@ -1527,9 +1587,9 @@ public final class RegistrarVenta extends javax.swing.JDialog {
             txtPrecioPesosArg.setText(precioPesosArgString);
         }
     }
-
+    
     List<Component> ordenTabulador;
-
+    
     private void OrdenTabulador() {
         ordenTabulador = new ArrayList<>();
         ordenTabulador.add(cbCliente);
@@ -1541,39 +1601,38 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         ordenTabulador.add(btnGuardar);
         setFocusTraversalPolicy(new PersonalizadoFocusTraversalPolicy());
     }
-
+    
     static void PonerClienteSeleccionado(int codigoSelect) {
         MetodosCombo metodoscombo = new MetodosCombo();
         metodoscombo.setSelectedCodigoItem(cbCliente, codigoSelect);
     }
-
+    
     static void PonerProductoSeleccionado(String codigoproducto) {
         txtCodigoProducto.setText(codigoproducto + "");
-        txtCodigoProducto.doLayout();
     }
-
+    
     private class PersonalizadoFocusTraversalPolicy extends FocusTraversalPolicy {
-
+        
         public Component getComponentAfter(Container focusCycleRoot, Component aComponent) {
             int currentPosition = ordenTabulador.indexOf(aComponent);
             currentPosition = (currentPosition + 1) % ordenTabulador.size();
             return (Component) ordenTabulador.get(currentPosition);
         }
-
+        
         public Component getComponentBefore(Container focusCycleRoot, Component aComponent) {
             int currentPosition = ordenTabulador.indexOf(aComponent);
             currentPosition = (ordenTabulador.size() + currentPosition - 1) % ordenTabulador.size();
             return (Component) ordenTabulador.get(currentPosition);
         }
-
+        
         public Component getFirstComponent(Container cntnr) {
             return (Component) ordenTabulador.get(0);
         }
-
+        
         public Component getLastComponent(Container cntnr) {
             return (Component) ordenTabulador.get(ordenTabulador.size() - 1);
         }
-
+        
         public Component getDefaultComponent(Container cntnr) {
             return (Component) ordenTabulador.get(0);
         }

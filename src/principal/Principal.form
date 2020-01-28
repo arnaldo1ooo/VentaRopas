@@ -33,7 +33,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem11">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="F2"/>
+                  <KeyStroke key="F1"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/iconos/Iconos25x25/IconoRegistrarCompra25.png"/>
@@ -49,7 +49,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem13">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="F1"/>
+                  <KeyStroke key="Shift+F1"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/iconos/Iconos25x25/IconoEliminar25.png"/>
@@ -82,6 +82,9 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem12">
               <Properties>
+                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                  <KeyStroke key="F2"/>
+                </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/iconos/Iconos25x25/IconoRegistrarCompra25.png"/>
                 </Property>
@@ -95,6 +98,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem14">
               <Properties>
+                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                  <KeyStroke key="Shift+F2"/>
+                </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/iconos/Iconos25x25/IconoEliminar25.png"/>
                 </Property>
@@ -102,6 +108,17 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem14ActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator16">
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem10">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Proveedores"/>
+                <Property name="toolTipText" type="java.lang.String" value=""/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem10ActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
@@ -130,7 +147,7 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem8">
               <Properties>
-                <Property name="text" type="java.lang.String" value="EMPRESAS REGISTRANTES"/>
+                <Property name="text" type="java.lang.String" value="Categorias"/>
                 <Property name="toolTipText" type="java.lang.String" value=""/>
               </Properties>
               <Events>
@@ -141,7 +158,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem16">
               <Properties>
-                <Property name="text" type="java.lang.String" value="FORMULACIONES"/>
+                <Property name="text" type="java.lang.String" value="Marcas"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem16ActionPerformed"/>
@@ -189,7 +206,7 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem4">
               <Properties>
-                <Property name="text" type="java.lang.String" value="MODULOS"/>
+                <Property name="text" type="java.lang.String" value="Modulos"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem4ActionPerformed"/>
@@ -199,7 +216,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem9">
               <Properties>
-                <Property name="text" type="java.lang.String" value="PERFILES"/>
+                <Property name="text" type="java.lang.String" value="Perfiles"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem9ActionPerformed"/>
@@ -209,7 +226,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem17">
               <Properties>
-                <Property name="text" type="java.lang.String" value="ROLES"/>
+                <Property name="text" type="java.lang.String" value="Roles"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem17ActionPerformed"/>
@@ -279,7 +296,7 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem6">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Cambio de moneda"/>
+                <Property name="text" type="java.lang.String" value="Cotizaci&#xf3;n"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem6ActionPerformed"/>
@@ -519,41 +536,40 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="btnProducto" max="32767" attributes="0"/>
-                      <Component id="btnUsuario" alignment="0" max="32767" attributes="0"/>
-                      <Component id="btnVenta" alignment="0" max="32767" attributes="0"/>
-                      <Component id="btnCompra" alignment="0" max="32767" attributes="0"/>
-                      <Component id="btnCliente" alignment="0" max="32767" attributes="0"/>
-                      <Component id="btnFuncionario" alignment="0" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="btnCliente" min="-2" pref="208" max="-2" attributes="0"/>
+                      <Component id="btnUsuario" min="-2" pref="208" max="-2" attributes="0"/>
+                      <Component id="btnFuncionario" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnProducto" min="-2" pref="208" max="-2" attributes="0"/>
+                      <Component id="btnCompra" min="-2" pref="208" max="-2" attributes="0"/>
+                      <Component id="btnVenta" min="-2" pref="208" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="731" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
                   <Component id="jpCotizaciones" min="-2" pref="415" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
-                  <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
-                  <Component id="btnProducto" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="btnFuncionario" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="btnCliente" min="-2" max="-2" attributes="0"/>
+              <Group type="102" alignment="1" attributes="0">
+                  <EmptySpace pref="539" max="32767" attributes="0"/>
+                  <Component id="jpCotizaciones" min="-2" pref="207" max="-2" attributes="0"/>
+              </Group>
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace min="-2" pref="69" max="-2" attributes="0"/>
+                  <Component id="btnVenta" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="btnCompra" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="btnVenta" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnProducto" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="btnFuncionario" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnCliente" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="btnUsuario" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="108" max="32767" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace max="32767" attributes="0"/>
-                  <Component id="jpCotizaciones" min="-2" pref="207" max="-2" attributes="0"/>
+                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

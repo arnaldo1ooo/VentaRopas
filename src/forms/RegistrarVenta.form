@@ -999,7 +999,6 @@
                   </StringArray>
                 </Property>
                 <Property name="selectedIndex" type="int" value="1"/>
-                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="cbMonedaItemStateChanged"/>
@@ -1038,6 +1037,7 @@
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtDescuentoActionPerformed"/>
                 <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtDescuentoKeyReleased"/>
                 <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtDescuentoKeyTyped"/>
               </Events>

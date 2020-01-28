@@ -173,7 +173,7 @@ public final class ABMProducto extends javax.swing.JDialog {
     public void TablaConsultaBDAll() {//Realiza la consulta de los productos que tenemos en la base de datos
         String elSP = "SP_" + nombreTablaBD + "Consulta";
         String titlesJtabla[] = {"Código", "Código del producto", "Descripción",
-            "Marca", "Existencia", "Tamaño", "Categoria", "Subcategoria", "Observación", "Estado"};
+            "Marca", "Stock", "Tamaño", "Categoria", "Subcategoria", "Observación", "Estado"};
 
         tbPrincipal.setModel(con.ConsultAllBD(elSP, titlesJtabla, cbCampoBuscar));
         metodos.AnchuraColumna(tbPrincipal);

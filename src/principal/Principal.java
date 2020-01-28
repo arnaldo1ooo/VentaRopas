@@ -5,6 +5,7 @@ import forms.ABMCliente;
 import forms.ABMFuncionario;
 import forms.ABMProducto;
 import forms.AnularCompra;
+import forms.AnularVenta;
 import forms.RegistrarCompra;
 import forms.RegistrarVenta;
 import java.sql.SQLException;
@@ -203,6 +204,8 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         jMenuItem12 = new javax.swing.JMenuItem();
         jSeparator15 = new javax.swing.JPopupMenu.Separator();
         jMenuItem14 = new javax.swing.JMenuItem();
+        jSeparator16 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem10 = new javax.swing.JMenuItem();
         meProducto = new javax.swing.JMenu();
         jMenuItem8 = new javax.swing.JMenuItem();
         jSeparator8 = new javax.swing.JPopupMenu.Separator();
@@ -549,38 +552,36 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         piPrincipalLayout.setHorizontalGroup(
             piPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(piPrincipalLayout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addGroup(piPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnProducto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(piPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(btnUsuario, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnVenta, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnCompra, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnCliente, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnFuncionario, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 731, Short.MAX_VALUE)
-                .addComponent(jpCotizaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0))
+                .addGap(33, 33, 33)
+                .addGroup(piPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnFuncionario)
+                    .addComponent(btnProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jpCotizaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         piPrincipalLayout.setVerticalGroup(
             piPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, piPrincipalLayout.createSequentialGroup()
+                .addContainerGap(539, Short.MAX_VALUE)
+                .addComponent(jpCotizaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(piPrincipalLayout.createSequentialGroup()
-                .addGap(56, 56, 56)
+                .addGap(69, 69, 69)
+                .addComponent(btnVenta)
+                .addGap(18, 18, 18)
+                .addComponent(btnCompra)
+                .addGap(18, 18, 18)
                 .addComponent(btnProducto)
                 .addGap(18, 18, 18)
                 .addComponent(btnFuncionario)
                 .addGap(18, 18, 18)
                 .addComponent(btnCliente)
                 .addGap(18, 18, 18)
-                .addComponent(btnCompra)
-                .addGap(18, 18, 18)
-                .addComponent(btnVenta)
-                .addGap(18, 18, 18)
                 .addComponent(btnUsuario)
-                .addContainerGap(108, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, piPrincipalLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jpCotizaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jMenuBar1.setMinimumSize(new java.awt.Dimension(120, 70));
@@ -597,7 +598,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             }
         });
 
-        jMenuItem11.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
+        jMenuItem11.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
         jMenuItem11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoRegistrarCompra25.png"))); // NOI18N
         jMenuItem11.setText("Registrar venta");
         jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
@@ -608,7 +609,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         meVenta.add(jMenuItem11);
         meVenta.add(jSeparator11);
 
-        jMenuItem13.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
+        jMenuItem13.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, java.awt.event.InputEvent.SHIFT_MASK));
         jMenuItem13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoEliminar25.png"))); // NOI18N
         jMenuItem13.setText("Anular venta");
         jMenuItem13.addActionListener(new java.awt.event.ActionListener() {
@@ -631,6 +632,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             }
         });
 
+        jMenuItem12.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
         jMenuItem12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoRegistrarCompra25.png"))); // NOI18N
         jMenuItem12.setText("Registrar compra");
         jMenuItem12.addActionListener(new java.awt.event.ActionListener() {
@@ -641,6 +643,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         meCompra.add(jMenuItem12);
         meCompra.add(jSeparator15);
 
+        jMenuItem14.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, java.awt.event.InputEvent.SHIFT_MASK));
         jMenuItem14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoEliminar25.png"))); // NOI18N
         jMenuItem14.setText("Anular compra");
         jMenuItem14.addActionListener(new java.awt.event.ActionListener() {
@@ -649,6 +652,16 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             }
         });
         meCompra.add(jMenuItem14);
+        meCompra.add(jSeparator16);
+
+        jMenuItem10.setText("Proveedores");
+        jMenuItem10.setToolTipText("");
+        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem10ActionPerformed(evt);
+            }
+        });
+        meCompra.add(jMenuItem10);
 
         jMenuBar1.add(meCompra);
 
@@ -665,7 +678,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             }
         });
 
-        jMenuItem8.setText("EMPRESAS REGISTRANTES");
+        jMenuItem8.setText("Categorias");
         jMenuItem8.setToolTipText("");
         jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -675,7 +688,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         meProducto.add(jMenuItem8);
         meProducto.add(jSeparator8);
 
-        jMenuItem16.setText("FORMULACIONES");
+        jMenuItem16.setText("Marcas");
         jMenuItem16.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem16ActionPerformed(evt);
@@ -710,7 +723,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         meUsuario.setMinimumSize(new java.awt.Dimension(210, 70));
         meUsuario.setPreferredSize(new java.awt.Dimension(220, 70));
 
-        jMenuItem4.setText("MODULOS");
+        jMenuItem4.setText("Modulos");
         jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem4ActionPerformed(evt);
@@ -719,7 +732,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         meUsuario.add(jMenuItem4);
         meUsuario.add(jSeparator7);
 
-        jMenuItem9.setText("PERFILES");
+        jMenuItem9.setText("Perfiles");
         jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem9ActionPerformed(evt);
@@ -728,7 +741,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         meUsuario.add(jMenuItem9);
         meUsuario.add(jSeparator6);
 
-        jMenuItem17.setText("ROLES");
+        jMenuItem17.setText("Roles");
         jMenuItem17.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem17ActionPerformed(evt);
@@ -778,7 +791,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         meConfiguracion.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         meConfiguracion.setPreferredSize(new java.awt.Dimension(220, 70));
 
-        jMenuItem6.setText("Cambio de moneda");
+        jMenuItem6.setText("Cotización");
         jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem6ActionPerformed(evt);
@@ -912,7 +925,8 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_btnUsuarioActionPerformed
 
     private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
-        // TODO add your handling code here:
+        AnularVenta anularventa = new AnularVenta(this, true);
+        anularventa.setVisible(true);
     }//GEN-LAST:event_jMenuItem13ActionPerformed
 
     private void jMenuItem18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem18ActionPerformed
@@ -955,6 +969,10 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         /*ABMEmpresaRegistrante abmempresaregistrante = new ABMEmpresaRegistrante(null, this, false);
         abmempresaregistrante.setVisible(true);*/
     }//GEN-LAST:event_jMenuItem8ActionPerformed
+
+    private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem10ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1008,6 +1026,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem10;
     private javax.swing.JMenuItem jMenuItem11;
     private javax.swing.JMenuItem jMenuItem12;
     private javax.swing.JMenuItem jMenuItem13;
@@ -1028,6 +1047,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     private javax.swing.JPopupMenu.Separator jSeparator12;
     private javax.swing.JPopupMenu.Separator jSeparator13;
     private javax.swing.JPopupMenu.Separator jSeparator15;
+    private javax.swing.JPopupMenu.Separator jSeparator16;
     private javax.swing.JPopupMenu.Separator jSeparator18;
     private javax.swing.JPopupMenu.Separator jSeparator19;
     private javax.swing.JPopupMenu.Separator jSeparator6;

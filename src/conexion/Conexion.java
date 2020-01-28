@@ -28,7 +28,7 @@ public class Conexion {
     private static String servidor;
 
     public static Connection ConectarBasedeDatos() {
-        String tipoHost = "local";
+        String tipoHost = "remoto";
 
         if (tipoHost.equals("local")) {
             //Modo host local
@@ -90,17 +90,17 @@ public class Conexion {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Error1, Verifique los datos de la conexion a la BD: "
-                    + ex, "Error1 en la Conexión con la BD" + ex.getMessage(), JOptionPane.ERROR_MESSAGE);
+                    + ex, "Error1 en la Conexión a la BD" + ex.getMessage(), JOptionPane.ERROR_MESSAGE);
             conexion = null;
         } catch (SQLException ex) {
             Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Verifique que el nombre de la bd, el usuario y la contraseña esten correctas: "
-                    + ex, "Error2 en la Conexión con la BD" + ex.getMessage(), JOptionPane.ERROR_MESSAGE);
+                    + ex, "Error2 en la Conexión a la BD" + ex.getMessage(), JOptionPane.ERROR_MESSAGE);
             conexion = null;
         } catch (Exception ex) {
             Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Error3, Verifique los datos de la conexion a la BD: "
-                    + ex, "Error3 en la Conexión con la BD" + ex.getMessage(), JOptionPane.ERROR_MESSAGE);
+                    + ex, "Error3 en la Conexión a la BD" + ex.getMessage(), JOptionPane.ERROR_MESSAGE);
             conexion = null;
         }
         return conexion;
