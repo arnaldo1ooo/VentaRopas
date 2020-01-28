@@ -26,7 +26,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="panel1" alignment="0" max="-2" attributes="0"/>
+          <Component id="panel1" alignment="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -54,33 +54,36 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
                                   <Component id="jLabel10" min="-2" pref="129" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="txtBuscar" min="-2" pref="284" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
+                                  <Component id="txtBuscar" min="-2" pref="399" max="-2" attributes="0"/>
+                                  <EmptySpace pref="88" max="32767" attributes="0"/>
                                   <Component id="lblBuscarCampo" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                                   <Component id="cbCampoBuscar" min="-2" pref="186" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="scPrincipal" alignment="0" max="32767" attributes="0"/>
+                              <Component id="pnProductosVendidos" alignment="1" max="32767" attributes="0"/>
                           </Group>
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
-                      <Component id="pnProductosComprados" alignment="1" max="32767" attributes="0"/>
+                      <Group type="102" alignment="1" attributes="0">
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <Component id="lbCantRegistros" min="-2" pref="509" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
               </Group>
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="307" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="369" max="-2" attributes="0"/>
                   <Component id="btnEliminar" min="-2" pref="150" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
               </Group>
-              <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace max="32767" attributes="0"/>
-                  <Component id="lbCantRegistros" min="-2" pref="376" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="scPrincipal" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -100,7 +103,7 @@
                   <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                   <Component id="lbCantRegistros" min="-2" pref="18" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
-                  <Component id="pnProductosComprados" min="-2" max="-2" attributes="0"/>
+                  <Component id="pnProductosVendidos" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="btnEliminar" min="-2" pref="37" max="-2" attributes="0"/>
                   <EmptySpace pref="16" max="32767" attributes="0"/>
@@ -163,7 +166,7 @@
             <Property name="text" type="java.lang.String" value="Buscar por:"/>
           </Properties>
         </Component>
-        <Container class="javax.swing.JPanel" name="pnProductosComprados">
+        <Container class="javax.swing.JPanel" name="pnProductosVendidos">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
@@ -187,10 +190,10 @@
                       <Component id="scPrincipal1" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="330" max="-2" attributes="0"/>
-                      <Component id="lbCantRegistrosProductos" min="-2" pref="394" max="-2" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="32767" attributes="0"/>
+                      <Component id="lbCantRegistrosProductos" min="-2" pref="495" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -214,7 +217,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JTable" name="tbProductosComprados">
+                <Component class="javax.swing.JTable" name="tbProductosVendidos">
                   <Properties>
                     <Property name="autoCreateRowSorter" type="boolean" value="true"/>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -361,7 +364,7 @@
             <Component class="org.edisoncor.gui.label.LabelMetric" name="labelMetric2">
               <Properties>
                 <Property name="horizontalAlignment" type="int" value="2"/>
-                <Property name="text" type="java.lang.String" value="ANULAR VENTA"/>
+                <Property name="text" type="java.lang.String" value="VENTAS"/>
                 <Property name="direccionDeSombra" type="int" value="110"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Cooper Black" size="28" style="0"/>
@@ -381,7 +384,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Eliminar compra"/>
+            <Property name="text" type="java.lang.String" value="Eliminar venta"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEliminarActionPerformed"/>

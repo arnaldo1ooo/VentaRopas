@@ -11,27 +11,36 @@ import javax.swing.JOptionPane;
 import metodos.Metodos;
 import metodos.MetodosTXT;
 
-public class AnularCompra extends javax.swing.JDialog {
+public class Venta extends javax.swing.JDialog {
 
     Conexion con = new Conexion();
     Metodos metodos = new Metodos();
     MetodosTXT metodostxt = new MetodosTXT();
 
-    public AnularCompra(javax.swing.JFrame parent) {
-        super(parent);
+    public Venta(javax.swing.JFrame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
 
         ConsultaAllCompraBD();
     }
 
     private void ConsultaAllCompraBD() {
-        String sentencia = "SP_CompraConsulta";
-        String titlesJtabla[] = {"Código", "N° de compra", "N° del documento", "Proveedor", "Tipo de documento",
-            "Fecha de registro", "Fecha de compra"};
+        String sentencia = "SP_VentaConsulta";
+        String titlesJtabla[] = {"Código", "N° de venta", "Vendedor/a", "Cliente", "Tipo de documento",
+            "Fecha de venta", "Importe ($)", "Moneda", "Cotización"};
 
         tbPrincipal.setModel(con.ConsultAllBD(sentencia, titlesJtabla, cbCampoBuscar));
         metodos.AnchuraColumna(tbPrincipal);
         cbCampoBuscar.setSelectedIndex(1);
+
+        double importe;
+        double cotizacion;
+        for (int i = 0; i < tbPrincipal.getRowCount(); i++) {
+            importe = Double.parseDouble(tbPrincipal.getValueAt(i, 6).toString());
+            tbPrincipal.setValueAt(metodostxt.DoubleAFormatoSudamerica(importe), i, 6);
+            cotizacion = Double.parseDouble(tbPrincipal.getValueAt(i, 8).toString());
+            tbPrincipal.setValueAt(metodostxt.DoubleAFormatoSudamerica(cotizacion), i, 8);
+        }
 
         if (tbPrincipal.getModel().getRowCount() == 1) {
             lbCantRegistros.setText(tbPrincipal.getModel().getRowCount() + " Registro encontrado");
@@ -40,25 +49,32 @@ public class AnularCompra extends javax.swing.JDialog {
         }
     }
 
-    private void ProductosDeLaCompra() {
-        int codigoCompraSelect = Integer.parseInt(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0).toString());
-        String sentencia = "SP_CompraProductosConsulta(" + codigoCompraSelect + ")";
-        String titlesJtabla[] = {"Id del producto", "Descripción", "Cantidad", "Precio de compra ($)"};
+    private void ProductosDeLaVenta() {
+        int codigoVentaSelect = Integer.parseInt(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0).toString());
+        String sentencia = "SP_VentaProductosConsulta(" + codigoVentaSelect + ")";
+        String titlesJtabla[] = {"Id del producto", "Codigo del producto","Descripción", "Cantidad",
+            "Precio de compra ($)", "Precio de venta ($)", "Descuento ($)"};
 
-        tbProductosComprados.setModel(con.ConsultAllBD(sentencia, titlesJtabla, null));
-        metodos.AnchuraColumna(tbProductosComprados);
+        tbProductosVendidos.setModel(con.ConsultAllBD(sentencia, titlesJtabla, null));
+        metodos.AnchuraColumna(tbProductosVendidos);
 
-        //Convertir precios
-        double precio;
-        for (int i = 0; i < tbProductosComprados.getRowCount(); i++) {
-            precio = Double.parseDouble(tbProductosComprados.getValueAt(i, 3).toString());
-            tbProductosComprados.setValueAt(metodostxt.DoubleAFormatoSudamerica(precio), i, 3);
+        //Convertir formato precios
+        double preciocompra;
+        double precioventa;
+        double descuento;
+        for (int i = 0; i < tbProductosVendidos.getRowCount(); i++) {
+            preciocompra = Double.parseDouble(tbProductosVendidos.getValueAt(i, 4).toString());
+            tbProductosVendidos.setValueAt(metodostxt.DoubleAFormatoSudamerica(preciocompra), i, 4);
+            precioventa = Double.parseDouble(tbProductosVendidos.getValueAt(i, 5).toString());
+            tbProductosVendidos.setValueAt(metodostxt.DoubleAFormatoSudamerica(precioventa), i, 5);
+            descuento = Double.parseDouble(tbProductosVendidos.getValueAt(i, 6).toString());
+            tbProductosVendidos.setValueAt(metodostxt.DoubleAFormatoSudamerica(descuento), i, 6);
         }
 
-        if (tbProductosComprados.getModel().getRowCount() == 1) {
-            lbCantRegistrosProductos.setText(tbProductosComprados.getModel().getRowCount() + " Registro encontrado");
+        if (tbProductosVendidos.getModel().getRowCount() == 1) {
+            lbCantRegistrosProductos.setText(tbProductosVendidos.getModel().getRowCount() + " Registro encontrado");
         } else {
-            lbCantRegistrosProductos.setText(tbProductosComprados.getModel().getRowCount() + " Registros encontrados");
+            lbCantRegistrosProductos.setText(tbProductosVendidos.getModel().getRowCount() + " Registros encontrados");
         }
     }
 
@@ -71,9 +87,9 @@ public class AnularCompra extends javax.swing.JDialog {
         txtBuscar = new javax.swing.JTextField();
         cbCampoBuscar = new javax.swing.JComboBox();
         lblBuscarCampo = new javax.swing.JLabel();
-        pnProductosComprados = new javax.swing.JPanel();
+        pnProductosVendidos = new javax.swing.JPanel();
         scPrincipal1 = new javax.swing.JScrollPane();
-        tbProductosComprados = new javax.swing.JTable(){
+        tbProductosVendidos = new javax.swing.JTable(){
             public boolean isCellEditable(int rowIndex, int colIndex) {
                 return false; //Disallow the editing of any cell
             }
@@ -117,13 +133,13 @@ public class AnularCompra extends javax.swing.JDialog {
         lblBuscarCampo.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblBuscarCampo.setText("Buscar por:");
 
-        pnProductosComprados.setBackground(new java.awt.Color(255, 255, 255));
-        pnProductosComprados.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Productos de la compra N° 000000"));
+        pnProductosVendidos.setBackground(new java.awt.Color(255, 255, 255));
+        pnProductosVendidos.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Productos de la venta N° 000000"));
 
-        tbProductosComprados.setAutoCreateRowSorter(true);
-        tbProductosComprados.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        tbProductosComprados.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        tbProductosComprados.setModel(new javax.swing.table.DefaultTableModel(
+        tbProductosVendidos.setAutoCreateRowSorter(true);
+        tbProductosVendidos.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        tbProductosVendidos.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        tbProductosVendidos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -131,15 +147,15 @@ public class AnularCompra extends javax.swing.JDialog {
 
             }
         ));
-        tbProductosComprados.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
-        tbProductosComprados.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        tbProductosComprados.setEnabled(false);
-        tbProductosComprados.setGridColor(new java.awt.Color(0, 153, 204));
-        tbProductosComprados.setOpaque(false);
-        tbProductosComprados.setRowHeight(20);
-        tbProductosComprados.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        tbProductosComprados.getTableHeader().setReorderingAllowed(false);
-        scPrincipal1.setViewportView(tbProductosComprados);
+        tbProductosVendidos.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        tbProductosVendidos.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        tbProductosVendidos.setEnabled(false);
+        tbProductosVendidos.setGridColor(new java.awt.Color(0, 153, 204));
+        tbProductosVendidos.setOpaque(false);
+        tbProductosVendidos.setRowHeight(20);
+        tbProductosVendidos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tbProductosVendidos.getTableHeader().setReorderingAllowed(false);
+        scPrincipal1.setViewportView(tbProductosVendidos);
 
         lbCantRegistrosProductos.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         lbCantRegistrosProductos.setForeground(new java.awt.Color(153, 153, 0));
@@ -147,22 +163,22 @@ public class AnularCompra extends javax.swing.JDialog {
         lbCantRegistrosProductos.setText("0 Registros encontrados");
         lbCantRegistrosProductos.setPreferredSize(new java.awt.Dimension(57, 25));
 
-        javax.swing.GroupLayout pnProductosCompradosLayout = new javax.swing.GroupLayout(pnProductosComprados);
-        pnProductosComprados.setLayout(pnProductosCompradosLayout);
-        pnProductosCompradosLayout.setHorizontalGroup(
-            pnProductosCompradosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnProductosCompradosLayout.createSequentialGroup()
+        javax.swing.GroupLayout pnProductosVendidosLayout = new javax.swing.GroupLayout(pnProductosVendidos);
+        pnProductosVendidos.setLayout(pnProductosVendidosLayout);
+        pnProductosVendidosLayout.setHorizontalGroup(
+            pnProductosVendidosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnProductosVendidosLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(scPrincipal1)
                 .addContainerGap())
-            .addGroup(pnProductosCompradosLayout.createSequentialGroup()
-                .addGap(330, 330, 330)
-                .addComponent(lbCantRegistrosProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnProductosVendidosLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lbCantRegistrosProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(21, 21, 21))
         );
-        pnProductosCompradosLayout.setVerticalGroup(
-            pnProductosCompradosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnProductosCompradosLayout.createSequentialGroup()
+        pnProductosVendidosLayout.setVerticalGroup(
+            pnProductosVendidosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnProductosVendidosLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(scPrincipal1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2)
@@ -213,7 +229,7 @@ public class AnularCompra extends javax.swing.JDialog {
         panel3.setColorSecundario(new java.awt.Color(233, 255, 255));
 
         labelMetric2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        labelMetric2.setText("ANULAR COMPRA");
+        labelMetric2.setText("VENTAS");
         labelMetric2.setDireccionDeSombra(110);
         labelMetric2.setFont(new java.awt.Font("Cooper Black", 0, 28)); // NOI18N
 
@@ -237,7 +253,7 @@ public class AnularCompra extends javax.swing.JDialog {
         btnEliminar.setBackground(new java.awt.Color(229, 11, 11));
         btnEliminar.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
         btnEliminar.setForeground(new java.awt.Color(255, 255, 255));
-        btnEliminar.setText("Eliminar compra");
+        btnEliminar.setText("Eliminar venta");
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminarActionPerformed(evt);
@@ -253,27 +269,29 @@ public class AnularCompra extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panel1Layout.createSequentialGroup()
-                        .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panel1Layout.createSequentialGroup()
                                 .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(57, 57, 57)
+                                .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 88, Short.MAX_VALUE)
                                 .addComponent(lblBuscarCampo)
                                 .addGap(4, 4, 4)
                                 .addComponent(cbCampoBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(scPrincipal))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(pnProductosComprados, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                            .addComponent(pnProductosVendidos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(lbCantRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, 509, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(31, 31, 31))))
             .addGroup(panel1Layout.createSequentialGroup()
-                .addGap(307, 307, 307)
+                .addGap(369, 369, 369)
                 .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lbCantRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, 376, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(panel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(scPrincipal)
+                .addContainerGap())
         );
         panel1Layout.setVerticalGroup(
             panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -290,7 +308,7 @@ public class AnularCompra extends javax.swing.JDialog {
                 .addGap(3, 3, 3)
                 .addComponent(lbCantRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(9, 9, 9)
-                .addComponent(pnProductosComprados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnProductosVendidos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(16, Short.MAX_VALUE))
@@ -300,7 +318,7 @@ public class AnularCompra extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(panel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -315,9 +333,9 @@ public class AnularCompra extends javax.swing.JDialog {
         int filaselect = tbPrincipal.getSelectedRow();
         if (tbPrincipal.getRowCount() > 0) {
             System.out.println("sele");
-            ProductosDeLaCompra();
+            ProductosDeLaVenta();
             String numcompra = tbPrincipal.getValueAt(filaselect, 1).toString();
-            pnProductosComprados.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(),
+            pnProductosVendidos.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(),
                     "Produtos de la compra N° " + numcompra));
         }
     }//GEN-LAST:event_tbPrincipalMousePressed
@@ -331,22 +349,22 @@ public class AnularCompra extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "No se ha seleccionado ninguna fila", "Advertencia", JOptionPane.WARNING_MESSAGE);
             txtBuscar.requestFocus();
         } else {
-            int confirmado = javax.swing.JOptionPane.showConfirmDialog(this, "¿Realmente desea anular esta compra?", "Confirmación", JOptionPane.YES_OPTION);
+            int confirmado = javax.swing.JOptionPane.showConfirmDialog(this, "¿Realmente desea anular esta venta?", "Confirmación", JOptionPane.YES_OPTION);
             if (confirmado == JOptionPane.YES_OPTION) {
-                String codigocompra = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0).toString();
-                //Elimina la compra
-                con.EjecutarABM("CALL SP_CompraEliminar(" + codigocompra + ")");
+                String codigoventa = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0).toString();
+                //Elimina la venta
+                con.EjecutarABM("CALL SP_VentaEliminar(" + codigoventa + ")");
 
-                //Elimina los productos de la compra                      
+                //Elimina los productos de la venta                      
                 String idproducto;
-                int cantidadadquirida;
-                int cantfila = tbProductosComprados.getRowCount();
+                int cantidadvendida;
+                int cantfila = tbProductosVendidos.getRowCount();
                 for (int fila = 0; fila < cantfila; fila++) {
-                    idproducto = tbProductosComprados.getValueAt(fila, 0).toString();
-                    cantidadadquirida = Integer.parseInt(tbProductosComprados.getValueAt(fila, 2).toString());
+                    idproducto = tbProductosVendidos.getValueAt(fila, 0).toString();
+                    cantidadvendida = Integer.parseInt(tbProductosVendidos.getValueAt(fila, 3).toString());
 
-                    con.EjecutarABM("CALL SP_CompraProductosEliminar('" + codigocompra + "','"
-                            + idproducto + "','" + cantidadadquirida + "')");
+                    con.EjecutarABM("CALL SP_VentaProductosEliminar('" + codigoventa + "','"
+                            + idproducto + "','" + cantidadvendida + "')");
                 }
                 JOptionPane.showMessageDialog(this, "Compra anulado correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
             }
@@ -355,21 +373,20 @@ public class AnularCompra extends javax.swing.JDialog {
 
     private void tbPrincipalKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbPrincipalKeyReleased
         if (evt.getKeyCode() == KeyEvent.VK_UP || evt.getKeyCode() == KeyEvent.VK_DOWN) {
-            ProductosDeLaCompra();
-            String numcompra = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 1).toString();
-            pnProductosComprados.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(),
-                    "Produtos de la compra N° " + numcompra));
+            ProductosDeLaVenta();
+            String numventa = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 1).toString();
+            pnProductosVendidos.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(),
+                    "Produtos de la venta N° " + numventa));
         }
     }//GEN-LAST:event_tbPrincipalKeyReleased
 
     private void tbPrincipalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbPrincipalMouseClicked
         int filaselect = tbPrincipal.getSelectedRow();
         if (tbPrincipal.getRowCount() > 0) {
-            System.out.println("sele");
-            ProductosDeLaCompra();
-            String numcompra = tbPrincipal.getValueAt(filaselect, 1).toString();
-            pnProductosComprados.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(),
-                    "Produtos de la compra N° " + numcompra));
+            ProductosDeLaVenta();
+            String numventa = tbPrincipal.getValueAt(filaselect, 1).toString();
+            pnProductosVendidos.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(),
+                    "Produtos de la venta N° " + numventa));
         }
     }//GEN-LAST:event_tbPrincipalMouseClicked
 
@@ -378,7 +395,7 @@ public class AnularCompra extends javax.swing.JDialog {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                AnularCompra dialog = new AnularCompra(new javax.swing.JFrame());
+                Venta dialog = new Venta(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -400,11 +417,11 @@ public class AnularCompra extends javax.swing.JDialog {
     private javax.swing.JLabel lblBuscarCampo;
     private org.edisoncor.gui.panel.Panel panel1;
     private org.edisoncor.gui.panel.Panel panel3;
-    private javax.swing.JPanel pnProductosComprados;
+    private javax.swing.JPanel pnProductosVendidos;
     private javax.swing.JScrollPane scPrincipal;
     private javax.swing.JScrollPane scPrincipal1;
     private javax.swing.JTable tbPrincipal;
-    private javax.swing.JTable tbProductosComprados;
+    private javax.swing.JTable tbProductosVendidos;
     private javax.swing.JTextField txtBuscar;
     // End of variables declaration//GEN-END:variables
 }

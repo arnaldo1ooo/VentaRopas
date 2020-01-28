@@ -5,7 +5,6 @@
 package login;
 
 import conexion.Conexion;
-import forms.ABMFuncionario;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
@@ -17,7 +16,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import metodos.PlaceHolder;
 
@@ -360,6 +358,7 @@ public class Login extends javax.swing.JFrame {
     }
 
     List<Component> ordenTabulador;
+
     private void OrdenTabulador() {
         ordenTabulador = new ArrayList<>();
         ordenTabulador.add(txtAlias);
@@ -367,23 +366,29 @@ public class Login extends javax.swing.JFrame {
         ordenTabulador.add(btnIniciarSesion);
         setFocusTraversalPolicy(new Login.PersonalizadoFocusTraversalPolicy());
     }
+
     private class PersonalizadoFocusTraversalPolicy extends FocusTraversalPolicy {
+
         public Component getComponentAfter(Container focusCycleRoot, Component aComponent) {
             int currentPosition = ordenTabulador.indexOf(aComponent);
             currentPosition = (currentPosition + 1) % ordenTabulador.size();
             return (Component) ordenTabulador.get(currentPosition);
         }
+
         public Component getComponentBefore(Container focusCycleRoot, Component aComponent) {
             int currentPosition = ordenTabulador.indexOf(aComponent);
             currentPosition = (ordenTabulador.size() + currentPosition - 1) % ordenTabulador.size();
             return (Component) ordenTabulador.get(currentPosition);
         }
+
         public Component getFirstComponent(Container cntnr) {
             return (Component) ordenTabulador.get(0);
         }
+
         public Component getLastComponent(Container cntnr) {
             return (Component) ordenTabulador.get(ordenTabulador.size() - 1);
         }
+
         public Component getDefaultComponent(Container cntnr) {
             return (Component) ordenTabulador.get(0);
         }
