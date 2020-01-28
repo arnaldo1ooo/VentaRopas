@@ -1515,9 +1515,6 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                         esNumeroValido = true;
                     }
                 } catch (NumberFormatException e) {
-                    if (cantidadString == null) {
-                        
-                    }
                     JOptionPane.showMessageDialog(this, "Ingrese un número entero válido");
                     esNumeroValido = false;
                 }
