@@ -6,13 +6,23 @@
 package forms;
 
 import conexion.Conexion;
-import java.sql.SQLException;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import metodos.Metodos;
+import reportes_modelos.ModeloProductos;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRResultSetDataSource;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -52,9 +62,9 @@ public class Reporte extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         panel1 = new org.edisoncor.gui.panel.Panel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtDesdeIdentificador = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        txtHastaIdentificador = new javax.swing.JTextField();
         buttonSeven1 = new org.edisoncor.gui.button.ButtonSeven();
         cbOrdenar = new javax.swing.JComboBox();
         lblBuscarCampo = new javax.swing.JLabel();
@@ -119,7 +129,7 @@ public class Reporte extends javax.swing.JDialog {
         jScrollPane1.setViewportView(tbPrincipal);
 
         jTabbedPane1.setBackground(new java.awt.Color(255, 255, 255));
-        jTabbedPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jTabbedPane1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jTabbedPane1.setEnabled(false);
         jTabbedPane1.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
 
@@ -137,15 +147,15 @@ public class Reporte extends javax.swing.JDialog {
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel3.setText("Desde");
 
-        jTextField1.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        jTextField1.setText("0");
-        jTextField1.setToolTipText("");
+        txtDesdeIdentificador.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtDesdeIdentificador.setText("0");
+        txtDesdeIdentificador.setToolTipText("");
 
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel4.setText("Hasta");
 
-        jTextField2.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        jTextField2.setText("999999");
+        txtHastaIdentificador.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtHastaIdentificador.setText("999999");
 
         javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
         panel1.setLayout(panel1Layout);
@@ -154,11 +164,11 @@ public class Reporte extends javax.swing.JDialog {
             .addGroup(panel1Layout.createSequentialGroup()
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(4, 4, 4)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtDesdeIdentificador, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(4, 4, 4)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtHastaIdentificador, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         panel1Layout.setVerticalGroup(
@@ -166,9 +176,9 @@ public class Reporte extends javax.swing.JDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtHastaIdentificador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtDesdeIdentificador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addContainerGap())
         );
@@ -184,10 +194,6 @@ public class Reporte extends javax.swing.JDialog {
         pnProducto.setLayout(pnProductoLayout);
         pnProductoLayout.setHorizontalGroup(
             pnProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnProductoLayout.createSequentialGroup()
-                .addContainerGap(389, Short.MAX_VALUE)
-                .addComponent(buttonSeven1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(376, 376, 376))
             .addGroup(pnProductoLayout.createSequentialGroup()
                 .addGroup(pnProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnProductoLayout.createSequentialGroup()
@@ -196,7 +202,11 @@ public class Reporte extends javax.swing.JDialog {
                     .addGroup(pnProductoLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(429, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnProductoLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(buttonSeven1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(301, 301, 301))
         );
         pnProductoLayout.setVerticalGroup(
             pnProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -205,8 +215,9 @@ public class Reporte extends javax.swing.JDialog {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
-                .addComponent(buttonSeven1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(buttonSeven1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Productos", pnProducto);
@@ -219,35 +230,37 @@ public class Reporte extends javax.swing.JDialog {
         panel3.setLayout(panel3Layout);
         panel3Layout.setHorizontalGroup(
             panel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(jTabbedPane1)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(panel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel3Layout.createSequentialGroup()
-                        .addComponent(lbCantRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(22, 22, 22))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel3Layout.createSequentialGroup()
                         .addComponent(buttonSeven2, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(375, 375, 375))))
-            .addComponent(jTabbedPane1)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel3Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(lblBuscarCampo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbOrdenar, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(293, 293, 293))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel3Layout.createSequentialGroup()
+                        .addGroup(panel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 683, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(panel3Layout.createSequentialGroup()
+                                .addComponent(lblBuscarCampo)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cbOrdenar, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(panel3Layout.createSequentialGroup()
+                                .addComponent(lbCantRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(17, 17, 17)))
+                        .addGap(22, 22, 22))))
         );
         panel3Layout.setVerticalGroup(
             panel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addGroup(panel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(cbOrdenar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblBuscarCampo, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2)
                 .addComponent(lbCantRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(buttonSeven2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -281,8 +294,37 @@ public class Reporte extends javax.swing.JDialog {
     private void buttonSeven2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSeven2ActionPerformed
         if (laTabla.equals("Productos")) {
             try {
-                JasperReport reporte_productos = (JasperReport) JRLoader.loadObject("reporte_productos.jasper");
-                
+                File rutareporte = new File("reporte_productos.jasper");
+                JasperReport reporte_productos = (JasperReport) JRLoader.loadObject(rutareporte);
+                Map parametro = new HashMap();
+                parametro.put("orden", cbOrdenar.getSelectedItem().toString());
+                parametro.put("desdeIdentificador", txtDesdeIdentificador.getText());
+                parametro.put("hastaIdentificador", txtHastaIdentificador.getText());
+
+                //Para jtable
+                List lista = new ArrayList();
+                for (int f = 0; f < tbPrincipal.getRowCount(); f++) {
+                    ModeloProductos producto = new ModeloProductos(
+                            tbPrincipal.getValueAt(f, 0).toString(),
+                            tbPrincipal.getValueAt(f, 1).toString(),
+                            tbPrincipal.getValueAt(f, 2).toString(),
+                            tbPrincipal.getValueAt(f, 3).toString());
+                    lista.add(producto);
+                }
+                JRBeanCollectionDataSource beanLista = new JRBeanCollectionDataSource(lista);
+
+                //Para SQL
+                if (rutareporte.exists()) {
+                    Conexion con = new Conexion();
+                    con = con.ObtenerRSSentencia("SELECT pro_identificador, pro_descripcion, mar_descripcion, pro_existencia "
+                            + "FROM producto,marca WHERE pro_marca = mar_codigo");
+                    JRResultSetDataSource rsLista = new JRResultSetDataSource(con.rs); //Para sql
+
+                    JasperPrint jprint = JasperFillManager.fillReport(reporte_productos, parametro, rsLista);
+                    JasperViewer.viewReport(jprint); //Visualizar el reporte
+                    
+                    con.DesconectarBasedeDatos();
+                }
             } catch (JRException ex) {
                 Logger.getLogger(Reporte.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -333,9 +375,10 @@ public class Reporte extends javax.swing.JDialog {
     }
 
     private void TablaAllProductos() {//Realiza la consulta de los productos que tenemos en la base de datos
-        String sentencia = "CALL SP_ProductoConsulta()";
-        String titlesJtabla[] = {"Código", "Código del producto", "Descripción",
-            "Marca", "Stock", "Tamaño", "Categoria", "Subcategoria", "Observación", "Estado"};
+        String sentencia = "SELECT pro_identificador, pro_descripcion, mar_descripcion, pro_existencia "
+                + "FROM producto, marca "
+                + "WHERE pro_marca = mar_codigo";
+        String titlesJtabla[] = {"Código", "Descripción", "Marca", "Stock"};
 
         tbPrincipal.setModel(con.ConsultAllBD(sentencia, titlesJtabla, cbOrdenar));
         metodos.AnchuraColumna(tbPrincipal);
@@ -351,8 +394,6 @@ public class Reporte extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     private org.edisoncor.gui.label.LabelMetric labelMetric2;
     private javax.swing.JLabel lbCantRegistros;
     private javax.swing.JLabel lblBuscarCampo;
@@ -361,5 +402,7 @@ public class Reporte extends javax.swing.JDialog {
     private org.edisoncor.gui.panel.Panel panel3;
     private org.edisoncor.gui.panel.Panel pnProducto;
     private javax.swing.JTable tbPrincipal;
+    private javax.swing.JTextField txtDesdeIdentificador;
+    private javax.swing.JTextField txtHastaIdentificador;
     // End of variables declaration//GEN-END:variables
 }
