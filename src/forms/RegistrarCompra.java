@@ -1080,7 +1080,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
     }//GEN-LAST:event_tbPrincipalKeyReleased
 
     private void btnBuscarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProductoActionPerformed
-        String nombresp = "SP_ProductoConsulta";
+        String nombresp = "CALL SP_ProductoConsulta";
         String titlesJtabla[] = {"Código", "Código del producto", "Descripción",
             "Marca", "Existencia", "Tamaño", "Categoria", "Subcategoria", "Observación", "Estado"};
         Buscador buscador = new Buscador(this, nombresp, titlesJtabla, 2);

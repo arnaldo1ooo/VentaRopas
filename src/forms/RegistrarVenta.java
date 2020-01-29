@@ -1386,9 +1386,9 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     }
 
     private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
-        String nombresp = "SP_ClienteConsulta";
+        String sentencia = "CALL SP_ClienteConsulta";
         String titlesJtabla[] = {"Código", "RUC/CI", "Nombre", "Apellido", "Dirección", "Teléfono", "Email", "Observación"};
-        Buscador buscador = new Buscador(this, nombresp, titlesJtabla, 1);
+        Buscador buscador = new Buscador(this, sentencia, titlesJtabla, 1);
         buscador.setVisible(true);
     }//GEN-LAST:event_btnBuscarClienteActionPerformed
 
@@ -1431,10 +1431,10 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     }//GEN-LAST:event_txtDescuentoKeyTyped
 
     private void btnBuscarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProductoActionPerformed
-        String nombresp = "SP_ProductoConsulta";
+        String sentencia = "CALL SP_ProductoConsulta";
         String titlesJtabla[] = {"Código", "Código del producto", "Descripción",
             "Marca", "Existencia", "Tamaño", "Categoria", "Subcategoria", "Observación", "Estado"};
-        Buscador buscador = new Buscador(this, nombresp, titlesJtabla, 2);
+        Buscador buscador = new Buscador(this, sentencia, titlesJtabla, 2);
         buscador.setVisible(true);
     }//GEN-LAST:event_btnBuscarProductoActionPerformed
 

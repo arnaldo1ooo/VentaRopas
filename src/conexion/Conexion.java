@@ -28,7 +28,7 @@ public class Conexion {
     private static String servidor;
 
     public static Connection ConectarBasedeDatos() {
-        String tipoHost = "remoto";
+        String tipoHost = "local";
 
         if (tipoHost.equals("local")) {
             //Modo host local
@@ -135,16 +135,16 @@ public class Conexion {
         return NumColumnsRS;
     }
 
-    public DefaultTableModel ConsultAllBD(String elSP, String titlesJtabla[], JComboBox ElComboCampos) {
+    public DefaultTableModel ConsultAllBD(String sentencia, String titlesJtabla[], JComboBox ElComboCampos) {
         DefaultTableModel modelotabla = new DefaultTableModel(null, titlesJtabla);
-        Conexion con = ObtenerRSSentencia("CALL " + elSP);
+        Conexion con = ObtenerRSSentencia(sentencia);
         try {
             ResultSetMetaData mdrs = con.rs.getMetaData();
             int numColumns = mdrs.getColumnCount();
             Object[] registro = new Object[numColumns]; //el numero es la cantidad de columnas del rs
             while (con.rs.next()) {
-                for (int j = 0; j < numColumns; j++) {
-                    registro[j] = (con.rs.getString(j + 1));
+                for (int c = 0; c < numColumns; c++) {
+                    registro[c] = (con.rs.getString(c + 1));
                 }
                 modelotabla.addRow(registro);//agrega el registro a la tabla
             }

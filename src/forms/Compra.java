@@ -29,7 +29,7 @@ public class Compra extends javax.swing.JDialog {
     }
 
     private void ConsultaAllCompraBD() {
-        String sentencia = "SP_CompraConsulta";
+        String sentencia = "CALL SP_CompraConsulta";
         String titlesJtabla[] = {"Código", "N° de compra", "N° del documento", "Proveedor", "Tipo de documento",
             "Fecha de registro", "Fecha de compra"};
 
@@ -46,7 +46,7 @@ public class Compra extends javax.swing.JDialog {
 
     private void ProductosDeLaCompra() {
         int codigoCompraSelect = Integer.parseInt(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0).toString());
-        String sentencia = "SP_CompraProductosConsulta(" + codigoCompraSelect + ")";
+        String sentencia = "CALL SP_CompraProductosConsulta(" + codigoCompraSelect + ")";
         String titlesJtabla[] = {"Id del producto", "Codigo del producto","Descripción", "Cantidad", "Precio de compra ($)"};
 
         tbProductosComprados.setModel(con.ConsultAllBD(sentencia, titlesJtabla, null));

@@ -185,15 +185,14 @@ public class Buscador extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_tbPrincipalMousePressed
 
-    private void PonerSeleccionado() throws NumberFormatException {
-
-        if (Elsp.equals("SP_ClienteConsulta")) {
+    private void PonerSeleccionado(){
+        if (Elsp.equals("CALL SP_ClienteConsulta")) {
             int codigoSelect = Integer.parseInt(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0).toString());
             RegistrarVenta.PonerClienteSeleccionado(codigoSelect);
             dispose();
         }
 
-        if (Elsp.equals("SP_ProductoConsulta")) {
+        if (Elsp.equals("CALL SP_ProductoConsulta")) {
             String codigoProductoSelect = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 1).toString();
 
             try {

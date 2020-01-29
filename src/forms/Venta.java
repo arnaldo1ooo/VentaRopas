@@ -25,7 +25,7 @@ public class Venta extends javax.swing.JDialog {
     }
 
     private void ConsultaAllCompraBD() {
-        String sentencia = "SP_VentaConsulta";
+        String sentencia = "CALL SP_VentaConsulta";
         String titlesJtabla[] = {"Código", "N° de venta", "Vendedor/a", "Cliente", "Tipo de documento",
             "Fecha de venta", "Importe ($)", "Moneda", "Cotización"};
 
@@ -51,7 +51,7 @@ public class Venta extends javax.swing.JDialog {
 
     private void ProductosDeLaVenta() {
         int codigoVentaSelect = Integer.parseInt(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0).toString());
-        String sentencia = "SP_VentaProductosConsulta(" + codigoVentaSelect + ")";
+        String sentencia = "CALL SP_VentaProductosConsulta(" + codigoVentaSelect + ")";
         String titlesJtabla[] = {"Id del producto", "Codigo del producto","Descripción", "Cantidad",
             "Precio de compra ($)", "Precio de venta ($)", "Descuento ($)"};
 

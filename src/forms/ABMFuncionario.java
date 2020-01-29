@@ -181,7 +181,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
     }
 
     public void TablaConsultaBDAll() {//Realiza la consulta de los productos que tenemos en la base de datos
-        String sentencia = "SP_" + nombreTablaBD + "Consulta";
+        String sentencia = "CALL SP_" + nombreTablaBD + "Consulta";
         String titlesJtabla[] = {"Código", "Nombre", "Apellido", "Fecha de ingreso", "Sexo",
             "Telefono", "Email", "Observación", "Estado", "Cargo"}; //Debe tener la misma cantidad que los campos a consultar
 
