@@ -27,8 +27,8 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import metodos.Metodos;
-import metodos.MetodosTXT;
+import utilidades.Metodos;
+import utilidades.MetodosTXT;
 
 /**
  *

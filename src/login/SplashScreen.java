@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import metodos.Metodos;
+import utilidades.Metodos;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import principal.Principal;

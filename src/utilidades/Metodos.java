@@ -3,7 +3,7 @@
  * Carga una consulta realizada a un combobox
  * 
  */
-package metodos;
+package utilidades;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -25,22 +25,38 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import conexion.Conexion;
+import forms.Reporte;
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.io.InputStream;
 import java.text.DecimalFormat;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JInternalFrame;
 import javax.swing.RowFilter;
+import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRResultSetDataSource;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRTableModelDataSource;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
  * @author Lic. Arnaldo Cantero
  */
 public class Metodos {
+
     public int CantRegistros = 0;
 
     public void AnchuraColumna(JTable LaTabla) {
@@ -230,4 +246,61 @@ public class Metodos {
         return new ImageIcon(resizedImage);
     }
 
+    public void GenerarReporteJTABLE(String rutajasper, Map parametros, TableModel elTableModel) {
+        try {
+            InputStream isRutajasper = Reporte.class.getResourceAsStream(rutajasper);
+            if (isRutajasper == null) {
+                JOptionPane.showMessageDialog(null, "Archivo jasper no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                //Carga el archivo jasper
+                JasperReport jrReporte_productos = (JasperReport) JRLoader.loadObject(isRutajasper);
+                //Carga el modelo de la tabla (Los titulos de la tabla deben coincidir con los fields del jasper)
+                JRTableModelDataSource jrTableModel = new JRTableModelDataSource(elTableModel);
+                JasperPrint jprint = JasperFillManager.fillReport(jrReporte_productos, parametros, jrTableModel);
+
+                JasperViewer jViewer = new JasperViewer(jprint, true);
+                //jViewer.setTitle("Reporte de productos"); //Titulo de la ventana
+                jViewer.setDefaultCloseOperation(JasperViewer.DISPOSE_ON_CLOSE);
+                jViewer.setZoomRatio((float) 1); //Zoom al 100%
+                jViewer.setExtendedState(JasperViewer.MAXIMIZED_BOTH); //Maximizado
+                jViewer.setModalExclusionType(Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
+                jViewer.requestFocus();
+                jViewer.setVisible(true);
+                //Para guardar directamente a pdf JasperExportManager.exportReportToPdfFile(jprint, "C:/Eclipse/workspace/BIBLIOTECA/Reportpdf.pdf");
+            }
+        } catch (JRException ex) {
+            Logger.getLogger(Reporte.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void GenerarReporteSQL(String rutajasper, Map parametros, String consulta) {
+        try {
+            InputStream isRutajasper = Reporte.class.getResourceAsStream(rutajasper);
+            if (isRutajasper == null) {
+                JOptionPane.showMessageDialog(null, "Archivo jasper no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                //Carga el archivo jasper
+                JasperReport jrReporte_productos = (JasperReport) JRLoader.loadObject(isRutajasper);
+
+                //LOS TITULOS DE LA Consulta DEBEN COINCIDIR CON LOS FIELDS DEL JASPER
+                Conexion con = new Conexion();
+                con = con.ObtenerRSSentencia(consulta);
+                JRResultSetDataSource rsLista = new JRResultSetDataSource(con.rs); //Para sql
+                JasperPrint jprint = JasperFillManager.fillReport(jrReporte_productos, parametros, rsLista);
+
+                JasperViewer jViewer = new JasperViewer(jprint, true);
+                //jViewer.setTitle("Reporte de productos"); //Titulo de la ventana
+                jViewer.setDefaultCloseOperation(JasperViewer.DISPOSE_ON_CLOSE);
+                jViewer.setZoomRatio((float) 1); //Zoom al 100%
+                jViewer.setExtendedState(JasperViewer.MAXIMIZED_BOTH); //Maximizado
+                jViewer.setModalExclusionType(Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
+                jViewer.requestFocus();
+                jViewer.setVisible(true);
+
+                con.DesconectarBasedeDatos();
+            }
+        } catch (JRException ex) {
+            Logger.getLogger(Reporte.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import metodos.Metodos;
+import utilidades.Metodos;
 
 public class Conexion {
 
@@ -135,7 +135,7 @@ public class Conexion {
         return NumColumnsRS;
     }
 
-    public DefaultTableModel ConsultAllBD(String sentencia, String titlesJtabla[], JComboBox ElComboCampos) {
+    public DefaultTableModel ConsultaBD(String sentencia, String titlesJtabla[], JComboBox ElComboCampos) {
         DefaultTableModel modelotabla = new DefaultTableModel(null, titlesJtabla);
         Conexion con = ObtenerRSSentencia(sentencia);
         try {

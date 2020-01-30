@@ -24,11 +24,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import metodos.Metodos;
-import metodos.MetodosCombo;
-import metodos.MetodosImagen;
-import metodos.MetodosTXT;
-import metodos.VistaCompletaImagen;
+import utilidades.Metodos;
+import utilidades.MetodosCombo;
+import utilidades.MetodosImagen;
+import utilidades.MetodosTXT;
+import utilidades.VistaCompletaImagen;
 //Variables globales
 import static principal.Principal.cotiUsdGsCompra;
 import static principal.Principal.cotiUsdRsCompra;

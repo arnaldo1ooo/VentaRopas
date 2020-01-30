@@ -7,7 +7,7 @@ package forms;
 
 import conexion.Conexion;
 import java.awt.event.KeyEvent;
-import metodos.Metodos;
+import utilidades.Metodos;
 
 public class Buscador extends javax.swing.JDialog {
 
@@ -21,7 +21,7 @@ public class Buscador extends javax.swing.JDialog {
 
         Elsp = nombresp;
 
-        tbPrincipal.setModel(con.ConsultAllBD(nombresp, titlesJtabla, cbCampoBuscar));
+        tbPrincipal.setModel(con.ConsultaBD(nombresp, titlesJtabla, cbCampoBuscar));
         metodos.AnchuraColumna(tbPrincipal);
         cbCampoBuscar.setSelectedIndex(campoBuscarDefault);
 

@@ -20,11 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import javax.swing.JOptionPane;
-import metodos.Metodos;
-import metodos.MetodosCombo;
-import metodos.MetodosImagen;
-import metodos.MetodosTXT;
-import metodos.VistaCompletaImagen;
+import utilidades.Metodos;
+import utilidades.MetodosCombo;
+import utilidades.MetodosImagen;
+import utilidades.MetodosTXT;
+import utilidades.VistaCompletaImagen;
 
 /**
  *
@@ -175,7 +175,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         String titlesJtabla[] = {"Código", "Código del producto", "Descripción",
             "Marca", "Stock", "Tamaño", "Categoria", "Subcategoria", "Observación", "Estado"};
 
-        tbPrincipal.setModel(con.ConsultAllBD(sentencia, titlesJtabla, cbCampoBuscar));
+        tbPrincipal.setModel(con.ConsultaBD(sentencia, titlesJtabla, cbCampoBuscar));
         metodos.AnchuraColumna(tbPrincipal);
         lbCantRegistros.setText(metodos.CantRegistros + " Registros encontrados");
     }

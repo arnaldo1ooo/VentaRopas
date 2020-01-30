@@ -21,8 +21,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
-import metodos.Metodos;
-import metodos.MetodosTXT;
+import utilidades.Metodos;
+import utilidades.MetodosTXT;
 
 /**
  *
@@ -161,7 +161,7 @@ public final class ABMCliente extends javax.swing.JDialog {
     public void TablaConsultaBDAll() {//Realiza la consulta de los productos que tenemos en la base de datos
         String sentencia = "CALL SP_ClienteConsulta";
         String titlesJtabla[] = {"Código", "RUC/CI", "Nombre", "Apellido", "Dirección", "Teléfono", "Email", "Observación"}; //Debe tener la misma cantidad que titlesconsulta
-        tbPrincipal.setModel(con.ConsultAllBD(sentencia, titlesJtabla, cbCampoBuscar));
+        tbPrincipal.setModel(con.ConsultaBD(sentencia, titlesJtabla, cbCampoBuscar));
         metodos.AnchuraColumna(tbPrincipal);
 
         if (tbPrincipal.getModel().getRowCount() == 1) {

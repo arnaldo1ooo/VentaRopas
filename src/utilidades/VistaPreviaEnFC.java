@@ -1,4 +1,4 @@
-package metodos;
+package utilidades;
 
 import java.awt.*;
 import java.beans.*;

@@ -23,9 +23,9 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.swing.JOptionPane;
-import metodos.Metodos;
-import metodos.MetodosCombo;
-import metodos.MetodosTXT;
+import utilidades.Metodos;
+import utilidades.MetodosCombo;
+import utilidades.MetodosTXT;
 
 /**
  *
@@ -185,7 +185,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
         String titlesJtabla[] = {"Código", "Nombre", "Apellido", "Fecha de ingreso", "Sexo",
             "Telefono", "Email", "Observación", "Estado", "Cargo"}; //Debe tener la misma cantidad que los campos a consultar
 
-        tbPrincipal.setModel(con.ConsultAllBD(sentencia, titlesJtabla, cbCampoBuscar));
+        tbPrincipal.setModel(con.ConsultaBD(sentencia, titlesJtabla, cbCampoBuscar));
         metodos.AnchuraColumna(tbPrincipal);
 
         if (tbPrincipal.getModel().getRowCount() == 1) {

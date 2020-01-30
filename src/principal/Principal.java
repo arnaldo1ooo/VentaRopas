@@ -17,8 +17,8 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import metodos.Metodos;
-import metodos.MetodosTXT;
+import utilidades.Metodos;
+import utilidades.MetodosTXT;
 //Variables globales
 import static login.Login.Alias;
 //

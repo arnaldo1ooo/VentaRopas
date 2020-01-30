@@ -8,8 +8,8 @@ package forms;
 import conexion.Conexion;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
-import metodos.Metodos;
-import metodos.MetodosTXT;
+import utilidades.Metodos;
+import utilidades.MetodosTXT;
 
 public class Venta extends javax.swing.JDialog {
 
@@ -29,7 +29,7 @@ public class Venta extends javax.swing.JDialog {
         String titlesJtabla[] = {"Código", "N° de venta", "Vendedor/a", "Cliente", "Tipo de documento",
             "Fecha de venta", "Importe ($)", "Moneda", "Cotización"};
 
-        tbPrincipal.setModel(con.ConsultAllBD(sentencia, titlesJtabla, cbCampoBuscar));
+        tbPrincipal.setModel(con.ConsultaBD(sentencia, titlesJtabla, cbCampoBuscar));
         metodos.AnchuraColumna(tbPrincipal);
         cbCampoBuscar.setSelectedIndex(1);
 
@@ -55,7 +55,7 @@ public class Venta extends javax.swing.JDialog {
         String titlesJtabla[] = {"Id del producto", "Codigo del producto","Descripción", "Cantidad",
             "Precio de compra ($)", "Precio de venta ($)", "Descuento ($)"};
 
-        tbProductosVendidos.setModel(con.ConsultAllBD(sentencia, titlesJtabla, null));
+        tbProductosVendidos.setModel(con.ConsultaBD(sentencia, titlesJtabla, null));
         metodos.AnchuraColumna(tbProductosVendidos);
 
         //Convertir formato precios

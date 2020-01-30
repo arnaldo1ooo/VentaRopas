@@ -3,7 +3,7 @@
  * se lo invoca con
  * 
  */
-package metodos;
+package utilidades;
 
 import javax.swing.JInternalFrame;
 
