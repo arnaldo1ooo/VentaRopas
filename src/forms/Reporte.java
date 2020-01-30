@@ -524,7 +524,7 @@ public class Reporte extends javax.swing.JDialog {
                     .addComponent(jLabel12)))
         );
 
-        panel9.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Stock/Existencia"));
+        panel9.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Fecha"));
         panel9.setColorPrimario(new java.awt.Color(255, 255, 255));
         panel9.setColorSecundario(new java.awt.Color(255, 255, 255));
         panel9.setOpaque(false);
