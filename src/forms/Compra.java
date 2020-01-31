@@ -17,12 +17,11 @@ public class Compra extends javax.swing.JDialog {
     Metodos metodos = new Metodos();
     MetodosTXT metodostxt = new MetodosTXT();
 
-    public Compra(javax.swing.JFrame parent, boolean reporte, boolean eliminar) {
+    public Compra(javax.swing.JFrame parent, boolean eliminar) {
         super(parent);
         initComponents();
-        
+
         //Oculta los botones
-        btnGenerarReporte.setVisible(reporte);
         btnEliminar.setVisible(eliminar);
 
         ConsultaAllCompraBD();
@@ -31,9 +30,16 @@ public class Compra extends javax.swing.JDialog {
     private void ConsultaAllCompraBD() {
         String sentencia = "CALL SP_CompraConsulta";
         String titlesJtabla[] = {"Código", "N° de compra", "N° del documento", "Proveedor", "Tipo de documento",
-            "Fecha de registro", "Fecha de compra"};
+            "Fecha de registro", "Fecha de compra", "Total de la compra ($)"};
 
         tbPrincipal.setModel(con.ConsultaBD(sentencia, titlesJtabla, cbCampoBuscar));
+
+        double totalcompra;
+        for (int i = 0; i < tbPrincipal.getRowCount(); i++) {
+            totalcompra = Double.parseDouble(tbPrincipal.getValueAt(i, 7).toString());
+            totalcompra = metodostxt.FormatearADosDecimales(totalcompra);
+            tbPrincipal.setValueAt(metodostxt.DoubleAFormatoSudamerica(totalcompra), i, 7);
+        }
         metodos.AnchuraColumna(tbPrincipal);
         cbCampoBuscar.setSelectedIndex(1);
 
@@ -47,7 +53,7 @@ public class Compra extends javax.swing.JDialog {
     private void ProductosDeLaCompra() {
         int codigoCompraSelect = Integer.parseInt(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0).toString());
         String sentencia = "CALL SP_CompraProductosConsulta(" + codigoCompraSelect + ")";
-        String titlesJtabla[] = {"Id del producto", "Codigo del producto","Descripción", "Cantidad", "Precio de compra ($)"};
+        String titlesJtabla[] = {"Id del producto", "Codigo del producto", "Descripción", "Cantidad", "Precio de compra ($)"};
 
         tbProductosComprados.setModel(con.ConsultaBD(sentencia, titlesJtabla, null));
         metodos.AnchuraColumna(tbProductosComprados);
@@ -93,7 +99,6 @@ public class Compra extends javax.swing.JDialog {
         panel3 = new org.edisoncor.gui.panel.Panel();
         labelMetric2 = new org.edisoncor.gui.label.LabelMetric();
         btnEliminar = new javax.swing.JButton();
-        btnGenerarReporte = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Anular compra");
@@ -156,14 +161,15 @@ public class Compra extends javax.swing.JDialog {
         pnProductosComprados.setLayout(pnProductosCompradosLayout);
         pnProductosCompradosLayout.setHorizontalGroup(
             pnProductosCompradosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnProductosCompradosLayout.createSequentialGroup()
+            .addGroup(pnProductosCompradosLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(scPrincipal1, javax.swing.GroupLayout.DEFAULT_SIZE, 804, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnProductosCompradosLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lbCantRegistrosProductos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18))
+                .addGroup(pnProductosCompradosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnProductosCompradosLayout.createSequentialGroup()
+                        .addComponent(scPrincipal1, javax.swing.GroupLayout.DEFAULT_SIZE, 804, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnProductosCompradosLayout.createSequentialGroup()
+                        .addComponent(lbCantRegistrosProductos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18))))
         );
         pnProductosCompradosLayout.setVerticalGroup(
             pnProductosCompradosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -249,16 +255,6 @@ public class Compra extends javax.swing.JDialog {
             }
         });
 
-        btnGenerarReporte.setBackground(new java.awt.Color(0, 51, 255));
-        btnGenerarReporte.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
-        btnGenerarReporte.setForeground(new java.awt.Color(255, 255, 255));
-        btnGenerarReporte.setText("Generar reporte");
-        btnGenerarReporte.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGenerarReporteActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
         panel1.setLayout(panel1Layout);
         panel1Layout.setHorizontalGroup(
@@ -280,21 +276,17 @@ public class Compra extends javax.swing.JDialog {
                         .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(scPrincipal, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panel1Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(panel1Layout.createSequentialGroup()
-                                        .addComponent(lblBuscarCampo)
-                                        .addGap(4, 4, 4)
-                                        .addComponent(cbCampoBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(panel1Layout.createSequentialGroup()
-                                        .addComponent(lbCantRegistros, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGap(15, 15, 15)))))
-                        .addGap(10, 10, 10))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
-                        .addComponent(btnGenerarReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                                .addComponent(lblBuscarCampo)
+                                .addGap(4, 4, 4)
+                                .addComponent(cbCampoBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(panel1Layout.createSequentialGroup()
+                                .addComponent(lbCantRegistros, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(15, 15, 15)))
+                        .addGap(10, 10, 10))))
+            .addGroup(panel1Layout.createSequentialGroup()
+                .addGap(334, 334, 334)
+                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         panel1Layout.setVerticalGroup(
             panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -313,9 +305,7 @@ public class Compra extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnProductosComprados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnGenerarReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
@@ -396,16 +386,12 @@ public class Compra extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_tbPrincipalMouseClicked
 
-    private void btnGenerarReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarReporteActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnGenerarReporteActionPerformed
-
     public static void main(String args[]) {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                Compra dialog = new Compra(new javax.swing.JFrame(), false, false);
+                Compra dialog = new Compra(new javax.swing.JFrame(), false);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -419,7 +405,6 @@ public class Compra extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEliminar;
-    private javax.swing.JButton btnGenerarReporte;
     private javax.swing.JComboBox cbCampoBuscar;
     private javax.swing.JLabel jLabel10;
     private org.edisoncor.gui.label.LabelMetric labelMetric2;

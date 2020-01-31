@@ -28,7 +28,7 @@ import static login.Login.Alias;
  * @author Lic. Arnaldo Cantero
  */
 public class Principal extends javax.swing.JFrame implements Runnable {
-    
+
     Conexion con = new Conexion();
     Metodos metodos = new Metodos();
     MetodosTXT metodostxt = new MetodosTXT();
@@ -44,7 +44,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         lbAlias.setText(Alias);
         PerfilUsuario();
         AsignarCotizaciones();
-        
+
         PrivilegiosUsuarioModulos(Alias);
 
         //Redimensionar iconos menu
@@ -55,17 +55,17 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         meReporte.setIcon(metodos.AjustarIconoAButton(meReporte.getIcon(), meReporte.getHeight()));
         meConfiguracion.setIcon(metodos.AjustarIconoAButton(meConfiguracion.getIcon(), meConfiguracion.getHeight()));
         meSalir.setIcon(metodos.AjustarIconoAButton(meSalir.getIcon(), meSalir.getHeight()));
-        
+
         setVisible(true);
     }
-    
+
     private void PrivilegiosUsuarioModulos(String ElAlias) {
         con = con.ObtenerRSSentencia("CALL SP_PrivilegioUsuarioModulos('" + ElAlias + "')");
         String modulo;
         try {
             while (con.rs.next()) {
                 modulo = con.rs.getString("mo_denominacion");
-                
+
                 if (modulo.equals("PRODUCTO")) {
                     btnProducto.setEnabled(true);
                     meProducto.setEnabled(true);
@@ -100,7 +100,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private void AsignarCotizaciones() {
         try {
             con = con.ObtenerRSSentencia("SELECT coti_valorcompra, coti_valorventa, coti_fecha "
@@ -110,25 +110,25 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             SimpleDateFormat formatoFechaSudamerica = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             Date fechaFormatoAmericano = formatoFechaAmericano.parse(con.rs.getString("coti_fecha").replace("-", "/"));
             lblFechaCotizacion.setText("Fecha de cotización: " + formatoFechaSudamerica.format(fechaFormatoAmericano));
-            
+
             cotiUsdGsCompra = con.rs.getDouble("coti_valorcompra"); //Variable global
             lblCotiUsdGsCompra.setText(metodostxt.DoubleAFormatoSudamerica(cotiUsdGsCompra));
             lblCotiUsdGsVenta.setText(metodostxt.DoubleAFormatoSudamerica(con.rs.getDouble("coti_valorventa")));
-            
+
             con = con.ObtenerRSSentencia("SELECT coti_valorcompra, coti_valorventa, coti_fecha "
                     + "FROM cotizacion WHERE coti_de='Dolares' AND coti_a='Reales'");
             con.rs.next();
             cotiUsdRsCompra = Double.parseDouble(con.rs.getString("coti_valorcompra"));
             lblCotiUsdRsCompra.setText(metodostxt.DoubleAFormatoSudamerica(cotiUsdRsCompra));
             lblCotiUsdRsVenta.setText(metodostxt.DoubleAFormatoSudamerica(con.rs.getDouble("coti_valorventa")));
-            
+
             con = con.ObtenerRSSentencia("SELECT coti_valorcompra, coti_valorventa, coti_fecha "
                     + "FROM cotizacion WHERE coti_de='Dolares' AND coti_a='Pesos argentinos'");
             con.rs.next();
             cotiUsdPaCompra = Double.parseDouble(con.rs.getString("coti_valorcompra"));
             lblCotiUsdPaCompra.setText(metodostxt.DoubleAFormatoSudamerica(cotiUsdPaCompra));
             lblCotiUsdPaVenta.setText(metodostxt.DoubleAFormatoSudamerica(con.rs.getDouble("coti_valorventa")));
-            
+
             con.DesconectarBasedeDatos();
         } catch (SQLException e) {
             System.out.println("Error al asignar cotizaciones desde bd" + e);
@@ -136,7 +136,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private void PerfilUsuario() {
         String consulta = "CALL SP_UsuarioPerfilConsulta('" + Alias + "')";
         con = con.ObtenerRSSentencia(consulta);
@@ -150,7 +150,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         }
         con.DesconectarBasedeDatos();
     }
-    
+
     private void ObtenerHorayFecha() {
         //Obtener fecha y hora
         hilo = new Thread(this);
@@ -850,12 +850,12 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
 
     }//GEN-LAST:event_jMenuItem9ActionPerformed
-    
+
 
     private void jMenuItem17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem17ActionPerformed
 
     }//GEN-LAST:event_jMenuItem17ActionPerformed
-    
+
     private void ObtenerFechayHora() {
         Date fecha = new Date();
         //Formateando la fecha:
@@ -864,7 +864,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         DateFormat formatoHora = new SimpleDateFormat("HH:mm:ss");
         lbHora.setText(formatoHora.format(fecha));
     }
-    
+
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
 
@@ -902,7 +902,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_jMenuItem11ActionPerformed
 
     private void btnCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompraActionPerformed
-        Compra compra = new Compra(this, false, false);
+        Compra compra = new Compra(this, false);
         compra.setVisible(true);
     }//GEN-LAST:event_btnCompraActionPerformed
 
@@ -938,8 +938,8 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_jMenuItem18ActionPerformed
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
-        Compra compra = new Compra(this, true, false);
-        compra.setVisible(true);
+        Reporte reporte = new Reporte(this, true, "Compras");
+        reporte.setVisible(true);
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     private void jMenuItem22ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem22ActionPerformed
@@ -947,7 +947,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_jMenuItem22ActionPerformed
 
     private void jMenuItem14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem14ActionPerformed
-        Compra anularcompra = new Compra(this, false, true);
+        Compra anularcompra = new Compra(this, true);
         anularcompra.setVisible(true);
     }//GEN-LAST:event_jMenuItem14ActionPerformed
 
@@ -1104,10 +1104,10 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 
         Thread current = Thread.currentThread();
-        
+
         while (current == hilo) {
             ObtenerFechayHora();
-            
+
         }
     }
 }

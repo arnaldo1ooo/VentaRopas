@@ -30,7 +30,6 @@ public class Venta extends javax.swing.JDialog {
             "Fecha de venta", "Importe ($)", "Moneda", "Cotización"};
 
         tbPrincipal.setModel(con.ConsultaBD(sentencia, titlesJtabla, cbCampoBuscar));
-        metodos.AnchuraColumna(tbPrincipal);
         cbCampoBuscar.setSelectedIndex(1);
 
         double importe;
@@ -41,7 +40,7 @@ public class Venta extends javax.swing.JDialog {
             cotizacion = Double.parseDouble(tbPrincipal.getValueAt(i, 8).toString());
             tbPrincipal.setValueAt(metodostxt.DoubleAFormatoSudamerica(cotizacion), i, 8);
         }
-
+        metodos.AnchuraColumna(tbPrincipal);
         if (tbPrincipal.getModel().getRowCount() == 1) {
             lbCantRegistros.setText(tbPrincipal.getModel().getRowCount() + " Registro encontrado");
         } else {
@@ -52,11 +51,10 @@ public class Venta extends javax.swing.JDialog {
     private void ProductosDeLaVenta() {
         int codigoVentaSelect = Integer.parseInt(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0).toString());
         String sentencia = "CALL SP_VentaProductosConsulta(" + codigoVentaSelect + ")";
-        String titlesJtabla[] = {"Id del producto", "Codigo del producto","Descripción", "Cantidad",
+        String titlesJtabla[] = {"Id del producto", "Codigo del producto", "Descripción", "Cantidad",
             "Precio de compra ($)", "Precio de venta ($)", "Descuento ($)"};
 
         tbProductosVendidos.setModel(con.ConsultaBD(sentencia, titlesJtabla, null));
-        metodos.AnchuraColumna(tbProductosVendidos);
 
         //Convertir formato precios
         double preciocompra;
@@ -70,7 +68,7 @@ public class Venta extends javax.swing.JDialog {
             descuento = Double.parseDouble(tbProductosVendidos.getValueAt(i, 6).toString());
             tbProductosVendidos.setValueAt(metodostxt.DoubleAFormatoSudamerica(descuento), i, 6);
         }
-
+        metodos.AnchuraColumna(tbProductosVendidos);
         if (tbProductosVendidos.getModel().getRowCount() == 1) {
             lbCantRegistrosProductos.setText(tbProductosVendidos.getModel().getRowCount() + " Registro encontrado");
         } else {
