@@ -181,6 +181,7 @@ public class Reporte extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Reportes");
         setBackground(new java.awt.Color(255, 255, 255));
+        setResizable(false);
 
         panel2.setColorPrimario(new java.awt.Color(0, 153, 153));
         panel2.setColorSecundario(new java.awt.Color(233, 255, 255));
@@ -655,9 +656,7 @@ public class Reporte extends javax.swing.JDialog {
                     .addComponent(dcDesdeFechaRegistro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(4, 4, 4)
                 .addGroup(panel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel9Layout.createSequentialGroup()
-                        .addComponent(jLabel14)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                    .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(dcHastaFechaRegistro, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(7, Short.MAX_VALUE))
         );
@@ -763,9 +762,7 @@ public class Reporte extends javax.swing.JDialog {
                     .addComponent(dcDesdeFechaCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(4, 4, 4)
                 .addGroup(panel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel11Layout.createSequentialGroup()
-                        .addComponent(jLabel18)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                    .addComponent(jLabel18, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(dcHastaFechaCompra, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(7, Short.MAX_VALUE))
         );
@@ -1062,7 +1059,6 @@ public class Reporte extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(pnProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnProductosLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel1)
                         .addGap(27, 27, 27))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnProductosLayout.createSequentialGroup()
@@ -1215,9 +1211,7 @@ public class Reporte extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(panel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
+            .addComponent(panel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1669,15 +1663,7 @@ public class Reporte extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
-    private javax.swing.JLabel jLabel26;
-    private javax.swing.JLabel jLabel27;
-    private javax.swing.JLabel jLabel28;
-    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel30;
-    private javax.swing.JLabel jLabel31;
-    private javax.swing.JLabel jLabel32;
-    private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel4;
@@ -1697,10 +1683,6 @@ public class Reporte extends javax.swing.JDialog {
     private org.edisoncor.gui.panel.Panel panel11;
     private org.edisoncor.gui.panel.Panel panel13;
     private org.edisoncor.gui.panel.Panel panel14;
-    private org.edisoncor.gui.panel.Panel panel15;
-    private org.edisoncor.gui.panel.Panel panel16;
-    private org.edisoncor.gui.panel.Panel panel17;
-    private org.edisoncor.gui.panel.Panel panel18;
     private org.edisoncor.gui.panel.Panel panel19;
     private org.edisoncor.gui.panel.Panel panel2;
     private org.edisoncor.gui.panel.Panel panel3;
@@ -1721,10 +1703,6 @@ public class Reporte extends javax.swing.JDialog {
     private javax.swing.JTextField txtDesdeNumCompra;
     private javax.swing.JTextField txtDesdeNumVenta;
     private javax.swing.JTextField txtDesdeProveedor;
-    private javax.swing.JTextField txtDesdeProveedor2;
-    private javax.swing.JTextField txtDesdeProveedor3;
-    private javax.swing.JTextField txtDesdeProveedor4;
-    private javax.swing.JTextField txtDesdeProveedor5;
     private javax.swing.JTextField txtDesdeVendedor;
     private javax.swing.JTextField txtHastaCliente;
     private javax.swing.JTextField txtHastaExistencia;
@@ -1733,10 +1711,6 @@ public class Reporte extends javax.swing.JDialog {
     private javax.swing.JTextField txtHastaNumCompra;
     private javax.swing.JTextField txtHastaNumVenta;
     private javax.swing.JTextField txtHastaProveedor;
-    private javax.swing.JTextField txtHastaProveedor2;
-    private javax.swing.JTextField txtHastaProveedor3;
-    private javax.swing.JTextField txtHastaProveedor4;
-    private javax.swing.JTextField txtHastaProveedor5;
     private javax.swing.JTextField txtHastaVendedor;
     // End of variables declaration//GEN-END:variables
 }

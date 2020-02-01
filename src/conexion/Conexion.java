@@ -28,7 +28,7 @@ public class Conexion {
     private static String servidor;
 
     public static Connection ConectarBasedeDatos() {
-        String tipoHost = "online";
+        String tipoHost = "remoto";
 
         if (tipoHost.equals("local")) {
             //Modo host local
@@ -89,18 +89,18 @@ public class Conexion {
             }
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Error1, Verifique los datos de la conexion a la BD: "
-                    + ex, "Error1 en la Conexión a la BD" + ex.getMessage(), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error1 al conecta al BD, Verifique los datos de la conexion a la BD");
+            System.out.println("Error1 al conecta al BD, Verifique los datos de la conexion a la BD  " + ex.getMessage());
             conexion = null;
         } catch (SQLException ex) {
             Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Verifique que el nombre de la bd, el usuario y la contraseña esten correctas: "
-                    + ex, "Error2 en la Conexión a la BD" + ex.getMessage(), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error2 al conecta al BD, Verifique los datos de la conexion a la BD");
+            System.out.println("Error2 al conecta al BD, Verifique los datos de la conexion a la BD  " + ex.getMessage());
             conexion = null;
         } catch (Exception ex) {
             Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Error3, Verifique los datos de la conexion a la BD: "
-                    + ex, "Error3 en la Conexión a la BD" + ex.getMessage(), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error3 al conecta al BD, Verifique los datos de la conexion a la BD");
+            System.out.println("Error3 al conecta al BD, Verifique los datos de la conexion a la BD  " + ex.getMessage());
             conexion = null;
         }
         return conexion;
@@ -148,17 +148,15 @@ public class Conexion {
                 }
                 modelotabla.addRow(registro);//agrega el registro a la tabla
             }
-
             //Carga el combobox con los titulos de la tabla, solo si esta vacio
             if (ElComboCampos != null && ElComboCampos.getItemCount() == 0) {
                 javax.swing.DefaultComboBoxModel modelCombo = new javax.swing.DefaultComboBoxModel(titlesJtabla);
                 ElComboCampos.setModel(modelCombo);
             }
-
-            con.DesconectarBasedeDatos();
         } catch (SQLException ex) {
             Logger.getLogger(ABMFuncionario.class.getName()).log(Level.SEVERE, null, ex);
         }
+        con.DesconectarBasedeDatos();
         return modelotabla;
     }
 

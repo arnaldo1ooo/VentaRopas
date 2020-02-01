@@ -60,7 +60,7 @@ public class Venta extends javax.swing.JDialog {
         int codigoVentaSelect = Integer.parseInt(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0).toString());
         String sentencia = "CALL SP_VentaProductosConsulta(" + codigoVentaSelect + ")";
         String titlesJtabla[] = {"Id del producto", "Codigo del producto", "Descripción", "Cantidad",
-            "Total precio de compra", "Totl precio de venta", "Descuento"};
+            "Total precio de compra", "Total precio de venta", "Descuento"};
 
         tbProductosVendidos.setModel(con.ConsultaBD(sentencia, titlesJtabla, null));
 
