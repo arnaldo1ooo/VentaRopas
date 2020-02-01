@@ -907,7 +907,8 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_btnCompraActionPerformed
 
     private void btnVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVentaActionPerformed
-
+        Venta venta = new Venta(this, false);
+        venta.setVisible(true);
     }//GEN-LAST:event_btnVentaActionPerformed
 
     private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
@@ -929,8 +930,8 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_btnUsuarioActionPerformed
 
     private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
-        Venta anularventa = new Venta(this, true);
-        anularventa.setVisible(true);
+        Venta venta = new Venta(this, true);
+        venta.setVisible(true);
     }//GEN-LAST:event_jMenuItem13ActionPerformed
 
     private void jMenuItem18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem18ActionPerformed
@@ -943,7 +944,8 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     private void jMenuItem22ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem22ActionPerformed
-        // TODO add your handling code here:
+        Reporte reporte = new Reporte(this, true, "Ventas");
+        reporte.setVisible(true);
     }//GEN-LAST:event_jMenuItem22ActionPerformed
 
     private void jMenuItem14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem14ActionPerformed

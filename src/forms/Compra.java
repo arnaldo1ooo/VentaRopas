@@ -30,14 +30,14 @@ public class Compra extends javax.swing.JDialog {
     private void ConsultaAllCompraBD() {
         String sentencia = "CALL SP_CompraConsulta";
         String titlesJtabla[] = {"Código", "N° de compra", "N° del documento", "Proveedor", "Tipo de documento",
-            "Fecha de registro", "Fecha de compra", "Total de la compra ($)"};
+            "Fecha de registro", "Fecha de compra", "Total de la compra"};
 
         tbPrincipal.setModel(con.ConsultaBD(sentencia, titlesJtabla, cbCampoBuscar));
 
         double totalcompra;
         for (int i = 0; i < tbPrincipal.getRowCount(); i++) {
             totalcompra = Double.parseDouble(tbPrincipal.getValueAt(i, 7).toString());
-            totalcompra = metodostxt.FormatearADosDecimales(totalcompra);
+            totalcompra = metodostxt.FormatearATresDecimales(totalcompra);
             tbPrincipal.setValueAt(metodostxt.DoubleAFormatoSudamerica(totalcompra), i, 7);
         }
         metodos.AnchuraColumna(tbPrincipal);
@@ -101,7 +101,7 @@ public class Compra extends javax.swing.JDialog {
         btnEliminar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Anular compra");
+        setTitle("Compras");
         setModal(true);
         setResizable(false);
 
@@ -347,8 +347,6 @@ public class Compra extends javax.swing.JDialog {
             int confirmado = javax.swing.JOptionPane.showConfirmDialog(this, "¿Realmente desea anular esta compra?", "Confirmación", JOptionPane.YES_OPTION);
             if (confirmado == JOptionPane.YES_OPTION) {
                 String codigocompra = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0).toString();
-                //Elimina la compra
-                con.EjecutarABM("CALL SP_CompraEliminar(" + codigocompra + ")");
 
                 //Elimina los productos de la compra                      
                 String idproducto;
@@ -361,6 +359,10 @@ public class Compra extends javax.swing.JDialog {
                     con.EjecutarABM("CALL SP_CompraProductosEliminar('" + codigocompra + "','"
                             + idproducto + "','" + cantidadcomprada + "')");
                 }
+
+                //Elimina la compra (Primero se debe eliminar los productos de la compra)
+                con.EjecutarABM("CALL SP_CompraEliminar(" + codigocompra + ")");
+
                 JOptionPane.showMessageDialog(this, "Compra anulado correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
             }
         }

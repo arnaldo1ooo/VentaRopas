@@ -95,17 +95,14 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                         break;
                     case "Guaranies":
                         importe = importe / cotiUsdGsCompra;
-                        importe = metodostxt.FormatearADosDecimales(importe);
                         cotizacion = cotiUsdGsCompra;
                         break;
                     case "Reales":
                         importe = importe / cotiUsdRsCompra;
-                        importe = metodostxt.FormatearADosDecimales(importe);
                         cotizacion = cotiUsdRsCompra;
                         break;
                     case "Pesos argentinos":
                         importe = importe / cotiUsdPaCompra;
-                        importe = metodostxt.FormatearADosDecimales(importe);
                         cotizacion = cotiUsdPaCompra;
                         break;
 
@@ -149,21 +146,18 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                                     break;
                                 case "Guaranies":
                                     precioventabruto = precioventabruto / cotiUsdGsCompra;
-                                    precioventabruto = metodostxt.FormatearADosDecimales(precioventabruto);
+                                    precioventabruto = metodostxt.FormatearATresDecimales(precioventabruto);
                                     descuento = descuento / cotiUsdGsCompra;
-                                    descuento = metodostxt.FormatearADosDecimales(descuento);
                                     break;
                                 case "Reales":
                                     precioventabruto = precioventabruto / cotiUsdRsCompra;
-                                    precioventabruto = metodostxt.FormatearADosDecimales(precioventabruto);
+                                    precioventabruto = metodostxt.FormatearATresDecimales(precioventabruto);
                                     descuento = descuento / cotiUsdRsCompra;
-                                    descuento = metodostxt.FormatearADosDecimales(descuento);
                                     break;
                                 case "Pesos argentinos":
                                     precioventabruto = precioventabruto / cotiUsdPaCompra;
-                                    precioventabruto = metodostxt.FormatearADosDecimales(precioventabruto);
+                                    precioventabruto = metodostxt.FormatearATresDecimales(precioventabruto);
                                     descuento = descuento / cotiUsdPaCompra;
-                                    descuento = metodostxt.FormatearADosDecimales(descuento);
                                     break;
 
                                 default:
@@ -422,8 +416,8 @@ public final class RegistrarVenta extends javax.swing.JDialog {
             jpBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpBotonesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnCancelar)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -1124,7 +1118,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                             .addGroup(jpPrincipalLayout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(jpDatosVenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(0, 1, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpPrincipalLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(panelDatosProducto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -1237,7 +1231,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                 int cantidad = Integer.parseInt(txtCantidad.getText());
                 double preciobruto = 0.0;
                 double descuento = metodostxt.DoubleAFormatoAmericano(txtDescuento.getText());
-                descuento = metodostxt.FormatearADosDecimales(descuento);
+                descuento = metodostxt.FormatearATresDecimales(descuento);
                 double precioneto;
                 //El precio de acuerdo a la moneda seleccionada
 
@@ -1264,12 +1258,12 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                     JOptionPane.showMessageDialog(null, "El descuento no puede ser mayor o igual al precio del producto", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                preciobruto = metodostxt.FormatearADosDecimales(preciobruto);
+                preciobruto = metodostxt.FormatearATresDecimales(preciobruto);
                 precioneto = preciobruto - descuento; //Se aplica el descuento
-                precioneto = metodostxt.FormatearADosDecimales(precioneto);
+                precioneto = metodostxt.FormatearATresDecimales(precioneto);
 
                 double subtotal = cantidad * precioneto;
-                subtotal = metodostxt.FormatearADosDecimales(subtotal);
+                subtotal = metodostxt.FormatearATresDecimales(subtotal);
                 tablemodelo.addRow(new Object[]{idproducto, codigoproducto, descripcion, cantidad, preciobruto, descuento, precioneto,
                     moneda, subtotal});
 
@@ -1300,7 +1294,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     private void SumarSubtotal() {
         //Suma la colmna subtotal
         double totalventa = metodos.SumarColumnaDouble(tbProductosVendidos, 8);
-        totalventa = metodostxt.FormatearADosDecimales(totalventa);
+        totalventa = metodostxt.FormatearATresDecimales(totalventa);
         String totalventaString = metodostxt.DoubleAFormatoSudamerica(totalventa);
         txtTotalVenta.setText(totalventaString); //El 5 es la columna 5, comienza de 0
     }
@@ -1457,7 +1451,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         } else {
             txtImporte.setText(metodostxt.DoubleFormatoSudamericaKeyReleased(txtImporte.getText()));
             double vuelto = importe - totalventa;
-            vuelto = metodostxt.FormatearADosDecimales(vuelto);
+            vuelto = metodostxt.FormatearATresDecimales(vuelto);
             txtVuelto.setText(metodostxt.DoubleAFormatoSudamerica(vuelto));
             txtImporte.setForeground(new Color(0, 153, 51)); //Verde
         }
@@ -1562,24 +1556,24 @@ public final class RegistrarVenta extends javax.swing.JDialog {
             //Precio Dolares
             String precioUSDString = txtPrecioDolares.getText();
             double precioUSDsDouble = metodostxt.DoubleAFormatoAmericano(precioUSDString);
-            precioUSDsDouble = metodostxt.FormatearADosDecimales(precioUSDsDouble);
+            precioUSDsDouble = metodostxt.FormatearATresDecimales(precioUSDsDouble);
             txtPrecioDolares.setText(metodostxt.DoubleAFormatoSudamerica(precioUSDsDouble));
 
             //Precio, cambio a Guaranies
             double precioGsDouble = precioUSDsDouble * cotiUsdGsCompra;
-            precioGsDouble = metodostxt.FormatearADosDecimales(precioGsDouble);
+            precioGsDouble = metodostxt.FormatearATresDecimales(precioGsDouble);
             String precioGsString = metodostxt.DoubleAFormatoSudamerica(precioGsDouble);
             txtPrecioGs.setText(precioGsString);
 
             //Precio, cambio a Reales
             double precioRsDouble = precioUSDsDouble * cotiUsdRsCompra;
-            precioRsDouble = metodostxt.FormatearADosDecimales(precioRsDouble);
+            precioRsDouble = metodostxt.FormatearATresDecimales(precioRsDouble);
             String precioRsString = metodostxt.DoubleAFormatoSudamerica(precioRsDouble);
             txtPrecioReales.setText(precioRsString);
 
             //Precio, cambio a Pesos argentinos
             double precioPesosArgDouble = precioUSDsDouble * cotiUsdPaCompra;
-            precioPesosArgDouble = metodostxt.FormatearADosDecimales(precioPesosArgDouble);
+            precioPesosArgDouble = metodostxt.FormatearATresDecimales(precioPesosArgDouble);
             String precioPesosArgString = metodostxt.DoubleAFormatoSudamerica(precioPesosArgDouble);
             txtPrecioPesosArg.setText(precioPesosArgString);
         }

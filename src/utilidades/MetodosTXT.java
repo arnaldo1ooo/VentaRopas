@@ -281,11 +281,11 @@ public class MetodosTXT {
     }
 
     //Formatear double para que tenga solo dos numeros despues de la coma, y la coma es punto
-    public double FormatearADosDecimales(double ElDouble) {
+    public double FormatearATresDecimales(double ElDouble) {
         String elDoubleString = "";
-        Double elNumeroDouble = 0.00;
+        Double elNumeroDouble = 0.000;
         try {
-            elDoubleString = String.format("%.2f", ElDouble);
+            elDoubleString = String.format("%.3f", ElDouble);
             elDoubleString = elDoubleString.replace(",", ".");
             elNumeroDouble = Double.parseDouble(elDoubleString);
         } catch (NumberFormatException e) {

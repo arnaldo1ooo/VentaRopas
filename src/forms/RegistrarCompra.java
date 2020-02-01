@@ -119,15 +119,12 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                             if (cbMoneda.getSelectedItem() != "Dolares") {
                                 if (cbMoneda.getSelectedItem() == "Guaranies") {
                                     preciocompra = preciocompra / cotiUsdGsCompra;
-                                    preciocompra = metodostxt.FormatearADosDecimales(preciocompra);
                                 }
                                 if (cbMoneda.getSelectedItem() == "Reales") {
                                     preciocompra = preciocompra / cotiUsdRsCompra;
-                                    preciocompra = metodostxt.FormatearADosDecimales(preciocompra);
                                 }
                                 if (cbMoneda.getSelectedItem() == "Pesos argentinos") {
                                     preciocompra = preciocompra / cotiUsdPaCompra;
-                                    preciocompra = metodostxt.FormatearADosDecimales(preciocompra);
                                 }
                             }
                             //Se registran los productos de la compra
@@ -958,7 +955,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
                 String descripcion = txtDescripcionProducto.getText();
                 int cantidad = Integer.parseInt(txtCantidadAdquirida.getText());
                 double preciounitario = metodostxt.DoubleAFormatoAmericano(txtPrecioUnitario.getText());
-                preciounitario = metodostxt.FormatearADosDecimales(preciounitario);
+                preciounitario = metodostxt.FormatearATresDecimales(preciounitario);
                 String moneda = cbMoneda.getSelectedItem().toString();
                 double subtotal = cantidad * preciounitario;
                 tablemodelo.addRow(new Object[]{idproducto, codigoproducto, descripcion, cantidad, preciounitario,
@@ -989,7 +986,7 @@ public final class RegistrarCompra extends javax.swing.JDialog {
     private void SumarSubtotal() {
         //Suma la colmna subtotal
         double totalcompra = metodos.SumarColumnaDouble(tbPrincipal, 6);
-        totalcompra = metodostxt.FormatearADosDecimales(totalcompra);
+        totalcompra = metodostxt.FormatearATresDecimales(totalcompra);
         String totalcompraString = metodostxt.DoubleAFormatoSudamerica(totalcompra);
         txtTotalCompra.setText(totalcompraString); //El 5 es la columna 5, comienza de 0
     }

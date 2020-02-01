@@ -17,28 +17,36 @@ public class Venta extends javax.swing.JDialog {
     Metodos metodos = new Metodos();
     MetodosTXT metodostxt = new MetodosTXT();
 
-    public Venta(javax.swing.JFrame parent, boolean modal) {
-        super(parent, modal);
+    public Venta(javax.swing.JFrame parent, boolean eliminar) {
+        super(parent);
         initComponents();
 
-        ConsultaAllCompraBD();
+        //Oculta los botones
+        btnEliminar.setVisible(eliminar);
+
+        ConsultaAllVentaBD();
     }
 
-    private void ConsultaAllCompraBD() {
+    private void ConsultaAllVentaBD() {
         String sentencia = "CALL SP_VentaConsulta";
         String titlesJtabla[] = {"Código", "N° de venta", "Vendedor/a", "Cliente", "Tipo de documento",
-            "Fecha de venta", "Importe ($)", "Moneda", "Cotización"};
+            "Fecha de venta", "Importe", "Total de la venta", "Moneda", "Cotización"};
 
         tbPrincipal.setModel(con.ConsultaBD(sentencia, titlesJtabla, cbCampoBuscar));
         cbCampoBuscar.setSelectedIndex(1);
 
         double importe;
+        double totalventa;
         double cotizacion;
         for (int i = 0; i < tbPrincipal.getRowCount(); i++) {
+            cotizacion = Double.parseDouble(tbPrincipal.getValueAt(i, 9).toString());
+            tbPrincipal.setValueAt(metodostxt.DoubleAFormatoSudamerica(cotizacion), i, 9);
             importe = Double.parseDouble(tbPrincipal.getValueAt(i, 6).toString());
+            importe = metodostxt.FormatearATresDecimales(importe * cotizacion);
             tbPrincipal.setValueAt(metodostxt.DoubleAFormatoSudamerica(importe), i, 6);
-            cotizacion = Double.parseDouble(tbPrincipal.getValueAt(i, 8).toString());
-            tbPrincipal.setValueAt(metodostxt.DoubleAFormatoSudamerica(cotizacion), i, 8);
+            totalventa = Double.parseDouble(tbPrincipal.getValueAt(i, 7).toString());
+            totalventa = metodostxt.FormatearATresDecimales(totalventa * cotizacion);
+            tbPrincipal.setValueAt(metodostxt.DoubleAFormatoSudamerica(totalventa), i, 7);
         }
         metodos.AnchuraColumna(tbPrincipal);
         if (tbPrincipal.getModel().getRowCount() == 1) {
@@ -52,7 +60,7 @@ public class Venta extends javax.swing.JDialog {
         int codigoVentaSelect = Integer.parseInt(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0).toString());
         String sentencia = "CALL SP_VentaProductosConsulta(" + codigoVentaSelect + ")";
         String titlesJtabla[] = {"Id del producto", "Codigo del producto", "Descripción", "Cantidad",
-            "Precio de compra ($)", "Precio de venta ($)", "Descuento ($)"};
+            "Total precio de compra", "Totl precio de venta", "Descuento"};
 
         tbProductosVendidos.setModel(con.ConsultaBD(sentencia, titlesJtabla, null));
 
@@ -60,12 +68,16 @@ public class Venta extends javax.swing.JDialog {
         double preciocompra;
         double precioventa;
         double descuento;
+        double cotizacion = metodostxt.DoubleAFormatoAmericano(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 9).toString());;
         for (int i = 0; i < tbProductosVendidos.getRowCount(); i++) {
             preciocompra = Double.parseDouble(tbProductosVendidos.getValueAt(i, 4).toString());
+            preciocompra = metodostxt.FormatearATresDecimales(preciocompra * cotizacion);
             tbProductosVendidos.setValueAt(metodostxt.DoubleAFormatoSudamerica(preciocompra), i, 4);
             precioventa = Double.parseDouble(tbProductosVendidos.getValueAt(i, 5).toString());
+            precioventa = metodostxt.FormatearATresDecimales(precioventa * cotizacion);
             tbProductosVendidos.setValueAt(metodostxt.DoubleAFormatoSudamerica(precioventa), i, 5);
             descuento = Double.parseDouble(tbProductosVendidos.getValueAt(i, 6).toString());
+            descuento = metodostxt.FormatearATresDecimales(descuento * cotizacion);
             tbProductosVendidos.setValueAt(metodostxt.DoubleAFormatoSudamerica(descuento), i, 6);
         }
         metodos.AnchuraColumna(tbProductosVendidos);
@@ -105,7 +117,7 @@ public class Venta extends javax.swing.JDialog {
         btnEliminar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Anular compra");
+        setTitle("Ventas");
         setModal(true);
         setResizable(false);
 
@@ -263,6 +275,10 @@ public class Venta extends javax.swing.JDialog {
         panel1Layout.setHorizontalGroup(
             panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(406, 406, 406))
             .addGroup(panel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -272,7 +288,7 @@ public class Venta extends javax.swing.JDialog {
                                 .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 88, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 162, Short.MAX_VALUE)
                                 .addComponent(lblBuscarCampo)
                                 .addGap(4, 4, 4)
                                 .addComponent(cbCampoBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -281,15 +297,10 @@ public class Venta extends javax.swing.JDialog {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(lbCantRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, 509, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(31, 31, 31))))
-            .addGroup(panel1Layout.createSequentialGroup()
-                .addGap(369, 369, 369)
-                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(panel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(scPrincipal)
-                .addContainerGap())
+                        .addGap(31, 31, 31))
+                    .addGroup(panel1Layout.createSequentialGroup()
+                        .addComponent(scPrincipal)
+                        .addContainerGap())))
         );
         panel1Layout.setVerticalGroup(
             panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -350,8 +361,6 @@ public class Venta extends javax.swing.JDialog {
             int confirmado = javax.swing.JOptionPane.showConfirmDialog(this, "¿Realmente desea anular esta venta?", "Confirmación", JOptionPane.YES_OPTION);
             if (confirmado == JOptionPane.YES_OPTION) {
                 String codigoventa = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0).toString();
-                //Elimina la venta
-                con.EjecutarABM("CALL SP_VentaEliminar(" + codigoventa + ")");
 
                 //Elimina los productos de la venta                      
                 String idproducto;
@@ -364,7 +373,12 @@ public class Venta extends javax.swing.JDialog {
                     con.EjecutarABM("CALL SP_VentaProductosEliminar('" + codigoventa + "','"
                             + idproducto + "','" + cantidadvendida + "')");
                 }
-                JOptionPane.showMessageDialog(this, "Compra anulado correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
+
+                //Elimina la venta (Primero se debe eliminar VentaProductos)
+                con.EjecutarABM("CALL SP_VentaEliminar(" + codigoventa + ")");
+
+                ConsultaAllVentaBD();
+                JOptionPane.showMessageDialog(this, "Venta anulado correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
             }
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
