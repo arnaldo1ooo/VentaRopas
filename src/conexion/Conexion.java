@@ -28,7 +28,7 @@ public class Conexion {
     private static String servidor;
 
     public static Connection ConectarBasedeDatos() {
-        String tipoHost = "remoto";
+        String tipoHost = "online";
 
         if (tipoHost.equals("local")) {
             //Modo host local
@@ -68,7 +68,7 @@ public class Conexion {
                     usuarioDB = "invitado";
                     passDB = "toor5127"; //Contrasena de la BD
                     nombreBD = "ventaropas";
-                    host = "143.255.143.230";
+                    host = "181.123.175.39";
                     puerto = "3306";
                     servidor = "jdbc:mysql://" + host + ":" + puerto + "/" + nombreBD
                             + "?useUnicode=true"
