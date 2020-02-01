@@ -1243,16 +1243,28 @@ public class Reporte extends javax.swing.JDialog {
 
         Map parametros;
         String rutajasper;
+        SimpleDateFormat formatosuda = new SimpleDateFormat("dd/MM/yyyy");
         switch (laTablaSelect) {
             case "Ventas":
                 //Parametros
                 parametros = new HashMap();
                 parametros.put("ORDEN", cbOrdenar.getSelectedItem().toString());
                 parametros.put("MONEDA", cbMonedaCompras.getSelectedItem().toString());
-
+                parametros.put("DESDE_NUMVENTA", txtDesdeNumVenta.getText());
+                parametros.put("HASTA_NUMVENTA", txtHastaNumVenta.getText());
+                parametros.put("DESDE_VENDEDOR", txtDesdeVendedor.getText());
+                parametros.put("HASTA_VENDEDOR", txtHastaVendedor.getText());
+                parametros.put("DESDE_CLIENTE", txtDesdeCliente.getText());
+                parametros.put("HASTA_CLIENTE", txtHastaCliente.getText());
+                parametros.put("DESDE_FECHAVENTA", formatosuda.format(dcDesdeFechaVenta.getDate()));
+                parametros.put("HASTA_FECHAVENTA", formatosuda.format(dcHastaFechaVenta.getDate()));
+                parametros.put("COTIZACION", "Cotización:   Guaraníes: " + metodostxt.DoubleAFormatoSudamerica(cotiUsdGsCompra)
+                        + "   Reales: " + metodostxt.DoubleAFormatoSudamerica(cotiUsdRsCompra)
+                        + "   Pesos argentinos: " + metodostxt.DoubleAFormatoSudamerica(cotiUsdPaCompra));
+                rutajasper = "/reportes/reporte_ventas.jasper";
+                metodos.GenerarReporteJTABLE(rutajasper, parametros, tbPrincipal.getModel());
                 break;
             case "Compras":
-                SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
                 //Parametros
                 parametros = new HashMap();
                 parametros.put("ORDEN", cbOrdenar.getSelectedItem().toString());
@@ -1261,12 +1273,13 @@ public class Reporte extends javax.swing.JDialog {
                 parametros.put("HASTA_NUMCOMPRA", txtHastaNumCompra.getText());
                 parametros.put("DESDE_PROVEEDOR", txtDesdeProveedor.getText());
                 parametros.put("HASTA_PROVEEDOR", txtHastaProveedor.getText());
-                parametros.put("DESDE_FECHAREGISTRO", formato.format(dcDesdeFechaRegistro.getDate()));
-                parametros.put("HASTA_FECHAREGISTRO", formato.format(dcHastaFechaRegistro.getDate()));
-                parametros.put("DESDE_FECHACOMPRA", formato.format(dcDesdeFechaCompra.getDate()));
-                parametros.put("HASTA_FECHACOMPRA", formato.format(dcHastaFechaCompra.getDate()));
-                parametros.put("COTIZACION", "Cotización:   Guaraníes: " + cotiUsdGsCompra
-                        + "   Reales: " + cotiUsdRsCompra + "   Pesos argentinos: " + cotiUsdPaCompra);
+                parametros.put("DESDE_FECHAREGISTRO", formatosuda.format(dcDesdeFechaRegistro.getDate()));
+                parametros.put("HASTA_FECHAREGISTRO", formatosuda.format(dcHastaFechaRegistro.getDate()));
+                parametros.put("DESDE_FECHACOMPRA", formatosuda.format(dcDesdeFechaCompra.getDate()));
+                parametros.put("HASTA_FECHACOMPRA", formatosuda.format(dcHastaFechaCompra.getDate()));
+                parametros.put("COTIZACION", "Cotización:   Guaraníes: " + metodostxt.DoubleAFormatoSudamerica(cotiUsdGsCompra)
+                        + "   Reales: " + metodostxt.DoubleAFormatoSudamerica(cotiUsdRsCompra)
+                        + "   Pesos argentinos: " + metodostxt.DoubleAFormatoSudamerica(cotiUsdPaCompra));
                 rutajasper = "/reportes/reporte_compras.jasper";
                 metodos.GenerarReporteJTABLE(rutajasper, parametros, tbPrincipal.getModel());
                 break;

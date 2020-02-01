@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="612" pageHeight="943" columnWidth="562" leftMargin="30" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d7ba0bb7-545a-46fb-9be6-63e81b1f1532">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="156"/>
+	<property name="ireport.y" value="108"/>
 	<parameter name="ORDEN" class="java.lang.String"/>
 	<parameter name="MONEDA" class="java.lang.String"/>
 	<parameter name="DESDE_NUMCOMPRA" class="java.lang.String"/>
@@ -220,7 +220,7 @@
 				<text><![CDATA[N° de compra]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="103" y="3" width="100" height="17" uuid="7aefaf80-4610-48bd-8c09-ac205a8f91f7"/>
+				<reportElement x="103" y="3" width="116" height="17" uuid="7aefaf80-4610-48bd-8c09-ac205a8f91f7"/>
 				<textElement verticalAlignment="Middle">
 					<font size="11" isBold="true"/>
 				</textElement>
@@ -243,7 +243,7 @@
 				<textFieldExpression><![CDATA[$F{N° de compra}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="103" y="0" width="100" height="20" uuid="29f2b1ff-fa16-4a0c-a794-2996527d6e45"/>
+				<reportElement x="103" y="0" width="116" height="20" uuid="29f2b1ff-fa16-4a0c-a794-2996527d6e45"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Proveedor}]]></textFieldExpression>
 			</textField>
@@ -277,36 +277,39 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="86" splitType="Stretch">
+		<band height="107" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="46" width="100" height="20" uuid="f8444e73-9471-430e-b15e-ea5ef0526e10"/>
+				<reportElement x="0" y="66" width="100" height="20" uuid="f8444e73-9471-430e-b15e-ea5ef0526e10"/>
 				<textElement>
-					<font size="12"/>
+					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[FIN ARCHIVO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="462" y="46" width="100" height="20" uuid="5a48b27a-3a3a-4261-a791-7ba04bd8a591"/>
+				<reportElement x="462" y="66" width="100" height="20" uuid="5a48b27a-3a3a-4261-a791-7ba04bd8a591"/>
 				<textElement>
-					<font size="12"/>
+					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[REGISTROS]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="398" y="46" width="51" height="20" uuid="71e78149-e083-49c3-953b-c825adac798f"/>
+				<reportElement x="398" y="66" width="51" height="20" uuid="71e78149-e083-49c3-953b-c825adac798f"/>
 				<textElement textAlignment="Right">
-					<font size="12"/>
+					<font size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="462" y="66" width="100" height="20" uuid="a6f58689-2bb3-4b1d-b37e-723154678664"/>
+				<reportElement x="462" y="86" width="100" height="20" uuid="a6f58689-2bb3-4b1d-b37e-723154678664"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
 				<text><![CDATA[(reporte_compras)]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="3" y="16" width="559" height="20" uuid="a7d6056d-b6b5-4ae0-9503-19f7ad2de839"/>
-				<textElement verticalAlignment="Middle">
-					<font size="12"/>
+				<reportElement x="0" y="36" width="562" height="20" uuid="a7d6056d-b6b5-4ae0-9503-19f7ad2de839"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{COTIZACION}]]></textFieldExpression>
 			</textField>
