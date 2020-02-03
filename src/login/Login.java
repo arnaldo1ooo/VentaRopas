@@ -326,7 +326,7 @@ public class Login extends javax.swing.JFrame {
         Alias = txtAlias.getText();
         Pass = String.valueOf(txtPass.getPassword());
 
-        String consulta = "CALL SP_UsuarioConsulta ('" + Alias + "','" + Pass + "') ";
+        String consulta = "CALL SP_LoginConsulta ('" + Alias + "','" + Pass + "') ";
         System.out.println("consulta: " + consulta);
         try {
             conexion = Conexion.ConectarBasedeDatos();

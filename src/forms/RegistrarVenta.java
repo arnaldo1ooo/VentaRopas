@@ -29,7 +29,7 @@ import utilidades.MetodosCombo;
 import utilidades.MetodosImagen;
 import utilidades.MetodosTXT;
 import utilidades.VistaCompletaImagen;
-//Variables globales
+//Variables globalesf
 import static principal.Principal.cotiUsdGsCompra;
 import static principal.Principal.cotiUsdRsCompra;
 import static principal.Principal.cotiUsdPaCompra;

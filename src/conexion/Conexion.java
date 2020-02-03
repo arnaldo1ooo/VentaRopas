@@ -50,7 +50,7 @@ public class Conexion {
             if (tipoHost.equals("remoto")) {
                 //Modo host remoto
                 controlador = "com.mysql.cj.jdbc.Driver";
-                usuarioDB = "invitado";
+                usuarioDB = "supervisor";
                 passDB = "toor5127"; //Contrasena de la BD
                 nombreBD = "ventaropas";
                 host = "192.168.88.240";
@@ -65,7 +65,7 @@ public class Conexion {
                 if (tipoHost.equals("online")) {
                     //Modo host online
                     controlador = "com.mysql.cj.jdbc.Driver";
-                    usuarioDB = "invitado";
+                    usuarioDB = "supervisor";
                     passDB = "toor5127"; //Contrasena de la BD
                     nombreBD = "ventaropas";
                     host = "181.123.175.39";

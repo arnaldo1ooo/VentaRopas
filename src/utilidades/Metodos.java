@@ -258,10 +258,10 @@ public class Metodos {
                 JRTableModelDataSource jrTableModel = new JRTableModelDataSource(elTableModel);
                 JasperPrint jprint = JasperFillManager.fillReport(jrReporte_productos, parametros, jrTableModel);
 
-                JasperViewer jViewer = new JasperViewer(jprint, true);
+                JasperViewer jViewer = new JasperViewer(jprint, false);//false para que al cerrar reporte no se cierre el sistema
                 //jViewer.setTitle("Reporte de productos"); //Titulo de la ventana
                 jViewer.setDefaultCloseOperation(JasperViewer.DISPOSE_ON_CLOSE);
-                jViewer.setZoomRatio((float) 1); //Zoom al 100%
+                jViewer.setZoomRatio((float) 0.8); //1 es Zoom al 100%
                 jViewer.setExtendedState(JasperViewer.MAXIMIZED_BOTH); //Maximizado
                 jViewer.setModalExclusionType(Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
                 jViewer.requestFocus();
@@ -288,10 +288,10 @@ public class Metodos {
                 JRResultSetDataSource rsLista = new JRResultSetDataSource(con.rs); //Para sql
                 JasperPrint jprint = JasperFillManager.fillReport(jrReporte_productos, parametros, rsLista);
 
-                JasperViewer jViewer = new JasperViewer(jprint, true);
+                JasperViewer jViewer = new JasperViewer(jprint, false);//false para que al cerrar reporte no se cierre el sistema
                 //jViewer.setTitle("Reporte de productos"); //Titulo de la ventana
                 jViewer.setDefaultCloseOperation(JasperViewer.DISPOSE_ON_CLOSE);
-                jViewer.setZoomRatio((float) 1); //Zoom al 100%
+                jViewer.setZoomRatio((float) 0.8); //1 es Zoom al 100%
                 jViewer.setExtendedState(JasperViewer.MAXIMIZED_BOTH); //Maximizado
                 jViewer.setModalExclusionType(Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
                 jViewer.requestFocus();

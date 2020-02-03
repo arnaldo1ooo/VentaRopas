@@ -29,31 +29,21 @@
 	<title>
 		<band height="77" splitType="Stretch">
 			<staticText>
-				<reportElement x="175" y="0" width="101" height="33" uuid="d853bb41-eba1-4446-bf8f-c6601cf9e426"/>
-				<textElement textAlignment="Right" verticalAlignment="Top">
-					<font fontName="Times New Roman" size="24" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Elegancia]]></text>
-			</staticText>
-			<staticText>
 				<reportElement x="10" y="47" width="219" height="25" uuid="afe7d3cd-1c5b-4e90-bd15-49424048cc57"/>
 				<textElement textAlignment="Left" verticalAlignment="Bottom">
 					<font fontName="Bodoni MT" size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[REPORTE DE PRODUCTOS]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="276" y="0" width="115" height="33" uuid="de410d78-9f71-4381-969b-c77ec7c3aa4a"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Leelawadee UI" size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[moda y accesorios]]></text>
-			</staticText>
 			<line>
 				<reportElement x="0" y="72" width="562" height="1" uuid="fba8c39c-7a58-49e5-9f6b-f80e0e01569b"/>
 			</line>
+			<image hAlign="Center" vAlign="Top">
+				<reportElement stretchType="RelativeToTallestObject" x="155" y="0" width="262" height="47" uuid="a54e9de7-5a39-4c21-8916-70e8a66ded04"/>
+				<imageExpression><![CDATA["C:\\Users\\Arnaldo_Cantero\\Google Drive\\Proyectos\\Sistemas\\Sistema elegancia\\Logo\\Logo elegancia.jpg"]]></imageExpression>
+			</image>
 			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement x="440" y="0" width="122" height="20" uuid="ac84ff90-bce4-41b9-a37f-6575cb80fc89"/>
+				<reportElement x="440" y="17" width="122" height="20" uuid="0e79e0b6-91d5-4ae2-a83e-4e83973a3623"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
@@ -231,10 +221,14 @@
 	</columnFooter>
 	<pageFooter>
 		<band height="56" splitType="Stretch">
+			<textField evaluationTime="Report">
+				<reportElement x="522" y="36" width="40" height="20" uuid="47dde1dc-f4dc-4eec-ba6d-782c8656d519"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
 			<textField>
-				<reportElement x="459" y="34" width="103" height="20" uuid="18da842f-0262-4559-85ca-7c31ac213537"/>
+				<reportElement x="352" y="36" width="170" height="20" uuid="9f736875-054a-4141-9001-bdff6192cf80"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>

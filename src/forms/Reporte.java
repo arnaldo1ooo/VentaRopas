@@ -230,7 +230,7 @@ public class Reporte extends javax.swing.JDialog {
         jLabel11.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
         jLabel11.setText("FILTRAR POR:");
 
-        panel8.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Número de venta  "));
+        panel8.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "N° de venta  "));
         panel8.setColorPrimario(new java.awt.Color(255, 255, 255));
         panel8.setColorSecundario(new java.awt.Color(255, 255, 255));
         panel8.setOpaque(false);
@@ -289,6 +289,7 @@ public class Reporte extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        btnFiltroCompras3.setBackground(new java.awt.Color(153, 0, 153));
         btnFiltroCompras3.setText("mes actual");
         btnFiltroCompras3.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         btnFiltroCompras3.addActionListener(new java.awt.event.ActionListener() {
@@ -297,6 +298,7 @@ public class Reporte extends javax.swing.JDialog {
             }
         });
 
+        btnTraerTodoCompras1.setBackground(new java.awt.Color(153, 0, 153));
         btnTraerTodoCompras1.setText("todos");
         btnTraerTodoCompras1.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         btnTraerTodoCompras1.addActionListener(new java.awt.event.ActionListener() {
@@ -305,7 +307,7 @@ public class Reporte extends javax.swing.JDialog {
             }
         });
 
-        panel13.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Proveedor"));
+        panel13.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Vendedor"));
         panel13.setColorPrimario(new java.awt.Color(255, 255, 255));
         panel13.setColorSecundario(new java.awt.Color(255, 255, 255));
         panel13.setOpaque(false);
@@ -411,6 +413,7 @@ public class Reporte extends javax.swing.JDialog {
             }
         });
 
+        btnFiltroCompras5.setBackground(new java.awt.Color(153, 0, 153));
         btnFiltroCompras5.setText("mes anterior");
         btnFiltroCompras5.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         btnFiltroCompras5.addActionListener(new java.awt.event.ActionListener() {
@@ -501,11 +504,11 @@ public class Reporte extends javax.swing.JDialog {
                         .addComponent(jLabel11)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(panel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(panel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(panel19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(panel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(lblBuscarCampo2)
                     .addComponent(cbMonedaVentas, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -554,7 +557,7 @@ public class Reporte extends javax.swing.JDialog {
         jLabel2.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
         jLabel2.setText("FILTRAR POR:");
 
-        panel7.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Número de compra"));
+        panel7.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "N° de compra"));
         panel7.setColorPrimario(new java.awt.Color(255, 255, 255));
         panel7.setColorSecundario(new java.awt.Color(255, 255, 255));
         panel7.setOpaque(false);
@@ -613,6 +616,7 @@ public class Reporte extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        btnFiltroCompras.setBackground(new java.awt.Color(0, 51, 204));
         btnFiltroCompras.setText("mes actual");
         btnFiltroCompras.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         btnFiltroCompras.addActionListener(new java.awt.event.ActionListener() {
@@ -661,6 +665,7 @@ public class Reporte extends javax.swing.JDialog {
                 .addContainerGap(7, Short.MAX_VALUE))
         );
 
+        btnTraerTodoCompras.setBackground(new java.awt.Color(0, 51, 204));
         btnTraerTodoCompras.setText("todos");
         btnTraerTodoCompras.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         btnTraerTodoCompras.addActionListener(new java.awt.event.ActionListener() {
@@ -669,7 +674,7 @@ public class Reporte extends javax.swing.JDialog {
             }
         });
 
-        panel10.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Proveedor"));
+        panel10.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Proveedor  "));
         panel10.setColorPrimario(new java.awt.Color(255, 255, 255));
         panel10.setColorSecundario(new java.awt.Color(255, 255, 255));
         panel10.setOpaque(false);
@@ -775,6 +780,7 @@ public class Reporte extends javax.swing.JDialog {
             }
         });
 
+        btnFiltroCompras2.setBackground(new java.awt.Color(0, 51, 204));
         btnFiltroCompras2.setText("mes anterior");
         btnFiltroCompras2.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         btnFiltroCompras2.addActionListener(new java.awt.event.ActionListener() {
@@ -820,7 +826,7 @@ public class Reporte extends javax.swing.JDialog {
                             .addComponent(btnFiltroCompras, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addComponent(btnFiltroCompras2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnTraerTodoCompras, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(257, 257, 257)
+                        .addGap(256, 256, 256)
                         .addComponent(btnFiltroCompras1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -1057,23 +1063,22 @@ public class Reporte extends javax.swing.JDialog {
             pnProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnProductosLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(pnProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnFiltroProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnProductosLayout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(27, 27, 27))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnProductosLayout.createSequentialGroup()
-                        .addComponent(btnTraeTodoProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(29, 29, 29)))
-                .addComponent(panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(panel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(pnProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnProductosLayout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(27, 27, 27))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnProductosLayout.createSequentialGroup()
+                                .addComponent(btnTraeTodoProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(29, 29, 29)))
+                        .addComponent(panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(panel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(panel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(216, 216, 216))
-            .addGroup(pnProductosLayout.createSequentialGroup()
-                .addGap(323, 323, 323)
-                .addComponent(btnFiltroProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnProductosLayout.setVerticalGroup(
             pnProductosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1156,7 +1161,7 @@ public class Reporte extends javax.swing.JDialog {
                         .addComponent(jScrollPane1)
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel4Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGap(0, 324, Short.MAX_VALUE)
                         .addGroup(panel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel4Layout.createSequentialGroup()
                                 .addComponent(lbCantRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1454,11 +1459,31 @@ public class Reporte extends javax.swing.JDialog {
     }//GEN-LAST:event_txtHastaNumVentaKeyTyped
 
     private void btnFiltroCompras3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltroCompras3ActionPerformed
-        // TODO add your handling code here:
+        txtDesdeNumVenta.setText("0");
+        txtHastaNumVenta.setText("999999");
+        txtDesdeVendedor.setText("A");
+        txtHastaVendedor.setText("Z");
+        txtDesdeCliente.setText("A");
+        txtHastaCliente.setText("Z");
+
+        dcDesdeFechaVenta.setDate(PrimerDiaMesActual());
+        dcHastaFechaVenta.setDate(UltimoDiaMesActual());
+
+        ConsultaVentas();
     }//GEN-LAST:event_btnFiltroCompras3ActionPerformed
 
     private void btnTraerTodoCompras1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTraerTodoCompras1ActionPerformed
-        // TODO add your handling code here:
+        txtDesdeNumVenta.setText("0");
+        txtHastaNumVenta.setText("999999");
+        txtDesdeVendedor.setText("A");
+        txtHastaVendedor.setText("Z");
+        txtDesdeCliente.setText("A");
+        txtHastaCliente.setText("Z");
+
+        dcDesdeFechaVenta.setDate(PrimerDiaDelAnho());
+        dcHastaFechaVenta.setDate(FechaActual());
+
+        ConsultaVentas();
     }//GEN-LAST:event_btnTraerTodoCompras1ActionPerformed
 
     private void txtDesdeVendedorKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDesdeVendedorKeyReleased
