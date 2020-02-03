@@ -42,11 +42,8 @@ public final class ABMCliente extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
 
-        btnNuevo.setVisible(false);
-        btnEliminar.setVisible(false);
-        btnModificar.setVisible(false);
         PermisoRoles(Alias, "CLIENTE");
-        
+
         TablaConsultaBDAll(); //Trae todos los registros
         txtBuscar.requestFocus();
 
@@ -55,6 +52,9 @@ public final class ABMCliente extends javax.swing.JDialog {
 
 //--------------------------METODOS----------------------------//
     private void PermisoRoles(String ElAlias, String modulo) {
+        btnNuevo.setVisible(false);
+        btnEliminar.setVisible(false);
+        btnModificar.setVisible(false);
         con = con.ObtenerRSSentencia("CALL SP_UsuarioRolConsulta('" + ElAlias + "','" + modulo + "')");
         String rol;
         try {
@@ -62,15 +62,12 @@ public final class ABMCliente extends javax.swing.JDialog {
                 rol = con.rs.getString("rol_denominacion");
                 switch (rol) {
                     case "ALTA":
-                        btnNuevo.setEnabled(true);
                         btnNuevo.setVisible(true);
                         break;
                     case "BAJA":
-                        btnEliminar.setEnabled(true);
                         btnEliminar.setVisible(true);
                         break;
                     case "MODIFICAR":
-                        btnModificar.setEnabled(true);
                         btnModificar.setVisible(true);
                         break;
                     default:
