@@ -24,6 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import static login.Login.Alias;
 import utilidades.Metodos;
 import utilidades.MetodosCombo;
 import utilidades.MetodosImagen;
@@ -62,6 +63,9 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         CargarComboBoxes();
         tablemodelo = (DefaultTableModel) tbProductosVendidos.getModel();
         GenerarNumVenta();
+
+        //Permiso Roles de usuario
+        btnGuardar.setVisible(metodos.PermisoRol(Alias, "VENTA", "ALTA"));
 
         OrdenTabulador();
     }

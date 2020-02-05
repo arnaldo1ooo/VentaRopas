@@ -6,7 +6,6 @@
 package forms;
 
 import conexion.Conexion;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
@@ -25,6 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import static login.Login.Alias;
 import utilidades.Metodos;
 import utilidades.MetodosCombo;
 import utilidades.MetodosImagen;
@@ -62,6 +62,9 @@ public final class RegistrarCompra extends javax.swing.JDialog {
         //Obtener fecha actual
         Calendar c2 = new GregorianCalendar();
         dcFechaRegistro.setCalendar(c2);
+
+        //Permiso Roles de usuario
+        btnGuardar.setVisible(metodos.PermisoRol(Alias, "COMPRA", "ALTA"));
 
         OrdenTabulador();
     }

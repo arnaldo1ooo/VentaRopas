@@ -8,6 +8,7 @@ package forms;
 import conexion.Conexion;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
+import static login.Login.Alias;
 import utilidades.Metodos;
 import utilidades.MetodosTXT;
 
@@ -25,6 +26,9 @@ public class Compra extends javax.swing.JDialog {
         btnEliminar.setVisible(eliminar);
 
         ConsultaAllCompraBD();
+
+        //Permiso Roles de usuario
+        btnEliminar.setVisible(metodos.PermisoRol(Alias, "COMPRA", "BAJA"));
     }
 
     private void ConsultaAllCompraBD() {
@@ -32,7 +36,7 @@ public class Compra extends javax.swing.JDialog {
         String titlesJtabla[] = {"Código", "N° de compra", "N° del documento", "Proveedor", "Tipo de documento",
             "Fecha de registro", "Fecha de compra", "Total de la compra"};
 
-        tbPrincipal.setModel(con.ConsultaBD(sentencia, titlesJtabla, cbCampoBuscar));
+        tbPrincipal.setModel(con.ConsultaTableBD(sentencia, titlesJtabla, cbCampoBuscar));
 
         double totalcompra;
         for (int i = 0; i < tbPrincipal.getRowCount(); i++) {
@@ -55,7 +59,7 @@ public class Compra extends javax.swing.JDialog {
         String sentencia = "CALL SP_CompraProductosConsulta(" + codigoCompraSelect + ")";
         String titlesJtabla[] = {"Id del producto", "Codigo del producto", "Descripción", "Cantidad", "Precio de compra ($)"};
 
-        tbProductosComprados.setModel(con.ConsultaBD(sentencia, titlesJtabla, null));
+        tbProductosComprados.setModel(con.ConsultaTableBD(sentencia, titlesJtabla, null));
         metodos.AnchuraColumna(tbProductosComprados);
 
         //Convertir precios

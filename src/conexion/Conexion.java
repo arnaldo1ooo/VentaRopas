@@ -135,7 +135,7 @@ public class Conexion {
         return NumColumnsRS;
     }
 
-    public DefaultTableModel ConsultaBD(String sentencia, String titlesJtabla[], JComboBox ElComboCampos) {
+    public DefaultTableModel ConsultaTableBD(String sentencia, String titlesJtabla[], JComboBox ElComboCampos) {
         DefaultTableModel modelotabla = new DefaultTableModel(null, titlesJtabla);
         Conexion con = ObtenerRSSentencia(sentencia);
         try {

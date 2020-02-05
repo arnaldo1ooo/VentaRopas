@@ -25,6 +25,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import conexion.Conexion;
+import forms.ABMCliente;
 import forms.Reporte;
 import java.awt.Dialog;
 import java.awt.Dimension;
@@ -37,6 +38,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JInternalFrame;
 import javax.swing.RowFilter;
@@ -57,6 +59,7 @@ import net.sf.jasperreports.view.JasperViewer;
  */
 public class Metodos {
 
+    Conexion con = new Conexion();
     public int CantRegistros = 0;
 
     public void AnchuraColumna(JTable LaTabla) {
@@ -302,5 +305,23 @@ public class Metodos {
         } catch (JRException ex) {
             Logger.getLogger(Reporte.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public boolean PermisoRol(String ElAlias, String modulo, String elRol) {
+        con = con.ObtenerRSSentencia("CALL SP_UsuarioRolConsulta('" + ElAlias + "','" + modulo + "')");
+        String rol;
+        boolean valido = false;
+        try {
+            while (con.rs.next()) {
+                rol = con.rs.getString("rol_denominacion");
+                if (rol.equals(elRol)) {
+                    valido = true;
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error al verificar roles del usuario " + ex);
+        }
+        con.DesconectarBasedeDatos();
+        return valido;
     }
 }

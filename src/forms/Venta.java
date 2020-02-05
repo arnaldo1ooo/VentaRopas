@@ -8,6 +8,7 @@ package forms;
 import conexion.Conexion;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
+import static login.Login.Alias;
 import utilidades.Metodos;
 import utilidades.MetodosTXT;
 
@@ -25,6 +26,9 @@ public class Venta extends javax.swing.JDialog {
         btnEliminar.setVisible(eliminar);
 
         ConsultaAllVentaBD();
+
+        //Permiso Roles de usuario
+        btnEliminar.setVisible(metodos.PermisoRol(Alias, "VENTA", "BAJA"));
     }
 
     private void ConsultaAllVentaBD() {
@@ -32,7 +36,7 @@ public class Venta extends javax.swing.JDialog {
         String titlesJtabla[] = {"Código", "N° de venta", "Vendedor/a", "Cliente", "Tipo de documento",
             "Fecha de venta", "Importe", "Total de la venta", "Moneda", "Cotización"};
 
-        tbPrincipal.setModel(con.ConsultaBD(sentencia, titlesJtabla, cbCampoBuscar));
+        tbPrincipal.setModel(con.ConsultaTableBD(sentencia, titlesJtabla, cbCampoBuscar));
         cbCampoBuscar.setSelectedIndex(1);
 
         double importe;
@@ -62,7 +66,7 @@ public class Venta extends javax.swing.JDialog {
         String titlesJtabla[] = {"Id del producto", "Codigo del producto", "Descripción", "Cantidad",
             "Total precio de compra", "Total precio de venta", "Descuento"};
 
-        tbProductosVendidos.setModel(con.ConsultaBD(sentencia, titlesJtabla, null));
+        tbProductosVendidos.setModel(con.ConsultaTableBD(sentencia, titlesJtabla, null));
 
         //Convertir formato precios
         double preciocompra;

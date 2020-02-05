@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import javax.swing.JOptionPane;
+import static login.Login.Alias;
 import utilidades.Metodos;
 import utilidades.MetodosCombo;
 import utilidades.MetodosImagen;
@@ -51,6 +52,10 @@ public final class ABMProducto extends javax.swing.JDialog {
         txtBuscar.requestFocus();
 
         CargarComboBoxes();
+        //Permiso Roles de usuario
+        btnNuevo.setVisible(metodos.PermisoRol(Alias, "PRODUCTO", "ALTA"));
+        btnModificar.setVisible(metodos.PermisoRol(Alias, "PRODUCTO", "MODIFICAR"));
+        btnEliminar.setVisible(metodos.PermisoRol(Alias, "PRODUCTO", "BAJA"));
 
         OrdenTabulador();
     }
@@ -175,7 +180,7 @@ public final class ABMProducto extends javax.swing.JDialog {
         String titlesJtabla[] = {"Código", "Código del producto", "Descripción",
             "Marca", "Stock", "Tamaño", "Categoria", "Subcategoria", "Observación", "Estado"};
 
-        tbPrincipal.setModel(con.ConsultaBD(sentencia, titlesJtabla, cbCampoBuscar));
+        tbPrincipal.setModel(con.ConsultaTableBD(sentencia, titlesJtabla, cbCampoBuscar));
         metodos.AnchuraColumna(tbPrincipal);
         lbCantRegistros.setText(metodos.CantRegistros + " Registros encontrados");
     }

@@ -47,6 +47,12 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         PermisoModulos(Alias);
         AsignarCotizaciones();
 
+        //Roles de usuario 
+        meRegistrarCompra.setEnabled(metodos.PermisoRol(Alias, "COMPRA", "ALTA")); //Si el usuario Alias tiene rol de NUEVO COMPRA
+        meRegistrarVenta.setEnabled(metodos.PermisoRol(Alias, "VENTA", "ALTA"));
+        meAnularCompra.setEnabled(metodos.PermisoRol(Alias, "COMPRA", "BAJA"));
+        meAnularVenta.setEnabled(metodos.PermisoRol(Alias, "VENTA", "BAJA"));
+
         //Redimensionar iconos menu
         meVenta.setIcon(metodos.AjustarIconoAButton(meVenta.getIcon(), meVenta.getHeight()));
         meCompra.setIcon(metodos.AjustarIconoAButton(meCompra.getIcon(), meCompra.getHeight()));
@@ -208,13 +214,13 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         lblCotiUsdGsCompra = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         meVenta = new javax.swing.JMenu();
-        jMenuItem11 = new javax.swing.JMenuItem();
+        meRegistrarVenta = new javax.swing.JMenuItem();
         jSeparator11 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem13 = new javax.swing.JMenuItem();
+        meAnularVenta = new javax.swing.JMenuItem();
         meCompra = new javax.swing.JMenu();
-        jMenuItem12 = new javax.swing.JMenuItem();
+        meRegistrarCompra = new javax.swing.JMenuItem();
         jSeparator15 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem14 = new javax.swing.JMenuItem();
+        meAnularCompra = new javax.swing.JMenuItem();
         jSeparator16 = new javax.swing.JPopupMenu.Separator();
         jMenuItem10 = new javax.swing.JMenuItem();
         meProducto = new javax.swing.JMenu();
@@ -595,33 +601,33 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         meVenta.setText("VENTAS");
         meVenta.setEnabled(false);
         meVenta.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        meVenta.setPreferredSize(new java.awt.Dimension(160, 70));
+        meVenta.setPreferredSize(new java.awt.Dimension(170, 70));
         meVenta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 meVentaActionPerformed(evt);
             }
         });
 
-        jMenuItem11.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
-        jMenuItem11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoRegistrarCompra25.png"))); // NOI18N
-        jMenuItem11.setText("Registrar venta");
-        jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
+        meRegistrarVenta.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
+        meRegistrarVenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoRegistrarCompra25.png"))); // NOI18N
+        meRegistrarVenta.setText("Registrar venta");
+        meRegistrarVenta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem11ActionPerformed(evt);
+                meRegistrarVentaActionPerformed(evt);
             }
         });
-        meVenta.add(jMenuItem11);
+        meVenta.add(meRegistrarVenta);
         meVenta.add(jSeparator11);
 
-        jMenuItem13.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, java.awt.event.InputEvent.SHIFT_MASK));
-        jMenuItem13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoEliminar25.png"))); // NOI18N
-        jMenuItem13.setText("Anular venta");
-        jMenuItem13.addActionListener(new java.awt.event.ActionListener() {
+        meAnularVenta.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, java.awt.event.InputEvent.SHIFT_MASK));
+        meAnularVenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoEliminar25.png"))); // NOI18N
+        meAnularVenta.setText("Anular venta");
+        meAnularVenta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem13ActionPerformed(evt);
+                meAnularVentaActionPerformed(evt);
             }
         });
-        meVenta.add(jMenuItem13);
+        meVenta.add(meAnularVenta);
 
         jMenuBar1.add(meVenta);
 
@@ -629,33 +635,33 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         meCompra.setText("COMPRAS");
         meCompra.setEnabled(false);
         meCompra.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        meCompra.setPreferredSize(new java.awt.Dimension(160, 70));
+        meCompra.setPreferredSize(new java.awt.Dimension(170, 70));
         meCompra.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 meCompraActionPerformed(evt);
             }
         });
 
-        jMenuItem12.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
-        jMenuItem12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoRegistrarCompra25.png"))); // NOI18N
-        jMenuItem12.setText("Registrar compra");
-        jMenuItem12.addActionListener(new java.awt.event.ActionListener() {
+        meRegistrarCompra.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
+        meRegistrarCompra.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoRegistrarCompra25.png"))); // NOI18N
+        meRegistrarCompra.setText("Registrar compra");
+        meRegistrarCompra.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem12ActionPerformed(evt);
+                meRegistrarCompraActionPerformed(evt);
             }
         });
-        meCompra.add(jMenuItem12);
+        meCompra.add(meRegistrarCompra);
         meCompra.add(jSeparator15);
 
-        jMenuItem14.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, java.awt.event.InputEvent.SHIFT_MASK));
-        jMenuItem14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoEliminar25.png"))); // NOI18N
-        jMenuItem14.setText("Anular compra");
-        jMenuItem14.addActionListener(new java.awt.event.ActionListener() {
+        meAnularCompra.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, java.awt.event.InputEvent.SHIFT_MASK));
+        meAnularCompra.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Iconos25x25/IconoEliminar25.png"))); // NOI18N
+        meAnularCompra.setText("Anular compra");
+        meAnularCompra.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem14ActionPerformed(evt);
+                meAnularCompraActionPerformed(evt);
             }
         });
-        meCompra.add(jMenuItem14);
+        meCompra.add(meAnularCompra);
         meCompra.add(jSeparator16);
 
         jMenuItem10.setText("Proveedores");
@@ -706,7 +712,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         meReporte.setText("REPORTES");
         meReporte.setEnabled(false);
         meReporte.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        meReporte.setPreferredSize(new java.awt.Dimension(200, 70));
+        meReporte.setPreferredSize(new java.awt.Dimension(170, 70));
 
         jMenuItem7.setText("Reporte de compras");
         jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
@@ -741,7 +747,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         meUsuario.setEnabled(false);
         meUsuario.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         meUsuario.setMinimumSize(new java.awt.Dimension(210, 70));
-        meUsuario.setPreferredSize(new java.awt.Dimension(220, 70));
+        meUsuario.setPreferredSize(new java.awt.Dimension(170, 70));
 
         jMenuItem9.setText("Perfiles");
         jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
@@ -884,10 +890,10 @@ public class Principal extends javax.swing.JFrame implements Runnable {
 
     }//GEN-LAST:event_meVentaActionPerformed
 
-    private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
+    private void meRegistrarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_meRegistrarVentaActionPerformed
         RegistrarVenta registrarventa = new RegistrarVenta(this, true);
         registrarventa.setVisible(true);
-    }//GEN-LAST:event_jMenuItem11ActionPerformed
+    }//GEN-LAST:event_meRegistrarVentaActionPerformed
 
     private void btnCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompraActionPerformed
         Compra compra = new Compra(this, false);
@@ -899,10 +905,10 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         venta.setVisible(true);
     }//GEN-LAST:event_btnVentaActionPerformed
 
-    private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
+    private void meRegistrarCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_meRegistrarCompraActionPerformed
         RegistrarCompra registrarcompra = new RegistrarCompra(this, true);
         registrarcompra.setVisible(true);
-    }//GEN-LAST:event_jMenuItem12ActionPerformed
+    }//GEN-LAST:event_meRegistrarCompraActionPerformed
 
     private void meCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_meCompraActionPerformed
         // TODO add your handling code here:
@@ -918,10 +924,10 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         abmusuarios.setVisible(true);
     }//GEN-LAST:event_btnUsuarioActionPerformed
 
-    private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
+    private void meAnularVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_meAnularVentaActionPerformed
         Venta venta = new Venta(this, true);
         venta.setVisible(true);
-    }//GEN-LAST:event_jMenuItem13ActionPerformed
+    }//GEN-LAST:event_meAnularVentaActionPerformed
 
     private void jMenuItem18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem18ActionPerformed
         // TODO add your handling code here:
@@ -937,10 +943,10 @@ public class Principal extends javax.swing.JFrame implements Runnable {
         reporte.setVisible(true);
     }//GEN-LAST:event_jMenuItem22ActionPerformed
 
-    private void jMenuItem14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem14ActionPerformed
+    private void meAnularCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_meAnularCompraActionPerformed
         Compra anularcompra = new Compra(this, true);
         anularcompra.setVisible(true);
-    }//GEN-LAST:event_jMenuItem14ActionPerformed
+    }//GEN-LAST:event_meAnularCompraActionPerformed
 
     private void meProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_meProductoActionPerformed
 
@@ -1018,10 +1024,6 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem10;
-    private javax.swing.JMenuItem jMenuItem11;
-    private javax.swing.JMenuItem jMenuItem12;
-    private javax.swing.JMenuItem jMenuItem13;
-    private javax.swing.JMenuItem jMenuItem14;
     private javax.swing.JMenuItem jMenuItem16;
     private javax.swing.JMenuItem jMenuItem17;
     private javax.swing.JMenuItem jMenuItem18;
@@ -1064,9 +1066,13 @@ public class Principal extends javax.swing.JFrame implements Runnable {
     private javax.swing.JLabel lbldolares3;
     private javax.swing.JLabel lbldolares4;
     private javax.swing.JLabel lbldolares7;
+    private javax.swing.JMenuItem meAnularCompra;
+    private javax.swing.JMenuItem meAnularVenta;
     private javax.swing.JMenu meCompra;
     private javax.swing.JMenu meConfiguracion;
     private javax.swing.JMenu meProducto;
+    private javax.swing.JMenuItem meRegistrarCompra;
+    private javax.swing.JMenuItem meRegistrarVenta;
     private javax.swing.JMenu meReporte;
     private javax.swing.JMenu meSalir;
     private javax.swing.JMenu meUsuario;

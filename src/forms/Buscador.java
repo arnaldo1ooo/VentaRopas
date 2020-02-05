@@ -21,7 +21,7 @@ public class Buscador extends javax.swing.JDialog {
 
         Elsp = nombresp;
 
-        tbPrincipal.setModel(con.ConsultaBD(nombresp, titlesJtabla, cbCampoBuscar));
+        tbPrincipal.setModel(con.ConsultaTableBD(nombresp, titlesJtabla, cbCampoBuscar));
         metodos.AnchuraColumna(tbPrincipal);
         cbCampoBuscar.setSelectedIndex(campoBuscarDefault);
 

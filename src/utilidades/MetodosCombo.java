@@ -76,7 +76,7 @@ public class MetodosCombo {
         }
     }
 
-    public void CargarComboBox(JComboBox ElCombo, String sentencia, int porDefecto) {
+    public void CargarComboBox(JComboBox ElCombo, String sentencia, int ComboDefault) {
 
         /*ElCombo.setRenderer(new DefaultListCellRenderer() {//Cambiar color de texto del combo cuando esta disabled
             @Override
@@ -100,11 +100,11 @@ public class MetodosCombo {
             }
 
             //Por defecto
-            if (ElCombo.getItemCount() > 0 && porDefecto > 0) {
+            if (ElCombo.getItemCount() > 0 && ComboDefault > 0) {
                 MetodosCombo item;
                 for (int i = 0; i < ElCombo.getItemCount(); i++) {
                     item = (MetodosCombo) ElCombo.getItemAt(i);
-                    if (item.getCodigo() == porDefecto) {
+                    if (item.getCodigo() == ComboDefault) {
                         ElCombo.setSelectedIndex(i);
                         break;
                     }

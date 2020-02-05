@@ -1563,7 +1563,7 @@ public class Reporte extends javax.swing.JDialog {
                 + "','" + formatamericano.format(dcDesdeFechaVenta.getDate()) + "','" + formatamericano.format(dcHastaFechaVenta.getDate()) + "')";
         String titlesJtabla[] = {"N° de venta", "Vendedor/a", "Cliente", "Tipo de documento", "Fecha de venta", "Total de la venta", "Ganancia"};
 
-        tbPrincipal.setModel(con.ConsultaBD(sentencia, titlesJtabla, cbOrdenar));
+        tbPrincipal.setModel(con.ConsultaTableBD(sentencia, titlesJtabla, cbOrdenar));
 
         double totalventa;
         double ganancia;
@@ -1608,7 +1608,7 @@ public class Reporte extends javax.swing.JDialog {
                 + "','" + formatamericano.format(dcDesdeFechaCompra.getDate()) + "','" + formatamericano.format(dcHastaFechaCompra.getDate()) + "')";
         String titlesJtabla[] = {"N° de compra", "Proveedor", "Tipo de documento", "Fecha de registro", "Fecha de compra", "Total de la compra"};
 
-        tbPrincipal.setModel(con.ConsultaBD(sentencia, titlesJtabla, cbOrdenar));
+        tbPrincipal.setModel(con.ConsultaTableBD(sentencia, titlesJtabla, cbOrdenar));
 
         double totalcompra;
         for (int i = 0; i < tbPrincipal.getRowCount(); i++) {
@@ -1645,7 +1645,7 @@ public class Reporte extends javax.swing.JDialog {
                 + "','" + txtDesdeExistencia.getText() + "','" + txtHastaExistencia.getText() + "')";
         String titlesJtabla[] = {"Codigo", "Descripcion", "Marca", "Stock/Existencia"};
 
-        tbPrincipal.setModel(con.ConsultaBD(sentencia, titlesJtabla, cbOrdenar));
+        tbPrincipal.setModel(con.ConsultaTableBD(sentencia, titlesJtabla, cbOrdenar));
         metodos.AnchuraColumna(tbPrincipal);
         lbCantRegistros.setText(tbPrincipal.getRowCount() + " Registros encontrados");
     }

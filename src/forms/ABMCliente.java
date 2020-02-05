@@ -17,13 +17,9 @@ import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import principal.Principal;
 import utilidades.Metodos;
 import utilidades.MetodosTXT;
 import static login.Login.Alias;
@@ -42,7 +38,10 @@ public final class ABMCliente extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
 
-        PermisoRoles(Alias, "CLIENTE");
+        //Permiso Roles de usuario
+        btnNuevo.setVisible(metodos.PermisoRol(Alias, "CLIENTE", "ALTA"));
+        btnModificar.setVisible(metodos.PermisoRol(Alias, "CLIENTE", "MODIFICAR"));
+        btnEliminar.setVisible(metodos.PermisoRol(Alias, "CLIENTE", "BAJA"));
 
         TablaConsultaBDAll(); //Trae todos los registros
         txtBuscar.requestFocus();
@@ -51,36 +50,6 @@ public final class ABMCliente extends javax.swing.JDialog {
     }
 
 //--------------------------METODOS----------------------------//
-    private void PermisoRoles(String ElAlias, String modulo) {
-        btnNuevo.setVisible(false);
-        btnEliminar.setVisible(false);
-        btnModificar.setVisible(false);
-        con = con.ObtenerRSSentencia("CALL SP_UsuarioRolConsulta('" + ElAlias + "','" + modulo + "')");
-        String rol;
-        try {
-            while (con.rs.next()) {
-                rol = con.rs.getString("rol_denominacion");
-                switch (rol) {
-                    case "ALTA":
-                        btnNuevo.setVisible(true);
-                        break;
-                    case "BAJA":
-                        btnEliminar.setVisible(true);
-                        break;
-                    case "MODIFICAR":
-                        btnModificar.setVisible(true);
-                        break;
-                    default:
-                        JOptionPane.showMessageDialog(this, "No se encontró", "Error", JOptionPane.ERROR_MESSAGE);
-                        break;
-                }
-            }
-            con.DesconectarBasedeDatos();
-        } catch (SQLException ex) {
-            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
     public void RegistroNuevo() {
         try {
             if (ComprobarCampos() == true) {
@@ -197,7 +166,7 @@ public final class ABMCliente extends javax.swing.JDialog {
     public void TablaConsultaBDAll() {//Realiza la consulta de los productos que tenemos en la base de datos
         String sentencia = "CALL SP_ClienteConsulta";
         String titlesJtabla[] = {"Código", "RUC/CI", "Nombre", "Apellido", "Dirección", "Teléfono", "Email", "Observación"}; //Debe tener la misma cantidad que titlesconsulta
-        tbPrincipal.setModel(con.ConsultaBD(sentencia, titlesJtabla, cbCampoBuscar));
+        tbPrincipal.setModel(con.ConsultaTableBD(sentencia, titlesJtabla, cbCampoBuscar));
         metodos.AnchuraColumna(tbPrincipal);
 
         if (tbPrincipal.getModel().getRowCount() == 1) {

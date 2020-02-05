@@ -27,7 +27,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import static login.Login.Alias;
 import utilidades.Metodos;
+import utilidades.MetodosCombo;
 import utilidades.MetodosTXT;
 
 /**
@@ -39,6 +41,7 @@ public final class ABMUsuario extends javax.swing.JDialog {
     Conexion con = new Conexion();
     Metodos metodos = new Metodos();
     MetodosTXT metodostxt = new MetodosTXT();
+    MetodosCombo metodoscombo = new MetodosCombo();
 
     public ABMUsuario(java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
@@ -47,11 +50,29 @@ public final class ABMUsuario extends javax.swing.JDialog {
         TablaConsultaUsuarios(); //Trae todos los registros
         TablaConsultaAllPerfil();
         txtBuscar.requestFocus();
+        //Permiso Roles de usuario
+        btnNuevo.setVisible(metodos.PermisoRol(Alias, "USUARIO", "ALTA"));
+        btnModificar.setVisible(metodos.PermisoRol(Alias, "USUARIO", "MODIFICAR"));
+        btnEliminar.setVisible(metodos.PermisoRol(Alias, "USUARIO", "BAJA"));
 
         OrdenTabulador();
     }
 
 //--------------------------METODOS----------------------------//
+    public void CargarComboBoxes() {
+        //Carga los combobox con las consultas
+        metodoscombo.CargarComboBox(cbPerfil, "CALL SP_UsuarioPerfilConsulta('"
+                + tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 3) + "')", 1);
+
+        if (metodoscombo.ObtenerIDSelectComboBox(cbPerfil) > 0) {
+            metodoscombo.CargarComboBox(cbModulo, "SELECT mo_codigo, mo_denominacion FROM perfil, perfil_modulo, modulo "
+                    + "WHERE  per_codigo = '" + metodoscombo.ObtenerIDSelectComboBox(cbPerfil) + "' "
+                    + "AND permo_perfil = per_codigo AND permo_modulo = mo_codigo ORDER BY mo_denominacion", 1);
+        }
+
+        ModoEdicion(false);
+    }
+
     public void RegistroNuevo() {
         try {
             if (ComprobarCampos() == true) {
@@ -168,7 +189,7 @@ public final class ABMUsuario extends javax.swing.JDialog {
     public void TablaConsultaUsuarios() {//Realiza la consulta de los productos que tenemos en la base de datos
         String sentencia = "CALL SP_UsuarioConsulta";
         String titlesJtabla[] = {"Código", "Nombre", "Apellido", "Alias", "Contraseña", "Fecha de creación"}; //Debe tener la misma cantidad que titlesconsulta
-        tbPrincipal.setModel(con.ConsultaBD(sentencia, titlesJtabla, cbCampoBuscar));
+        tbPrincipal.setModel(con.ConsultaTableBD(sentencia, titlesJtabla, cbCampoBuscar));
         metodos.AnchuraColumna(tbPrincipal);
 
         if (tbPrincipal.getModel().getRowCount() == 1) {
@@ -181,14 +202,14 @@ public final class ABMUsuario extends javax.swing.JDialog {
     public void TablaConsultaPerfilUsuarios() {
         String sentencia = "CALL SP_UsuarioPerfilConsulta('" + txtAlias.getText() + "')";
         String titlesJtabla[] = {"Código", "Denominación"};
-        tbPerfilUsuario.setModel(con.ConsultaBD(sentencia, titlesJtabla, null));
+        tbPerfilUsuario.setModel(con.ConsultaTableBD(sentencia, titlesJtabla, null));
         metodos.AnchuraColumna(tbPerfilUsuario);
     }
 
-    public void TablaConsultaAllPerfil() {//Realiza la consulta de los productos que tenemos en la base de datos
+    public void TablaConsultaAllPerfil() {
         String sentencia = "CALL SP_PerfilConsulta";
         String titlesJtabla[] = {"Código", "Denominación", "Descripción"}; //Debe tener la misma cantidad que titlesconsulta
-        tbAllPerfil.setModel(con.ConsultaBD(sentencia, titlesJtabla, null));
+        tbAllPerfil.setModel(con.ConsultaTableBD(sentencia, titlesJtabla, null));
         metodos.AnchuraColumna(tbAllPerfil);
     }
 
@@ -339,15 +360,13 @@ public final class ABMUsuario extends javax.swing.JDialog {
         };
         jpRoles = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
-        scTodosPerfil1 = new javax.swing.JScrollPane();
-        tbAllPerfil1 = new javax.swing.JTable(){
-            public boolean isCellEditable(int rowIndex, int colIndex) {
-                return false; //Disallow the editing of any cell
-            }
-        };
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jCheckBox3 = new javax.swing.JCheckBox();
+        chbNuevo = new javax.swing.JCheckBox();
+        chbModificar = new javax.swing.JCheckBox();
+        chbEliminar = new javax.swing.JCheckBox();
+        cbPerfil = new javax.swing.JComboBox<>();
+        cbModulo = new javax.swing.JComboBox<>();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
         jpBotones2 = new javax.swing.JPanel();
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
@@ -400,6 +419,9 @@ public final class ABMUsuario extends javax.swing.JDialog {
         tbPrincipal.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 tbPrincipalMousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                tbPrincipalMouseReleased(evt);
             }
         });
         tbPrincipal.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -801,85 +823,83 @@ public final class ABMUsuario extends javax.swing.JDialog {
         jpRoles.setBackground(new java.awt.Color(233, 255, 255));
         jpRoles.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
 
-        jLabel5.setFont(new java.awt.Font("sansserif", 1, 16)); // NOI18N
-        jLabel5.setText("Roles del usuario");
+        jLabel5.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
+        jLabel5.setText("Perfil");
 
-        tbAllPerfil1.setAutoCreateRowSorter(true);
-        tbAllPerfil1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        tbAllPerfil1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        tbAllPerfil1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+        chbNuevo.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+        chbNuevo.setText("Nuevo");
+        chbNuevo.setEnabled(false);
 
-            },
-            new String [] {
+        chbModificar.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+        chbModificar.setText("Modificar");
+        chbModificar.setEnabled(false);
 
-            }
-        ));
-        tbAllPerfil1.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
-        tbAllPerfil1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        tbAllPerfil1.setGridColor(new java.awt.Color(0, 153, 204));
-        tbAllPerfil1.setOpaque(false);
-        tbAllPerfil1.setRowHeight(20);
-        tbAllPerfil1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        tbAllPerfil1.getTableHeader().setReorderingAllowed(false);
-        tbAllPerfil1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                tbAllPerfil1MousePressed(evt);
+        chbEliminar.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+        chbEliminar.setText("Eliminar");
+        chbEliminar.setEnabled(false);
+
+        cbPerfil.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbPerfilItemStateChanged(evt);
             }
         });
-        tbAllPerfil1.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                tbAllPerfil1KeyReleased(evt);
+
+        cbModulo.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbModuloItemStateChanged(evt);
             }
         });
-        scTodosPerfil1.setViewportView(tbAllPerfil1);
 
-        jCheckBox1.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
-        jCheckBox1.setText("Nuevo");
+        jLabel7.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
+        jLabel7.setText("Roles del usuario");
 
-        jCheckBox2.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
-        jCheckBox2.setText("Modificar");
-
-        jCheckBox3.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
-        jCheckBox3.setText("Eliminar");
+        jLabel8.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
+        jLabel8.setText("Modulo");
 
         javax.swing.GroupLayout jpRolesLayout = new javax.swing.GroupLayout(jpRoles);
         jpRoles.setLayout(jpRolesLayout);
         jpRolesLayout.setHorizontalGroup(
             jpRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpRolesLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
+                .addGap(29, 29, 29)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(39, 39, 39)
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbModulo, 0, 159, Short.MAX_VALUE)
+                .addGap(38, 38, 38)
                 .addGroup(jpRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpRolesLayout.createSequentialGroup()
-                        .addComponent(scTodosPerfil1, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(38, 38, 38)
-                        .addGroup(jpRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jCheckBox1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jCheckBox2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
-                            .addComponent(jCheckBox3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(jLabel5))
-                .addContainerGap(398, Short.MAX_VALUE))
+                    .addComponent(jLabel7)
+                    .addGroup(jpRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(chbNuevo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(chbModificar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(chbEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(143, 143, 143))
         );
         jpRolesLayout.setVerticalGroup(
             jpRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpRolesLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(19, 19, 19)
                 .addGroup(jpRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
                     .addGroup(jpRolesLayout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addGroup(jpRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(scTodosPerfil1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jpRolesLayout.createSequentialGroup()
-                                .addComponent(jCheckBox1)
-                                .addGap(18, 18, 18)
-                                .addComponent(jCheckBox2)
-                                .addGap(18, 18, 18)
-                                .addComponent(jCheckBox3)))))
-                .addContainerGap(31, Short.MAX_VALUE))
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(chbNuevo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(chbModificar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(chbEliminar))
+                    .addGroup(jpRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel5)
+                        .addComponent(cbPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cbModulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel8)))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
-        jtpEdicion.addTab("Roles", jpRoles);
+        jtpEdicion.addTab("Perfiles y roles", jpRoles);
 
         jpBotones2.setBackground(new java.awt.Color(233, 255, 255));
         jpBotones2.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
@@ -967,18 +987,18 @@ public final class ABMUsuario extends javax.swing.JDialog {
         jpPrincipalLayout.setHorizontalGroup(
             jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpPrincipalLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jpBotones2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(245, 245, 245))
             .addGroup(jpPrincipalLayout.createSequentialGroup()
-                .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jtpEdicion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jtpEdicion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addGroup(jpPrincipalLayout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(jpTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 644, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jpBotones, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jpPrincipalLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jpTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 644, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jpBotones, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(255, 255, 255)
+                        .addComponent(jpBotones2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(9, Short.MAX_VALUE))
         );
         jpPrincipalLayout.setVerticalGroup(
@@ -991,9 +1011,9 @@ public final class ABMUsuario extends javax.swing.JDialog {
                     .addComponent(jpTabla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jtpEdicion, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
+                .addGap(18, 18, 18)
                 .addComponent(jpBotones2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         jtpEdicion.getAccessibleContext().setAccessibleName("");
@@ -1063,6 +1083,7 @@ public final class ABMUsuario extends javax.swing.JDialog {
             btnModificar.setEnabled(true);
             btnEliminar.setEnabled(true);
 
+            CargarComboBoxes();
             ModoVistaPrevia();
         }
     }//GEN-LAST:event_tbPrincipalMousePressed
@@ -1093,6 +1114,7 @@ public final class ABMUsuario extends javax.swing.JDialog {
 
     private void tbPrincipalKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbPrincipalKeyReleased
         if (evt.getKeyCode() == KeyEvent.VK_UP || evt.getKeyCode() == KeyEvent.VK_DOWN) {
+            CargarComboBoxes();
             ModoVistaPrevia();
         }
     }//GEN-LAST:event_tbPrincipalKeyReleased
@@ -1117,13 +1139,57 @@ public final class ABMUsuario extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_tbAllPerfilKeyReleased
 
-    private void tbAllPerfil1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbAllPerfil1KeyReleased
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tbAllPerfil1KeyReleased
+    private void cbPerfilItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbPerfilItemStateChanged
+        if (metodoscombo.ObtenerIDSelectComboBox(cbPerfil) > 0) {
+            metodoscombo.CargarComboBox(cbModulo, "SELECT mo_codigo, mo_denominacion FROM perfil, perfil_modulo, modulo "
+                    + "WHERE  per_codigo = '" + metodoscombo.ObtenerIDSelectComboBox(cbPerfil) + "' "
+                    + "AND permo_perfil = per_codigo AND permo_modulo = mo_codigo", 1);
 
-    private void tbAllPerfil1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbAllPerfil1MousePressed
+            if (cbModulo.getItemCount() > 0 && cbModulo.isEnabled()) {
+                cbModulo.setSelectedIndex(0);
+            }
+        }
+    }//GEN-LAST:event_cbPerfilItemStateChanged
+
+    private void tbPrincipalMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbPrincipalMouseReleased
         // TODO add your handling code here:
-    }//GEN-LAST:event_tbAllPerfil1MousePressed
+    }//GEN-LAST:event_tbPrincipalMouseReleased
+
+    private void cbModuloItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbModuloItemStateChanged
+        if (cbModulo.getSelectedIndex() == -1) {
+            return;
+        }
+
+        String aliasselect = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 3).toString();
+        String moduloselect = cbModulo.getSelectedItem().toString();
+
+        con = con.ObtenerRSSentencia("CALL SP_UsuarioRolConsulta('" + aliasselect + "','" + moduloselect + "')");
+        try {
+            chbNuevo.setSelected(false);
+            chbEliminar.setSelected(false);
+            chbModificar.setSelected(false);
+            String rol;
+            while (con.rs.next()) {
+                rol = con.rs.getString("rol_denominacion");
+                switch (rol) {
+                    case "ALTA":
+                        chbNuevo.setSelected(true);
+                        break;
+                    case "BAJA":
+                        chbEliminar.setSelected(true);
+                        break;
+                    case "MODIFICAR":
+                        chbModificar.setSelected(true);
+                        break;
+                    default:
+                        JOptionPane.showMessageDialog(this, "No se encontró", "Error", JOptionPane.ERROR_MESSAGE);
+                        break;
+                }
+            }
+        } catch (HeadlessException | SQLException e) {
+        }
+        con.DesconectarBasedeDatos();
+    }//GEN-LAST:event_cbModuloItemStateChanged
 
     List<Component> ordenTabulador;
 
@@ -1175,15 +1241,19 @@ public final class ABMUsuario extends javax.swing.JDialog {
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnNuevo;
     private javax.swing.JComboBox cbCampoBuscar;
+    private javax.swing.JComboBox<MetodosCombo> cbModulo;
+    private javax.swing.JComboBox<MetodosCombo> cbPerfil;
+    private javax.swing.JCheckBox chbEliminar;
+    private javax.swing.JCheckBox chbModificar;
+    private javax.swing.JCheckBox chbNuevo;
     private com.toedter.calendar.JDateChooser dcFechaCreacion;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jpBotones;
     private javax.swing.JPanel jpBotones2;
     private javax.swing.JPanel jpEdicion;
@@ -1205,9 +1275,7 @@ public final class ABMUsuario extends javax.swing.JDialog {
     private javax.swing.JScrollPane scPerfilesUsuario;
     private javax.swing.JScrollPane scPrincipal;
     private javax.swing.JScrollPane scTodosPerfil;
-    private javax.swing.JScrollPane scTodosPerfil1;
     private javax.swing.JTable tbAllPerfil;
-    private javax.swing.JTable tbAllPerfil1;
     private javax.swing.JTable tbPerfilUsuario;
     private javax.swing.JTable tbPrincipal;
     private javax.swing.JTextField txtAlias;

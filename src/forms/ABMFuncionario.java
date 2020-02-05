@@ -15,14 +15,16 @@ import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import static login.Login.Alias;
 import utilidades.Metodos;
 import utilidades.MetodosCombo;
 import utilidades.MetodosTXT;
@@ -50,7 +52,11 @@ public final class ABMFuncionario extends javax.swing.JDialog {
         Calendar c2 = new GregorianCalendar();
         dcFechaIngreso.setCalendar(c2);
         CargarComboBoxes();
-
+                //Permiso Roles de usuario
+        btnNuevo.setVisible(metodos.PermisoRol(Alias, "FUNCIONARIO", "ALTA"));
+        btnModificar.setVisible(metodos.PermisoRol(Alias, "FUNCIONARIO", "MODIFICAR"));
+        btnEliminar.setVisible(metodos.PermisoRol(Alias, "FUNCIONARIO", "BAJA"));
+        
         OrdenTabulador();
     }
 
@@ -185,7 +191,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
         String titlesJtabla[] = {"Código", "Nombre", "Apellido", "Fecha de ingreso", "Sexo",
             "Telefono", "Email", "Observación", "Estado", "Cargo"}; //Debe tener la misma cantidad que los campos a consultar
 
-        tbPrincipal.setModel(con.ConsultaBD(sentencia, titlesJtabla, cbCampoBuscar));
+        tbPrincipal.setModel(con.ConsultaTableBD(sentencia, titlesJtabla, cbCampoBuscar));
         metodos.AnchuraColumna(tbPrincipal);
 
         if (tbPrincipal.getModel().getRowCount() == 1) {
