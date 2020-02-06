@@ -324,4 +324,12 @@ public class Metodos {
         con.DesconectarBasedeDatos();
         return valido;
     }
+
+    public String MayusPrimeraLetra(String laCadena) {
+        if (laCadena == null || laCadena.isEmpty()) {
+            return "";
+        } else {
+            return Character.toUpperCase(laCadena.charAt(0)) + laCadena.substring(1, laCadena.length()).toLowerCase();
+        }
+    }
 }

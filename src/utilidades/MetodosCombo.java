@@ -6,10 +6,13 @@
 package utilidades;
 
 import conexion.Conexion;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollBar;
@@ -24,6 +27,7 @@ public class MetodosCombo {
 
     private int codigo;
     private String descripcion;
+    Conexion con = new Conexion();
 
     public MetodosCombo() { //No borrar
     }
@@ -77,29 +81,24 @@ public class MetodosCombo {
     }
 
     public void CargarComboBox(JComboBox ElCombo, String sentencia, int ComboDefault) {
-
-        /*ElCombo.setRenderer(new DefaultListCellRenderer() {//Cambiar color de texto del combo cuando esta disabled
+        ElCombo.setRenderer(new DefaultListCellRenderer() {//Cambiar color de texto del combo cuando esta disabled
             @Override
             public void paint(Graphics g) {
                 setForeground(Color.BLACK);
                 super.paint(g);
             }
-        });*/
+        });
         try {
             ElCombo.removeAllItems(); //Vaciamos el combo
-            System.out.println("Cargar combo (" + ElCombo.getName() + "): " + sentencia);
             AutoCompleteDecorator.decorate(ElCombo);
-            Connection con;
-            con = (Connection) Conexion.ConectarBasedeDatos();
-            Statement st;
-            st = con.createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(sentencia);
-            while (rs.next()) {
-                ElCombo.addItem(new MetodosCombo(rs.getInt(1), rs.getString(2)));
+            System.out.println("Cargar combo (" + ElCombo.getName() + "): " + sentencia);
+            con = con.ObtenerRSSentencia(sentencia);
+            while (con.rs.next()) {
+                System.out.println("sdas   " + con.rs.getString(2));
+                ElCombo.addItem(new MetodosCombo(con.rs.getInt(1), con.rs.getString(2)));
             }
 
-            //Por defecto
+            //Seleccionado por defecto
             if (ElCombo.getItemCount() > 0 && ComboDefault > 0) {
                 MetodosCombo item;
                 for (int i = 0; i < ElCombo.getItemCount(); i++) {
@@ -114,17 +113,13 @@ public class MetodosCombo {
                     ElCombo.setSelectedIndex(-1);
                 }
             }
-
             ElCombo.setMaximumRowCount(ElCombo.getModel().getSize()); //Hace que se despliegue en toda la pantalla vertical el combo
-            rs.close();
-            st.close();
-            con.close();
-
             AnadirScrollHorizontal(ElCombo);
         } catch (NumberFormatException | SQLException e) {
             System.out.println("Error al cargar combo: " + sentencia + ",   ERROR: " + e
             );
         }
+        con.DesconectarBasedeDatos();
     }
 
     public int ObtenerIDSelectComboBox(JComboBox<MetodosCombo> ElCombo) {
