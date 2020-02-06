@@ -6,7 +6,6 @@
 package utilidades;
 
 import conexion.Conexion;
-import forms.ABMProducto;
 import java.awt.Graphics2D;
 import java.awt.HeadlessException;
 import java.awt.Image;
@@ -232,7 +231,7 @@ public class MetodosImagen {
             con.DesconectarBasedeDatos();
 
         } catch (SQLException ex) {
-            Logger.getLogger(ABMProducto.class
+            Logger.getLogger(MetodosImagen.class
                     .getName()).log(Level.SEVERE, null, ex);
             System.out.println(
                     "No se pudo obtener el idultimoproducto: " + idultimoproducto);

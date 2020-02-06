@@ -25,8 +25,6 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import conexion.Conexion;
-import forms.ABMCliente;
-import forms.Reporte;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Image;
@@ -251,7 +249,7 @@ public class Metodos {
 
     public void GenerarReporteJTABLE(String rutajasper, Map parametros, TableModel elTableModel) {
         try {
-            InputStream isRutajasper = Reporte.class.getResourceAsStream(rutajasper);
+            InputStream isRutajasper = Metodos.class.getResourceAsStream(rutajasper);
             if (isRutajasper == null) {
                 JOptionPane.showMessageDialog(null, "Archivo jasper no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
             } else {
@@ -272,13 +270,14 @@ public class Metodos {
                 //Para guardar directamente a pdf JasperExportManager.exportReportToPdfFile(jprint, "C:/Eclipse/workspace/BIBLIOTECA/Reportpdf.pdf");
             }
         } catch (JRException ex) {
-            Logger.getLogger(Reporte.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error  al GenerarReporteJTABLE ");
+            ex.printStackTrace();
         }
     }
 
     public void GenerarReporteSQL(String rutajasper, Map parametros, String consulta) {
         try {
-            InputStream isRutajasper = Reporte.class.getResourceAsStream(rutajasper);
+            InputStream isRutajasper = Metodos.class.getResourceAsStream(rutajasper);
             if (isRutajasper == null) {
                 JOptionPane.showMessageDialog(null, "Archivo jasper no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
             } else {
@@ -303,7 +302,8 @@ public class Metodos {
                 con.DesconectarBasedeDatos();
             }
         } catch (JRException ex) {
-            Logger.getLogger(Reporte.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error  al GenerarReporteSQL");
+            ex.printStackTrace();
         }
     }
 
