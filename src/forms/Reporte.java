@@ -6,14 +6,16 @@
 package forms;
 
 import conexion.Conexion;
-import java.awt.Image;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.RowSorter;
 import javax.swing.table.TableModel;
@@ -1245,10 +1247,27 @@ public class Reporte extends javax.swing.JDialog {
         Map parametros;
         String rutajasper;
         SimpleDateFormat formatosuda = new SimpleDateFormat("dd/MM/yyyy");
+        InputStream logo = null;
+        try {
+            logo = new BufferedInputStream(new FileInputStream("src/reportes/images/logo_elegancia.jpg"));
+        } catch (FileNotFoundException e) {
+            System.out.println("No se encontro el logo " + e);
+        }
         switch (laTablaSelect) {
             case "Ventas":
+                //Se suma la ganancia
+                double totalGanancia = 0.0;
+                double ganancia = 0.0;
+                for (int i = 0; i < tbPrincipal.getRowCount(); i++) {
+                    ganancia = metodostxt.DoubleAFormatoAmericano(tbPrincipal.getValueAt(i, 6).toString());
+                    totalGanancia = totalGanancia + ganancia;
+                }
+                String totalgananciaString = metodostxt.DoubleAFormatoSudamerica(totalGanancia);
+
                 //Parametros 
                 parametros = new HashMap();
+                parametros.clear();
+                parametros.put("LOGO", logo);
                 parametros.put("ORDEN", cbOrdenar.getSelectedItem().toString());
                 parametros.put("MONEDA", cbMonedaCompras.getSelectedItem().toString());
                 parametros.put("DESDE_NUMVENTA", txtDesdeNumVenta.getText());
@@ -1259,15 +1278,20 @@ public class Reporte extends javax.swing.JDialog {
                 parametros.put("HASTA_CLIENTE", txtHastaCliente.getText());
                 parametros.put("DESDE_FECHAVENTA", formatosuda.format(dcDesdeFechaVenta.getDate()));
                 parametros.put("HASTA_FECHAVENTA", formatosuda.format(dcHastaFechaVenta.getDate()));
+                parametros.put("TOTALGANANCIA", totalgananciaString);
                 parametros.put("COTIZACION", "Cotización:   Guaraníes: " + metodostxt.DoubleAFormatoSudamerica(cotiUsdGsCompra)
                         + "   Reales: " + metodostxt.DoubleAFormatoSudamerica(cotiUsdRsCompra)
                         + "   Pesos argentinos: " + metodostxt.DoubleAFormatoSudamerica(cotiUsdPaCompra));
+
                 rutajasper = "/reportes/reporte_ventas.jasper";
+
                 metodos.GenerarReporteJTABLE(rutajasper, parametros, tbPrincipal.getModel());
                 break;
             case "Compras":
                 //Parametros
                 parametros = new HashMap();
+                parametros.clear();
+                parametros.put("LOGO", logo);
                 parametros.put("ORDEN", cbOrdenar.getSelectedItem().toString());
                 parametros.put("MONEDA", cbMonedaCompras.getSelectedItem().toString());
                 parametros.put("DESDE_NUMCOMPRA", txtDesdeNumCompra.getText());
@@ -1281,12 +1305,16 @@ public class Reporte extends javax.swing.JDialog {
                 parametros.put("COTIZACION", "Cotización:   Guaraníes: " + metodostxt.DoubleAFormatoSudamerica(cotiUsdGsCompra)
                         + "   Reales: " + metodostxt.DoubleAFormatoSudamerica(cotiUsdRsCompra)
                         + "   Pesos argentinos: " + metodostxt.DoubleAFormatoSudamerica(cotiUsdPaCompra));
+
                 rutajasper = "/reportes/reporte_compras.jasper";
                 metodos.GenerarReporteJTABLE(rutajasper, parametros, tbPrincipal.getModel());
                 break;
+
             case "Productos":
                 //Parametros
                 parametros = new HashMap();
+                parametros.clear();
+                parametros.put("LOGO", logo);
                 parametros.put("ORDEN", cbOrdenar.getSelectedItem().toString());
                 parametros.put("DESDE_IDENTIFICADOR", txtDesdeIdentificador.getText());
                 parametros.put("HASTA_IDENTIFICADOR", txtHastaIdentificador.getText());
@@ -1294,6 +1322,7 @@ public class Reporte extends javax.swing.JDialog {
                 parametros.put("HASTA_MARCA", txtHastaMarca.getText());
                 parametros.put("DESDE_EXISTENCIA", txtDesdeExistencia.getText());
                 parametros.put("HASTA_EXISTENCIA", txtHastaExistencia.getText());
+
                 rutajasper = "/reportes/reporte_productos.jasper";
                 metodos.GenerarReporteJTABLE(rutajasper, parametros, tbPrincipal.getModel());
                 break;

@@ -3,6 +3,7 @@
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<parameter name="LOGO" class="java.io.InputStream"/>
 	<parameter name="ORDEN" class="java.lang.String"/>
 	<parameter name="DESDE_IDENTIFICADOR" class="java.lang.String"/>
 	<parameter name="HASTA_IDENTIFICADOR" class="java.lang.String"/>
@@ -40,7 +41,7 @@
 			</line>
 			<image hAlign="Center" vAlign="Top">
 				<reportElement stretchType="RelativeToTallestObject" x="155" y="1" width="262" height="47" uuid="a54e9de7-5a39-4c21-8916-70e8a66ded04"/>
-				<imageExpression><![CDATA["images\\logo_elegancia.jpg"]]></imageExpression>
+				<imageExpression><![CDATA[$P{LOGO}]]></imageExpression>
 			</image>
 			<textField pattern="EEEEE dd MMMMM yyyy">
 				<reportElement x="440" y="17" width="122" height="20" uuid="0e79e0b6-91d5-4ae2-a83e-4e83973a3623"/>
