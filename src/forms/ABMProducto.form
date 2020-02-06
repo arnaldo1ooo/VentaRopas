@@ -144,15 +144,10 @@
                       </Group>
                       <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                       <Component id="scPrincipal" min="-2" pref="154" max="-2" attributes="0"/>
+                      <EmptySpace min="3" pref="3" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                              <Component id="btnGenerarCodigo" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                              <Component id="lbCantRegistros" min="-2" pref="17" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="btnGenerarCodigo" min="-2" max="-2" attributes="0"/>
+                          <Component id="lbCantRegistros" alignment="0" min="-2" pref="17" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>

@@ -127,12 +127,12 @@ public final class ABMProducto extends javax.swing.JDialog {
                 //guarda los datos que se han modificado en los campos
                 String codigo = txtCodigo.getText();
                 String codigoproducto = txtCodigoProducto.getText();
-                String descripcion = txtDescripcion.getText();
+                String descripcion =  metodos.MayusPrimeraLetra(txtDescripcion.getText());
                 int marca = metodoscombo.ObtenerIDSelectComboBox(cbMarca);
                 String existencia = txtExistencia.getText();
                 String tamano = cbTamano.getSelectedItem().toString();
                 int subcategoria = metodoscombo.ObtenerIDSelectComboBox(cbSubcategoria);
-                String obs = taObs.getText();
+                String obs = metodos.MayusPrimeraLetra(taObs.getText());
                 int estado = cbEstado.getSelectedIndex();
 
                 String sentencia = "CALL SP_ProductoModificar(" + codigo + ",'" + codigoproducto + "','" + descripcion + "','"

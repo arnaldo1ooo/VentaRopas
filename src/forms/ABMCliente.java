@@ -54,12 +54,12 @@ public final class ABMCliente extends javax.swing.JDialog {
         try {
             if (ComprobarCampos() == true) {
                 String rucci = txtRucCedula.getText();
-                String nombre = txtNombre.getText();
-                String apellido = txtApellido.getText();
-                String direccion = txtDireccion.getText();
+                String nombre = metodos.MayusPrimeraLetra(txtNombre.getText());
+                String apellido = metodos.MayusPrimeraLetra(txtApellido.getText());
+                String direccion = metodos.MayusPrimeraLetra(txtDireccion.getText());
                 String email = txtEmail.getText();
                 String telefono = txtTelefono.getText();
-                String obs = taObs.getText();
+                String obs = metodos.MayusPrimeraLetra(taObs.getText());
 
                 int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro crear este nuevo registro?", "Confirmación", JOptionPane.YES_OPTION);
 
@@ -88,12 +88,12 @@ public final class ABMCliente extends javax.swing.JDialog {
         if (ComprobarCampos() == true) {
             String codigo = txtCodigo.getText();
             String rucci = txtRucCedula.getText();
-            String nombre = txtNombre.getText();
-            String apellido = txtApellido.getText();
-            String direccion = txtDireccion.getText();
+            String nombre = metodos.MayusPrimeraLetra(txtNombre.getText());
+            String apellido = metodos.MayusPrimeraLetra(txtApellido.getText());
+            String direccion = metodos.MayusPrimeraLetra(txtDireccion.getText());
             String telefono = txtTelefono.getText();
             String email = txtEmail.getText();
-            String obs = taObs.getText();
+            String obs = metodos.MayusPrimeraLetra(taObs.getText());
 
             int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro de modificar este registro?", "Confirmación", JOptionPane.YES_OPTION);
             if (JOptionPane.YES_OPTION == confirmado) {
@@ -890,8 +890,7 @@ public final class ABMCliente extends javax.swing.JDialog {
     }//GEN-LAST:event_txtDireccionKeyTyped
 
     private void txtDireccionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDireccionKeyReleased
-        metodostxt.TxtMayusKeyReleased(txtDireccion, evt);
-        metodostxt.TxtColorLabelKeyReleased(txtDireccion, lblDireccion);
+
     }//GEN-LAST:event_txtDireccionKeyReleased
 
     private void txtDireccionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDireccionKeyPressed
@@ -934,7 +933,6 @@ public final class ABMCliente extends javax.swing.JDialog {
 
     private void txtApellidoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidoKeyReleased
         metodostxt.TxtColorLabelKeyReleased(txtApellido, lblApellido);
-        metodostxt.TxtMayusKeyReleased(txtApellido, evt);
     }//GEN-LAST:event_txtApellidoKeyReleased
 
     private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
@@ -946,7 +944,6 @@ public final class ABMCliente extends javax.swing.JDialog {
 
     private void txtNombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyReleased
         metodostxt.TxtColorLabelKeyReleased(txtNombre, lblNombre);
-        metodostxt.TxtMayusKeyReleased(txtNombre, evt);
     }//GEN-LAST:event_txtNombreKeyReleased
 
     private void taObsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_taObsKeyPressed
