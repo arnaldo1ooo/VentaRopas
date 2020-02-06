@@ -6,12 +6,14 @@
 package forms;
 
 import conexion.Conexion;
+import java.awt.Image;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.RowSorter;
 import javax.swing.table.TableModel;
@@ -1245,7 +1247,7 @@ public class Reporte extends javax.swing.JDialog {
         SimpleDateFormat formatosuda = new SimpleDateFormat("dd/MM/yyyy");
         switch (laTablaSelect) {
             case "Ventas":
-                //Parametros
+                //Parametros 
                 parametros = new HashMap();
                 parametros.put("ORDEN", cbOrdenar.getSelectedItem().toString());
                 parametros.put("MONEDA", cbMonedaCompras.getSelectedItem().toString());
