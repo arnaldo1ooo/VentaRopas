@@ -40,7 +40,7 @@
 			</line>
 			<image hAlign="Center" vAlign="Top">
 				<reportElement stretchType="RelativeToTallestObject" x="155" y="0" width="262" height="47" uuid="a54e9de7-5a39-4c21-8916-70e8a66ded04"/>
-				<imageExpression><![CDATA["C:\\Users\\Arnaldo_Cantero\\Google Drive\\Proyectos\\Sistemas\\Sistema elegancia\\Logo\\Logo elegancia.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["C:\\Users\\Arnaldo_Cantero\\Documents\\NetBeansProjects\\VentaRopas\\src\\images\\Logo elegancia.jpg"]]></imageExpression>
 			</image>
 			<textField pattern="EEEEE dd MMMMM yyyy">
 				<reportElement x="440" y="17" width="122" height="20" uuid="0e79e0b6-91d5-4ae2-a83e-4e83973a3623"/>
