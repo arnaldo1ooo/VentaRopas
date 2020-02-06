@@ -1,6 +1,5 @@
 package conexion;
 
-import forms.ABMFuncionario;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -154,7 +153,7 @@ public class Conexion {
                 ElComboCampos.setModel(modelCombo);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(ABMFuncionario.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error en ConsultaTableBD " + ex);
         }
         con.DesconectarBasedeDatos();
         return modelotabla;
