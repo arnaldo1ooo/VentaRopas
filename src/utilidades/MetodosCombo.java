@@ -8,10 +8,7 @@ package utilidades;
 import conexion.Conexion;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
 import javax.swing.JPopupMenu;
@@ -81,13 +78,6 @@ public class MetodosCombo {
     }
 
     public void CargarComboBox(JComboBox ElCombo, String sentencia, int ComboDefault) {
-        ElCombo.setRenderer(new DefaultListCellRenderer() {//Cambiar color de texto del combo cuando esta disabled
-            @Override
-            public void paint(Graphics g) {
-                setForeground(Color.BLACK);
-                super.paint(g);
-            }
-        });
         try {
             ElCombo.removeAllItems(); //Vaciamos el combo
             AutoCompleteDecorator.decorate(ElCombo);
@@ -119,6 +109,17 @@ public class MetodosCombo {
             System.out.println("Error al cargar combo: " + sentencia + ",   ERROR: " + e
             );
         }
+
+        //Cambiar color de texto del combo cuando esta disabled
+        ElCombo.setEnabled(true);
+        ElCombo.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public void paint(Graphics g) {
+                setForeground(Color.BLACK);
+                super.paint(g);
+            }
+        });
+        ElCombo.setEnabled(false);
         con.DesconectarBasedeDatos();
     }
 

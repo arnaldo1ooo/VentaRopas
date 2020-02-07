@@ -185,7 +185,7 @@ public class Buscador extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_tbPrincipalMousePressed
 
-    private void PonerSeleccionado(){
+    private void PonerSeleccionado() {
         if (Elsp.equals("CALL SP_ClienteConsulta")) {
             int codigoSelect = Integer.parseInt(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0).toString());
             RegistrarVenta.PonerClienteSeleccionado(codigoSelect);
@@ -206,6 +206,12 @@ public class Buscador extends javax.swing.JDialog {
 
     private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
         metodos.FiltroJTable(txtBuscar.getText(), cbCampoBuscar.getSelectedIndex(), tbPrincipal);
+
+        if (tbPrincipal.getRowCount() == 1) {
+            lbCantRegistros.setText(tbPrincipal.getRowCount() + " Registro encontrado");
+        } else {
+            lbCantRegistros.setText(tbPrincipal.getRowCount() + " Registros encontrados");
+        }
     }//GEN-LAST:event_txtBuscarKeyReleased
 
     private void btnActualizarTablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarTablaActionPerformed

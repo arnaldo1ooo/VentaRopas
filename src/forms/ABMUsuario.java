@@ -48,7 +48,6 @@ public final class ABMUsuario extends javax.swing.JDialog {
         initComponents();
 
         TablaConsultaUsuarios(); //Trae todos los registros
-        TablaConsultaAllPerfil();
         txtBuscar.requestFocus();
         //Permiso Roles de usuario
         btnNuevo.setVisible(metodos.PermisoRol(Alias, "USUARIO", "ALTA"));
@@ -206,13 +205,6 @@ public final class ABMUsuario extends javax.swing.JDialog {
         metodos.AnchuraColumna(tbPerfilUsuario);
     }
 
-    public void TablaConsultaAllPerfil() {
-        String sentencia = "CALL SP_PerfilConsulta";
-        String titlesJtabla[] = {"Código", "Denominación", "Descripción"}; //Debe tener la misma cantidad que titlesconsulta
-        tbAllPerfil.setModel(con.ConsultaTableBD(sentencia, titlesJtabla, null));
-        metodos.AnchuraColumna(tbAllPerfil);
-    }
-
     private void ModoVistaPrevia() {
         txtCodigo.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0).toString());
         txtNombre.setText(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 1).toString());
@@ -351,13 +343,6 @@ public final class ABMUsuario extends javax.swing.JDialog {
         btnCargarImagen = new javax.swing.JButton();
         btnEliminarImagen = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        scTodosPerfil = new javax.swing.JScrollPane();
-        tbAllPerfil = new javax.swing.JTable(){
-            public boolean isCellEditable(int rowIndex, int colIndex) {
-                return false; //Disallow the editing of any cell
-            }
-        };
         jpRoles = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         chbNuevo = new javax.swing.JCheckBox();
@@ -738,39 +723,6 @@ public final class ABMUsuario extends javax.swing.JDialog {
         jLabel1.setFont(new java.awt.Font("sansserif", 1, 16)); // NOI18N
         jLabel1.setText("Perfiles del usuario seleccionado");
 
-        jLabel3.setFont(new java.awt.Font("sansserif", 1, 16)); // NOI18N
-        jLabel3.setText("Todos los perfiles de usuario");
-
-        tbAllPerfil.setAutoCreateRowSorter(true);
-        tbAllPerfil.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        tbAllPerfil.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        tbAllPerfil.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-
-            }
-        ));
-        tbAllPerfil.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
-        tbAllPerfil.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        tbAllPerfil.setGridColor(new java.awt.Color(0, 153, 204));
-        tbAllPerfil.setOpaque(false);
-        tbAllPerfil.setRowHeight(20);
-        tbAllPerfil.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        tbAllPerfil.getTableHeader().setReorderingAllowed(false);
-        tbAllPerfil.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                tbAllPerfilMousePressed(evt);
-            }
-        });
-        tbAllPerfil.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                tbAllPerfilKeyReleased(evt);
-            }
-        });
-        scTodosPerfil.setViewportView(tbAllPerfil);
-
         javax.swing.GroupLayout jpPerfilesLayout = new javax.swing.GroupLayout(jpPerfiles);
         jpPerfiles.setLayout(jpPerfilesLayout);
         jpPerfilesLayout.setHorizontalGroup(
@@ -785,36 +737,23 @@ public final class ABMUsuario extends javax.swing.JDialog {
                             .addComponent(btnCargarImagen)
                             .addComponent(btnEliminarImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jpPerfilesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpPerfilesLayout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(scTodosPerfil, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE))
-                .addContainerGap())
+                .addContainerGap(465, Short.MAX_VALUE))
         );
         jpPerfilesLayout.setVerticalGroup(
             jpPerfilesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpPerfilesLayout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jLabel1)
                 .addGroup(jpPerfilesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpPerfilesLayout.createSequentialGroup()
-                        .addGroup(jpPerfilesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel3))
-                        .addGroup(jpPerfilesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jpPerfilesLayout.createSequentialGroup()
-                                .addGap(2, 2, 2)
-                                .addComponent(scPerfilesUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpPerfilesLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnCargarImagen)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnEliminarImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(27, 27, 27))))
-                    .addGroup(jpPerfilesLayout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addComponent(scTodosPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(2, 2, 2)
+                        .addComponent(scPerfilesUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpPerfilesLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCargarImagen)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnEliminarImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)))
                 .addContainerGap(10, Short.MAX_VALUE))
         );
 
@@ -829,6 +768,11 @@ public final class ABMUsuario extends javax.swing.JDialog {
         chbNuevo.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
         chbNuevo.setText("Nuevo");
         chbNuevo.setEnabled(false);
+        chbNuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chbNuevoActionPerformed(evt);
+            }
+        });
 
         chbModificar.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
         chbModificar.setText("Modificar");
@@ -1013,7 +957,7 @@ public final class ABMUsuario extends javax.swing.JDialog {
                 .addComponent(jtpEdicion, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jpBotones2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         jtpEdicion.getAccessibleContext().setAccessibleName("");
@@ -1026,7 +970,7 @@ public final class ABMUsuario extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 542, Short.MAX_VALUE)
+            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 531, Short.MAX_VALUE)
         );
 
         getAccessibleContext().setAccessibleName("Inventario");
@@ -1131,14 +1075,6 @@ public final class ABMUsuario extends javax.swing.JDialog {
         btnEliminarImagen.setEnabled(false);
     }//GEN-LAST:event_btnEliminarImagenActionPerformed
 
-    private void tbAllPerfilMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbAllPerfilMousePressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tbAllPerfilMousePressed
-
-    private void tbAllPerfilKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbAllPerfilKeyReleased
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tbAllPerfilKeyReleased
-
     private void cbPerfilItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbPerfilItemStateChanged
         if (metodoscombo.ObtenerIDSelectComboBox(cbPerfil) > 0) {
             metodoscombo.CargarComboBox(cbModulo, "SELECT mo_codigo, mo_denominacion FROM perfil, perfil_modulo, modulo "
@@ -1190,6 +1126,10 @@ public final class ABMUsuario extends javax.swing.JDialog {
         }
         con.DesconectarBasedeDatos();
     }//GEN-LAST:event_cbModuloItemStateChanged
+
+    private void chbNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbNuevoActionPerformed
+       
+    }//GEN-LAST:event_chbNuevoActionPerformed
 
     List<Component> ordenTabulador;
 
@@ -1250,7 +1190,6 @@ public final class ABMUsuario extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -1274,8 +1213,6 @@ public final class ABMUsuario extends javax.swing.JDialog {
     private org.edisoncor.gui.panel.Panel panel2;
     private javax.swing.JScrollPane scPerfilesUsuario;
     private javax.swing.JScrollPane scPrincipal;
-    private javax.swing.JScrollPane scTodosPerfil;
-    private javax.swing.JTable tbAllPerfil;
     private javax.swing.JTable tbPerfilUsuario;
     private javax.swing.JTable tbPrincipal;
     private javax.swing.JTextField txtAlias;
