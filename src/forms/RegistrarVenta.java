@@ -125,8 +125,10 @@ public final class RegistrarVenta extends javax.swing.JDialog {
 
                         //Obtener el id de la venta
                         con = con.ObtenerRSSentencia("SELECT MAX(ven_codigo) AS ultimoid FROM venta");
-                        con.rs.next();
-                        int idultimaventa = con.rs.getInt("ultimoid");
+                        int idultimaventa = 0;
+                        while (con.rs.next()) {
+                            idultimaventa = con.rs.getInt("ultimoid");
+                        }
                         con.DesconectarBasedeDatos();
 
                         //Registra los productos de la venta                      

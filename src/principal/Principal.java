@@ -255,6 +255,7 @@ public class Principal extends javax.swing.JFrame implements Runnable {
             }
         });
 
+        piPrincipal.setFocusable(false);
         piPrincipal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/iconos/fondo1.png"))); // NOI18N
         piPrincipal.setPreferredSize(new java.awt.Dimension(2000, 655));
 
