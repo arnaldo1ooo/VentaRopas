@@ -319,6 +319,8 @@ public class Login extends javax.swing.JFrame {
         PlaceHolder placeholder;
         placeholder = new PlaceHolder("Alias", txtAlias);
         placeholder = new PlaceHolder("Contraseña", txtPass);
+
+        OrdenTabulador();
     }
 
     //-------------METODOS----------//
