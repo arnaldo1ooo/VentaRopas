@@ -111,7 +111,6 @@ public class MetodosCombo {
         }
 
         //Cambiar color de texto del combo cuando esta disabled
-        ElCombo.setEnabled(true);
         ElCombo.setRenderer(new DefaultListCellRenderer() {
             @Override
             public void paint(Graphics g) {
@@ -119,7 +118,6 @@ public class MetodosCombo {
                 super.paint(g);
             }
         });
-        ElCombo.setEnabled(false);
         con.DesconectarBasedeDatos();
     }
 

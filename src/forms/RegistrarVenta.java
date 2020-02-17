@@ -56,12 +56,13 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         initComponents();
         this.setLocationRelativeTo(null); //Centrar ventana
 
+        tablemodelo = (DefaultTableModel) tbProductosVendidos.getModel();
         //Obtener fecha actual
         Calendar c2 = new GregorianCalendar();
         dcFechaVenta.setCalendar(c2);
 
         CargarComboBoxes();
-        tablemodelo = (DefaultTableModel) tbProductosVendidos.getModel();
+        TablaAllProducto();
         GenerarNumVenta();
 
         //Permiso Roles de usuario
@@ -305,6 +306,19 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        BuscadorProducto = new javax.swing.JDialog();
+        panel6 = new org.edisoncor.gui.panel.Panel();
+        jLabel12 = new javax.swing.JLabel();
+        txtBuscarApoderado = new javax.swing.JTextField();
+        lblBuscarCampoApoderado = new javax.swing.JLabel();
+        cbCampoBuscarProducto = new javax.swing.JComboBox();
+        scApoderado = new javax.swing.JScrollPane();
+        tbProducto = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex) {
+                return false; //Disallow the editing of any cell
+            }
+        };
+        lbCantRegistrosProducto = new javax.swing.JLabel();
         jpPrincipal = new javax.swing.JPanel();
         jpBotones = new javax.swing.JPanel();
         btnGuardar = new javax.swing.JButton();
@@ -374,6 +388,118 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         lblTituloTotalCompra = new javax.swing.JLabel();
         lblTotalMoneda1 = new javax.swing.JLabel();
         lblTotalMoneda2 = new javax.swing.JLabel();
+
+        BuscadorProducto.setTitle("Buscador de apoderados");
+        BuscadorProducto.setModal(true);
+        BuscadorProducto.setSize(new java.awt.Dimension(760, 310));
+
+        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/iconos40x40/IconoBuscar.png"))); // NOI18N
+        jLabel12.setText("  BUSCAR ");
+
+        txtBuscarApoderado.setFont(new java.awt.Font("Tahoma", 1, 17)); // NOI18N
+        txtBuscarApoderado.setForeground(new java.awt.Color(0, 153, 153));
+        txtBuscarApoderado.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtBuscarApoderado.setCaretColor(new java.awt.Color(0, 204, 204));
+        txtBuscarApoderado.setDisabledTextColor(new java.awt.Color(0, 204, 204));
+        txtBuscarApoderado.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBuscarApoderadoKeyReleased(evt);
+            }
+        });
+
+        lblBuscarCampoApoderado.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
+        lblBuscarCampoApoderado.setForeground(new java.awt.Color(255, 255, 255));
+        lblBuscarCampoApoderado.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblBuscarCampoApoderado.setText("Buscar por:");
+
+        tbProducto.setAutoCreateRowSorter(true);
+        tbProducto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        tbProducto.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        tbProducto.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        tbProducto.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        tbProducto.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        tbProducto.setGridColor(new java.awt.Color(0, 153, 204));
+        tbProducto.setOpaque(false);
+        tbProducto.setRowHeight(20);
+        tbProducto.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tbProducto.getTableHeader().setReorderingAllowed(false);
+        tbProducto.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                tbProductoMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tbProductoMousePressed(evt);
+            }
+        });
+        tbProducto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tbProductoKeyReleased(evt);
+            }
+        });
+        scApoderado.setViewportView(tbProducto);
+
+        lbCantRegistrosProducto.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        lbCantRegistrosProducto.setForeground(new java.awt.Color(153, 153, 0));
+        lbCantRegistrosProducto.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lbCantRegistrosProducto.setText("0 Registros encontrados");
+        lbCantRegistrosProducto.setPreferredSize(new java.awt.Dimension(57, 25));
+
+        javax.swing.GroupLayout panel6Layout = new javax.swing.GroupLayout(panel6);
+        panel6.setLayout(panel6Layout);
+        panel6Layout.setHorizontalGroup(
+            panel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel6Layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addGroup(panel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(scApoderado, javax.swing.GroupLayout.PREFERRED_SIZE, 717, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(panel6Layout.createSequentialGroup()
+                        .addComponent(lbCantRegistrosProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(8, 8, 8))
+                    .addGroup(panel6Layout.createSequentialGroup()
+                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtBuscarApoderado, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblBuscarCampoApoderado)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbCampoBuscarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        panel6Layout.setVerticalGroup(
+            panel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel6Layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addGroup(panel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(cbCampoBuscarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblBuscarCampoApoderado, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtBuscarApoderado, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(2, 2, 2)
+                .addComponent(scApoderado, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2)
+                .addComponent(lbCantRegistrosProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18))
+        );
+
+        javax.swing.GroupLayout BuscadorProductoLayout = new javax.swing.GroupLayout(BuscadorProducto.getContentPane());
+        BuscadorProducto.getContentPane().setLayout(BuscadorProductoLayout);
+        BuscadorProductoLayout.setHorizontalGroup(
+            BuscadorProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        BuscadorProductoLayout.setVerticalGroup(
+            BuscadorProductoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
 
         setTitle("Ventana Registrar Compra");
         setBackground(new java.awt.Color(45, 62, 80));
@@ -1431,11 +1557,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     }//GEN-LAST:event_txtDescuentoKeyTyped
 
     private void btnBuscarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProductoActionPerformed
-        String sentencia = "CALL SP_ProductoConsulta";
-        String titlesJtabla[] = {"Código", "Código del producto", "Descripción",
-            "Marca", "Existencia", "Tamaño", "Categoria", "Subcategoria", "Observación", "Estado"};
-        Buscador buscador = new Buscador(this, sentencia, titlesJtabla, 2);
-        buscador.setVisible(true);
+        BuscadorProducto.setVisible(true);
     }//GEN-LAST:event_btnBuscarProductoActionPerformed
 
     private void txtVueltoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtVueltoActionPerformed
@@ -1481,7 +1603,11 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     }//GEN-LAST:event_txtImporteActionPerformed
 
     private void txtCodigoProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoProductoActionPerformed
-        //Si se oprime ENTER o si el producto ya se encontro y se cambia el codigo de producto, volver a buscar        
+        ConsultarProdCotiCant();
+    }//GEN-LAST:event_txtCodigoProductoActionPerformed
+
+    private void ConsultarProdCotiCant() throws HeadlessException {
+        //Si se oprime ENTER o si el producto ya se encontro y se cambia el codigo de producto, volver a buscar
         if (ConsultaProducto(txtCodigoProducto.getText()) == true) {
             ConvertirCotizacion();
 
@@ -1520,11 +1646,43 @@ public final class RegistrarVenta extends javax.swing.JDialog {
                 }
             }
         }
-    }//GEN-LAST:event_txtCodigoProductoActionPerformed
+    }
 
     private void txtDescuentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDescuentoActionPerformed
         btnAnadir.doClick();
     }//GEN-LAST:event_txtDescuentoActionPerformed
+
+    private void txtBuscarApoderadoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarApoderadoKeyReleased
+        metodos.FiltroJTable(txtBuscarApoderado.getText(), cbCampoBuscarProducto.getSelectedIndex(), tbProducto);
+
+        if (tbProducto.getRowCount() == 1) {
+            lbCantRegistrosProducto.setText(tbProducto.getRowCount() + " Registro encontrado");
+        } else {
+            lbCantRegistrosProducto.setText(tbProducto.getRowCount() + " Registros encontrados");
+        }
+    }//GEN-LAST:event_txtBuscarApoderadoKeyReleased
+
+    private void tbProductoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbProductoMousePressed
+        if (evt.getClickCount() == 2) {
+            String codselect = tbProducto.getValueAt(tbProducto.getSelectedRow(), 1) + "";
+            txtCodigoProducto.setText(codselect);
+            ConsultarProdCotiCant();
+            BuscadorProducto.dispose();
+        }
+    }//GEN-LAST:event_tbProductoMousePressed
+
+    private void tbProductoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbProductoKeyReleased
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            String codselect = tbProducto.getValueAt(tbProducto.getSelectedRow(), 1) + "";
+            txtCodigoProducto.setText(codselect);
+            ConsultarProdCotiCant();
+            BuscadorProducto.dispose();
+        }
+    }//GEN-LAST:event_tbProductoKeyReleased
+
+    private void tbProductoMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbProductoMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tbProductoMouseExited
 
     private double MayorPrecioCompra(String codigoproducto) {
         con = con.ObtenerRSSentencia("SELECT compro_preciocompra AS mayorpreciocompra FROM compra_producto "
@@ -1599,13 +1757,25 @@ public final class RegistrarVenta extends javax.swing.JDialog {
         setFocusTraversalPolicy(new PersonalizadoFocusTraversalPolicy());
     }
 
+    public void TablaAllProducto() {//Realiza la consulta de los productos que tenemos en la base de datos
+        String sentencia = "CALL SP_ProductoConsulta";
+        String titlesJtabla[] = {"Código", "Código del producto", "Descripción",
+            "Marca", "Existencia", "Tamaño", "Categoria", "Subcategoria", "Observación", "Estado"};
+
+        tbProducto.setModel(con.ConsultaTableBD(sentencia, titlesJtabla, cbCampoBuscarProducto));
+        cbCampoBuscarProducto.setSelectedIndex(1);
+        metodos.AnchuraColumna(tbProducto);
+
+        if (tbProducto.getModel().getRowCount() == 1) {
+            lbCantRegistrosProducto.setText(tbProducto.getModel().getRowCount() + " Registro encontrado");
+        } else {
+            lbCantRegistrosProducto.setText(tbProducto.getModel().getRowCount() + " Registros encontrados");
+        }
+    }
+
     static void PonerClienteSeleccionado(int codigoSelect) {
         MetodosCombo metodoscombo = new MetodosCombo();
         metodoscombo.setSelectedCodigoItem(cbCliente, codigoSelect);
-    }
-
-    static void PonerProductoSeleccionado(String codigoproducto) {
-        txtCodigoProducto.setText(codigoproducto + "");
     }
 
     private class PersonalizadoFocusTraversalPolicy extends FocusTraversalPolicy {
@@ -1636,6 +1806,7 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JDialog BuscadorProducto;
     private javax.swing.JButton btnABMCliente;
     private javax.swing.JButton btnAnadir;
     private javax.swing.JButton btnBuscarCliente;
@@ -1644,11 +1815,13 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnPantallaCompleta;
+    private javax.swing.JComboBox cbCampoBuscarProducto;
     private static javax.swing.JComboBox<MetodosCombo> cbCliente;
     private javax.swing.JComboBox<String> cbMoneda;
     private javax.swing.JComboBox<String> cbTipoDocumento;
     private javax.swing.JComboBox<MetodosCombo> cbVendedor;
     private com.toedter.calendar.JDateChooser dcFechaVenta;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jpBotones;
     private javax.swing.JPanel jpDatosVenta;
@@ -1656,6 +1829,8 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     private javax.swing.JPanel jpProductos;
     private org.edisoncor.gui.label.LabelMetric labelMetric1;
     private org.edisoncor.gui.label.LabelMetric labelMetric2;
+    private javax.swing.JLabel lbCantRegistrosProducto;
+    private javax.swing.JLabel lblBuscarCampoApoderado;
     private javax.swing.JLabel lblCantidad;
     private javax.swing.JLabel lblCodigo10;
     private javax.swing.JLabel lblCodigo13;
@@ -1685,9 +1860,13 @@ public final class RegistrarVenta extends javax.swing.JDialog {
     private javax.swing.JLabel lblTotalMoneda1;
     private javax.swing.JLabel lblTotalMoneda2;
     private org.edisoncor.gui.panel.Panel panel2;
+    private org.edisoncor.gui.panel.Panel panel6;
     private javax.swing.JPanel panelDatosProducto;
+    private javax.swing.JScrollPane scApoderado;
     private javax.swing.JScrollPane scPrincipal;
+    private javax.swing.JTable tbProducto;
     private javax.swing.JTable tbProductosVendidos;
+    private javax.swing.JTextField txtBuscarApoderado;
     private javax.swing.JTextField txtCantidad;
     private static javax.swing.JTextField txtCodigoProducto;
     private javax.swing.JTextField txtDescripcionProducto;

@@ -32,16 +32,14 @@ import java.awt.Toolkit;
 import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JInternalFrame;
 import javax.swing.RowFilter;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRResultSetDataSource;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -251,14 +249,22 @@ public class Metodos {
         try {
             InputStream isRutajasper = Metodos.class.getResourceAsStream(rutajasper);
             if (isRutajasper == null) {
-                JOptionPane.showMessageDialog(null, "Archivo jasper no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Archivo jasper no encontrado: " + rutajasper, "Error", JOptionPane.ERROR_MESSAGE);
             } else {
                 //Carga el archivo jasper
-                JasperReport jrReporte_productos = (JasperReport) JRLoader.loadObject(isRutajasper);
+                JasperReport jrReporte = (JasperReport) JRLoader.loadObject(isRutajasper);
                 //Carga el modelo de la tabla (Los titulos de la tabla deben coincidir con los fields del jasper)
-                JRTableModelDataSource jrTableModel = new JRTableModelDataSource(elTableModel);
-                JasperPrint jprint = JasperFillManager.fillReport(jrReporte_productos, parametros, jrTableModel);
+                JasperPrint jprint;
+                if (elTableModel != null) {
+                    JRTableModelDataSource jrTableModel = new JRTableModelDataSource(elTableModel);
+                    jprint = JasperFillManager.fillReport(jrReporte, parametros, jrTableModel);
+                } else {  //Si el tablemodel viene null
+                    jprint = JasperFillManager.fillReport(jrReporte, parametros, new JREmptyDataSource());
+                }
 
+                //JasperPrintManager.printPages(jprint, 1, 4, true); //Imprimir paginas especificas
+                //JasperPrintManager.printReport(jprint, true); //Mandar directamente al dialogo de impresora, si es false imprime directo
+                //Ver vista previa del reporte
                 JasperViewer jViewer = new JasperViewer(jprint, false);//false para que al cerrar reporte no se cierre el sistema
                 //jViewer.setTitle("Reporte de productos"); //Titulo de la ventana
                 jViewer.setDefaultCloseOperation(JasperViewer.DISPOSE_ON_CLOSE);
@@ -267,7 +273,9 @@ public class Metodos {
                 jViewer.setModalExclusionType(Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
                 jViewer.requestFocus();
                 jViewer.setVisible(true);
-                //Para guardar directamente a pdf JasperExportManager.exportReportToPdfFile(jprint, "C:/Eclipse/workspace/BIBLIOTECA/Reportpdf.pdf");
+
+                //Exportar a pdf
+                //JasperExportManager.exportReportToPdfFile(jprint, "C:/ss.pdf"); 
             }
         } catch (JRException ex) {
             System.out.println("Error  al GenerarReporteJTABLE ");

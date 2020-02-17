@@ -28,25 +28,25 @@ public class Conexion {
 
     public static Connection ConectarBasedeDatos() {
         String tipoHost = "remoto";
-
-        if (tipoHost.equals("local")) {
-            //Modo host local
-            controlador = "com.mysql.cj.jdbc.Driver";
-            usuarioDB = "root";
-            passDB = "toor5127"; //Contrasena de la BD
-            nombreBD = "ventaropas";
-            host = "localhost";
-            puerto = "3306";
-            servidor = "jdbc:mysql://" + host + ":" + puerto + "/" + nombreBD
-                    + "?useUnicode=true"
-                    + "&useJDBCCompliantTimezoneShift=true"
-                    + "&useLegacyDatetimeCode=false"
-                    + "&serverTimezone=America/Mexico_City"
-                    //+ "&serverTimezone=UTC"
-                    + "&useSSL=false"
-                    + "&allowPublicKeyRetrieval=true";
-        } else {
-            if (tipoHost.equals("remoto")) {
+        switch (tipoHost) {
+            case "local":
+                //Modo host local
+                controlador = "com.mysql.cj.jdbc.Driver";
+                usuarioDB = "root";
+                passDB = "toor5127"; //Contrasena de la BD
+                nombreBD = "ventaropas";
+                host = "localhost";
+                puerto = "3306";
+                servidor = "jdbc:mysql://" + host + ":" + puerto + "/" + nombreBD
+                        + "?useUnicode=true"
+                        + "&useJDBCCompliantTimezoneShift=true"
+                        + "&useLegacyDatetimeCode=false"
+                        + "&serverTimezone=America/Mexico_City"
+                        //+ "&serverTimezone=UTC"
+                        + "&useSSL=false"
+                        + "&allowPublicKeyRetrieval=true";
+                break;
+            case "remoto":
                 //Modo host remoto
                 controlador = "com.mysql.cj.jdbc.Driver";
                 usuarioDB = "supervisor";
@@ -60,23 +60,26 @@ public class Conexion {
                         + "&useLegacyDatetimeCode=false"
                         + "&serverTimezone=UTC"
                         + "&useSSL=false";
-            } else {
-                if (tipoHost.equals("online")) {
-                    //Modo host online
-                    controlador = "com.mysql.cj.jdbc.Driver";
-                    usuarioDB = "supervisor";
-                    passDB = "toor5127"; //Contrasena de la BD
-                    nombreBD = "ventaropas";
-                    host = "181.123.175.39";
-                    puerto = "3306";
-                    servidor = "jdbc:mysql://" + host + ":" + puerto + "/" + nombreBD
-                            + "?useUnicode=true"
-                            + "&useJDBCCompliantTimezoneShift=true"
-                            + "&useLegacyDatetimeCode=false"
-                            + "&serverTimezone=UTC"
-                            + "&useSSL=false";
-                }
-            }
+                break;
+            case "online":
+                //Modo host online
+                controlador = "com.mysql.cj.jdbc.Driver";
+                usuarioDB = "root";
+                passDB = "toor5127"; //Contrasena de la BD
+                nombreBD = "ventaropas";
+                host = "181.123.175.39";
+                puerto = "3306";
+                servidor = "jdbc:mysql://" + host + ":" + puerto + "/" + nombreBD
+                        + "?useUnicode=true"
+                        + "&useJDBCCompliantTimezoneShift=true"
+                        + "&useLegacyDatetimeCode=false"
+                        + "&serverTimezone=UTC"
+                        + "&useSSL=false";
+                break;
+
+            default:
+                JOptionPane.showMessageDialog(null, "No se encontró la moneda seleccionada", "Error", JOptionPane.ERROR_MESSAGE);
+                break;
         }
 
         Connection conexion;

@@ -191,17 +191,6 @@ public class Buscador extends javax.swing.JDialog {
             RegistrarVenta.PonerClienteSeleccionado(codigoSelect);
             dispose();
         }
-
-        if (Elsp.equals("CALL SP_ProductoConsulta")) {
-            String codigoProductoSelect = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 1).toString();
-
-            try {
-                RegistrarCompra.PonerProductoSeleccionado(codigoProductoSelect);
-            } catch (NullPointerException e) {
-                RegistrarVenta.PonerProductoSeleccionado(codigoProductoSelect);
-            }
-            dispose();
-        }
     }
 
     private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
