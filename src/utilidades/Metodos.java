@@ -25,10 +25,13 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import conexion.Conexion;
+import java.awt.Desktop;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.Map;
@@ -56,13 +59,14 @@ import net.sf.jasperreports.view.JasperViewer;
 public class Metodos {
 
     Conexion con = new Conexion();
+    MetodosTXT metodostxt = new MetodosTXT();
     public int CantRegistros = 0;
 
     public void AnchuraColumna(JTable LaTabla) {
         LaTabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); //Desactiva el autoresize
         TableColumnModel ModeloColumna = LaTabla.getColumnModel();
         int anchoacumulado = 0;
-        int anchoadicional = 21;
+        int anchoadicional = 20;
         int cantidadcolumns = LaTabla.getColumnCount();
         int cantidadfilas = LaTabla.getRowCount();
         String nomheader; //Header = Cabecera
@@ -74,7 +78,7 @@ public class Metodos {
         //Obtener tamano de String en pixeles
         BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB); //Elegir el tipo de fuente que usa
         Graphics2D graphics2d = img.createGraphics();
-        Font font = new Font("Tahoma", Font.PLAIN, 14); //Poner la fuente tipo y tamano que se usa en la tabla
+        Font font = new Font("Tahoma", Font.PLAIN, 12); //Poner la fuente tipo y tamano que se usa en la tabla
         FontMetrics fontmetrics = graphics2d.getFontMetrics(font);
         //System.out.println(fm.stringWidth("Este es un ejemplo"));
         graphics2d.dispose();
@@ -228,7 +232,7 @@ public class Metodos {
         try {
             if (LaTabla.getRowCount() > 0) {
                 for (int i = 0; i < LaTabla.getRowCount(); i++) {
-                    valor = Double.parseDouble(LaTabla.getValueAt(i, LaColumna).toString());
+                    valor = metodostxt.DoubleAFormatoAmericano(LaTabla.getValueAt(i, LaColumna) + "");
                     totalDouble = totalDouble + valor;
                 }
             }
@@ -323,6 +327,7 @@ public class Metodos {
             while (con.rs.next()) {
                 rol = con.rs.getString("rol_denominacion");
                 if (rol.equals(elRol)) {
+                    System.out.println("El usuario (" + ElAlias + ") tiene permiso para " + elRol + " en el modulo " + modulo);
                     valido = true;
                 }
             }
@@ -340,4 +345,23 @@ public class Metodos {
             return Character.toUpperCase(laCadena.charAt(0)) + laCadena.substring(1, laCadena.length()).toLowerCase();
         }
     }
+
+    public String SiStringEsNull(String laCadena) {
+        if (laCadena.equals("null")) {
+            laCadena = "";
+        }
+        return laCadena;
+    }
+
+    public void AbrirFichero(String ruta) {
+        File elFile = new File(ruta);
+        Desktop ficheroAEjecutar = Desktop.getDesktop();
+        try {
+            ficheroAEjecutar.open(elFile);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null,
+                    e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
 }

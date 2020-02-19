@@ -87,22 +87,32 @@ public class Conexion {
             Class.forName(controlador);
             conexion = DriverManager.getConnection(servidor, usuarioDB, passDB);
             if (conexion != null) {
-                System.out.println("CONEXIÓN A " + nombreBD + ", EXITOSA..");
+                System.out.println("\nCONEXIÓN A " + nombreBD + ", EXITOSA..");
+
             }
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Error1 al conecta al BD, Verifique los datos de la conexion a la BD");
-            System.out.println("Error1 al conecta al BD, Verifique los datos de la conexion a la BD  " + ex.getMessage());
+            Logger.getLogger(Conexion.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(
+                    null, "Error1 al conecta al BD, Verifique los datos de la conexion a la BD");
+            System.out.println(
+                    "Error1 al conecta al BD, Verifique los datos de la conexion a la BD  " + ex.getMessage());
             conexion = null;
         } catch (SQLException ex) {
-            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Error2 al conecta al BD, Verifique los datos de la conexion a la BD");
-            System.out.println("Error2 al conecta al BD, Verifique los datos de la conexion a la BD  " + ex.getMessage());
+            Logger.getLogger(Conexion.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(
+                    null, "Error2 al conecta al BD, Verifique los datos de la conexion a la BD");
+            System.out.println(
+                    "Error2 al conecta al BD, Verifique los datos de la conexion a la BD  " + ex.getMessage());
             conexion = null;
         } catch (Exception ex) {
-            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Error3 al conecta al BD, Verifique los datos de la conexion a la BD");
-            System.out.println("Error3 al conecta al BD, Verifique los datos de la conexion a la BD  " + ex.getMessage());
+            Logger.getLogger(Conexion.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(
+                    null, "Error3 al conecta al BD, Verifique los datos de la conexion a la BD");
+            System.out.println(
+                    "Error3 al conecta al BD, Verifique los datos de la conexion a la BD  " + ex.getMessage());
             conexion = null;
         }
         return conexion;
@@ -118,7 +128,7 @@ public class Conexion {
                         rs.close();
                     }
                 }
-                System.out.println("DESCONEXIÓN DEL CONNECTION(" + nombreBD + "), RESULTSET y del STATEMENT, EXITOSA..");
+                System.out.println("DESCONEXIÓN DEL CONNECTION(" + nombreBD + "), RESULTSET y del STATEMENT, EXITOSA..\n");
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR AL INTENTAR DESCONECTAR "
@@ -131,8 +141,10 @@ public class Conexion {
         int NumColumnsRS = -1;
         try {
             NumColumnsRS = rs.getMetaData().getColumnCount();
+
         } catch (SQLException ex) {
-            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Conexion.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         return NumColumnsRS;
     }
@@ -171,7 +183,7 @@ public class Conexion {
             conexion.rs = conexion.st.executeQuery(sentencia);
             int cantreg = 0;
             while (conexion.rs.next() && cantreg < 2) { //Revisamos cuantos registro trajo la consulta
-                cantreg++;
+                cantreg = cantreg + 1;
             }
 
             switch (cantreg) {
@@ -193,24 +205,26 @@ public class Conexion {
 
         } catch (SQLException e) {
             System.out.println("Error al EjecutarSentencia ObtenerRSSentencia,  sentencia: " + sentencia + ",  ERROR " + e);
-            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, e);
+            Logger
+                    .getLogger(Conexion.class
+                            .getName()).log(Level.SEVERE, null, e);
         } catch (NullPointerException e) {
             System.out.println("ObtenerRSSentencia no trajo ningun resultado (null),  sentencia: " + sentencia + ",  ERROR " + e);
-            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, e);
+            Logger
+                    .getLogger(Conexion.class
+                            .getName()).log(Level.SEVERE, null, e);
         }
         return conexion;
     }
 
     public void EjecutarABM(String sentencia) {
         //Ejecuta consultas de Altas, Bajas y Modificaciones
+        Connection con;
+        Statement st;
         try {
-            Connection con;
             con = (Connection) Conexion.ConectarBasedeDatos();
-
-            System.out.println("Insertar o Modificar registro: " + sentencia);
-
-            Statement st;
             st = (Statement) con.createStatement();
+            System.out.println("Insertar o Modificar registro: " + sentencia);
             st.executeUpdate(sentencia);
             con.close();
             st.close();

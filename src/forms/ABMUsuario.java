@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import static login.Login.Alias;
 import utilidades.Metodos;
 import utilidades.MetodosCombo;
@@ -42,12 +43,19 @@ public final class ABMUsuario extends javax.swing.JDialog {
     Metodos metodos = new Metodos();
     MetodosTXT metodostxt = new MetodosTXT();
     MetodosCombo metodoscombo = new MetodosCombo();
+    DefaultTableModel dtmPerfiles;
+    DefaultTableModel dtmRoles;
+    DefaultTableModel dtmPerfilModulos;
 
     public ABMUsuario(java.awt.Frame parent, Boolean modal) {
         super(parent, modal);
         initComponents();
 
+        //Metodos
         TablaConsultaUsuarios(); //Trae todos los registros
+        TablaAllPerfiles();
+        TablaAllRoles();
+
         txtBuscar.requestFocus();
         //Permiso Roles de usuario
         btnNuevo.setVisible(metodos.PermisoRol(Alias, "USUARIO", "ALTA"));
@@ -58,91 +66,49 @@ public final class ABMUsuario extends javax.swing.JDialog {
     }
 
 //--------------------------METODOS----------------------------//
-    public void CargarComboBoxes() {
-        //Carga los combobox con las consultas
-        metodoscombo.CargarComboBox(cbPerfil, "CALL SP_UsuarioPerfilConsulta('"
-                + tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 3) + "')", 1);
-
-        if (metodoscombo.ObtenerIDSelectComboBox(cbPerfil) > 0) {
-            metodoscombo.CargarComboBox(cbModulo, "SELECT mo_codigo, mo_denominacion FROM perfil, perfil_modulo, modulo "
-                    + "WHERE  per_codigo = '" + metodoscombo.ObtenerIDSelectComboBox(cbPerfil) + "' "
-                    + "AND permo_perfil = per_codigo AND permo_modulo = mo_codigo ORDER BY mo_denominacion", 1);
-        }
-
-        ModoEdicion(false);
-    }
-
-    public void RegistroNuevo() {
+    public void RegistroNuevoModificar() {
         try {
             if (ComprobarCampos() == true) {
-                String alias = txtAlias.getText();
+                String codigo = txtCodigo.getText();
                 String nombre = txtNombre.getText();
                 String apellido = txtApellido.getText();
+                String alias = txtAlias.getText();
                 String pass = txtPass.getText();
-
                 SimpleDateFormat formatoamericano = new SimpleDateFormat("yyyy-MM-dd");
                 String fechacreacion = formatoamericano.format(dcFechaCreacion.getDate());
 
-                int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro crear este nuevo registro?", "Confirmación", JOptionPane.YES_OPTION);
+                if (codigo.equals("")) {
+                    int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro crear este nuevo registro?", "Confirmación", JOptionPane.YES_OPTION);
+                    if (JOptionPane.YES_OPTION == confirmado) { //NUEVO REGISTRO
+                        String sentencia = "CALL SP_UsuarioAlta ('" + nombre + "','" + apellido + "','"
+                                + alias + "','" + pass + "','" + fechacreacion + "')";
+                        con.EjecutarABM(sentencia);
+                        NuevoModificarPerfilUsuario();
+                        NuevoModificarRolesUsuario();
 
-                if (JOptionPane.YES_OPTION == confirmado) {
-                    //REGISTRAR NUEVO
-                    String sentencia = "CALL SP_UsuarioAlta ('" + nombre + "','" + apellido + "','"
-                            + alias + "','" + pass + "','" + fechacreacion + "')";
-                    con.EjecutarABM(sentencia);
+                        Toolkit.getDefaultToolkit().beep();
+                        JOptionPane.showMessageDialog(this, "Registro creado correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } else { //MODIFICAR REGISTRO
+                    int confirmado = JOptionPane.showConfirmDialog(this, "¿Estás seguro de modificar este registro?", "Confirmación", JOptionPane.YES_OPTION);
+                    if (JOptionPane.YES_OPTION == confirmado) {
+                        String sentencia = "CALL SP_UsuarioModificar(" + codigo + ",'" + nombre + "','" + apellido + "','" + alias
+                                + "','" + pass + "','" + fechacreacion + "')";
+                        con.EjecutarABM(sentencia);
+                        NuevoModificarPerfilUsuario();
+                        NuevoModificarRolesUsuario();
 
-                    TablaConsultaUsuarios(); //Actualizar tabla
-                    JOptionPane.showMessageDialog(this, "Se agregó correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
-                    ModoEdicion(false);
-                    Limpiar();
+                        Toolkit.getDefaultToolkit().beep();
+                        JOptionPane.showMessageDialog(this, "Registro modificado correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
+                    }
                 }
+                TablaConsultaUsuarios(); //Actualizar tabla
+                ModoEdicion(false);
+                Limpiar();
             }
         } catch (HeadlessException ex) {
             JOptionPane.showMessageDialog(null, "Completar los campos obligarios marcados con * ", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            System.out.println("Completar los campos obligarios marcados con * " + ex);
             txtNombre.requestFocus();
-        }
-    }
-
-    public void RegistroModificar() {
-        //guarda los datos que se han modificado en los campos
-
-        if (ComprobarCampos() == true) {
-            String codigo = txtCodigo.getText();
-            String alias = txtAlias.getText();
-            String nombre = txtNombre.getText();
-            String apellido = txtApellido.getText();
-            String pass = txtPass.getText();
-
-            SimpleDateFormat formatoamericano = new SimpleDateFormat("yyyy-MM-dd");
-            String fechacreacion = formatoamericano.format(dcFechaCreacion.getDate());
-
-            int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro de modificar este registro?", "Confirmación", JOptionPane.YES_OPTION);
-            if (JOptionPane.YES_OPTION == confirmado) {
-                String sentencia = "CALL SP_UsuarioModificar(" + codigo + ",'" + nombre + "','" + apellido + "','" + alias
-                        + "','" + pass + "','" + fechacreacion + "')";
-                System.out.println("Actualizar registro: " + sentencia);
-
-                try {
-                    Connection con;
-                    con = conexion.Conexion.ConectarBasedeDatos();
-                    PreparedStatement pst;
-                    pst = con.prepareStatement(sentencia);
-                    pst.executeUpdate();
-                    getToolkit().beep();
-                    JOptionPane.showMessageDialog(null, "Registro modificado correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
-
-                    con.close();
-                    pst.close();
-                } catch (SQLException ex) {
-                    System.out.println("Error al modificar registro " + ex);
-                    JOptionPane.showMessageDialog(null, "Error al intentar modificar el registro", "Error", JOptionPane.INFORMATION_MESSAGE);
-                }
-                ModoEdicion(false);
-                Limpiar();
-            } else {
-                System.out.println("No se modificó el registro");
-            }
         }
     }
 
@@ -198,11 +164,235 @@ public final class ABMUsuario extends javax.swing.JDialog {
         }
     }
 
-    public void TablaConsultaPerfilUsuarios() {
-        String sentencia = "CALL SP_UsuarioPerfilConsulta('" + txtAlias.getText() + "')";
-        String titlesJtabla[] = {"Código", "Denominación"};
-        tbPerfilUsuario.setModel(con.ConsultaTableBD(sentencia, titlesJtabla, null));
-        metodos.AnchuraColumna(tbPerfilUsuario);
+    public void TablaAllPerfiles() {
+        try {
+            String sentencia = "SELECT per_codigo, per_denominacion, per_descripcion FROM perfil ORDER BY per_denominacion";
+            con = con.ObtenerRSSentencia(sentencia);
+            dtmPerfiles = (DefaultTableModel) tbPerfiles.getModel();
+            dtmPerfiles.setRowCount(0);
+            while (con.rs.next()) {
+                dtmPerfiles.addRow(new Object[]{con.rs.getString("per_codigo"), con.rs.getString("per_denominacion"),
+                    false, con.rs.getString("per_descripcion")});
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        con.DesconectarBasedeDatos();
+    }
+
+    public void TablaPerfilesDelUsu() {
+        //Poner todos en false
+        for (int i = 0; i < tbPerfiles.getRowCount(); i++) {
+            tbPerfiles.setValueAt(false, i, 2);
+        }
+
+        try {
+            String codususelect = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0) + "";
+            String sentencia = "CALL SP_UsuarioPerfilConsulta('" + codususelect + "')";
+            con = con.ObtenerRSSentencia(sentencia);
+            String perfil;
+            while (con.rs.next()) {
+                for (int i = 0; i < tbPerfiles.getRowCount(); i++) {
+                    perfil = tbPerfiles.getValueAt(i, 1) + "";
+                    if (perfil.equals(con.rs.getString("per_denominacion"))) {
+                        tbPerfiles.setValueAt(true, i, 2);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        con.DesconectarBasedeDatos();
+    }
+
+    public void TablaAllRoles() {
+        try {
+            String sentencia = "CALL SP_UsuarioRolesABMAll()";
+            con = con.ObtenerRSSentencia(sentencia);
+            dtmRoles = (DefaultTableModel) tbRoles.getModel();
+            dtmRoles.setRowCount(0);
+            while (con.rs.next()) {
+                dtmRoles.addRow(new Object[]{con.rs.getString("mo_denominacion"), false, false, false,
+                    con.rs.getString("altacodigo"), con.rs.getString("modificarcodigo"), con.rs.getString("bajacodigo")});
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        con.DesconectarBasedeDatos();
+    }
+
+    public void TablaRolesDelUsu() {
+        //Poner todo en false
+        for (int i = 0; i < tbRoles.getRowCount(); i++) {
+            tbRoles.setValueAt(false, i, 1);
+            tbRoles.setValueAt(false, i, 2);
+            tbRoles.setValueAt(false, i, 3);
+        }
+
+        try {
+            String codususelect = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0) + "";
+            String sentencia = "CALL SP_UsuarioRolesABM('" + codususelect + "')";
+            con = con.ObtenerRSSentencia(sentencia);
+            String modulo;
+            while (con.rs.next()) {
+                for (int i = 0; i < tbRoles.getRowCount(); i++) {
+                    modulo = tbRoles.getValueAt(i, 0) + "";
+                    if (modulo.equals(con.rs.getString("mo_denominacion"))) {
+                        tbRoles.setValueAt(con.rs.getBoolean("alta"), i, 1);
+                        tbRoles.setValueAt(con.rs.getBoolean("modificar"), i, 2);
+                        tbRoles.setValueAt(con.rs.getBoolean("baja"), i, 3);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        con.DesconectarBasedeDatos();
+    }
+
+    private void NuevoModificarPerfilUsuario() {
+        //Perfiles de usuario
+        try {
+            String codusuario = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0) + "";
+            String codperfil;
+            boolean estado;
+            String sentencia;
+
+            if (txtCodigo.getText().equals("")) { //Si es nuevo
+                for (int i = 0; i < tbPerfiles.getRowCount(); i++) {
+                    codperfil = tbPerfiles.getValueAt(i, 0) + "";
+                    estado = (Boolean) tbPerfiles.getValueAt(i, 2);
+                    if (estado == true) {
+                        sentencia = "INSERT INTO usuario_perfil VALUES(usuper_codigo,'" + codusuario + "','" + codperfil + "')";
+                        con.EjecutarABM(sentencia);
+                    }
+                }
+            } else { //Si es modificar
+                for (int i = 0; i < tbPerfiles.getRowCount(); i++) {
+                    //Validar si usuperfil ya esta registrado
+                    codperfil = tbPerfiles.getValueAt(i, 0) + "";
+                    estado = (Boolean) tbPerfiles.getValueAt(i, 2);
+                    sentencia = "SELECT usuper_codigo FROM usuario_perfil "
+                            + "WHERE usuper_usuario='" + codusuario + "' AND usuper_perfil='" + codperfil + "'";
+                    con = con.ObtenerRSSentencia(sentencia);
+                    if (con.rs.next()) { //Si existe
+                        if (estado == false) {
+                            sentencia = "DELETE FROM usuario_perfil WHERE usuper_usuario='" + codusuario + "' "
+                                    + "AND usuper_perfil='" + codperfil + "'";
+                            con.EjecutarABM(sentencia);
+                        }
+                    } else { //Si no existe
+                        if (estado == true) {
+                            sentencia = "INSERT INTO usuario_perfil VALUES(usuper_codigo,'" + codusuario + "','" + codperfil + "')";
+                            con.EjecutarABM(sentencia);
+                        }
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        con.DesconectarBasedeDatos();
+    }
+
+    private void NuevoModificarRolesUsuario() {
+        //Roles de usuario
+        try {
+            boolean estadoAlta;
+            String codRolAlta;
+            boolean estadoModificar;
+            String codRolModificar;
+            boolean estadoBaja;
+            String codRolBaja;
+            String codusuario = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0) + "";
+            String sentencia;
+
+            if (txtCodigo.getText().equals("")) { //Si es nuevo
+                for (int i = 0; i < tbRoles.getRowCount(); i++) {
+                    //RolAlta
+                    estadoAlta = (Boolean) tbRoles.getValueAt(i, 1);
+                    codRolAlta = tbRoles.getValueAt(i, 4) + "";
+                    if (estadoAlta == true) {
+                        sentencia = "INSERT INTO usuario_rol VALUES(usurol_codigo,'" + codusuario + "','" + codRolAlta + "')";
+                        con.EjecutarABM(sentencia);
+                    }
+                    //RolModificar
+                    estadoModificar = (Boolean) tbRoles.getValueAt(i, 2);
+                    codRolModificar = tbRoles.getValueAt(i, 5) + "";
+                    if (estadoModificar == true) {
+                        sentencia = "INSERT INTO usuario_rol VALUES(usurol_codigo,'" + codusuario + "','" + codRolModificar + "')";
+                        con.EjecutarABM(sentencia);
+                    }
+                    //RolBaja
+                    estadoBaja = (Boolean) tbRoles.getValueAt(i, 3);
+                    codRolBaja = tbRoles.getValueAt(i, 6) + "";
+                    if (estadoBaja == true) {
+                        sentencia = "INSERT INTO usuario_rol VALUES(usurol_codigo,'" + codusuario + "','" + codRolBaja + "')";
+                        con.EjecutarABM(sentencia);
+                    }
+                }
+            } else { //Si es modificar
+                for (int i = 0; i < tbRoles.getRowCount(); i++) {
+                    //Si existe rol alta
+                    estadoAlta = (Boolean) tbRoles.getValueAt(i, 1);
+                    codRolAlta = tbRoles.getValueAt(i, 4) + "";
+                    sentencia = "SELECT usurol_codigo FROM usuario_rol WHERE usurol_usuario='" + codusuario
+                            + "' AND usurol_rol='" + codRolAlta + "'";
+                    con = con.ObtenerRSSentencia(sentencia);
+                    if (con.rs.next()) { //Si existe
+                        if (estadoAlta == false) {
+                            sentencia = "DELETE FROM usuario_rol WHERE usurol_usuario='" + codusuario + "' "
+                                    + "AND usurol_rol='" + codRolAlta + "'";
+                            con.EjecutarABM(sentencia);
+                        }
+                    } else { //Si no existe
+                        if (estadoAlta == true) {
+                            sentencia = "INSERT INTO usuario_rol VALUES(usurol_codigo,'" + codusuario + "','" + codRolAlta + "')";
+                            con.EjecutarABM(sentencia);
+                        }
+                    }
+                    //Si existe rol modificar
+                    estadoModificar = (Boolean) tbRoles.getValueAt(i, 2);
+                    codRolModificar = tbRoles.getValueAt(i, 5) + "";
+                    sentencia = "SELECT usurol_codigo FROM usuario_rol WHERE usurol_usuario='" + codusuario
+                            + "' AND usurol_rol='" + codRolModificar + "'";
+                    con = con.ObtenerRSSentencia(sentencia);
+                    if (con.rs.next()) { //Si existe
+                        if (estadoModificar == false) {
+                            sentencia = "DELETE FROM usuario_rol WHERE usurol_usuario='" + codusuario + "' "
+                                    + "AND usurol_rol='" + codRolModificar + "'";
+                            con.EjecutarABM(sentencia);
+                        }
+                    } else { //Si no existe
+                        if (estadoModificar == true) {
+                            sentencia = "INSERT INTO usuario_rol VALUES(usurol_codigo,'" + codusuario + "','" + codRolModificar + "')";
+                            con.EjecutarABM(sentencia);
+                        }
+                    }
+                    //Si existe rol baja
+                    estadoBaja = (Boolean) tbRoles.getValueAt(i, 3);
+                    codRolBaja = tbRoles.getValueAt(i, 6) + "";
+                    sentencia = "SELECT usurol_codigo FROM usuario_rol WHERE usurol_usuario='" + codusuario
+                            + "' AND usurol_rol='" + codRolBaja + "'";
+                    con = con.ObtenerRSSentencia(sentencia);
+                    if (con.rs.next()) { //Si existe
+                        if (estadoBaja == false) {
+                            sentencia = "DELETE FROM usuario_rol WHERE usurol_usuario='" + codusuario + "' "
+                                    + "AND usurol_rol='" + codRolBaja + "'";
+                            con.EjecutarABM(sentencia);
+                        }
+                    } else { //Si no existe
+                        if (estadoBaja == true) {
+                            sentencia = "INSERT INTO usuario_rol VALUES(usurol_codigo,'" + codusuario + "','" + codRolBaja + "')";
+                            con.EjecutarABM(sentencia);
+                        }
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        con.DesconectarBasedeDatos();
     }
 
     private void ModoVistaPrevia() {
@@ -216,12 +406,15 @@ public final class ABMUsuario extends javax.swing.JDialog {
         Date fechacreacion = null;
         try {
             fechacreacion = formato.parse(tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 5).toString());
+
         } catch (ParseException ex) {
-            Logger.getLogger(ABMUsuario.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ABMUsuario.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         dcFechaCreacion.setDate(fechacreacion);
 
-        TablaConsultaPerfilUsuarios();
+        TablaPerfilesDelUsu();
+        TablaRolesDelUsu();
     }
 
     private void ModoEdicion(boolean valor) {
@@ -238,7 +431,10 @@ public final class ABMUsuario extends javax.swing.JDialog {
         btnGuardar.setEnabled(valor);
         btnCancelar.setEnabled(valor);
 
-        txtAlias.requestFocus();
+        tbPerfiles.setEnabled(valor);
+        tbRoles.setEnabled(valor);
+
+        txtNombre.requestFocus();
     }
 
     private void Limpiar() {
@@ -258,6 +454,13 @@ public final class ABMUsuario extends javax.swing.JDialog {
 
         txtBuscar.requestFocus();
         tbPrincipal.clearSelection();
+
+        TablaAllPerfiles();
+        TablaAllRoles();
+        if (dtmPerfilModulos.getRowCount() != 0) {
+            dtmPerfilModulos.setRowCount(0); //Vacia tabla
+        }
+
     }
 
     public boolean ComprobarCampos() {
@@ -274,24 +477,6 @@ public final class ABMUsuario extends javax.swing.JDialog {
 
         if (metodostxt.ValidarCampoVacioTXT(txtPass, lblPass) == false) {
             return false;
-        }
-
-        try {
-            con = con.ObtenerRSSentencia("SELECT cli_ruccedula FROM cliente "
-                    + "WHERE cli_ruccedula='" + txtAlias.getText() + "'");
-            if (con.rs.next() == true) { //Si ya existe el numero de cedula en la bd de clientes
-                System.out.println("El CI ingresado ya existe en la bd");
-                JOptionPane.showMessageDialog(null, "El RUC o CI ya se encuentra registrado", "Error", JOptionPane.ERROR_MESSAGE);
-                lblAlias.setForeground(Color.RED);
-                lblAlias.requestFocus();
-                con.DesconectarBasedeDatos();
-                Toolkit.getDefaultToolkit().beep();
-                return false;
-            }
-        } catch (SQLException e) {
-            System.out.println("Error al buscar si ci ya existe en bd: " + e);
-        } catch (NullPointerException e) {
-            System.out.println("La CI ingresada no existe en la bd, aprobado: " + e);
         }
 
         return true;
@@ -319,44 +504,33 @@ public final class ABMUsuario extends javax.swing.JDialog {
         btnModificar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         jtpEdicion = new javax.swing.JTabbedPane();
-        jpEdicion = new javax.swing.JPanel();
-        lblCodigo = new javax.swing.JLabel();
-        txtCodigo = new javax.swing.JTextField();
-        lblAlias = new javax.swing.JLabel();
-        txtAlias = new javax.swing.JTextField();
-        lblNombre = new javax.swing.JLabel();
-        txtNombre = new javax.swing.JTextField();
-        lblApellido = new javax.swing.JLabel();
-        txtApellido = new javax.swing.JTextField();
-        lblPass = new javax.swing.JLabel();
-        txtPass = new javax.swing.JTextField();
-        lblFechaCreacion = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        dcFechaCreacion = new com.toedter.calendar.JDateChooser();
         jpPerfiles = new javax.swing.JPanel();
-        scPerfilesUsuario = new javax.swing.JScrollPane();
-        tbPerfilUsuario = new javax.swing.JTable(){
-            public boolean isCellEditable(int rowIndex, int colIndex) {
-                return false; //Disallow the editing of any cell
-            }
-        };
-        btnCargarImagen = new javax.swing.JButton();
-        btnEliminarImagen = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tbPerfiles = new javax.swing.JTable();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tbPerfilModulos = new javax.swing.JTable();
+        lblTituloPerfilModulos = new javax.swing.JLabel();
         jpRoles = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
-        chbNuevo = new javax.swing.JCheckBox();
-        chbModificar = new javax.swing.JCheckBox();
-        chbEliminar = new javax.swing.JCheckBox();
-        cbPerfil = new javax.swing.JComboBox<>();
-        cbModulo = new javax.swing.JComboBox<>();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tbRoles = new javax.swing.JTable();
         jpBotones2 = new javax.swing.JPanel();
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         panel2 = new org.edisoncor.gui.panel.Panel();
         labelMetric2 = new org.edisoncor.gui.label.LabelMetric();
+        panel1 = new org.edisoncor.gui.panel.Panel();
+        lblCodigo = new javax.swing.JLabel();
+        txtCodigo = new javax.swing.JTextField();
+        lblNombre = new javax.swing.JLabel();
+        txtNombre = new javax.swing.JTextField();
+        lblApellido = new javax.swing.JLabel();
+        txtApellido = new javax.swing.JTextField();
+        lblFechaCreacion = new javax.swing.JLabel();
+        dcFechaCreacion = new com.toedter.calendar.JDateChooser();
+        lblAlias = new javax.swing.JLabel();
+        lblPass = new javax.swing.JLabel();
+        txtAlias = new javax.swing.JTextField();
+        txtPass = new javax.swing.JTextField();
 
         setTitle("Ventana Clientes");
         setBackground(new java.awt.Color(45, 62, 80));
@@ -430,24 +604,20 @@ public final class ABMUsuario extends javax.swing.JDialog {
         jpTabla.setLayout(jpTablaLayout);
         jpTablaLayout.setHorizontalGroup(
             jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpTablaLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpTablaLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpTablaLayout.createSequentialGroup()
-                        .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(scPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 628, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jpTablaLayout.createSequentialGroup()
-                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(lblBuscarCampo)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbCampoBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(90, 90, 90))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpTablaLayout.createSequentialGroup()
-                        .addComponent(lbCantRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(108, 108, 108))))
+                .addGroup(jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lbCantRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(scPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 676, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jpTablaLayout.createSequentialGroup()
+                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(37, 37, 37)
+                        .addComponent(lblBuscarCampo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbCampoBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(42, 42, 42))
         );
         jpTablaLayout.setVerticalGroup(
             jpTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -458,7 +628,7 @@ public final class ABMUsuario extends javax.swing.JDialog {
                     .addComponent(lblBuscarCampo, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(1, 1, 1)
                 .addComponent(scPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addGap(2, 2, 2)
                 .addComponent(lbCantRegistros, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -513,7 +683,7 @@ public final class ABMUsuario extends javax.swing.JDialog {
         jpBotonesLayout.setHorizontalGroup(
             jpBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpBotonesLayout.createSequentialGroup()
-                .addContainerGap(9, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jpBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnNuevo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnEliminar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -535,226 +705,99 @@ public final class ABMUsuario extends javax.swing.JDialog {
         jtpEdicion.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
         jtpEdicion.setName(""); // NOI18N
 
-        jpEdicion.setBackground(new java.awt.Color(233, 255, 255));
-        jpEdicion.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
-
-        lblCodigo.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        lblCodigo.setForeground(new java.awt.Color(102, 102, 102));
-        lblCodigo.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblCodigo.setText("Código:");
-
-        txtCodigo.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        txtCodigo.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        txtCodigo.setEnabled(false);
-
-        lblAlias.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        lblAlias.setForeground(new java.awt.Color(102, 102, 102));
-        lblAlias.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblAlias.setText("Alias*:");
-        lblAlias.setToolTipText("");
-
-        txtAlias.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        txtAlias.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        txtAlias.setEnabled(false);
-
-        lblNombre.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        lblNombre.setForeground(new java.awt.Color(102, 102, 102));
-        lblNombre.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblNombre.setText("Nombre*:");
-
-        txtNombre.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        txtNombre.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        txtNombre.setEnabled(false);
-        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtNombreKeyReleased(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNombreKeyTyped(evt);
-            }
-        });
-
-        lblApellido.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        lblApellido.setForeground(new java.awt.Color(102, 102, 102));
-        lblApellido.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblApellido.setText("Apellido*:");
-
-        txtApellido.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        txtApellido.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        txtApellido.setEnabled(false);
-        txtApellido.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtApellidoKeyReleased(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtApellidoKeyTyped(evt);
-            }
-        });
-
-        lblPass.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        lblPass.setForeground(new java.awt.Color(102, 102, 102));
-        lblPass.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblPass.setText("Contraseña*:");
-
-        txtPass.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        txtPass.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        txtPass.setEnabled(false);
-
-        lblFechaCreacion.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        lblFechaCreacion.setForeground(new java.awt.Color(102, 102, 102));
-        lblFechaCreacion.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblFechaCreacion.setText("Fecha de creación*:");
-
-        jLabel2.setForeground(new java.awt.Color(0, 0, 153));
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel2.setText("Campos con (*) son obligatorios");
-
-        javax.swing.GroupLayout jpEdicionLayout = new javax.swing.GroupLayout(jpEdicion);
-        jpEdicion.setLayout(jpEdicionLayout);
-        jpEdicionLayout.setHorizontalGroup(
-            jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpEdicionLayout.createSequentialGroup()
-                .addGap(1, 1, 1)
-                .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblAlias, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblFechaCreacion, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
-                    .addComponent(lblCodigo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(2, 2, 2)
-                .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpEdicionLayout.createSequentialGroup()
-                        .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2))
-                    .addGroup(jpEdicionLayout.createSequentialGroup()
-                        .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(txtAlias, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
-                            .addComponent(txtNombre, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addGap(18, 18, 18)
-                        .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lblPass, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(2, 2, 2)
-                        .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtApellido, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE)
-                            .addComponent(txtPass)))
-                    .addComponent(dcFechaCreacion, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(319, 319, Short.MAX_VALUE))
-        );
-        jpEdicionLayout.setVerticalGroup(
-            jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpEdicionLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(lblCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(lblAlias, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtAlias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblPass, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblFechaCreacion, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dcFechaCreacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(17, Short.MAX_VALUE))
-        );
-
-        jtpEdicion.addTab("Edición", jpEdicion);
-
         jpPerfiles.setBackground(new java.awt.Color(233, 255, 255));
         jpPerfiles.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
 
-        tbPerfilUsuario.setAutoCreateRowSorter(true);
-        tbPerfilUsuario.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        tbPerfilUsuario.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        tbPerfilUsuario.setModel(new javax.swing.table.DefaultTableModel(
+        tbPerfiles.setFont(new java.awt.Font("sansserif", 0, 13)); // NOI18N
+        tbPerfiles.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-
+                "Código", "Perfil", "Estado", "Descripción"
             }
-        ));
-        tbPerfilUsuario.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
-        tbPerfilUsuario.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        tbPerfilUsuario.setGridColor(new java.awt.Color(0, 153, 204));
-        tbPerfilUsuario.setOpaque(false);
-        tbPerfilUsuario.setRowHeight(20);
-        tbPerfilUsuario.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        tbPerfilUsuario.getTableHeader().setReorderingAllowed(false);
-        tbPerfilUsuario.addMouseListener(new java.awt.event.MouseAdapter() {
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, true, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tbPerfiles.setEnabled(false);
+        tbPerfiles.setRowHeight(25);
+        tbPerfiles.setShowHorizontalLines(true);
+        tbPerfiles.getTableHeader().setReorderingAllowed(false);
+        tbPerfiles.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                tbPerfilUsuarioMousePressed(evt);
+                tbPerfilesMousePressed(evt);
             }
         });
-        tbPerfilUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                tbPerfilUsuarioKeyReleased(evt);
+        jScrollPane2.setViewportView(tbPerfiles);
+
+        tbPerfilModulos.setFont(new java.awt.Font("sansserif", 0, 13)); // NOI18N
+        tbPerfilModulos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Código", "Módulo"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
-        scPerfilesUsuario.setViewportView(tbPerfilUsuario);
+        tbPerfilModulos.setEnabled(false);
+        tbPerfilModulos.setRowHeight(20);
+        tbPerfilModulos.setRowSelectionAllowed(false);
+        tbPerfilModulos.getTableHeader().setReorderingAllowed(false);
+        jScrollPane3.setViewportView(tbPerfilModulos);
+        if (tbPerfilModulos.getColumnModel().getColumnCount() > 0) {
+            tbPerfilModulos.getColumnModel().getColumn(0).setResizable(false);
+            tbPerfilModulos.getColumnModel().getColumn(0).setPreferredWidth(20);
+            tbPerfilModulos.getColumnModel().getColumn(1).setResizable(false);
+            tbPerfilModulos.getColumnModel().getColumn(1).setPreferredWidth(50);
+        }
 
-        btnCargarImagen.setBackground(new java.awt.Color(0, 153, 153));
-        btnCargarImagen.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
-        btnCargarImagen.setText("+");
-        btnCargarImagen.setToolTipText("Cargar una imagen del producto");
-        btnCargarImagen.setEnabled(false);
-
-        btnEliminarImagen.setBackground(new java.awt.Color(255, 0, 51));
-        btnEliminarImagen.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
-        btnEliminarImagen.setText("-");
-        btnEliminarImagen.setToolTipText("Eliminar imagen del producto");
-        btnEliminarImagen.setEnabled(false);
-        btnEliminarImagen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEliminarImagenActionPerformed(evt);
-            }
-        });
-
-        jLabel1.setFont(new java.awt.Font("sansserif", 1, 16)); // NOI18N
-        jLabel1.setText("Perfiles del usuario seleccionado");
+        lblTituloPerfilModulos.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
+        lblTituloPerfilModulos.setText("Módulos del perfil:");
 
         javax.swing.GroupLayout jpPerfilesLayout = new javax.swing.GroupLayout(jpPerfiles);
         jpPerfiles.setLayout(jpPerfilesLayout);
         jpPerfilesLayout.setHorizontalGroup(
             jpPerfilesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpPerfilesLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpPerfilesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jpPerfilesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpPerfilesLayout.createSequentialGroup()
-                        .addComponent(scPerfilesUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jpPerfilesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnCargarImagen)
-                            .addComponent(btnEliminarImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(465, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 588, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                .addGroup(jpPerfilesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblTituloPerfilModulos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jpPerfilesLayout.setVerticalGroup(
             jpPerfilesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpPerfilesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addGroup(jpPerfilesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpPerfilesLayout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(scPerfilesUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpPerfilesLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCargarImagen)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnEliminarImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(27, 27, 27)))
-                .addContainerGap(10, Short.MAX_VALUE))
+                .addComponent(lblTituloPerfilModulos)
+                .addGap(4, 4, 4)
+                .addGroup(jpPerfilesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jtpEdicion.addTab("Perfiles", jpPerfiles);
@@ -762,88 +805,73 @@ public final class ABMUsuario extends javax.swing.JDialog {
         jpRoles.setBackground(new java.awt.Color(233, 255, 255));
         jpRoles.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
 
-        jLabel5.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
-        jLabel5.setText("Perfil");
+        tbRoles.setFont(new java.awt.Font("sansserif", 0, 13)); // NOI18N
+        tbRoles.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
 
-        chbNuevo.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
-        chbNuevo.setText("Nuevo");
-        chbNuevo.setEnabled(false);
-        chbNuevo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chbNuevoActionPerformed(evt);
+            },
+            new String [] {
+                "Módulo", "Alta", "Modificar", "Baja", "AltaCodigo", "ModificarCodigo", "BajaCodigo"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Boolean.class, java.lang.Boolean.class, java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, true, true, true, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
-
-        chbModificar.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
-        chbModificar.setText("Modificar");
-        chbModificar.setEnabled(false);
-
-        chbEliminar.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
-        chbEliminar.setText("Eliminar");
-        chbEliminar.setEnabled(false);
-
-        cbPerfil.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cbPerfilItemStateChanged(evt);
-            }
-        });
-
-        cbModulo.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cbModuloItemStateChanged(evt);
-            }
-        });
-
-        jLabel7.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
-        jLabel7.setText("Roles del usuario");
-
-        jLabel8.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
-        jLabel8.setText("Modulo");
+        tbRoles.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_NEXT_COLUMN);
+        tbRoles.setEnabled(false);
+        tbRoles.setRowHeight(25);
+        tbRoles.setRowSelectionAllowed(false);
+        tbRoles.setShowHorizontalLines(true);
+        tbRoles.getTableHeader().setResizingAllowed(false);
+        tbRoles.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(tbRoles);
+        if (tbRoles.getColumnModel().getColumnCount() > 0) {
+            tbRoles.getColumnModel().getColumn(0).setResizable(false);
+            tbRoles.getColumnModel().getColumn(0).setPreferredWidth(50);
+            tbRoles.getColumnModel().getColumn(1).setResizable(false);
+            tbRoles.getColumnModel().getColumn(1).setPreferredWidth(10);
+            tbRoles.getColumnModel().getColumn(2).setResizable(false);
+            tbRoles.getColumnModel().getColumn(2).setPreferredWidth(10);
+            tbRoles.getColumnModel().getColumn(3).setResizable(false);
+            tbRoles.getColumnModel().getColumn(3).setPreferredWidth(10);
+            tbRoles.getColumnModel().getColumn(4).setResizable(false);
+            tbRoles.getColumnModel().getColumn(4).setPreferredWidth(0);
+            tbRoles.getColumnModel().getColumn(5).setResizable(false);
+            tbRoles.getColumnModel().getColumn(5).setPreferredWidth(0);
+            tbRoles.getColumnModel().getColumn(6).setResizable(false);
+            tbRoles.getColumnModel().getColumn(6).setPreferredWidth(0);
+        }
 
         javax.swing.GroupLayout jpRolesLayout = new javax.swing.GroupLayout(jpRoles);
         jpRoles.setLayout(jpRolesLayout);
         jpRolesLayout.setHorizontalGroup(
             jpRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpRolesLayout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39)
-                .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbModulo, 0, 159, Short.MAX_VALUE)
-                .addGap(38, 38, 38)
-                .addGroup(jpRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel7)
-                    .addGroup(jpRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(chbNuevo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(chbModificar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(chbEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(143, 143, 143))
+                .addGap(112, 112, 112)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 617, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(118, Short.MAX_VALUE))
         );
         jpRolesLayout.setVerticalGroup(
             jpRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpRolesLayout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addGroup(jpRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpRolesLayout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(chbNuevo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(chbModificar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(chbEliminar))
-                    .addGroup(jpRolesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel5)
-                        .addComponent(cbPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(cbModulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel8)))
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
-        jtpEdicion.addTab("Perfiles y roles", jpRoles);
+        jtpEdicion.addTab("Roles", jpRoles);
 
         jpBotones2.setBackground(new java.awt.Color(233, 255, 255));
         jpBotones2.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
@@ -926,24 +954,151 @@ public final class ABMUsuario extends javax.swing.JDialog {
                 .addContainerGap(7, Short.MAX_VALUE))
         );
 
+        panel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Datos del usuario"));
+        panel1.setColorPrimario(new java.awt.Color(233, 255, 255));
+        panel1.setColorSecundario(new java.awt.Color(255, 255, 255));
+
+        lblCodigo.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lblCodigo.setForeground(new java.awt.Color(102, 102, 102));
+        lblCodigo.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblCodigo.setText("Código");
+
+        txtCodigo.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        txtCodigo.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        txtCodigo.setEnabled(false);
+
+        lblNombre.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lblNombre.setForeground(new java.awt.Color(102, 102, 102));
+        lblNombre.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblNombre.setText("Nombre*");
+
+        txtNombre.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        txtNombre.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        txtNombre.setEnabled(false);
+        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtNombreKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreKeyTyped(evt);
+            }
+        });
+
+        lblApellido.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lblApellido.setForeground(new java.awt.Color(102, 102, 102));
+        lblApellido.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblApellido.setText("Apellido*");
+
+        txtApellido.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        txtApellido.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        txtApellido.setEnabled(false);
+        txtApellido.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtApellidoKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtApellidoKeyTyped(evt);
+            }
+        });
+
+        lblFechaCreacion.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lblFechaCreacion.setForeground(new java.awt.Color(102, 102, 102));
+        lblFechaCreacion.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblFechaCreacion.setText("Fecha de creación*");
+
+        dcFechaCreacion.setEnabled(false);
+
+        lblAlias.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lblAlias.setForeground(new java.awt.Color(102, 102, 102));
+        lblAlias.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblAlias.setText("Alias*");
+        lblAlias.setToolTipText("");
+
+        lblPass.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        lblPass.setForeground(new java.awt.Color(102, 102, 102));
+        lblPass.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblPass.setText("Contraseña*");
+
+        txtAlias.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        txtAlias.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        txtAlias.setEnabled(false);
+
+        txtPass.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        txtPass.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        txtPass.setEnabled(false);
+
+        javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
+        panel1.setLayout(panel1Layout);
+        panel1Layout.setHorizontalGroup(
+            panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblCodigo)
+                    .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblNombre)
+                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblApellido)
+                    .addComponent(txtApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(40, 40, 40)
+                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblAlias)
+                    .addComponent(txtAlias, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblPass, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtPass, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblFechaCreacion)
+                    .addComponent(dcFechaCreacion, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        panel1Layout.setVerticalGroup(
+            panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(lblCodigo)
+                    .addComponent(lblNombre)
+                    .addComponent(lblApellido)
+                    .addComponent(lblAlias)
+                    .addComponent(lblPass)
+                    .addComponent(lblFechaCreacion))
+                .addGap(2, 2, 2)
+                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtAlias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dcFechaCreacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout jpPrincipalLayout = new javax.swing.GroupLayout(jpPrincipal);
         jpPrincipal.setLayout(jpPrincipalLayout);
         jpPrincipalLayout.setHorizontalGroup(
             jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jpPrincipalLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jtpEdicion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addGroup(jpPrincipalLayout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(jpTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 644, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jpBotones, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jpPrincipalLayout.createSequentialGroup()
-                        .addGap(255, 255, 255)
-                        .addComponent(jpBotones2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(9, Short.MAX_VALUE))
+                        .addComponent(jpTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 691, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jpBotones, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jtpEdicion, javax.swing.GroupLayout.PREFERRED_SIZE, 851, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpPrincipalLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jpBotones2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(270, 270, 270))
         );
         jpPrincipalLayout.setVerticalGroup(
             jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -953,11 +1108,13 @@ public final class ABMUsuario extends javax.swing.JDialog {
                 .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jpBotones, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
                     .addComponent(jpTabla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jtpEdicion, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(jtpEdicion, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jpBotones2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(10, Short.MAX_VALUE))
         );
 
         jtpEdicion.getAccessibleContext().setAccessibleName("");
@@ -966,11 +1123,11 @@ public final class ABMUsuario extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 823, Short.MAX_VALUE)
+            .addComponent(jpPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 866, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 531, Short.MAX_VALUE)
+            .addComponent(jpPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 625, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         getAccessibleContext().setAccessibleName("Inventario");
@@ -988,11 +1145,7 @@ public final class ABMUsuario extends javax.swing.JDialog {
     }//GEN-LAST:event_txtBuscarKeyReleased
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        if (txtCodigo.getText().equals("")) {//Si es nuevo
-            RegistroNuevo();
-        } else { //Si es modificar
-            RegistroModificar();
-        }
+        RegistroNuevoModificar();
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -1027,7 +1180,6 @@ public final class ABMUsuario extends javax.swing.JDialog {
             btnModificar.setEnabled(true);
             btnEliminar.setEnabled(true);
 
-            CargarComboBoxes();
             ModoVistaPrevia();
         }
     }//GEN-LAST:event_tbPrincipalMousePressed
@@ -1058,78 +1210,33 @@ public final class ABMUsuario extends javax.swing.JDialog {
 
     private void tbPrincipalKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbPrincipalKeyReleased
         if (evt.getKeyCode() == KeyEvent.VK_UP || evt.getKeyCode() == KeyEvent.VK_DOWN) {
-            CargarComboBoxes();
             ModoVistaPrevia();
         }
     }//GEN-LAST:event_tbPrincipalKeyReleased
-
-    private void tbPerfilUsuarioMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbPerfilUsuarioMousePressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tbPerfilUsuarioMousePressed
-
-    private void tbPerfilUsuarioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbPerfilUsuarioKeyReleased
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tbPerfilUsuarioKeyReleased
-
-    private void btnEliminarImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarImagenActionPerformed
-        btnEliminarImagen.setEnabled(false);
-    }//GEN-LAST:event_btnEliminarImagenActionPerformed
-
-    private void cbPerfilItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbPerfilItemStateChanged
-        if (metodoscombo.ObtenerIDSelectComboBox(cbPerfil) > 0) {
-            metodoscombo.CargarComboBox(cbModulo, "SELECT mo_codigo, mo_denominacion FROM perfil, perfil_modulo, modulo "
-                    + "WHERE  per_codigo = '" + metodoscombo.ObtenerIDSelectComboBox(cbPerfil) + "' "
-                    + "AND permo_perfil = per_codigo AND permo_modulo = mo_codigo", 1);
-
-            if (cbModulo.getItemCount() > 0 && cbModulo.isEnabled()) {
-                cbModulo.setSelectedIndex(0);
-            }
-        }
-    }//GEN-LAST:event_cbPerfilItemStateChanged
 
     private void tbPrincipalMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbPrincipalMouseReleased
         // TODO add your handling code here:
     }//GEN-LAST:event_tbPrincipalMouseReleased
 
-    private void cbModuloItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbModuloItemStateChanged
-        if (cbModulo.getSelectedIndex() == -1) {
-            return;
-        }
-
-        String aliasselect = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 3).toString();
-        String moduloselect = cbModulo.getSelectedItem().toString();
-
-        con = con.ObtenerRSSentencia("CALL SP_UsuarioRolConsulta('" + aliasselect + "','" + moduloselect + "')");
-        try {
-            chbNuevo.setSelected(false);
-            chbEliminar.setSelected(false);
-            chbModificar.setSelected(false);
-            String rol;
-            while (con.rs.next()) {
-                rol = con.rs.getString("rol_denominacion");
-                switch (rol) {
-                    case "ALTA":
-                        chbNuevo.setSelected(true);
-                        break;
-                    case "BAJA":
-                        chbEliminar.setSelected(true);
-                        break;
-                    case "MODIFICAR":
-                        chbModificar.setSelected(true);
-                        break;
-                    default:
-                        JOptionPane.showMessageDialog(this, "No se encontró", "Error", JOptionPane.ERROR_MESSAGE);
-                        break;
+    private void tbPerfilesMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbPerfilesMousePressed
+        if (tbPerfiles.isEnabled()) {
+            dtmPerfilModulos = (DefaultTableModel) tbPerfilModulos.getModel();
+            dtmPerfilModulos.setRowCount(0);
+            String codperfil = tbPerfiles.getValueAt(tbPerfiles.getSelectedRow(), 0) + "";
+            lblTituloPerfilModulos.setText("Módulos del perfil: " + tbPerfiles.getValueAt(tbPerfiles.getSelectedRow(), 1));
+            String sentencia = "SELECT mo_codigo, mo_denominacion FROM perfil_modulo, modulo WHERE permo_perfil = '" + codperfil
+                    + "' AND permo_modulo=mo_codigo ORDER BY mo_denominacion";
+            con = con.ObtenerRSSentencia(sentencia);
+            try {
+                while (con.rs.next()) {
+                    dtmPerfilModulos.addRow(new Object[]{con.rs.getString("mo_codigo"), con.rs.getString("mo_denominacion")});
                 }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (HeadlessException | SQLException e) {
+            con.DesconectarBasedeDatos();
         }
-        con.DesconectarBasedeDatos();
-    }//GEN-LAST:event_cbModuloItemStateChanged
-
-    private void chbNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbNuevoActionPerformed
-       
-    }//GEN-LAST:event_chbNuevoActionPerformed
+    }//GEN-LAST:event_tbPerfilesMousePressed
 
     List<Component> ordenTabulador;
 
@@ -1143,6 +1250,7 @@ public final class ABMUsuario extends javax.swing.JDialog {
         ordenTabulador.add(dcFechaCreacion);
         ordenTabulador.add(btnGuardar);
         setFocusTraversalPolicy(new PersonalizadoFocusTraversalPolicy());
+
     }
 
     private class PersonalizadoFocusTraversalPolicy extends FocusTraversalPolicy {
@@ -1174,28 +1282,18 @@ public final class ABMUsuario extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
-    private javax.swing.JButton btnCargarImagen;
     private javax.swing.JButton btnEliminar;
-    private javax.swing.JButton btnEliminarImagen;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnNuevo;
     private javax.swing.JComboBox cbCampoBuscar;
-    private javax.swing.JComboBox<MetodosCombo> cbModulo;
-    private javax.swing.JComboBox<MetodosCombo> cbPerfil;
-    private javax.swing.JCheckBox chbEliminar;
-    private javax.swing.JCheckBox chbModificar;
-    private javax.swing.JCheckBox chbNuevo;
     private com.toedter.calendar.JDateChooser dcFechaCreacion;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JPanel jpBotones;
     private javax.swing.JPanel jpBotones2;
-    private javax.swing.JPanel jpEdicion;
     private javax.swing.JPanel jpPerfiles;
     private javax.swing.JPanel jpPrincipal;
     private javax.swing.JPanel jpRoles;
@@ -1210,11 +1308,14 @@ public final class ABMUsuario extends javax.swing.JDialog {
     private javax.swing.JLabel lblFechaCreacion;
     private javax.swing.JLabel lblNombre;
     private javax.swing.JLabel lblPass;
+    private javax.swing.JLabel lblTituloPerfilModulos;
+    private org.edisoncor.gui.panel.Panel panel1;
     private org.edisoncor.gui.panel.Panel panel2;
-    private javax.swing.JScrollPane scPerfilesUsuario;
     private javax.swing.JScrollPane scPrincipal;
-    private javax.swing.JTable tbPerfilUsuario;
+    private javax.swing.JTable tbPerfilModulos;
+    private javax.swing.JTable tbPerfiles;
     private javax.swing.JTable tbPrincipal;
+    private javax.swing.JTable tbRoles;
     private javax.swing.JTextField txtAlias;
     private javax.swing.JTextField txtApellido;
     private javax.swing.JTextField txtBuscar;
