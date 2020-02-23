@@ -10,19 +10,14 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
-import java.awt.HeadlessException;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import static login.Login.Alias;
 import utilidades.Metodos;
@@ -52,59 +47,21 @@ public final class ABMFuncionario extends javax.swing.JDialog {
         Calendar c2 = new GregorianCalendar();
         dcFechaIngreso.setCalendar(c2);
         CargarComboBoxes();
-                //Permiso Roles de usuario
+        //Permiso Roles de usuario
         btnNuevo.setVisible(metodos.PermisoRol(Alias, "FUNCIONARIO", "ALTA"));
         btnModificar.setVisible(metodos.PermisoRol(Alias, "FUNCIONARIO", "MODIFICAR"));
         btnEliminar.setVisible(metodos.PermisoRol(Alias, "FUNCIONARIO", "BAJA"));
-        
+
         OrdenTabulador();
     }
 
     //--------------------------METODOS----------------------------//
     public void CargarComboBoxes() {
         //Carga los combobox con las consultas
-        metodoscombo.CargarComboBox(cbCargo, "SELECT car_codigo, car_descripcion FROM cargo ORDER BY car_codigo", 1);
-        metodoscombo.setSelectedCodigoItem(cbCargo, 1);
+        metodoscombo.CargarComboBox(cbCargo, "SELECT car_codigo, car_descripcion FROM cargo ORDER BY car_descripcion", -1);
     }
 
-    public void RegistroNuevo() {
-        try {
-            if (ComprobarCampos() == true) {
-                String nombre = txtNombre.getText();
-                String apellido = txtApellido.getText();
-                SimpleDateFormat formatofecha = new SimpleDateFormat("yyyy-MM-dd");
-                String fechaingreso = formatofecha.format(dcFechaIngreso.getDate());
-                String sexo = cbSexo.getSelectedItem().toString();
-                String telefono = txtTelefono.getText();
-                String email = txtEmail.getText();
-                String obs = taObs.getText();
-                int estado = cbEstado.getSelectedIndex();
-                int cargo = metodoscombo.ObtenerIDSelectComboBox(cbCargo);
-
-                int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro crear este nuevo registro?", "Confirmación", JOptionPane.YES_OPTION);
-
-                if (JOptionPane.YES_OPTION == confirmado) {
-                    //REGISTRAR NUEVO
-                    String sentencia = "CALL SP_" + nombreTablaBD + "Alta ('" + nombre + "','" + apellido + "','" + fechaingreso + "','" + sexo
-                            + "','" + telefono + "','" + email + "','" + obs + "','" + estado + "','" + cargo + "')";
-                    con.EjecutarABM(sentencia);
-
-                    TablaConsultaBDAll(); //Actualizar tabla
-                    JOptionPane.showMessageDialog(this, "Se agregó correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
-                    ModoEdicion(false);
-                    Limpiar();
-                }
-            }
-        } catch (HeadlessException ex) {
-            JOptionPane.showMessageDialog(null, "Completar los campos obligarios marcados con * ", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            System.out.println("Completar los campos obligarios marcados con * " + ex);
-            txtNombre.requestFocus();
-        }
-    }
-
-    public void RegistroModificar() {
-        //guarda los datos que se han modificado en los campos
-
+    public void RegistroNuevoModificar() {
         if (ComprobarCampos() == true) {
             String codigo = txtCodigo.getText();
             String nombre = txtNombre.getText();
@@ -118,71 +75,55 @@ public final class ABMFuncionario extends javax.swing.JDialog {
             int estado = cbEstado.getSelectedIndex();
             int cargo = metodoscombo.ObtenerIDSelectComboBox(cbCargo);
 
-            int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro de modificar este registro?", "Confirmación", JOptionPane.YES_OPTION);
-            if (JOptionPane.YES_OPTION == confirmado) {
-                String sentencia = "CALL SP_" + nombreTablaBD + "Modificar(" + codigo + ",'" + nombre + "','" + apellido + "','" + fechaingreso + "','" + sexo
-                        + "','" + telefono + "','" + email + "','" + obs + "','" + estado + "','" + cargo + "')";
-                System.out.println("Actualizar registro: " + sentencia);
+            if (codigo.equals("")) {
+                //NUEVO REGISTRO
+                int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro crear este nuevo registro?", "Confirmación", JOptionPane.YES_OPTION);
+                if (JOptionPane.YES_OPTION == confirmado) {
+                    String sentencia = "CALL SP_" + nombreTablaBD + "Alta ('" + nombre + "','" + apellido + "','" + fechaingreso + "','" + sexo
+                            + "','" + telefono + "','" + email + "','" + obs + "','" + estado + "','" + cargo + "')";
+                    con.EjecutarABM(sentencia);
 
-                try {
-                    Connection con;
-                    con = conexion.Conexion.ConectarBasedeDatos();
-                    PreparedStatement pst;
-                    pst = con.prepareStatement(sentencia);
-                    pst.executeUpdate();
-                    getToolkit().beep();
-                    JOptionPane.showMessageDialog(null, "Registro modificado correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
-
-                    con.close();
-                    pst.close();
-                } catch (SQLException ex) {
-                    System.out.println("Error al modificar registro " + ex);
-                    JOptionPane.showMessageDialog(null, "Error al intentar modificar el registro", "Error", JOptionPane.INFORMATION_MESSAGE);
+                    Toolkit.getDefaultToolkit().beep();
+                    JOptionPane.showMessageDialog(this, "Se agregó correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
                 }
-                ModoEdicion(false);
-                Limpiar();
             } else {
-                System.out.println("No se modificó el registro");
+                //MODIFICAR REGISTRO
+                int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro de modificar este registro?", "Confirmación", JOptionPane.YES_OPTION);
+                if (JOptionPane.YES_OPTION == confirmado) {
+                    String sentencia = "CALL SP_" + nombreTablaBD + "Modificar(" + codigo + ",'" + nombre + "','" + apellido + "','" + fechaingreso + "','" + sexo
+                            + "','" + telefono + "','" + email + "','" + obs + "','" + estado + "','" + cargo + "')";
+                    con.EjecutarABM(sentencia);
+
+                    Toolkit.getDefaultToolkit().beep();
+                    JOptionPane.showMessageDialog(this, "Se modificó correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
+                }
             }
+            TablaConsultaBDAll(); //Actualizar tabla                  
+            ModoEdicion(false);
+            Limpiar();
         }
     }
 
     private void RegistroEliminar() {
-        int filasel;
-        String codigo;
-        try {
-            filasel = tbPrincipal.getSelectedRow();
-            if (filasel == -1) {
-                JOptionPane.showMessageDialog(this, "No se ha seleccionado ninguna fila", "Advertencia", JOptionPane.WARNING_MESSAGE);
-                txtBuscar.requestFocus();
-            } else {
-                int confirmado = javax.swing.JOptionPane.showConfirmDialog(this, "¿Realmente desea eliminar este registro?", "Confirmación", JOptionPane.YES_OPTION);
-                if (confirmado == JOptionPane.YES_OPTION) {
-                    codigo = (String) tbPrincipal.getModel().getValueAt(filasel, 0);
-                    try {
-                        Connection con;
-                        con = Conexion.ConectarBasedeDatos();
-                        String sentence;
-                        sentence = "CALL SP_" + nombreTablaBD + "Eliminar(" + codigo + ")";
-                        PreparedStatement pst;
-                        pst = con.prepareStatement(sentence);
-                        pst.executeUpdate();
-                        JOptionPane.showMessageDialog(this, "Registro eliminado correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
+        int filasel = tbPrincipal.getSelectedRow();
+        String codigo = tbPrincipal.getModel().getValueAt(filasel, 0) + "";
 
-                        con.close();
-                        pst.close();
-                    } catch (SQLException ex) {
-                        JOptionPane.showMessageDialog(this, ex);
-                        JOptionPane.showMessageDialog(this, "Error al intentar eliminar el registro", "Error", JOptionPane.INFORMATION_MESSAGE);
-                    }
-                } else {
-                    ModoEdicion(false);
-                    Limpiar();
-                    JOptionPane.showMessageDialog(null, "Cancelado correctamente", "Información", JOptionPane.ERROR_MESSAGE);
-                }
+        if (filasel == -1) {
+            JOptionPane.showMessageDialog(this, "No se ha seleccionado ninguna fila", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            txtBuscar.requestFocus();
+        } else {
+            int confirmado = javax.swing.JOptionPane.showConfirmDialog(this, "¿Realmente desea eliminar este registro?", "Confirmación", JOptionPane.YES_OPTION);
+            if (confirmado == JOptionPane.YES_OPTION) {
+                String sentencia = "CALL SP_" + nombreTablaBD + "Eliminar(" + codigo + ")";
+                con.EjecutarABM(sentencia);
+
+                Toolkit.getDefaultToolkit().beep();
+                JOptionPane.showMessageDialog(this, "Registro eliminado correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
             }
-        } catch (HeadlessException e) {
-            System.out.println("Error al intentar eliminar registro" + e);
+
+            TablaConsultaBDAll();
+            ModoEdicion(false);
+            Limpiar();
         }
     }
 
@@ -258,7 +199,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
         txtTelefono.setText("");
         taObs.setText("");
         cbEstado.setSelectedItem(0);
-        metodoscombo.setSelectedCodigoItem(cbCargo, 1);
+        cbCargo.setSelectedIndex(0);
         lblFechaIngreso.setForeground(new Color(102, 102, 102));
         lblNombre.setForeground(new Color(102, 102, 102));
         lblApellido.setForeground(new Color(102, 102, 102));
@@ -478,7 +419,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
         jpBotonesLayout.setHorizontalGroup(
             jpBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpBotonesLayout.createSequentialGroup()
-                .addContainerGap(7, Short.MAX_VALUE)
+                .addContainerGap(9, Short.MAX_VALUE)
                 .addGroup(jpBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnNuevo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnEliminar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -625,6 +566,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
         lblEstado.setToolTipText("");
 
         cbEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "INACTIVO", "ACTIVO" }));
+        cbEstado.setSelectedIndex(1);
         cbEstado.setEnabled(false);
 
         lblEstado1.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
@@ -646,7 +588,9 @@ public final class ABMFuncionario extends javax.swing.JDialog {
                     .addComponent(lblNombre, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
                     .addComponent(lblCodigo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblApellido, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblFechaIngreso, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jpEdicionLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(lblFechaIngreso, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(4, 4, 4)
                 .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpEdicionLayout.createSequentialGroup()
@@ -701,10 +645,10 @@ public final class ABMFuncionario extends javax.swing.JDialog {
                         .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(4, 4, 4)
-                        .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                            .addComponent(lblFechaIngreso, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(dcFechaIngreso, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(dcFechaIngreso, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblFechaIngreso, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(4, 4, 4)
                 .addGroup(jpEdicionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(lblSexo, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -808,7 +752,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
                 .addGroup(jpPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpPrincipalLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jpTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(jpTabla, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jpBotones, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jpPrincipalLayout.createSequentialGroup()
@@ -848,7 +792,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 594, Short.MAX_VALUE)
+            .addComponent(jpPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 594, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         getAccessibleContext().setAccessibleName("Inventario");
@@ -866,12 +810,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
     }//GEN-LAST:event_txtBuscarKeyReleased
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        if (txtCodigo.getText().equals("")) {//Si es nuevo
-            RegistroNuevo();
-        } else { //Si es modificar
-            RegistroModificar();
-        }
-        TablaConsultaBDAll();
+        RegistroNuevoModificar();
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -890,10 +829,6 @@ public final class ABMFuncionario extends javax.swing.JDialog {
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         RegistroEliminar();
-        Limpiar();
-        ModoEdicion(false);
-
-        TablaConsultaBDAll();
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnGuardarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnGuardarKeyPressed
@@ -978,6 +913,7 @@ public final class ABMFuncionario extends javax.swing.JDialog {
         ordenTabulador.add(cbEstado);
         ordenTabulador.add(btnGuardar);
         setFocusTraversalPolicy(new PersonalizadoFocusTraversalPolicy());
+
     }
 
     private class PersonalizadoFocusTraversalPolicy extends FocusTraversalPolicy {
