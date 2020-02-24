@@ -67,48 +67,48 @@ public final class ABMUsuario extends javax.swing.JDialog {
 
 //--------------------------METODOS----------------------------//
     public void RegistroNuevoModificar() {
-        try {
-            if (ComprobarCampos() == true) {
-                String codigo = txtCodigo.getText();
-                String nombre = txtNombre.getText();
-                String apellido = txtApellido.getText();
-                String alias = txtAlias.getText();
-                String pass = txtPass.getText();
-                SimpleDateFormat formatoamericano = new SimpleDateFormat("yyyy-MM-dd");
-                String fechacreacion = formatoamericano.format(dcFechaCreacion.getDate());
+        if (ComprobarCampos() == true) {
+            String codigo = txtCodigo.getText();
+            String nombre = txtNombre.getText();
+            String apellido = txtApellido.getText();
+            String alias = txtAlias.getText();
+            String pass = txtPass.getText();
+            SimpleDateFormat formatoamericano = new SimpleDateFormat("yyyy-MM-dd");
+            String fechacreacion = formatoamericano.format(dcFechaCreacion.getDate());
 
-                if (codigo.equals("")) {
-                    int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro crear este nuevo registro?", "Confirmación", JOptionPane.YES_OPTION);
-                    if (JOptionPane.YES_OPTION == confirmado) { //NUEVO REGISTRO
-                        String sentencia = "CALL SP_UsuarioAlta ('" + nombre + "','" + apellido + "','"
-                                + alias + "','" + pass + "','" + fechacreacion + "')";
-                        con.EjecutarABM(sentencia);
-                        NuevoModificarPerfilUsuario();
-                        NuevoModificarRolesUsuario();
+            if (codigo.equals("")) {
+                int confirmado = JOptionPane.showConfirmDialog(this, "¿Esta seguro crear este nuevo registro?", "Confirmación", JOptionPane.YES_OPTION);
+                if (JOptionPane.YES_OPTION == confirmado) { //NUEVO REGISTRO
+                    String sentencia = "CALL SP_UsuarioAlta ('" + nombre + "','" + apellido + "','"
+                            + alias + "','" + pass + "','" + fechacreacion + "')";
+                    con.EjecutarABM(sentencia);
+                    NuevoModificarPerfilUsuario();
+                    NuevoModificarRolesUsuario();
 
-                        Toolkit.getDefaultToolkit().beep();
-                        JOptionPane.showMessageDialog(this, "Registro creado correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
-                    }
-                } else { //MODIFICAR REGISTRO
-                    int confirmado = JOptionPane.showConfirmDialog(this, "¿Estás seguro de modificar este registro?", "Confirmación", JOptionPane.YES_OPTION);
-                    if (JOptionPane.YES_OPTION == confirmado) {
-                        String sentencia = "CALL SP_UsuarioModificar(" + codigo + ",'" + nombre + "','" + apellido + "','" + alias
-                                + "','" + pass + "','" + fechacreacion + "')";
-                        con.EjecutarABM(sentencia);
-                        NuevoModificarPerfilUsuario();
-                        NuevoModificarRolesUsuario();
+                    Toolkit.getDefaultToolkit().beep();
+                    JOptionPane.showMessageDialog(this, "Registro creado correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
 
-                        Toolkit.getDefaultToolkit().beep();
-                        JOptionPane.showMessageDialog(this, "Registro modificado correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
-                    }
+                    TablaConsultaUsuarios(); //Actualizar tabla
+                    ModoEdicion(false);
+                    Limpiar();
                 }
-                TablaConsultaUsuarios(); //Actualizar tabla
-                ModoEdicion(false);
-                Limpiar();
+            } else { //MODIFICAR REGISTRO
+                int confirmado = JOptionPane.showConfirmDialog(this, "¿Estás seguro de modificar este registro?", "Confirmación", JOptionPane.YES_OPTION);
+                if (JOptionPane.YES_OPTION == confirmado) {
+                    String sentencia = "CALL SP_UsuarioModificar(" + codigo + ",'" + nombre + "','" + apellido + "','" + alias
+                            + "','" + pass + "','" + fechacreacion + "')";
+                    con.EjecutarABM(sentencia);
+                    NuevoModificarPerfilUsuario();
+                    NuevoModificarRolesUsuario();
+
+                    Toolkit.getDefaultToolkit().beep();
+                    JOptionPane.showMessageDialog(this, "Registro modificado correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
+
+                    TablaConsultaUsuarios(); //Actualizar tabla
+                    ModoEdicion(false);
+                    Limpiar();
+                }
             }
-        } catch (HeadlessException ex) {
-            JOptionPane.showMessageDialog(null, "Completar los campos obligarios marcados con * ", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            txtNombre.requestFocus();
         }
     }
 
@@ -253,21 +253,36 @@ public final class ABMUsuario extends javax.swing.JDialog {
     private void NuevoModificarPerfilUsuario() {
         //Perfiles de usuario
         try {
-            String codusuario = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0) + "";
+            String codusuario = "";
             String codperfil;
             boolean estado;
             String sentencia;
 
             if (txtCodigo.getText().equals("")) { //Si es nuevo
+                //Obtener el id del ultimo usuario registrado
+                try {
+                    sentencia = "SELECT MAX(usu_codigo) AS id FROM usuario";
+                    con = con.ObtenerRSSentencia(sentencia);
+                    while (con.rs.next()) {
+                        codusuario = con.rs.getString("id");
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                con.DesconectarBasedeDatos();
+                //Recorer la tabla y registrar
                 for (int i = 0; i < tbPerfiles.getRowCount(); i++) {
                     codperfil = tbPerfiles.getValueAt(i, 0) + "";
                     estado = (Boolean) tbPerfiles.getValueAt(i, 2);
+
                     if (estado == true) {
                         sentencia = "INSERT INTO usuario_perfil VALUES(usuper_codigo,'" + codusuario + "','" + codperfil + "')";
                         con.EjecutarABM(sentencia);
                     }
                 }
+
             } else { //Si es modificar
+                codusuario = txtCodigo.getText();
                 for (int i = 0; i < tbPerfiles.getRowCount(); i++) {
                     //Validar si usuperfil ya esta registrado
                     codperfil = tbPerfiles.getValueAt(i, 0) + "";
@@ -304,10 +319,22 @@ public final class ABMUsuario extends javax.swing.JDialog {
             String codRolModificar;
             boolean estadoBaja;
             String codRolBaja;
-            String codusuario = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0) + "";
+            String codusuario = "";
             String sentencia;
 
             if (txtCodigo.getText().equals("")) { //Si es nuevo
+                //Obtener el id del ultimo usuario registrado
+                try {
+                    sentencia = "SELECT MAX(usu_codigo) AS id FROM usuario";
+                    con = con.ObtenerRSSentencia(sentencia);
+                    while (con.rs.next()) {
+                        codusuario = con.rs.getString("id");
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                con.DesconectarBasedeDatos();
+
                 for (int i = 0; i < tbRoles.getRowCount(); i++) {
                     //RolAlta
                     estadoAlta = (Boolean) tbRoles.getValueAt(i, 1);
@@ -333,7 +360,8 @@ public final class ABMUsuario extends javax.swing.JDialog {
                 }
             } else { //Si es modificar
                 for (int i = 0; i < tbRoles.getRowCount(); i++) {
-                    //Si existe rol alta
+                    codusuario = txtCodigo.getText();
+
                     estadoAlta = (Boolean) tbRoles.getValueAt(i, 1);
                     codRolAlta = tbRoles.getValueAt(i, 4) + "";
                     sentencia = "SELECT usurol_codigo FROM usuario_rol WHERE usurol_usuario='" + codusuario
@@ -457,10 +485,12 @@ public final class ABMUsuario extends javax.swing.JDialog {
 
         TablaAllPerfiles();
         TablaAllRoles();
-        if (dtmPerfilModulos.getRowCount() != 0) {
-            dtmPerfilModulos.setRowCount(0); //Vacia tabla
+        try {
+            if (dtmPerfilModulos.getRowCount() > 0) {
+                dtmPerfilModulos.setRowCount(0); //Vacia tabla
+            }
+        } catch (Exception e) {
         }
-
     }
 
     public boolean ComprobarCampos() {
