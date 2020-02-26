@@ -81,7 +81,7 @@ public final class ABMUsuario extends javax.swing.JDialog {
                 if (JOptionPane.YES_OPTION == confirmado) { //NUEVO REGISTRO
                     String sentencia = "CALL SP_UsuarioAlta ('" + nombre + "','" + apellido + "','"
                             + alias + "','" + pass + "','" + fechacreacion + "')";
-                    con.EjecutarABM(sentencia);
+                    con.EjecutarABM(sentencia, false);
                     NuevoModificarPerfilUsuario();
                     NuevoModificarRolesUsuario();
 
@@ -97,7 +97,7 @@ public final class ABMUsuario extends javax.swing.JDialog {
                 if (JOptionPane.YES_OPTION == confirmado) {
                     String sentencia = "CALL SP_UsuarioModificar(" + codigo + ",'" + nombre + "','" + apellido + "','" + alias
                             + "','" + pass + "','" + fechacreacion + "')";
-                    con.EjecutarABM(sentencia);
+                    con.EjecutarABM(sentencia, false);
                     NuevoModificarPerfilUsuario();
                     NuevoModificarRolesUsuario();
 
@@ -277,10 +277,9 @@ public final class ABMUsuario extends javax.swing.JDialog {
 
                     if (estado == true) {
                         sentencia = "INSERT INTO usuario_perfil VALUES(usuper_codigo,'" + codusuario + "','" + codperfil + "')";
-                        con.EjecutarABM(sentencia);
+                        con.EjecutarABM(sentencia, false);
                     }
                 }
-
             } else { //Si es modificar
                 codusuario = txtCodigo.getText();
                 for (int i = 0; i < tbPerfiles.getRowCount(); i++) {
@@ -294,12 +293,12 @@ public final class ABMUsuario extends javax.swing.JDialog {
                         if (estado == false) {
                             sentencia = "DELETE FROM usuario_perfil WHERE usuper_usuario='" + codusuario + "' "
                                     + "AND usuper_perfil='" + codperfil + "'";
-                            con.EjecutarABM(sentencia);
+                            con.EjecutarABM(sentencia, false);
                         }
                     } else { //Si no existe
                         if (estado == true) {
                             sentencia = "INSERT INTO usuario_perfil VALUES(usuper_codigo,'" + codusuario + "','" + codperfil + "')";
-                            con.EjecutarABM(sentencia);
+                            con.EjecutarABM(sentencia, false);
                         }
                     }
                 }
@@ -341,21 +340,21 @@ public final class ABMUsuario extends javax.swing.JDialog {
                     codRolAlta = tbRoles.getValueAt(i, 4) + "";
                     if (estadoAlta == true) {
                         sentencia = "INSERT INTO usuario_rol VALUES(usurol_codigo,'" + codusuario + "','" + codRolAlta + "')";
-                        con.EjecutarABM(sentencia);
+                        con.EjecutarABM(sentencia, false);
                     }
                     //RolModificar
                     estadoModificar = (Boolean) tbRoles.getValueAt(i, 2);
                     codRolModificar = tbRoles.getValueAt(i, 5) + "";
                     if (estadoModificar == true) {
                         sentencia = "INSERT INTO usuario_rol VALUES(usurol_codigo,'" + codusuario + "','" + codRolModificar + "')";
-                        con.EjecutarABM(sentencia);
+                        con.EjecutarABM(sentencia, false);
                     }
                     //RolBaja
                     estadoBaja = (Boolean) tbRoles.getValueAt(i, 3);
                     codRolBaja = tbRoles.getValueAt(i, 6) + "";
                     if (estadoBaja == true) {
                         sentencia = "INSERT INTO usuario_rol VALUES(usurol_codigo,'" + codusuario + "','" + codRolBaja + "')";
-                        con.EjecutarABM(sentencia);
+                        con.EjecutarABM(sentencia, false);
                     }
                 }
             } else { //Si es modificar
@@ -371,12 +370,12 @@ public final class ABMUsuario extends javax.swing.JDialog {
                         if (estadoAlta == false) {
                             sentencia = "DELETE FROM usuario_rol WHERE usurol_usuario='" + codusuario + "' "
                                     + "AND usurol_rol='" + codRolAlta + "'";
-                            con.EjecutarABM(sentencia);
+                            con.EjecutarABM(sentencia, false);
                         }
                     } else { //Si no existe
                         if (estadoAlta == true) {
                             sentencia = "INSERT INTO usuario_rol VALUES(usurol_codigo,'" + codusuario + "','" + codRolAlta + "')";
-                            con.EjecutarABM(sentencia);
+                            con.EjecutarABM(sentencia, false);
                         }
                     }
                     //Si existe rol modificar
@@ -389,12 +388,12 @@ public final class ABMUsuario extends javax.swing.JDialog {
                         if (estadoModificar == false) {
                             sentencia = "DELETE FROM usuario_rol WHERE usurol_usuario='" + codusuario + "' "
                                     + "AND usurol_rol='" + codRolModificar + "'";
-                            con.EjecutarABM(sentencia);
+                            con.EjecutarABM(sentencia, false);
                         }
                     } else { //Si no existe
                         if (estadoModificar == true) {
                             sentencia = "INSERT INTO usuario_rol VALUES(usurol_codigo,'" + codusuario + "','" + codRolModificar + "')";
-                            con.EjecutarABM(sentencia);
+                            con.EjecutarABM(sentencia, false);
                         }
                     }
                     //Si existe rol baja
@@ -407,12 +406,12 @@ public final class ABMUsuario extends javax.swing.JDialog {
                         if (estadoBaja == false) {
                             sentencia = "DELETE FROM usuario_rol WHERE usurol_usuario='" + codusuario + "' "
                                     + "AND usurol_rol='" + codRolBaja + "'";
-                            con.EjecutarABM(sentencia);
+                            con.EjecutarABM(sentencia, false);
                         }
                     } else { //Si no existe
                         if (estadoBaja == true) {
                             sentencia = "INSERT INTO usuario_rol VALUES(usurol_codigo,'" + codusuario + "','" + codRolBaja + "')";
-                            con.EjecutarABM(sentencia);
+                            con.EjecutarABM(sentencia, false);
                         }
                     }
                 }

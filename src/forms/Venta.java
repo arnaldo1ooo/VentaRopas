@@ -6,6 +6,7 @@
 package forms;
 
 import conexion.Conexion;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 import static login.Login.Alias;
@@ -370,18 +371,21 @@ public class Venta extends javax.swing.JDialog {
                 String idproducto;
                 int cantidadvendida;
                 int cantfila = tbProductosVendidos.getRowCount();
+                String sentencia;
                 for (int fila = 0; fila < cantfila; fila++) {
                     idproducto = tbProductosVendidos.getValueAt(fila, 0).toString();
                     cantidadvendida = Integer.parseInt(tbProductosVendidos.getValueAt(fila, 3).toString());
-
-                    con.EjecutarABM("CALL SP_VentaProductosEliminar('" + codigoventa + "','"
-                            + idproducto + "','" + cantidadvendida + "')");
+                    sentencia = "CALL SP_VentaProductosEliminar('" + codigoventa + "','" + idproducto + "','" + cantidadvendida + "')";
+                    con.EjecutarABM(sentencia, false);
                 }
 
                 //Elimina la venta (Primero se debe eliminar VentaProductos)
-                con.EjecutarABM("CALL SP_VentaEliminar(" + codigoventa + ")");
+                sentencia = "CALL SP_VentaEliminar(" + codigoventa + ")";
+                con.EjecutarABM(sentencia, false);
 
                 ConsultaAllVentaBD();
+                
+                Toolkit.getDefaultToolkit().beep();
                 JOptionPane.showMessageDialog(this, "Venta anulado correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
             }
         }

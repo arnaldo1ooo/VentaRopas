@@ -1,5 +1,6 @@
 package conexion;
 
+import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -217,7 +218,7 @@ public class Conexion {
         return conexion;
     }
 
-    public void EjecutarABM(String sentencia) {
+    public void EjecutarABM(String sentencia, boolean conAviso) {
         //Ejecuta consultas de Altas, Bajas y Modificaciones
         Connection con;
         Statement st;
@@ -228,6 +229,11 @@ public class Conexion {
             st.executeUpdate(sentencia);
             con.close();
             st.close();
+
+            if (conAviso == true) {
+                Toolkit.getDefaultToolkit().beep(); //BEEP
+                JOptionPane.showMessageDialog(null, "Se realizó correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(Metodos.class.getName() + " Sentencia: " + sentencia).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Error al intentar crear o modificar registro" + ex, "Error", JOptionPane.ERROR_MESSAGE);

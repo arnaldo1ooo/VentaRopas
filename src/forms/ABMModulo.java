@@ -10,7 +10,6 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
 
-import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -47,60 +46,52 @@ public final class ABMModulo extends javax.swing.JDialog {
 
 //--------------------------METODOS----------------------------//
     public void RegistroNuevoModificar() {
-        try {
-            if (ComprobarCampos() == true) {
-                String codigo = txtCodigo.getText();
-                String denominacion = txtDenominacion.getText().toUpperCase();
+        if (ComprobarCampos() == true) {
+            String codigo = txtCodigo.getText();
+            String denominacion = txtDenominacion.getText().toUpperCase();
 
-                if (txtCodigo.getText().equals("")) { //NUEVO REGISTRO
-                    int confirmado = JOptionPane.showConfirmDialog(this, "¿Estás seguro de registrar este nuevo registro?", "Confirmación", JOptionPane.YES_OPTION);
-                    if (JOptionPane.YES_OPTION == confirmado) {
-                        con.EjecutarABM("CALL SP_ModuloAlta ('" + denominacion + "')");
-                        Toolkit.getDefaultToolkit().beep(); //BEEP
-                        JOptionPane.showMessageDialog(this, "Se agregó correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
-                        TablaConsultaBDAll(); //Actualizar tabla
-                        ModoEdicion(false);
-                        Limpiar();
-                    }
-                } else { //MODIFICAR REGISTRO
-                    int confirmado = JOptionPane.showConfirmDialog(this, "¿Estás seguro de modificar este regitro?", "Confirmación", JOptionPane.YES_OPTION);
-                    if (JOptionPane.YES_OPTION == confirmado) {
-                        con.EjecutarABM("CALL SP_ModuloModificar(" + codigo + ",'" + denominacion + "')");
-                        Toolkit.getDefaultToolkit().beep(); //BEEP
-                        JOptionPane.showMessageDialog(this, "Se modificó correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
-                        TablaConsultaBDAll(); //Actualizar tabla
-                        ModoEdicion(false);
-                        Limpiar();
-                    }
+            if (txtCodigo.getText().equals("")) { //NUEVO REGISTRO
+                int confirmado = JOptionPane.showConfirmDialog(this, "¿Estás seguro de registrar este nuevo registro?", "Confirmación", JOptionPane.YES_OPTION);
+                if (JOptionPane.YES_OPTION == confirmado) {
+                    String sentencia = "CALL SP_ModuloAlta ('" + denominacion + "')";
+                    con.EjecutarABM(sentencia, true);
+
+                    TablaConsultaBDAll(); //Actualizar tabla
+                    ModoEdicion(false);
+                    Limpiar();
+                }
+            } else { //MODIFICAR REGISTRO
+                int confirmado = JOptionPane.showConfirmDialog(this, "¿Estás seguro de modificar este regitro?", "Confirmación", JOptionPane.YES_OPTION);
+                if (JOptionPane.YES_OPTION == confirmado) {
+                    String sentencia = "CALL SP_ModuloModificar(" + codigo + ",'" + denominacion + "')";
+                    con.EjecutarABM(sentencia, true);
+
+                    TablaConsultaBDAll(); //Actualizar tabla
+                    ModoEdicion(false);
+                    Limpiar();
                 }
             }
-        } catch (HeadlessException ex) {
-            Toolkit.getDefaultToolkit().beep();
-            JOptionPane.showMessageDialog(null, "Completar los campos obligarios marcados con * ", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            System.out.println("Completar los campos obligarios marcados con * " + ex);
-            txtDenominacion.requestFocus();
         }
     }
 
     private void RegistroEliminar() {
         int filasel = tbPrincipal.getSelectedRow();
-        if (filasel == -1) {
-            Toolkit.getDefaultToolkit().beep();
-            JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            txtBuscar.requestFocus();
-        } else {
+        if (filasel != -1) {
             int confirmado = JOptionPane.showConfirmDialog(this, "¿Estás seguro eliminar este registro?", "Confirmación", JOptionPane.YES_OPTION);
             if (JOptionPane.YES_OPTION == confirmado) {
                 String codigo = tbPrincipal.getValueAt(filasel, 0) + "";
-                con.EjecutarABM("CALL SP_ModuloEliminar(" + codigo + ")");
-                Toolkit.getDefaultToolkit().beep(); //BEEP
-                JOptionPane.showMessageDialog(this, "Se eliminó correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
+                String sentencia = "CALL SP_ModuloEliminar(" + codigo + ")";
+                con.EjecutarABM(sentencia, true);
+
                 TablaConsultaBDAll(); //Actualizar tabla
                 ModoEdicion(false);
                 Limpiar();
             }
+        } else {
+            Toolkit.getDefaultToolkit().beep();
+            JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            txtBuscar.requestFocus();
         }
-
     }
 
     public void TablaConsultaBDAll() {//Realiza la consulta de los productos que tenemos en la base de datos
@@ -183,7 +174,7 @@ public final class ABMModulo extends javax.swing.JDialog {
         panel2 = new org.edisoncor.gui.panel.Panel();
         labelMetric2 = new org.edisoncor.gui.label.LabelMetric();
 
-        setTitle("Ventana Modulos");
+        setTitle("Ventana módulos");
         setBackground(new java.awt.Color(45, 62, 80));
         setResizable(false);
 

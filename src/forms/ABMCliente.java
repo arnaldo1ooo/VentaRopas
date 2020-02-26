@@ -50,116 +50,63 @@ public final class ABMCliente extends javax.swing.JDialog {
     }
 
 //--------------------------METODOS----------------------------//
-    public void RegistroNuevo() {
-        try {
-            if (ComprobarCampos() == true) {
-                String rucci = txtRucCedula.getText();
-                String nombre = metodos.MayusPrimeraLetra(txtNombre.getText());
-                String apellido = metodos.MayusPrimeraLetra(txtApellido.getText());
-                String direccion = metodos.MayusPrimeraLetra(txtDireccion.getText());
-                String email = txtEmail.getText();
-                String telefono = txtTelefono.getText();
-                String obs = metodos.MayusPrimeraLetra(taObs.getText());
-
-                int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro crear este nuevo registro?", "Confirmación", JOptionPane.YES_OPTION);
-
-                if (JOptionPane.YES_OPTION == confirmado) {
-                    //REGISTRAR NUEVO
-                    String sentencia = "CALL SP_ClienteAlta ('" + rucci + "','" + nombre + "','"
-                            + apellido + "','" + direccion + "','" + email + "','" + telefono + "','" + obs + "')";
-                    con.EjecutarABM(sentencia);
-
-                    TablaConsultaBDAll(); //Actualizar tabla
-                    JOptionPane.showMessageDialog(this, "Se agregó correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
-                    ModoEdicion(false);
-                    Limpiar();
-                }
-            }
-        } catch (HeadlessException ex) {
-            JOptionPane.showMessageDialog(null, "Completar los campos obligarios marcados con * ", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            System.out.println("Completar los campos obligarios marcados con * " + ex);
-            txtNombre.requestFocus();
-        }
-    }
-
-    public void RegistroModificar() {
-        //guarda los datos que se han modificado en los campos
-
+    public void RegistroNuevoModificar() {
         if (ComprobarCampos() == true) {
             String codigo = txtCodigo.getText();
             String rucci = txtRucCedula.getText();
             String nombre = metodos.MayusPrimeraLetra(txtNombre.getText());
             String apellido = metodos.MayusPrimeraLetra(txtApellido.getText());
             String direccion = metodos.MayusPrimeraLetra(txtDireccion.getText());
-            String telefono = txtTelefono.getText();
             String email = txtEmail.getText();
+            String telefono = txtTelefono.getText();
             String obs = metodos.MayusPrimeraLetra(taObs.getText());
 
-            int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro de modificar este registro?", "Confirmación", JOptionPane.YES_OPTION);
-            if (JOptionPane.YES_OPTION == confirmado) {
-                String sentencia = "CALL SP_ClienteModificar(" + codigo + ",'" + rucci + "','" + nombre + "','" + apellido + "','" + direccion
-                        + "','" + telefono + "','" + email + "','" + obs + "')";
-                System.out.println("Actualizar registro: " + sentencia);
+            if (txtCodigo.getText().equals("")) {//Si es nuevo
+                int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro crear este nuevo registro?", "Confirmación", JOptionPane.YES_OPTION);
+                if (JOptionPane.YES_OPTION == confirmado) {
+                    //NUEVO REGISTRO
+                    String sentencia = "CALL SP_ClienteAlta ('" + rucci + "','" + nombre + "','"
+                            + apellido + "','" + direccion + "','" + email + "','" + telefono + "','" + obs + "')";
+                    con.EjecutarABM(sentencia, true);
 
-                try {
-                    Connection con;
-                    con = conexion.Conexion.ConectarBasedeDatos();
-                    PreparedStatement pst;
-                    pst = con.prepareStatement(sentencia);
-                    pst.executeUpdate();
-                    getToolkit().beep();
-                    JOptionPane.showMessageDialog(null, "Registro modificado correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
-
-                    con.close();
-                    pst.close();
-                } catch (SQLException ex) {
-                    System.out.println("Error al modificar registro " + ex);
-                    JOptionPane.showMessageDialog(null, "Error al intentar modificar el registro", "Error", JOptionPane.INFORMATION_MESSAGE);
+                    TablaConsultaBDAll(); //Actualizar tabla
+                    ModoEdicion(false);
+                    Limpiar();
                 }
-                ModoEdicion(false);
-                Limpiar();
             } else {
-                System.out.println("No se modificó el registro");
+                //MODIFICAR REGISTRO
+                int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro de modificar este registro?", "Confirmación", JOptionPane.YES_OPTION);
+                if (JOptionPane.YES_OPTION == confirmado) {
+                    String sentencia = "CALL SP_ClienteModificar(" + codigo + ",'" + rucci + "','" + nombre + "','"
+                            + apellido + "','" + direccion + "','" + telefono + "','" + email + "','" + obs + "')";
+                    con.EjecutarABM(sentencia, true);
+
+                    TablaConsultaBDAll(); //Actualizar tabla
+                    ModoEdicion(false);
+                    Limpiar();
+                }
             }
         }
     }
 
     private void RegistroEliminar() {
-        int filasel;
-        String codigo;
-        try {
-            filasel = tbPrincipal.getSelectedRow();
-            if (filasel == -1) {
-                JOptionPane.showMessageDialog(null, "No se ha seleccionado ninguna fila", "Advertencia", JOptionPane.WARNING_MESSAGE);
-                txtBuscar.requestFocus();
-            } else {
-                int confirmado = javax.swing.JOptionPane.showConfirmDialog(null, "¿Realmente desea eliminar este registro?", "Confirmación", JOptionPane.YES_OPTION);
-                if (confirmado == JOptionPane.YES_OPTION) {
-                    codigo = (String) tbPrincipal.getModel().getValueAt(filasel, 0);
-                    try {
-                        Connection con;
-                        con = Conexion.ConectarBasedeDatos();
-                        String sentence;
-                        sentence = "CALL SP_ClienteEliminar(" + codigo + ")";
-                        PreparedStatement pst;
-                        pst = con.prepareStatement(sentence);
-                        pst.executeUpdate();
-                        JOptionPane.showMessageDialog(null, "Registro eliminado correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
+        int filasel = tbPrincipal.getSelectedRow();
+        if (filasel != -1) {
+            int confirmado = JOptionPane.showConfirmDialog(this, "¿Realmente desea eliminar este registro?", "Confirmación", JOptionPane.YES_OPTION);
+            if (confirmado == JOptionPane.YES_OPTION) {
+                String codigo = tbPrincipal.getValueAt(filasel, 0) + "";
 
-                        con.close();
-                        pst.close();
-                    } catch (SQLException ex) {
-                        JOptionPane.showMessageDialog(null, ex);
-                        JOptionPane.showMessageDialog(null, "Error al intentar eliminar el registro", "Error", JOptionPane.INFORMATION_MESSAGE);
-                    }
-                } else {
-                    ModoEdicion(false);
-                    Limpiar();
-                    JOptionPane.showMessageDialog(null, "Cancelado correctamente", "Información", JOptionPane.ERROR_MESSAGE);
-                }
+                String sentencia = "CALL SP_ClienteEliminar(" + codigo + ")";
+                con.EjecutarABM(sentencia, true);
+
+                TablaConsultaBDAll(); //Actualizar tabla
+                ModoEdicion(false);
+                Limpiar();
             }
-        } catch (HeadlessException e) {
-            System.out.println("Error al intentar eliminar registro" + e);
+        } else {
+            Toolkit.getDefaultToolkit().beep();
+            JOptionPane.showMessageDialog(this, "No se ha seleccionado ninguna fila", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            txtBuscar.requestFocus();
         }
     }
 
@@ -842,11 +789,7 @@ public final class ABMCliente extends javax.swing.JDialog {
     }//GEN-LAST:event_txtBuscarKeyReleased
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        if (txtCodigo.getText().equals("")) {//Si es nuevo
-            RegistroNuevo();
-        } else { //Si es modificar
-            RegistroModificar();
-        }
+        RegistroNuevoModificar();
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed

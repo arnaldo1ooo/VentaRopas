@@ -86,37 +86,34 @@ public final class ABMProducto extends javax.swing.JDialog {
     }
 
     public void RegistroNuevo() {
-        try {
-            if (ComprobarCampos() == true) {
-                String codigoproducto = txtCodigoProducto.getText();
-                String descripcion = metodos.MayusPrimeraLetra(txtDescripcion.getText());
-                int marca = metodoscombo.ObtenerIDSelectComboBox(cbMarca);
-                String tamano = cbTamano.getSelectedItem().toString();
-                String existencia = txtExistencia.getText();
-                int idsubcategoria = metodoscombo.ObtenerIDSelectComboBox(cbSubcategoria);
-                String obs = metodos.MayusPrimeraLetra(taObs.getText());
-                int estado = cbEstado.getSelectedIndex();
+        if (ComprobarCampos() == true) {
+            String codigoproducto = txtCodigoProducto.getText();
+            String descripcion = metodos.MayusPrimeraLetra(txtDescripcion.getText());
+            int marca = metodoscombo.ObtenerIDSelectComboBox(cbMarca);
+            String tamano = cbTamano.getSelectedItem().toString();
+            String existencia = txtExistencia.getText();
+            int idsubcategoria = metodoscombo.ObtenerIDSelectComboBox(cbSubcategoria);
+            String obs = metodos.MayusPrimeraLetra(taObs.getText());
+            int estado = cbEstado.getSelectedIndex();
 
-                int confirmado = JOptionPane.showConfirmDialog(this, "¿Esta seguro crear este nuevo registro?", "Confirmación", JOptionPane.YES_OPTION);
-                if (JOptionPane.YES_OPTION == confirmado) {
-                    //REGISTRAR NUEVO
-                    String sentencia = "CALL SP_ProductoAlta ('" + codigoproducto + "','" + descripcion + "','"
-                            + marca + "','" + existencia + "','" + tamano + "','" + idsubcategoria + "','"
-                            + obs + "','" + estado + "')";
-                    con.EjecutarABM(sentencia);
-                    TablaConsultaBDAll(); //Actualiza la tabla
-                    //Guardarimagen
-                    String ultimoid = metodosimagen.ObtenerUltimoID();
-                    metodosimagen.GuardarImagen(rutaFotoProducto + ultimoid);
-                    JOptionPane.showMessageDialog(this, "El registro se agregó correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
-                    Limpiar();
-                    ModoEdicion(false);
-                }
+            int confirmado = JOptionPane.showConfirmDialog(this, "¿Esta seguro crear este nuevo registro?", "Confirmación", JOptionPane.YES_OPTION);
+            if (JOptionPane.YES_OPTION == confirmado) {
+                //REGISTRAR NUEVO
+                String sentencia = "CALL SP_ProductoAlta ('" + codigoproducto + "','" + descripcion + "','"
+                        + marca + "','" + existencia + "','" + tamano + "','" + idsubcategoria + "','"
+                        + obs + "','" + estado + "')";
+                con.EjecutarABM(sentencia, false);
+                //Guardarimagen
+                String ultimoid = metodosimagen.ObtenerUltimoID();
+                metodosimagen.GuardarImagen(rutaFotoProducto + ultimoid);
+
+                Toolkit.getDefaultToolkit().beep();
+                JOptionPane.showMessageDialog(this, "El registro se agregó correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
+
+                TablaConsultaBDAll(); //Actualiza la tabla
+                ModoEdicion(false);
+                Limpiar();
             }
-        } catch (HeadlessException ex) {
-            JOptionPane.showMessageDialog(this, "Completar los campos obligarios marcados con * ", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            System.out.println("Completar los campos obligarios marcados con * " + ex);
-            txtDescripcion.requestFocus();
         }
     }
 
@@ -127,7 +124,7 @@ public final class ABMProducto extends javax.swing.JDialog {
                 //guarda los datos que se han modificado en los campos
                 String codigo = txtCodigo.getText();
                 String codigoproducto = txtCodigoProducto.getText();
-                String descripcion =  metodos.MayusPrimeraLetra(txtDescripcion.getText());
+                String descripcion = metodos.MayusPrimeraLetra(txtDescripcion.getText());
                 int marca = metodoscombo.ObtenerIDSelectComboBox(cbMarca);
                 String existencia = txtExistencia.getText();
                 String tamano = cbTamano.getSelectedItem().toString();
@@ -136,11 +133,8 @@ public final class ABMProducto extends javax.swing.JDialog {
                 int estado = cbEstado.getSelectedIndex();
 
                 String sentencia = "CALL SP_ProductoModificar(" + codigo + ",'" + codigoproducto + "','" + descripcion + "','"
-                        + marca + "','" + existencia + "','" + tamano + "','" + subcategoria + "','"
-                        + obs + "','" + estado + "')";
-
-                con.EjecutarABM(sentencia);
-                TablaConsultaBDAll(); //Actualiza la tabla
+                        + marca + "','" + existencia + "','" + tamano + "','" + subcategoria + "','" + obs + "','" + estado + "')";
+                con.EjecutarABM(sentencia, false);
 
                 //Guardarimagen
                 if (lblImagen.getIcon() == null) {
@@ -148,30 +142,38 @@ public final class ABMProducto extends javax.swing.JDialog {
                 } else {
                     metodosimagen.GuardarImagen(rutaFotoProducto + codigo);
                 }
+
+                Toolkit.getDefaultToolkit().beep();
                 JOptionPane.showMessageDialog(this, "Registro modificado correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
 
-                Limpiar();
+                TablaConsultaBDAll(); //Actualiza la tabla
                 ModoEdicion(false);
+                Limpiar();
             }
         }
     }
 
     private void RegistroEliminar() {
         int filasel = tbPrincipal.getSelectedRow();
-        if (filasel == -1) {
+        if (filasel != -1) {
+            int confirmado = JOptionPane.showConfirmDialog(this, "¿Realmente desea eliminar este registro?", "Confirmación", JOptionPane.YES_OPTION);
+            if (confirmado == JOptionPane.YES_OPTION) {
+                String codigo = tbPrincipal.getValueAt(filasel, 0) + "";
+                String sentencia = "CALL SP_ProductoEliminar(" + codigo + ")";
+                con.EjecutarABM(sentencia, false);
+                metodosimagen.EliminarImagen(rutaFotoProducto + txtCodigo.getText()); //Eliminar la foto
+
+                Toolkit.getDefaultToolkit().beep();
+                JOptionPane.showMessageDialog(this, "Registro eliminado correctamente", "Información", JOptionPane.ERROR_MESSAGE);
+
+                TablaConsultaBDAll();
+                ModoEdicion(false);
+                Limpiar();
+            }
+        } else {
+            Toolkit.getDefaultToolkit().beep();
             JOptionPane.showMessageDialog(this, "No se ha seleccionado ninguna fila", "Advertencia", JOptionPane.WARNING_MESSAGE);
             txtBuscar.requestFocus();
-        } else {
-            int confirmado = javax.swing.JOptionPane.showConfirmDialog(this, "¿Realmente desea eliminar este registro?", "Confirmación", JOptionPane.YES_OPTION);
-            if (confirmado == JOptionPane.YES_OPTION) {
-                String codigo = (String) tbPrincipal.getModel().getValueAt(filasel, 0);
-                String sentencia = "CALL SP_ProductoEliminar(" + codigo + ")";
-                con.EjecutarABM(sentencia);
-                metodosimagen.EliminarImagen(rutaFotoProducto + txtCodigo.getText()); //Eliminar la foto
-                Limpiar();
-                ModoEdicion(false);
-                JOptionPane.showMessageDialog(this, "Registro eliminado correctamente", "Información", JOptionPane.ERROR_MESSAGE);
-            }
         }
     }
 

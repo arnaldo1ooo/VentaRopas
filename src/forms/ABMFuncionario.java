@@ -79,51 +79,47 @@ public final class ABMFuncionario extends javax.swing.JDialog {
                 //NUEVO REGISTRO
                 int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro crear este nuevo registro?", "Confirmación", JOptionPane.YES_OPTION);
                 if (JOptionPane.YES_OPTION == confirmado) {
-                    String sentencia = "CALL SP_" + nombreTablaBD + "Alta ('" + nombre + "','" + apellido + "','" + fechaingreso + "','" + sexo
-                            + "','" + telefono + "','" + email + "','" + obs + "','" + estado + "','" + cargo + "')";
-                    con.EjecutarABM(sentencia);
+                    String sentencia = "CALL SP_" + nombreTablaBD + "Alta ('" + nombre + "','" + apellido + "','" + fechaingreso + "','"
+                            + sexo + "','" + telefono + "','" + email + "','" + obs + "','" + estado + "','" + cargo + "')";
+                    con.EjecutarABM(sentencia, true);
 
-                    Toolkit.getDefaultToolkit().beep();
-                    JOptionPane.showMessageDialog(this, "Se agregó correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
+                    TablaConsultaBDAll(); //Actualizar tabla                  
+                    ModoEdicion(false);
+                    Limpiar();
                 }
             } else {
                 //MODIFICAR REGISTRO
                 int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro de modificar este registro?", "Confirmación", JOptionPane.YES_OPTION);
                 if (JOptionPane.YES_OPTION == confirmado) {
-                    String sentencia = "CALL SP_" + nombreTablaBD + "Modificar(" + codigo + ",'" + nombre + "','" + apellido + "','" + fechaingreso + "','" + sexo
-                            + "','" + telefono + "','" + email + "','" + obs + "','" + estado + "','" + cargo + "')";
-                    con.EjecutarABM(sentencia);
+                    String sentencia = "CALL SP_" + nombreTablaBD + "Modificar(" + codigo + ",'" + nombre + "','" + apellido + "','"
+                            + fechaingreso + "','" + sexo + "','" + telefono + "','" + email + "','" + obs + "','" + estado + "','" + cargo + "')";
+                    con.EjecutarABM(sentencia, true);
 
-                    Toolkit.getDefaultToolkit().beep();
-                    JOptionPane.showMessageDialog(this, "Se modificó correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
+                    TablaConsultaBDAll(); //Actualizar tabla                  
+                    ModoEdicion(false);
+                    Limpiar();
                 }
             }
-            TablaConsultaBDAll(); //Actualizar tabla                  
-            ModoEdicion(false);
-            Limpiar();
         }
     }
 
     private void RegistroEliminar() {
         int filasel = tbPrincipal.getSelectedRow();
-        String codigo = tbPrincipal.getModel().getValueAt(filasel, 0) + "";
+        if (filasel != -1) {
+            int confirmado = JOptionPane.showConfirmDialog(this, "¿Realmente desea eliminar este registro?", "Confirmación", JOptionPane.YES_OPTION);
+            if (confirmado == JOptionPane.YES_OPTION) {
+                String codigo = tbPrincipal.getValueAt(filasel, 0) + "";
+                String sentencia = "CALL SP_" + nombreTablaBD + "Eliminar(" + codigo + ")";
+                con.EjecutarABM(sentencia, true);
 
-        if (filasel == -1) {
+                TablaConsultaBDAll();
+                ModoEdicion(false);
+                Limpiar();
+            }
+        } else {
+            Toolkit.getDefaultToolkit().beep();
             JOptionPane.showMessageDialog(this, "No se ha seleccionado ninguna fila", "Advertencia", JOptionPane.WARNING_MESSAGE);
             txtBuscar.requestFocus();
-        } else {
-            int confirmado = javax.swing.JOptionPane.showConfirmDialog(this, "¿Realmente desea eliminar este registro?", "Confirmación", JOptionPane.YES_OPTION);
-            if (confirmado == JOptionPane.YES_OPTION) {
-                String sentencia = "CALL SP_" + nombreTablaBD + "Eliminar(" + codigo + ")";
-                con.EjecutarABM(sentencia);
-
-                Toolkit.getDefaultToolkit().beep();
-                JOptionPane.showMessageDialog(this, "Registro eliminado correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
-            }
-
-            TablaConsultaBDAll();
-            ModoEdicion(false);
-            Limpiar();
         }
     }
 

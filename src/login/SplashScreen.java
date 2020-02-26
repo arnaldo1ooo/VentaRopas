@@ -205,6 +205,7 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
             Elements losTr;
             Element fila1;
             Element fila2;
+            String sentencia;
 
             losDiv = doc.select("div." + "col-sm-7"); //Las tablas, div.
             losTr = losDiv.select("tr"); //Las filas, tr.
@@ -215,8 +216,9 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
 
             String usdGsVentaString = fila1.getElementsByClass("sale").text();
             double usdGsVentaDouble = Double.parseDouble(((usdGsVentaString).replace(".", "")).replace(",", "."));
-            con.EjecutarABM("CALL SP_CotizacionModificar('1','Dolares','Guaranies','" + usdGsCompraDouble + "','"
-                    + usdGsVentaDouble + "','" + FechaActual() + "')");
+            sentencia = "CALL SP_CotizacionModificar('1','Dolares','Guaranies','" + usdGsCompraDouble + "','"
+                    + usdGsVentaDouble + "','" + FechaActual() + "')";
+            con.EjecutarABM(sentencia, false);
 
             losDiv = doc.select("div." + "col-sm-5"); //Las tablas, div.
             losTr = losDiv.select("tr"); //Las filas, tr.
@@ -228,16 +230,18 @@ public class SplashScreen extends javax.swing.JFrame implements Runnable {
 
             String usdRsVentaString = fila1.getElementsByClass("sale").text();
             double usdRsVentaDouble = Double.parseDouble(((usdRsVentaString).replace(".", "")).replace(",", "."));
-            con.EjecutarABM("CALL SP_CotizacionModificar('2','Dolares','Reales','" + usdRsCompraDouble + "','"
-                    + usdRsVentaDouble + "','" + FechaActual() + "')");
+            sentencia = "CALL SP_CotizacionModificar('2','Dolares','Reales','" + usdRsCompraDouble + "','"
+                    + usdRsVentaDouble + "','" + FechaActual() + "')";
+            con.EjecutarABM(sentencia, false);
 
             String usdPaCompraString = fila2.getElementsByClass("purchase").text();
             double usdPaCompraDouble = Double.parseDouble(((usdPaCompraString).replace(".", "")).replace(",", "."));
 
             String usdPaVentaString = fila2.getElementsByClass("sale").text();
             double usdPaVentaDouble = Double.parseDouble(((usdPaVentaString).replace(".", "")).replace(",", "."));
-            con.EjecutarABM("CALL SP_CotizacionModificar('3','Dolares','Pesos argentinos','" + usdPaCompraDouble + "','"
-                    + usdPaVentaDouble + "','" + FechaActual() + "')");
+            sentencia = "CALL SP_CotizacionModificar('3','Dolares','Pesos argentinos','" + usdPaCompraDouble + "','"
+                    + usdPaVentaDouble + "','" + FechaActual() + "')";
+            con.EjecutarABM(sentencia, false);
         } catch (IOException e) {
             System.out.println("Error al realizar el scraping web " + e);
             Logger.getLogger(SplashScreen.class.getName()).log(Level.SEVERE, null, e);

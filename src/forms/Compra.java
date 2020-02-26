@@ -6,6 +6,8 @@
 package forms;
 
 import conexion.Conexion;
+import java.awt.HeadlessException;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 import static login.Login.Alias;
@@ -344,33 +346,41 @@ public class Compra extends javax.swing.JDialog {
     }//GEN-LAST:event_txtBuscarKeyReleased
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        RegistroEliminar();
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void RegistroEliminar() throws NumberFormatException, HeadlessException {
         if (tbPrincipal.getSelectedRow() == -1) {
             JOptionPane.showMessageDialog(this, "No se ha seleccionado ninguna fila", "Advertencia", JOptionPane.WARNING_MESSAGE);
             txtBuscar.requestFocus();
         } else {
-            int confirmado = javax.swing.JOptionPane.showConfirmDialog(this, "¿Realmente desea anular esta compra?", "Confirmación", JOptionPane.YES_OPTION);
+            int confirmado = JOptionPane.showConfirmDialog(this, "¿Realmente desea anular esta compra?", "Confirmación", JOptionPane.YES_OPTION);
             if (confirmado == JOptionPane.YES_OPTION) {
                 String codigocompra = tbPrincipal.getValueAt(tbPrincipal.getSelectedRow(), 0).toString();
-
-                //Elimina los productos de la compra                      
+                
+                //Elimina los productos de la compra
                 String idproducto;
                 int cantidadcomprada;
                 int cantfila = tbProductosComprados.getRowCount();
+                String sentencia;
                 for (int fila = 0; fila < cantfila; fila++) {
                     idproducto = tbProductosComprados.getValueAt(fila, 0).toString();
                     cantidadcomprada = Integer.parseInt(tbProductosComprados.getValueAt(fila, 3).toString());
-
-                    con.EjecutarABM("CALL SP_CompraProductosEliminar('" + codigocompra + "','"
-                            + idproducto + "','" + cantidadcomprada + "')");
+                    sentencia = "CALL SP_CompraProductosEliminar('" + codigocompra + "','" + idproducto + "','" + cantidadcomprada + "')";
+                    con.EjecutarABM(sentencia, false);
                 }
-
+                
                 //Elimina la compra (Primero se debe eliminar los productos de la compra)
-                con.EjecutarABM("CALL SP_CompraEliminar(" + codigocompra + ")");
-
+                sentencia = "CALL SP_CompraEliminar(" + codigocompra + ")";
+                con.EjecutarABM(sentencia, false);
+                
+                Toolkit.getDefaultToolkit().beep();
                 JOptionPane.showMessageDialog(this, "Compra anulado correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
+                
+                ConsultaAllCompraBD();
             }
         }
-    }//GEN-LAST:event_btnEliminarActionPerformed
+    }
 
     private void tbPrincipalKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbPrincipalKeyReleased
         if (evt.getKeyCode() == KeyEvent.VK_UP || evt.getKeyCode() == KeyEvent.VK_DOWN) {

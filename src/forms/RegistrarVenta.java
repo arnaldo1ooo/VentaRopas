@@ -83,115 +83,111 @@ public final class RegistrarVenta extends javax.swing.JDialog {
 
     public void RegistroNuevo() {
         //Registra la venta
-        try {
-            if (ComprobarCamposVenta() == true) {
-                String numventa = lblNumVenta.getText();
-                int vendedor = metodoscombo.ObtenerIDSelectComboBox(cbVendedor);
-                int cliente = metodoscombo.ObtenerIDSelectComboBox(cbCliente);
-                int tipodocumento = cbTipoDocumento.getSelectedIndex();
-                DateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
-                String fecharegistro = formatoFecha.format(dcFechaVenta.getDate());
-                double importe = metodostxt.DoubleAFormatoAmericano(txtImporte.getText());
-                String moneda = cbMoneda.getSelectedItem().toString();
-                double cotizacion = 1;
+        if (ComprobarCamposVenta() == true) {
+            String numventa = lblNumVenta.getText();
+            int vendedor = metodoscombo.ObtenerIDSelectComboBox(cbVendedor);
+            int cliente = metodoscombo.ObtenerIDSelectComboBox(cbCliente);
+            int tipodocumento = cbTipoDocumento.getSelectedIndex();
+            DateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+            String fecharegistro = formatoFecha.format(dcFechaVenta.getDate());
+            double importe = metodostxt.DoubleAFormatoAmericano(txtImporte.getText());
+            String moneda = cbMoneda.getSelectedItem().toString();
+            double cotizacion = 1;
 
-                switch (moneda) {
-                    case "Dolares":
-                        break;
-                    case "Guaranies":
-                        importe = importe / cotiUsdGsCompra;
-                        cotizacion = cotiUsdGsCompra;
-                        break;
-                    case "Reales":
-                        importe = importe / cotiUsdRsCompra;
-                        cotizacion = cotiUsdRsCompra;
-                        break;
-                    case "Pesos argentinos":
-                        importe = importe / cotiUsdPaCompra;
-                        cotizacion = cotiUsdPaCompra;
-                        break;
+            switch (moneda) {
+                case "Dolares":
+                    break;
+                case "Guaranies":
+                    importe = importe / cotiUsdGsCompra;
+                    cotizacion = cotiUsdGsCompra;
+                    break;
+                case "Reales":
+                    importe = importe / cotiUsdRsCompra;
+                    cotizacion = cotiUsdRsCompra;
+                    break;
+                case "Pesos argentinos":
+                    importe = importe / cotiUsdPaCompra;
+                    cotizacion = cotiUsdPaCompra;
+                    break;
 
-                    default:
-                        JOptionPane.showMessageDialog(this, "No se encontró la moneda seleccionada", "Error", JOptionPane.ERROR_MESSAGE);
-                        break;
-                }
+                default:
+                    JOptionPane.showMessageDialog(this, "No se encontró la moneda seleccionada", "Error", JOptionPane.ERROR_MESSAGE);
+                    break;
+            }
 
-                int confirmado = JOptionPane.showConfirmDialog(this, "¿Esta seguro de crear esta nueva venta?", "Confirmación", JOptionPane.YES_OPTION);
-                if (JOptionPane.YES_OPTION == confirmado) {
-                    try {
-                        //Registrar nueva venta
-                        String sentencia = "CALL SP_VentaAlta('" + numventa + "','" + vendedor + "','" + cliente + "','"
-                                + tipodocumento + "','" + fecharegistro + "','" + importe + "','" + moneda + "','" + cotizacion + "')";
-                        con.EjecutarABM(sentencia);
+            int confirmado = JOptionPane.showConfirmDialog(this, "¿Esta seguro de crear esta nueva venta?", "Confirmación", JOptionPane.YES_OPTION);
+            if (JOptionPane.YES_OPTION == confirmado) {
+                try {
+                    //Registrar nueva venta
+                    String sentencia = "CALL SP_VentaAlta('" + numventa + "','" + vendedor + "','" + cliente + "','"
+                            + tipodocumento + "','" + fecharegistro + "','" + importe + "','" + moneda + "','" + cotizacion + "')";
+                    con.EjecutarABM(sentencia, false);
 
-                        //Obtener el id de la venta
-                        con = con.ObtenerRSSentencia("SELECT MAX(ven_codigo) AS ultimoid FROM venta");
-                        int idultimaventa = 0;
-                        while (con.rs.next()) {
-                            idultimaventa = con.rs.getInt("ultimoid");
-                        }
-                        con.DesconectarBasedeDatos();
-
-                        //Registra los productos de la venta                      
-                        String idproducto;
-                        int cantidadadquirida;
-                        double preciocompra;
-                        double precioventabruto;
-                        double descuento;
-
-                        int cantfila = tbProductosVendidos.getRowCount();
-                        for (int fila = 0; fila < cantfila; fila++) {
-                            idproducto = tbProductosVendidos.getValueAt(fila, 0).toString();
-                            cantidadadquirida = Integer.parseInt(tbProductosVendidos.getValueAt(fila, 3).toString());
-                            preciocompra = MayorPrecioCompra(idproducto);
-                            precioventabruto = metodostxt.DoubleAFormatoAmericano(tbProductosVendidos.getValueAt(fila, 4).toString());
-                            descuento = Double.parseDouble(tbProductosVendidos.getValueAt(fila, 5).toString());
-
-                            //Comprobar en que moneda se guarda, en caso de ser distinto a dolares, se convierte a dolares
-                            switch (moneda) {
-                                case "Dolares":
-                                    break;
-                                case "Guaranies":
-                                    precioventabruto = precioventabruto / cotiUsdGsCompra;
-                                    precioventabruto = metodostxt.FormatearATresDecimales(precioventabruto);
-                                    descuento = descuento / cotiUsdGsCompra;
-                                    break;
-                                case "Reales":
-                                    precioventabruto = precioventabruto / cotiUsdRsCompra;
-                                    precioventabruto = metodostxt.FormatearATresDecimales(precioventabruto);
-                                    descuento = descuento / cotiUsdRsCompra;
-                                    break;
-                                case "Pesos argentinos":
-                                    precioventabruto = precioventabruto / cotiUsdPaCompra;
-                                    precioventabruto = metodostxt.FormatearATresDecimales(precioventabruto);
-                                    descuento = descuento / cotiUsdPaCompra;
-                                    break;
-
-                                default:
-                                    JOptionPane.showMessageDialog(this, "No se encontró la moneda seleccionada", "Error", JOptionPane.ERROR_MESSAGE);
-                                    break;
-                            }
-
-                            //Se registran los productos de la venta
-                            sentencia = "CALL SP_VentaProductosAlta('" + idultimaventa + "','" + idproducto + "','"
-                                    + cantidadadquirida + "','" + preciocompra + "','" + precioventabruto + "','" + descuento + "')";
-                            con.EjecutarABM(sentencia);
-                        }
-                        Toolkit.getDefaultToolkit().beep(); //BEEP
-                        JOptionPane.showMessageDialog(this, "Se agregó correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
-                        Limpiar();
-                        GenerarNumVenta();
-                    } catch (SQLException ex) {
-                        Logger.getLogger(RegistrarVenta.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (HeadlessException ex) {
-                        JOptionPane.showMessageDialog(this, "Ocurrió un Error " + ex.getMessage());
-                        Logger.getLogger(RegistrarVenta.class.getName()).log(Level.SEVERE, null, ex);
+                    //Obtener el id de la venta
+                    con = con.ObtenerRSSentencia("SELECT MAX(ven_codigo) AS ultimoid FROM venta");
+                    int idultimaventa = 0;
+                    while (con.rs.next()) {
+                        idultimaventa = con.rs.getInt("ultimoid");
                     }
+                    con.DesconectarBasedeDatos();
+
+                    //Registra los productos de la venta                      
+                    String idproducto;
+                    int cantidadadquirida;
+                    double preciocompra;
+                    double precioventabruto;
+                    double descuento;
+
+                    int cantfila = tbProductosVendidos.getRowCount();
+                    for (int fila = 0; fila < cantfila; fila++) {
+                        idproducto = tbProductosVendidos.getValueAt(fila, 0).toString();
+                        cantidadadquirida = Integer.parseInt(tbProductosVendidos.getValueAt(fila, 3).toString());
+                        preciocompra = MayorPrecioCompra(idproducto);
+                        precioventabruto = metodostxt.DoubleAFormatoAmericano(tbProductosVendidos.getValueAt(fila, 4).toString());
+                        descuento = Double.parseDouble(tbProductosVendidos.getValueAt(fila, 5).toString());
+
+                        //Comprobar en que moneda se guarda, en caso de ser distinto a dolares, se convierte a dolares
+                        switch (moneda) {
+                            case "Dolares":
+                                break;
+                            case "Guaranies":
+                                precioventabruto = precioventabruto / cotiUsdGsCompra;
+                                precioventabruto = metodostxt.FormatearATresDecimales(precioventabruto);
+                                descuento = descuento / cotiUsdGsCompra;
+                                break;
+                            case "Reales":
+                                precioventabruto = precioventabruto / cotiUsdRsCompra;
+                                precioventabruto = metodostxt.FormatearATresDecimales(precioventabruto);
+                                descuento = descuento / cotiUsdRsCompra;
+                                break;
+                            case "Pesos argentinos":
+                                precioventabruto = precioventabruto / cotiUsdPaCompra;
+                                precioventabruto = metodostxt.FormatearATresDecimales(precioventabruto);
+                                descuento = descuento / cotiUsdPaCompra;
+                                break;
+
+                            default:
+                                JOptionPane.showMessageDialog(this, "No se encontró la moneda seleccionada", "Error", JOptionPane.ERROR_MESSAGE);
+                                break;
+                        }
+
+                        //Se registran los productos de la venta
+                        sentencia = "CALL SP_VentaProductosAlta('" + idultimaventa + "','" + idproducto + "','"
+                                + cantidadadquirida + "','" + preciocompra + "','" + precioventabruto + "','" + descuento + "')";
+                        con.EjecutarABM(sentencia, false);
+                    }
+
+                    Toolkit.getDefaultToolkit().beep(); //BEEP
+                    JOptionPane.showMessageDialog(this, "Se agregó correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
+                    Limpiar();
+                    GenerarNumVenta();
+                } catch (SQLException ex) {
+                    Logger.getLogger(RegistrarVenta.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (HeadlessException ex) {
+                    JOptionPane.showMessageDialog(this, "Ocurrió un Error " + ex.getMessage());
+                    Logger.getLogger(RegistrarVenta.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-        } catch (HeadlessException ex) {
-            JOptionPane.showMessageDialog(this, "Completar los campos obligarios marcados con * ", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            System.out.println("Completar los campos obligarios marcados con * " + ex);
         }
     }
 

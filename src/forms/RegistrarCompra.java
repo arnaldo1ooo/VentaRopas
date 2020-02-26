@@ -78,81 +78,74 @@ public final class RegistrarCompra extends javax.swing.JDialog {
 
     public void RegistroNuevo() {
         //Registra la compra
-        try {
-            int cantidadProductos = tbPrincipal.getModel().getRowCount();
-            if (cantidadProductos <= 0) {
-                JOptionPane.showMessageDialog(null, "No se cargó ningún producto", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            if (ComprobarCamposCompra() == true) {
-                String numcompra = lblNumCompra.getText();
-                String identificador = txtIdentificador.getText();
-                int proveedor = metodoscombo.ObtenerIDSelectComboBox(cbProveedor);
-                int tipodocumento = cbTipoDocumento.getSelectedIndex();
-                DateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
-                String fecharegistro = formatoFecha.format(dcFechaRegistro.getDate());
-                String fechacompra = formatoFecha.format(dcFechaCompra.getDate());
+        int cantidadProductos = tbPrincipal.getModel().getRowCount();
+        if (cantidadProductos <= 0) {
+            JOptionPane.showMessageDialog(null, "No se cargó ningún producto", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (ComprobarCamposCompra() == true) {
+            String numcompra = lblNumCompra.getText();
+            String identificador = txtIdentificador.getText();
+            int proveedor = metodoscombo.ObtenerIDSelectComboBox(cbProveedor);
+            int tipodocumento = cbTipoDocumento.getSelectedIndex();
+            DateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+            String fecharegistro = formatoFecha.format(dcFechaRegistro.getDate());
+            String fechacompra = formatoFecha.format(dcFechaCompra.getDate());
 
-                int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro crear este nuevo registro?", "Confirmación", JOptionPane.YES_OPTION);
-                if (JOptionPane.YES_OPTION == confirmado) {
+            int confirmado = JOptionPane.showConfirmDialog(null, "¿Esta seguro crear este nuevo registro?", "Confirmación", JOptionPane.YES_OPTION);
+            if (JOptionPane.YES_OPTION == confirmado) {
 
-                    try {
-                        //Registrar nueva compra
-                        String sentencia = "CALL SP_CompraAlta('" + numcompra + "','" + identificador + "','" + proveedor + "','"
-                                + tipodocumento + "','" + fecharegistro + "','" + fechacompra + "')";
-                        con.EjecutarABM(sentencia);
+                try {
+                    //Registrar nueva compra
+                    String sentencia = "CALL SP_CompraAlta('" + numcompra + "','" + identificador + "','" + proveedor + "','"
+                            + tipodocumento + "','" + fecharegistro + "','" + fechacompra + "')";
+                    con.EjecutarABM(sentencia, false);
 
-                        //Obtener el id de la compra
-                        con = con.ObtenerRSSentencia("SELECT MAX(com_codigo) AS ultimoid FROM compra");
-                        con.rs.next();
-                        int idultimacompra = con.rs.getInt("ultimoid");
-                        con.DesconectarBasedeDatos();
+                    //Obtener el id de la compra
+                    con = con.ObtenerRSSentencia("SELECT MAX(com_codigo) AS ultimoid FROM compra");
+                    con.rs.next();
+                    int idultimacompra = con.rs.getInt("ultimoid");
+                    con.DesconectarBasedeDatos();
 
-                        //Registra los productos de la compra                      
-                        String idproducto;
-                        int cantidadadquirida;
-                        double preciocompra;
-                        int cantfila = tbPrincipal.getRowCount();
-                        for (int fila = 0; fila < cantfila; fila++) {
-                            idproducto = tbPrincipal.getValueAt(fila, 0).toString();
-                            cantidadadquirida = Integer.parseInt(tbPrincipal.getValueAt(fila, 3).toString());
-                            preciocompra = Double.parseDouble(tbPrincipal.getValueAt(fila, 4).toString());
+                    //Registra los productos de la compra                      
+                    String idproducto;
+                    int cantidadadquirida;
+                    double preciocompra;
+                    int cantfila = tbPrincipal.getRowCount();
+                    for (int fila = 0; fila < cantfila; fila++) {
+                        idproducto = tbPrincipal.getValueAt(fila, 0).toString();
+                        cantidadadquirida = Integer.parseInt(tbPrincipal.getValueAt(fila, 3).toString());
+                        preciocompra = Double.parseDouble(tbPrincipal.getValueAt(fila, 4).toString());
 
-                            //Comprobar en que moneda se guarda, en caso de ser distinto a dolares, se convierte a dolares
-                            if (cbMoneda.getSelectedItem() != "Dolares") {
-                                if (cbMoneda.getSelectedItem() == "Guaranies") {
-                                    preciocompra = preciocompra / cotiUsdGsCompra;
-                                }
-                                if (cbMoneda.getSelectedItem() == "Reales") {
-                                    preciocompra = preciocompra / cotiUsdRsCompra;
-                                }
-                                if (cbMoneda.getSelectedItem() == "Pesos argentinos") {
-                                    preciocompra = preciocompra / cotiUsdPaCompra;
-                                }
+                        //Comprobar en que moneda se guarda, en caso de ser distinto a dolares, se convierte a dolares
+                        if (cbMoneda.getSelectedItem() != "Dolares") {
+                            if (cbMoneda.getSelectedItem() == "Guaranies") {
+                                preciocompra = preciocompra / cotiUsdGsCompra;
                             }
-                            //Se registran los productos de la compra
-                            sentencia = "CALL SP_CompraProductosAlta('" + idultimacompra + "','" + idproducto + "','"
-                                    + cantidadadquirida + "','" + preciocompra + "')";
-                            con.EjecutarABM(sentencia);
+                            if (cbMoneda.getSelectedItem() == "Reales") {
+                                preciocompra = preciocompra / cotiUsdRsCompra;
+                            }
+                            if (cbMoneda.getSelectedItem() == "Pesos argentinos") {
+                                preciocompra = preciocompra / cotiUsdPaCompra;
+                            }
                         }
-                        Toolkit.getDefaultToolkit().beep(); //BEEP
-                        JOptionPane.showMessageDialog(this, "Se agregó correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
-                        GenerarNumCompra();
-                        Limpiar();
-                    } catch (HeadlessException ex) {
-                        JOptionPane.showMessageDialog(this, "Ocurrió un Error " + ex.getMessage());
-                        Logger.getLogger(RegistrarCompra.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (SQLException ex) {
-                        JOptionPane.showMessageDialog(this, "Ocurrió un Error " + ex.getMessage());
-                        Logger.getLogger(RegistrarCompra.class.getName()).log(Level.SEVERE, null, ex);
+                        //Se registran los productos de la compra
+                        sentencia = "CALL SP_CompraProductosAlta('" + idultimacompra + "','" + idproducto + "','"
+                                + cantidadadquirida + "','" + preciocompra + "')";
+                        con.EjecutarABM(sentencia, false);
                     }
-                } else {
-                    System.out.println("No se guardó el registro");
+                    Toolkit.getDefaultToolkit().beep(); //BEEP
+                    JOptionPane.showMessageDialog(this, "Se agregó correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
+                    GenerarNumCompra();
+                    Limpiar();
+                } catch (HeadlessException ex) {
+                    JOptionPane.showMessageDialog(this, "Ocurrió un Error " + ex.getMessage());
+                    Logger.getLogger(RegistrarCompra.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(this, "Ocurrió un Error " + ex.getMessage());
+                    Logger.getLogger(RegistrarCompra.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-        } catch (HeadlessException ex) {
-            JOptionPane.showMessageDialog(null, "Completar los campos obligarios marcados con * ", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            System.out.println("Completar los campos obligarios marcados con * " + ex);
         }
     }
 
@@ -1139,11 +1132,10 @@ public final class RegistrarCompra extends javax.swing.JDialog {
             return;
         }
 
-        con.EjecutarABM("CALL SP_ProveedorAlta('" + provnombre.toUpperCase() + "','" + provdireccion + "','" + provcel + "','" + provemail + "')");
+        String sentencia = "CALL SP_ProveedorAlta('" + provnombre.toUpperCase() + "','" + provdireccion + "','" + provcel + "','" + provemail + "')";
+        con.EjecutarABM(sentencia, true);
 
         CargarComboBoxes();
-        Toolkit.getDefaultToolkit().beep();
-        JOptionPane.showMessageDialog(null, "Proveedor registrado con éxito!");
     }//GEN-LAST:event_btnProveedor1ActionPerformed
 
     private void btnABMProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnABMProductoActionPerformed
